@@ -25,14 +25,20 @@ le_test_ensure_matrix_size(LeMatrix *a, unsigned height, unsigned width)
     return 0;
 }
 
+#define MAX_DIMENSION 4
+
 int
 le_test_matrices()
 {
     unsigned width;
     unsigned height;
-    LeMatrix *a;
+    unsigned second_width;
     
-    for (height = 1; height < 4; height++)
+    LeMatrix *a;
+    LeMatrix *b;
+    LeMatrix *c;
+    
+    for (height = 1; height < MAX_DIMENSION; height++)
     {
         a = le_matrix_new_identity(height);
         if (le_test_ensure_matrix_size(a, height, height) != 0)
@@ -42,7 +48,7 @@ le_test_matrices()
         }
         le_matrix_free(a);
         
-        for (width = 1; width < 4; width++)
+        for (width = 1; width < MAX_DIMENSION; width++)
         {
             a = le_matrix_new_zeros(height, width);
             if (le_test_ensure_matrix_size(a, height, width) != 0)
@@ -58,6 +64,20 @@ le_test_matrices()
                 printf("Problem occured when testing sizes of random matrix.\n");
                 return 0;
             }
+            
+            for (second_width = 1; second_width < MAX_DIMENSION; second_width++)
+            {
+                b = le_matrix_new_rand(width, second_width);
+                c = le_matrix_new_product(a, b);
+                if (le_test_ensure_matrix_size(c, height, second_width) != 0)
+                {
+                    printf("Problem occured when testing sizes of matrix product.\n");
+                    return 0;
+                }
+                le_matrix_free(c);
+                le_matrix_free(b);
+            }
+            
             le_matrix_free(a);
         }
     }
