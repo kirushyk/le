@@ -102,6 +102,28 @@ le_matrix_free(LeMatrix *self)
     free(self);
 }
 
+LeMatrix *
+le_matrix_new_transpose(LeMatrix *a)
+{
+    unsigned x;
+    unsigned y;
+    LeMatrix *self;
+    
+    self = malloc(sizeof(struct LeMatrix));
+    self->data = malloc(a->width * a->height * sizeof(double));
+    self->height = a->width;
+    self->width = a->height;
+    
+    for (y = 0; y < self->height; y++)
+    {
+        for (x = 0; x < self->width; x++)
+        {
+            self->data[y * self->width + x] = a->data[x * self->width + y];
+        }
+    }
+    
+    return self;
+}
 
 LeMatrix *
 le_matrix_new_product(LeMatrix *a, LeMatrix *b)
@@ -116,9 +138,9 @@ le_matrix_new_product(LeMatrix *a, LeMatrix *b)
         return le_matrix_new();
     
     self = malloc(sizeof(struct LeMatrix));
-    self->data = malloc(b->width * a->height * sizeof(double));
-    self->width = b->width;
+    self->data = malloc(a->height * b->width * sizeof(double));
     self->height = a->height;
+    self->width = b->width;
     
     for (y = 0; y < self->height; y++)
     {
