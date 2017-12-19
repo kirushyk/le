@@ -9,6 +9,10 @@ typedef struct LeMatrix LeMatrix;
 
 LeMatrix * le_matrix_new           (void);
 
+unsigned   le_matrix_get_width     (LeMatrix *matrix);
+
+unsigned   le_matrix_get_height    (LeMatrix *matrix);
+
 LeMatrix * le_matrix_new_identity  (unsigned size);
 
 LeMatrix * le_matrix_new_zeros     (unsigned height,
@@ -17,7 +21,7 @@ LeMatrix * le_matrix_new_zeros     (unsigned height,
 LeMatrix * le_matrix_new_rand      (unsigned height,
                                     unsigned width);
 
-LeMatrix * le_matrix_new_transpose (LeMatrix *x);
+LeMatrix * le_matrix_new_transpose (LeMatrix *a);
 
 LeMatrix * le_matrix_new_product   (LeMatrix *a,
                                     LeMatrix *b);

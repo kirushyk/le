@@ -16,6 +16,18 @@ le_matrix_new(void)
     return self;
 }
 
+unsigned
+le_matrix_get_width(LeMatrix *self)
+{
+    return self->width;
+}
+
+unsigned
+le_matrix_get_height(LeMatrix *self)
+{
+    return self->height;
+}
+
 void
 le_matrix_empty(LeMatrix *self)
 {
