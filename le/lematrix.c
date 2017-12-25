@@ -5,6 +5,7 @@
 #include "lematrix.h"
 #include "lematrix-imp.h"
 #include <stdlib.h>
+#include <string.h>
 
 LeMatrix *
 le_matrix_new(void)
@@ -13,6 +14,21 @@ le_matrix_new(void)
     self->data = NULL;
     self->width = 0;
     self->height = 0;
+    return self;
+}
+
+LeMatrix *
+le_matrix_new_from_data(unsigned height, unsigned width, const double *data)
+{
+    LeMatrix *self;
+    size_t data_size = height * width * sizeof(double);
+    
+    self = malloc(sizeof(struct LeMatrix));
+    self->data = malloc(data_size);
+    self->height = height;
+    self->width = width;
+    memcpy(self->data, data, data_size);
+    
     return self;
 }
 
