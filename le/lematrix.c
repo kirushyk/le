@@ -85,21 +85,19 @@ le_matrix_new_identity(unsigned size)
 LeMatrix *
 le_matrix_new_zeros(unsigned height, unsigned width)
 {
-    unsigned x;
-    unsigned y;
+    unsigned i;
+    unsigned elements_count;
     LeMatrix *self;
     
     self = malloc(sizeof(struct LeMatrix));
     self->data = malloc(height * width * sizeof(double));
     self->height = height;
     self->width = width;
+    elements_count = height * width;
     
-    for (y = 0; y < height; y++)
+    for (i = 0; i < elements_count; i++)
     {
-        for (x = 0; x < width; x++)
-        {
-            self->data[y * self->width + x] = 0.0;
-        }
+        self->data[i] = 0.0;
     }
     
     return self;
@@ -152,7 +150,7 @@ le_matrix_new_transpose(LeMatrix *a)
     {
         for (x = 0; x < self->width; x++)
         {
-            self->data[y * self->width + x] = a->data[x * self->width + y];
+            self->data[y * self->width + x] = a->data[x * a->width + y];
         }
     }
     
