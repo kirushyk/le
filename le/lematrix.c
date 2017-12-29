@@ -191,6 +191,18 @@ le_matrix_new_product(LeMatrix *a, LeMatrix *b)
     return self;
 }
 
+void
+le_matrix_add_scalar(LeMatrix *self, double b)
+{
+    unsigned i;
+    unsigned elements_count = self->height * self->width;
+    
+    for (i = 0; i < elements_count; i++)
+    {
+        self->data[i] += b;
+    }
+}
+
 /** @note: Temporary */
 void
 le_matrix_print(LeMatrix *self, FILE *stream)
