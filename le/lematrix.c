@@ -44,6 +44,12 @@ le_matrix_get_height(LeMatrix *self)
     return self->height;
 }
 
+double
+le_matrix_at(LeMatrix *self, unsigned y, unsigned x)
+{
+    return self->data[y * self->width + x];
+}
+
 void
 le_matrix_empty(LeMatrix *self)
 {

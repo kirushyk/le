@@ -17,6 +17,10 @@ unsigned   le_matrix_get_width     (LeMatrix     *matrix);
 
 unsigned   le_matrix_get_height    (LeMatrix     *matrix);
 
+double     le_matrix_at            (LeMatrix     *matrix,
+                                    unsigned      y,
+                                    unsigned      x);
+
 LeMatrix * le_matrix_new_identity  (unsigned      size);
 
 LeMatrix * le_matrix_new_zeros     (unsigned      height,
