@@ -37,6 +37,8 @@ LeMatrix * le_matrix_new_product   (LeMatrix     *a,
 void       le_matrix_add_scalar    (LeMatrix     *a,
                                     double        b);
 
+void       le_matrix_apply_sigmoid (LeMatrix     *matrix);
+
 void       le_matrix_free          (LeMatrix     *matrix);
 
 /** @note: Temporary */

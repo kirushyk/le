@@ -6,6 +6,7 @@
 #include "lematrix-imp.h"
 #include <stdlib.h>
 #include <string.h>
+#include <math.h>
 
 LeMatrix *
 le_matrix_new(void)
@@ -198,6 +199,24 @@ le_matrix_add_scalar(LeMatrix *self, double b)
     for (i = 0; i < elements_count; i++)
     {
         self->data[i] += b;
+    }
+}
+
+static double
+le_sigmoid(const double a)
+{
+    return 1.0 / (1.0 + exp(-a));
+}
+
+void
+le_matrix_apply_sigmoid(LeMatrix *self)
+{
+    unsigned i;
+    unsigned elements_count = self->height * self->width;
+    
+    for (i = 0; i < elements_count; i++)
+    {
+        self->data[i] = le_sigmoid(self->data[i]);
     }
 }
 
