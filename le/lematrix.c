@@ -191,6 +191,21 @@ le_matrix_new_product(LeMatrix *a, LeMatrix *b)
 }
 
 void
+le_matrix_subtract(LeMatrix *a, LeMatrix *b)
+{
+    if (a->height == b->height && a->width == b->width)
+    {
+        unsigned i;
+        unsigned elements_count = a->height * a->width;
+        
+        for (i = 0; i < elements_count; i++)
+        {
+            a->data[i] -= b->data[i];
+        }
+    }
+}
+
+void
 le_matrix_add_scalar(LeMatrix *self, double b)
 {
     unsigned i;

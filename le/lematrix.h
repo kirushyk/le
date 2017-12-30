@@ -34,6 +34,9 @@ LeMatrix * le_matrix_new_transpose (LeMatrix     *a);
 LeMatrix * le_matrix_new_product   (LeMatrix     *a,
                                     LeMatrix     *b);
 
+void       le_matrix_subtract      (LeMatrix     *a,
+                                    LeMatrix     *b);
+
 void       le_matrix_add_scalar    (LeMatrix     *a,
                                     double        b);
 
