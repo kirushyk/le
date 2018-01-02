@@ -206,6 +206,18 @@ le_matrix_subtract(LeMatrix *a, LeMatrix *b)
 }
 
 void
+le_matrix_multiply_by_scalar(LeMatrix *self, double b)
+{
+    unsigned i;
+    unsigned elements_count = self->height * self->width;
+    
+    for (i = 0; i < elements_count; i++)
+    {
+        self->data[i] *= b;
+    }
+}
+
+void
 le_matrix_add_scalar(LeMatrix *self, double b)
 {
     unsigned i;
@@ -215,6 +227,21 @@ le_matrix_add_scalar(LeMatrix *self, double b)
     {
         self->data[i] += b;
     }
+}
+
+double
+le_matrix_sum(LeMatrix *self)
+{
+    double sum = 0.0;
+    unsigned i;
+    unsigned elements_count = self->height * self->width;
+    
+    for (i = 0; i < elements_count; i++)
+    {
+        sum += self->data[i];
+    }
+    
+    return sum;
 }
 
 static double
