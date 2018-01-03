@@ -32,6 +32,7 @@ le_logistic_classifier_new_train(LeMatrix *x_train, LeMatrix *y_train)
             le_matrix_multiply_by_scalar(h, 1.0 / examples_count);
             LeMatrix *dwt = le_matrix_new_product(h, xt);
             LeMatrix *dw = le_matrix_new_transpose(dwt);
+            le_matrix_multiply_by_scalar(dw, learning_rate);
             double db = le_matrix_sum(h);
             
             le_matrix_free(dwt);
