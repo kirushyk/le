@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include "le.h"
+#include <le/le.h>
 
 int
 main(int argc, const char *argv[])

@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <math.h>
-#include "le.h"
+#include <le/le.h>
 
 int
 main(int argc, const char *argv[])
