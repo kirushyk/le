@@ -3,5 +3,6 @@
 
 #include "lematrix.h"
 #include "lelogistic.h"
+#include "lesvm.h"
 
 #endif
