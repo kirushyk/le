@@ -24,10 +24,22 @@ le_menubar_new ()
     GMenu *menu;
     GMenu *submenu;
     GMenu *section;
+    GMenu *subsection;
     
     menu = g_menu_new ();
     
     submenu = g_menu_new ();
+    
+    section = g_menu_new ();
+    subsection = g_menu_new ();
+    g_menu_append (subsection, "Random", "win.gen_rand");
+    g_menu_append (subsection, "Linearly Separable", "win.gen_linsep");
+    g_menu_append (subsection, "Nested Circles", "win.gen_nc");
+    g_menu_append (subsection, "SV Border", "win.gen_svb");
+    g_menu_append_submenu (section, "Generate", G_MENU_MODEL (subsection));
+    g_object_unref (subsection);
+    g_menu_append_section (submenu, NULL, G_MENU_MODEL (section));
+    g_object_unref (section);
     
     section = g_menu_new ();
     g_menu_append (section, "Close", "win.close");
