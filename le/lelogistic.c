@@ -4,7 +4,7 @@
 struct LeLogisticClassifier
 {
     LeMatrix *w;
-    double    b;
+    float    b;
 };
 
 LeLogisticClassifier *
@@ -14,7 +14,7 @@ le_logistic_classifier_new_train(LeMatrix *x_train, LeMatrix *y_train)
     unsigned features_count = le_matrix_get_height(x_train);
     unsigned examples_count = le_matrix_get_width(x_train);
     unsigned iterations_count = 200;
-    double learning_rate = 0.1;
+    float learning_rate = 0.1;
     unsigned i;
     
     if (le_matrix_get_width(y_train) == examples_count)
@@ -33,7 +33,7 @@ le_logistic_classifier_new_train(LeMatrix *x_train, LeMatrix *y_train)
             LeMatrix *dwt = le_matrix_new_product(h, xt);
             LeMatrix *dw = le_matrix_new_transpose(dwt);
             le_matrix_multiply_by_scalar(dw, learning_rate);
-            double db = le_matrix_sum(h);
+            float db = le_matrix_sum(h);
             
             le_matrix_free(dwt);
             le_matrix_free(h);

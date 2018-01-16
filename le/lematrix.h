@@ -11,13 +11,13 @@ LeMatrix * le_matrix_new                (void);
 
 LeMatrix * le_matrix_new_from_data      (unsigned      height,
                                          unsigned      width,
-                                         const double *data);
+                                         const float  *data);
 
 unsigned   le_matrix_get_width          (LeMatrix     *matrix);
 
 unsigned   le_matrix_get_height         (LeMatrix     *matrix);
 
-double     le_matrix_at                 (LeMatrix     *matrix,
+float      le_matrix_at                 (LeMatrix     *matrix,
                                          unsigned      y,
                                          unsigned      x);
 
@@ -38,12 +38,12 @@ void       le_matrix_subtract           (LeMatrix     *a,
                                          LeMatrix     *b);
 
 void       le_matrix_multiply_by_scalar (LeMatrix     *a,
-                                         double        b);
+                                         float         b);
 
 void       le_matrix_add_scalar         (LeMatrix     *a,
-                                         double        b);
+                                         float         b);
 
-double     le_matrix_sum                (LeMatrix     *matrix);
+float      le_matrix_sum                (LeMatrix     *matrix);
 
 void       le_matrix_apply_sigmoid      (LeMatrix     *matrix);
 

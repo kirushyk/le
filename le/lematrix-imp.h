@@ -5,7 +5,7 @@
 
 struct LeMatrix
 {
-    double *data;
+    float *data;
     
     /** @note: Temporary */
     unsigned width;

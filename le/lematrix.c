@@ -19,10 +19,10 @@ le_matrix_new(void)
 }
 
 LeMatrix *
-le_matrix_new_from_data(unsigned height, unsigned width, const double *data)
+le_matrix_new_from_data(unsigned height, unsigned width, const float *data)
 {
     LeMatrix *self;
-    size_t data_size = height * width * sizeof(double);
+    size_t data_size = height * width * sizeof(float);
     
     self = malloc(sizeof(struct LeMatrix));
     self->data = malloc(data_size);
@@ -45,7 +45,7 @@ le_matrix_get_height(LeMatrix *self)
     return self->height;
 }
 
-double
+float
 le_matrix_at(LeMatrix *self, unsigned y, unsigned x)
 {
     return self->data[y * self->width + x];
@@ -68,7 +68,7 @@ le_matrix_new_identity(unsigned size)
     LeMatrix *self;
     
     self = malloc(sizeof(struct LeMatrix));
-    self->data = malloc(size * size * sizeof(double));
+    self->data = malloc(size * size * sizeof(float));
     self->height = size;
     self->width = size;
     
@@ -91,7 +91,7 @@ le_matrix_new_zeros(unsigned height, unsigned width)
     LeMatrix *self;
     
     self = malloc(sizeof(struct LeMatrix));
-    self->data = malloc(height * width * sizeof(double));
+    self->data = malloc(height * width * sizeof(float));
     self->height = height;
     self->width = width;
     elements_count = height * width;
@@ -113,7 +113,7 @@ le_matrix_new_rand(unsigned height, unsigned width)
     LeMatrix *self;
     
     self = malloc(sizeof(struct LeMatrix));
-    self->data = malloc(height * width * sizeof(double));
+    self->data = malloc(height * width * sizeof(float));
     self->height = height;
     self->width = width;
     
@@ -121,7 +121,7 @@ le_matrix_new_rand(unsigned height, unsigned width)
     {
         for (x = 0; x < self->width; x++)
         {
-            self->data[y * self->width + x] = rand() / (double)RAND_MAX;
+            self->data[y * self->width + x] = rand() / (float)RAND_MAX;
         }
     }
     
@@ -143,7 +143,7 @@ le_matrix_new_transpose(LeMatrix *a)
     LeMatrix *self;
     
     self = malloc(sizeof(struct LeMatrix));
-    self->data = malloc(a->width * a->height * sizeof(double));
+    self->data = malloc(a->width * a->height * sizeof(float));
     self->height = a->width;
     self->width = a->height;
     
@@ -171,7 +171,7 @@ le_matrix_new_product(LeMatrix *a, LeMatrix *b)
         return le_matrix_new();
     
     self = malloc(sizeof(struct LeMatrix));
-    self->data = malloc(a->height * b->width * sizeof(double));
+    self->data = malloc(a->height * b->width * sizeof(float));
     self->height = a->height;
     self->width = b->width;
     
@@ -206,7 +206,7 @@ le_matrix_subtract(LeMatrix *a, LeMatrix *b)
 }
 
 void
-le_matrix_multiply_by_scalar(LeMatrix *self, double b)
+le_matrix_multiply_by_scalar(LeMatrix *self, float b)
 {
     unsigned i;
     unsigned elements_count = self->height * self->width;
@@ -218,7 +218,7 @@ le_matrix_multiply_by_scalar(LeMatrix *self, double b)
 }
 
 void
-le_matrix_add_scalar(LeMatrix *self, double b)
+le_matrix_add_scalar(LeMatrix *self, float b)
 {
     unsigned i;
     unsigned elements_count = self->height * self->width;
@@ -229,10 +229,10 @@ le_matrix_add_scalar(LeMatrix *self, double b)
     }
 }
 
-double
+float
 le_matrix_sum(LeMatrix *self)
 {
-    double sum = 0.0;
+    float sum = 0.0;
     unsigned i;
     unsigned elements_count = self->height * self->width;
     
@@ -244,8 +244,8 @@ le_matrix_sum(LeMatrix *self)
     return sum;
 }
 
-static double
-le_sigmoid(const double a)
+static float
+le_sigmoid(const float a)
 {
     return 1.0 / (1.0 + exp(-a));
 }
@@ -273,7 +273,7 @@ le_matrix_print(LeMatrix *self, FILE *stream)
     {
         for (x = 0; x < self->width; x++)
         {
-            fprintf(stream, "%1.3lf", self->data[y * self->width + x]);
+            fprintf(stream, "%1.3f", self->data[y * self->width + x]);
             if (x < self->width - 1)
             {
                 fprintf(stream, " ");
