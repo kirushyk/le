@@ -9,7 +9,7 @@ typedef struct LeMatrix LeMatrix;
 
 LeMatrix * le_matrix_new                (void);
 
-LeMatrix * le_matrix_copy               (LeMatrix     *another);
+LeMatrix * le_matrix_new_copy           (LeMatrix     *another);
 
 LeMatrix * le_matrix_new_from_data      (unsigned      height,
                                          unsigned      width,

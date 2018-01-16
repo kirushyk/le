@@ -8,11 +8,11 @@ struct LeTrainingData
 };
 
 LeTrainingData *
-le_training_data_new_copy (LeMatrix *input, LeMatrix *output)
+le_training_data_new_copy (LeMatrix *x, LeMatrix *y)
 {
     LeTrainingData *data = malloc(sizeof(LeTrainingData));
-    data->x = le_matrix_new_copy(input);
-    data->y = le_matrix_new_copy(output);
+    data->x = le_matrix_new_copy(x);
+    data->y = le_matrix_new_copy(y);
     return data;
 }
 
