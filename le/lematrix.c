@@ -13,8 +13,18 @@ le_matrix_new(void)
 {
     LeMatrix *self = malloc(sizeof(struct LeMatrix));
     self->data = NULL;
-    self->width = 0;
     self->height = 0;
+    self->width = 0;
+    return self;
+}
+
+LeMatrix *
+le_matrix_new_copy(LeMatrix *another)
+{
+    LeMatrix *self = malloc(sizeof(struct LeMatrix));
+    self->data = malloc(another->height * another->width * sizeof(float));
+    self->height = another->height;
+    self->width = another->width;
     return self;
 }
 
