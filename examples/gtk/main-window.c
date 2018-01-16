@@ -29,9 +29,40 @@ draw_callback (GtkWidget *widget, cairo_t *cr, gpointer data)
     height = gtk_widget_get_allocated_height (widget);
     window = LE_MAIN_WINDOW (data);
     
+    
+    /*
     window->dark ? cairo_set_source_rgba (cr, 0.0, 0.0, 0.0, 1.0) : cairo_set_source_rgba (cr, 1.0, 1.0, 1.0, 1.0);
     cairo_rectangle (cr, 0, 0, width, height);
-    cairo_fill (cr);
+    cairo_fill(cr);
+    */
+
+    cairo_surface_t *surf = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, width, height);
+    gint half = (width + height) / 2;
+    gint stride = cairo_image_surface_get_stride(surf);
+    cairo_surface_flush (surf);
+    guint8 *pixmap = cairo_image_surface_get_data(surf);
+    for (gint y = 0; y < height; y++)
+    {
+        for (gint x = 0; x < width; x++)
+        {
+            if (x + y > half)
+            {
+                pixmap[y * stride + x * 4 + 2] = 32;
+                pixmap[y * stride + x * 4 + 1] = 96;
+            }
+            else
+            {
+                pixmap[y * stride + x * 4 + 2] = 128;
+                pixmap[y * stride + x * 4 + 1] = 96;
+            }
+            pixmap[y * stride + x * 4 + 3] = 255;
+        }
+    }
+    cairo_surface_mark_dirty(surf);
+    cairo_set_source_surface(cr, surf, 0, 0);
+    cairo_paint(cr);
+
+    cairo_surface_destroy(surf);
     
     return FALSE;
 }
