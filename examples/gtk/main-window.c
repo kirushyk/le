@@ -29,6 +29,10 @@ draw_callback (GtkWidget *widget, cairo_t *cr, gpointer data)
     height = gtk_widget_get_allocated_height (widget);
     window = LE_MAIN_WINDOW (data);
     
+    window->dark ? cairo_set_source_rgba (cr, 0.0, 0.0, 0.0, 1.0) : cairo_set_source_rgba (cr, 1.0, 1.0, 1.0, 1.0);
+    cairo_rectangle (cr, 0, 0, width, height);
+    cairo_fill (cr);
+    
     return FALSE;
 }
 
