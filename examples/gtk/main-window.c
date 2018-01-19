@@ -1,6 +1,7 @@
 #include "main-window.h"
 #include <stdlib.h>
 #include <le/le.h>
+#include <math.h>
 
 #define LE_TYPE_MAIN_WINDOW le_main_window_get_type ()
 G_DECLARE_FINAL_TYPE (LEMainWindow, le_main_window, LE, MAIN_WINDOW, GtkApplicationWindow);
@@ -28,7 +29,6 @@ draw_callback (GtkWidget *widget, cairo_t *cr, gpointer data)
     width = gtk_widget_get_allocated_width (widget);
     height = gtk_widget_get_allocated_height (widget);
     window = LE_MAIN_WINDOW (data);
-    
     
     /*
     window->dark ? cairo_set_source_rgba (cr, 0.0, 0.0, 0.0, 1.0) : cairo_set_source_rgba (cr, 1.0, 1.0, 1.0, 1.0);
@@ -61,8 +61,33 @@ draw_callback (GtkWidget *widget, cairo_t *cr, gpointer data)
     cairo_surface_mark_dirty(surf);
     cairo_set_source_surface(cr, surf, 0, 0);
     cairo_paint(cr);
-
     cairo_surface_destroy(surf);
+    
+    if (window->trainig_data)
+    {
+        LeMatrix *input = le_training_data_get_input(window->trainig_data);
+        LeMatrix *output = le_training_data_get_output(window->trainig_data);;
+        gint examples_count = le_matrix_get_width(input);
+        for (i = 0; i < examples_count; i++)
+        {
+            // window->dark ? cairo_set_source_rgba (cr, 0.0, 0.0, 0.0, 1.0) : cairo_set_source_rgba (cr, 1.0, 1.0, 1.0, 1.0);
+            double x = width * 0.5 + height * 0.5 * le_matrix_at(input, 0, i);
+            double y = height * 0.5 - height * 0.5 * le_matrix_at(input, 1, i);
+            cairo_set_source_rgba (cr, 1.0, 1.0, 1.0, 1.0);
+            cairo_set_line_width(cr, 0.5);
+            cairo_arc( cr, x, y, 2., 0., 2 * M_PI);
+            if (le_matrix_at(output, 0, i) > 0.5)
+            {
+                cairo_fill(cr);
+            }
+            else
+            {
+                cairo_stroke(cr);
+            }
+        }
+    }
+    
+    gtk_widget_queue_draw (GTK_WIDGET (window));
     
     return FALSE;
 }
@@ -71,8 +96,11 @@ static void
 generate_activated (GSimpleAction *action, GVariant *parameter, gpointer data)
 {
     LEMainWindow *window = LE_MAIN_WINDOW (data);
-    LeMatrix *x = le_matrix_new_rand(2, 32);
-    LeMatrix *y = le_matrix_new_zeros(1, 32);
+    guint examples_count = 128;
+    LeMatrix *x = le_matrix_new_rand(2, examples_count);
+    le_matrix_multiply_by_scalar(x, 2.0f);
+    le_matrix_add_scalar(x, -1.0f);
+    LeMatrix *y = le_matrix_new_rand(1, examples_count);
     window->trainig_data = le_training_data_new_take(x, y);
     
     printf("training data generated\n");
