@@ -25,6 +25,18 @@ le_training_data_new_take(LeMatrix *input, LeMatrix *output)
     return data;
 }
 
+LeMatrix *
+le_training_data_get_input(LeTrainingData *data)
+{
+    return data->x;
+}
+
+LeMatrix *
+le_training_data_get_output (LeTrainingData *data)
+{
+    return data->y;
+}
+
 void
 le_training_data_free(LeTrainingData *self)
 {
