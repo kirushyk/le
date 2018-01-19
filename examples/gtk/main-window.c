@@ -1,7 +1,6 @@
-
 #include "main-window.h"
 #include <stdlib.h>
-
+#include <le/le.h>
 
 #define LE_TYPE_MAIN_WINDOW le_main_window_get_type ()
 G_DECLARE_FINAL_TYPE (LEMainWindow, le_main_window, LE, MAIN_WINDOW, GtkApplicationWindow);
@@ -13,6 +12,7 @@ struct _LEMainWindow
     GtkWidget *drawing_area;
     
     gboolean dark;
+    LeTrainingData *trainig_data;
     
 };
 
@@ -67,6 +67,16 @@ draw_callback (GtkWidget *widget, cairo_t *cr, gpointer data)
     return FALSE;
 }
 
+static void
+generate_activated (GSimpleAction *action, GVariant *parameter, gpointer data)
+{
+    LEMainWindow *window = LE_MAIN_WINDOW (data);
+    LeMatrix *x = le_matrix_new_rand(2, 32);
+    LeMatrix *y = le_matrix_new_zeros(1, 32);
+    window->trainig_data = le_training_data_new_take(x, y);
+    
+    printf("training data generated\n");
+}
 
 static void
 style_activated (GSimpleAction *action, GVariant *parameter, gpointer data)
@@ -105,6 +115,8 @@ close_activated (GSimpleAction *action, GVariant *parameter, gpointer data)
 static GActionEntry win_entries[] =
 {
     { "style", style_activated, "s" },
+    { "gen", generate_activated, "s" },
+    { "style", style_activated, "s" },
     { "view", view_activated, "s", "\"q\"" },
     { "close", close_activated }
 };
@@ -129,6 +141,7 @@ static void
 le_main_window_init (LEMainWindow *self)
 {
     self->dark = FALSE;
+    self->trainig_data = NULL;
     
     self->drawing_area = gtk_drawing_area_new ();
     gtk_widget_set_size_request (self->drawing_area, 640, 480);
