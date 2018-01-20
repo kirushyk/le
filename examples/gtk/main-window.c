@@ -30,12 +30,11 @@ draw_callback (GtkWidget *widget, cairo_t *cr, gpointer data)
     height = gtk_widget_get_allocated_height (widget);
     window = LE_MAIN_WINDOW (data);
     
-    /*
     window->dark ? cairo_set_source_rgba (cr, 0.0, 0.0, 0.0, 1.0) : cairo_set_source_rgba (cr, 1.0, 1.0, 1.0, 1.0);
     cairo_rectangle (cr, 0, 0, width, height);
     cairo_fill(cr);
-    */
-
+    
+/*
     cairo_surface_t *surf = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, width, height);
     gint half = (width + height) / 2;
     gint stride = cairo_image_surface_get_stride(surf);
@@ -62,6 +61,7 @@ draw_callback (GtkWidget *widget, cairo_t *cr, gpointer data)
     cairo_set_source_surface(cr, surf, 0, 0);
     cairo_paint(cr);
     cairo_surface_destroy(surf);
+ */
     
     if (window->trainig_data)
     {
@@ -73,9 +73,9 @@ draw_callback (GtkWidget *widget, cairo_t *cr, gpointer data)
             // window->dark ? cairo_set_source_rgba (cr, 0.0, 0.0, 0.0, 1.0) : cairo_set_source_rgba (cr, 1.0, 1.0, 1.0, 1.0);
             double x = width * 0.5 + height * 0.5 * le_matrix_at(input, 0, i);
             double y = height * 0.5 - height * 0.5 * le_matrix_at(input, 1, i);
-            cairo_set_source_rgba (cr, 1.0, 1.0, 1.0, 1.0);
+            window->dark ? cairo_set_source_rgba (cr, 1.0, 1.0, 1.0, 1.0) : cairo_set_source_rgba (cr, 0.0, 0.0, 0.0, 1.0);
             cairo_set_line_width(cr, 0.5);
-            cairo_arc( cr, x, y, 2., 0., 2 * M_PI);
+            cairo_arc(cr, x, y, 2., 0., 2 * M_PI);
             if (le_matrix_at(output, 0, i) > 0.5)
             {
                 cairo_fill(cr);
