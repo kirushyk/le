@@ -96,12 +96,33 @@ static void
 generate_activated (GSimpleAction *action, GVariant *parameter, gpointer data)
 {
     LEMainWindow *window = LE_MAIN_WINDOW (data);
+    
     guint examples_count = 128;
-    LeMatrix *x = le_matrix_new_rand(2, examples_count);
-    le_matrix_multiply_by_scalar(x, 2.0f);
-    le_matrix_add_scalar(x, -1.0f);
-    LeMatrix *y = le_matrix_new_rand(1, examples_count);
-    window->trainig_data = le_training_data_new_take(x, y);
+    
+    LeMatrix *input = le_matrix_new_rand(2, examples_count);
+    LeMatrix *output = le_matrix_new_rand(1, examples_count);
+    
+    const gchar *pattern_name = g_variant_get_string (parameter, NULL);
+    if (g_strcmp0(pattern_name, "spiral") == 0)
+    {
+        guint i;
+        for (i = 0; i < examples_count; i++)
+        {
+            gfloat scalar = (rand() * 2.0f / RAND_MAX) - 1.0f;
+            gfloat x = sinf(scalar);
+            gfloat y = cosf(scalar);
+            le_matrix_set_element(input, 0, i, x);
+            le_matrix_set_element(input, 1, i, y);
+            le_matrix_set_element(output, 0, i, scalar > 0.0f ? 1.0f : 0.0f);
+        }
+    }
+    else
+    {
+        le_matrix_multiply_by_scalar(input, 2.0f);
+        le_matrix_add_scalar(input, -1.0f);
+    }
+    
+    window->trainig_data = le_training_data_new_take(input, output);
     
     printf("training data generated\n");
 }
