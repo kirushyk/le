@@ -97,7 +97,7 @@ generate_activated (GSimpleAction *action, GVariant *parameter, gpointer data)
 {
     LEMainWindow *window = LE_MAIN_WINDOW (data);
     
-    guint examples_count = 128;
+    guint examples_count = 256;
     
     LeMatrix *input = le_matrix_new_rand(2, examples_count);
     LeMatrix *output = le_matrix_new_rand(1, examples_count);
@@ -109,8 +109,8 @@ generate_activated (GSimpleAction *action, GVariant *parameter, gpointer data)
         for (i = 0; i < examples_count; i++)
         {
             gfloat scalar = (rand() * 2.0f / RAND_MAX) - 1.0f;
-            gfloat x = sinf(scalar);
-            gfloat y = cosf(scalar);
+            gfloat x = sinf(scalar * 3.0f * M_PI) * fabs(scalar);
+            gfloat y = cosf(scalar * 3.0f * M_PI) * scalar;
             le_matrix_set_element(input, 0, i, x);
             le_matrix_set_element(input, 1, i, y);
             le_matrix_set_element(output, 0, i, scalar > 0.0f ? 1.0f : 0.0f);
