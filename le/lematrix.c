@@ -62,6 +62,12 @@ le_matrix_at(LeMatrix *self, unsigned y, unsigned x)
 }
 
 void
+le_matrix_set_element(LeMatrix *self, unsigned y, unsigned x, float value)
+{
+    self->data[y * self->width + x] = value;
+}
+
+void
 le_matrix_empty(LeMatrix *self)
 {
     free(self->data);

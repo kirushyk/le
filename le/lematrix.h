@@ -23,6 +23,11 @@ float      le_matrix_at                 (LeMatrix     *matrix,
                                          unsigned      y,
                                          unsigned      x);
 
+void       le_matrix_set_element        (LeMatrix     *matrix,
+                                         unsigned      y,
+                                         unsigned      x,
+                                         float         value);
+
 LeMatrix * le_matrix_new_identity       (unsigned      size);
 
 LeMatrix * le_matrix_new_zeros          (unsigned      height,
