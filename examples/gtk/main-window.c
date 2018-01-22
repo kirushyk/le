@@ -14,6 +14,7 @@ struct _LEMainWindow
     
     gboolean dark;
     LeTrainingData *trainig_data;
+    LeLogisticClassifier *classifier;
     
 };
 
@@ -33,35 +34,45 @@ draw_callback (GtkWidget *widget, cairo_t *cr, gpointer data)
     window->dark ? cairo_set_source_rgba (cr, 0.0, 0.0, 0.0, 1.0) : cairo_set_source_rgba (cr, 1.0, 1.0, 1.0, 1.0);
     cairo_rectangle (cr, 0, 0, width, height);
     cairo_fill(cr);
-    
-/*
-    cairo_surface_t *surf = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, width, height);
-    gint half = (width + height) / 2;
-    gint stride = cairo_image_surface_get_stride(surf);
-    cairo_surface_flush (surf);
-    guint8 *pixmap = cairo_image_surface_get_data(surf);
-    for (gint y = 0; y < height; y++)
+  
+    if (window->classifier)
     {
-        for (gint x = 0; x < width; x++)
+        cairo_surface_t *surf = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, width, height);
+        gint half = (width + height) / 2;
+        gint stride = cairo_image_surface_get_stride(surf);
+        cairo_surface_flush (surf);
+        guint8 *pixmap = cairo_image_surface_get_data(surf);
+        for (gint y = 0; y < height; y++)
         {
-            if (x + y > half)
+            LeMatrix *column = le_matrix_new_zeros(2, width);
+            for (gint x = 0; x < width; x++)
             {
-                pixmap[y * stride + x * 4 + 2] = 32;
-                pixmap[y * stride + x * 4 + 1] = 96;
+                le_matrix_set_element(column, 0, x, x * 2.0f / width - 1.0f);
+                le_matrix_set_element(column, 1, x, y * -2.0f / height + 1.0f);
             }
-            else
+            
+            LeMatrix *prediction = le_logistic_classifier_prefict(window->classifier, column);
+            
+            for (gint x = 0; x < width; x++)
             {
-                pixmap[y * stride + x * 4 + 2] = 128;
-                pixmap[y * stride + x * 4 + 1] = 96;
+                if (le_matrix_at(prediction, 0, x) > 0.5f)
+                {
+                    pixmap[y * stride + x * 4 + 2] = 32;
+                    pixmap[y * stride + x * 4 + 1] = 96;
+                }
+                else
+                {
+                    pixmap[y * stride + x * 4 + 2] = 128;
+                    pixmap[y * stride + x * 4 + 1] = 96;
+                }
+                pixmap[y * stride + x * 4 + 3] = 255;
             }
-            pixmap[y * stride + x * 4 + 3] = 255;
         }
+        cairo_surface_mark_dirty(surf);
+        cairo_set_source_surface(cr, surf, 0, 0);
+        cairo_paint(cr);
+        cairo_surface_destroy(surf);
     }
-    cairo_surface_mark_dirty(surf);
-    cairo_set_source_surface(cr, surf, 0, 0);
-    cairo_paint(cr);
-    cairo_surface_destroy(surf);
- */
     
     if (window->trainig_data)
     {
@@ -188,6 +199,7 @@ generate_activated (GSimpleAction *action, GVariant *parameter, gpointer data)
     }
     
     window->trainig_data = le_training_data_new_take(input, output);
+    window->classifier = le_logistic_classifier_new_train(input, output);
     
     printf("training data generated\n");
 }
@@ -256,6 +268,7 @@ le_main_window_init (LEMainWindow *self)
 {
     self->dark = FALSE;
     self->trainig_data = NULL;
+    self->classifier = NULL;
     
     self->drawing_area = gtk_drawing_area_new ();
     gtk_widget_set_size_request (self->drawing_area, 640, 480);
