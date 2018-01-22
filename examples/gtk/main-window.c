@@ -145,6 +145,42 @@ generate_activated (GSimpleAction *action, GVariant *parameter, gpointer data)
             le_matrix_set_element(output, 0, i, y > bias + slope * x);
         }
     }
+    else if (g_strcmp0(pattern_name, "svb") == 0)
+    {
+        guint i, j;
+        
+#define SUPPORT_VECTORS_COUNT 4
+        gfloat svx[SUPPORT_VECTORS_COUNT], svy[SUPPORT_VECTORS_COUNT];
+        
+        for (j = 0; j < SUPPORT_VECTORS_COUNT; j++)
+        {
+            svx[j] = (rand() * 2.0f / RAND_MAX) - 1.0f;
+            svy[j] = (rand() * 2.0f / RAND_MAX) - 1.0f;
+        }
+        
+        le_matrix_multiply_by_scalar(input, 2.0f);
+        le_matrix_add_scalar(input, -1.0f);
+        for (i = 0; i < examples_count; i++)
+        {
+            guint closest_vector = 0;
+            gfloat min_squared_distance = 2.0f;
+            
+            gfloat x = le_matrix_at(input, 0, i);
+            gfloat y = le_matrix_at(input, 1, i);
+            
+            for (j = 0; j < SUPPORT_VECTORS_COUNT; j++)
+            {
+                gfloat squared_distance = (x - svx[j]) * (x - svx[j]) + (y - svy[j]) * (y - svy[j]);
+                if (squared_distance < min_squared_distance)
+                {
+                    min_squared_distance = squared_distance;
+                    closest_vector = j;
+                }
+            }
+            
+            le_matrix_set_element(output, 0, i, closest_vector >= SUPPORT_VECTORS_COUNT / 2);
+        }
+    }
     else
     {
         le_matrix_multiply_by_scalar(input, 2.0f);
