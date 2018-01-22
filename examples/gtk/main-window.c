@@ -130,6 +130,21 @@ generate_activated (GSimpleAction *action, GVariant *parameter, gpointer data)
             le_matrix_set_element(output, 0, i, distance < 0.5f ? 1.0f : 0.0f);
         }
     }
+    else if (g_strcmp0(pattern_name, "linsep") == 0)
+    {
+        guint i;
+        gfloat bias = (gfloat)rand() / RAND_MAX - 0.5f;
+        gfloat slope = rand() * 20.0f / RAND_MAX - 10.0f;
+        le_matrix_multiply_by_scalar(input, 2.0f);
+        le_matrix_add_scalar(input, -1.0f);
+        for (i = 0; i < examples_count; i++)
+        {
+            gfloat x = le_matrix_at(input, 0, i);
+            gfloat y = le_matrix_at(input, 1, i);
+            
+            le_matrix_set_element(output, 0, i, y > bias + slope * x);
+        }
+    }
     else
     {
         le_matrix_multiply_by_scalar(input, 2.0f);
