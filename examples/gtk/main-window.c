@@ -116,6 +116,20 @@ generate_activated (GSimpleAction *action, GVariant *parameter, gpointer data)
             le_matrix_set_element(output, 0, i, scalar > 0.0f ? 1.0f : 0.0f);
         }
     }
+    else if (g_strcmp0(pattern_name, "nested") == 0)
+    {
+        guint i;
+        for (i = 0; i < examples_count; i++)
+        {
+            gfloat distance = (gfloat)rand() / RAND_MAX;
+            gfloat angle = rand() * 2.0f * M_PI / RAND_MAX;
+            gfloat x = sinf(angle) * distance;
+            gfloat y = cosf(angle) * distance;
+            le_matrix_set_element(input, 0, i, x);
+            le_matrix_set_element(input, 1, i, y);
+            le_matrix_set_element(output, 0, i, distance < 0.5f ? 1.0f : 0.0f);
+        }
+    }
     else
     {
         le_matrix_multiply_by_scalar(input, 2.0f);

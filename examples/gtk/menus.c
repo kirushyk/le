@@ -34,7 +34,7 @@ le_menubar_new ()
     subsection = g_menu_new ();
     g_menu_append (subsection, "Random", "win.gen::rand");
     g_menu_append (subsection, "Linearly Separable", "win.gen::linsep");
-    g_menu_append (subsection, "Nested Circles", "win.gen::nc");
+    g_menu_append (subsection, "Nested Circles", "win.gen::nested");
     g_menu_append (subsection, "SV Border", "win.gen::svb");
     g_menu_append (subsection, "Spiral", "win.gen::spiral");
     g_menu_append_submenu (section, "Generate", G_MENU_MODEL (subsection));
