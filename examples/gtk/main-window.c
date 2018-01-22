@@ -38,7 +38,7 @@ draw_callback (GtkWidget *widget, cairo_t *cr, gpointer data)
     if (window->classifier)
     {
         cairo_surface_t *surf = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, width, height);
-        gint half = (width + height) / 2;
+
         gint stride = cairo_image_surface_get_stride(surf);
         cairo_surface_flush (surf);
         guint8 *pixmap = cairo_image_surface_get_data(surf);
