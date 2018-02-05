@@ -9,7 +9,7 @@ le_gtk_demo_sources = [
 le_gtk_demo_deps = dependency('gtk+-3.0')
 
 executable('le-gtk-demo', le_gtk_demo_sources,
-    dependencies : le_gtk_demo_deps,
+    dependencies: le_gtk_demo_deps,
     include_directories: incdir,
     link_with: le,
     install: false
