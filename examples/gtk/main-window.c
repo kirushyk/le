@@ -221,8 +221,8 @@ view_activated (GSimpleAction *action, GVariant *parameter, gpointer data)
 {
     LEMainWindow *window = LE_MAIN_WINDOW (data);
     g_assert (LE_IS_MAIN_WINDOW (window));
-    const gchar *style = g_variant_get_string (parameter, NULL);
-    /*
+    /*const gchar *style = g_variant_get_string (parameter, NULL);
+
     if ((g_strcmp0(style, "q") == 0))
         window->projection = LE_PROJECTION_TIMEX;
     else if */
@@ -256,7 +256,6 @@ le_main_window_constructed (GObject *object)
 static void
 le_main_window_class_init (LEMainWindowClass *klass)
 {
-    gint i;
     GObjectClass *object_class = G_OBJECT_CLASS (klass);
     
     object_class->constructed = le_main_window_constructed;
