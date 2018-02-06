@@ -20,6 +20,52 @@ struct _LEMainWindow
 
 G_DEFINE_TYPE (LEMainWindow, le_main_window, GTK_TYPE_APPLICATION_WINDOW);
 
+typedef struct ARGB32
+{
+    guint8 b, g, r, a;
+} ARGB32;
+
+static ARGB32
+color_for_tanh (float scalar)
+{
+    ARGB32 color;
+    if (scalar > 0)
+    {
+        color.r = 255;
+        color.g = 255;
+        color.b = (guint8)((1.f - scalar) * 255);
+    }
+    else
+    {
+        color.r = (guint8)((scalar + 1.f) * 255);
+        color.g = (guint8)((scalar + 1.f) * 255);
+        color.b = 255;
+    }
+    color.a = 255;
+    return color;
+}
+
+static ARGB32
+color_for_logistic (float scalar)
+{
+    ARGB32 color;
+    scalar = scalar * 2.f - 1.f;
+    if (scalar > 0)
+    {
+        color.r = 255;
+        color.g = 255;
+        color.b = (guint8)((1.f - scalar) * 255);
+    }
+    else
+    {
+        color.r = (guint8)((scalar + 1.f) * 255);
+        color.g = (guint8)((scalar + 1.f) * 255);
+        color.b = 255;
+    }
+    color.a = 255;
+    return color;
+}
+
 static gboolean
 draw_callback (GtkWidget *widget, cairo_t *cr, gpointer data)
 {
@@ -39,7 +85,6 @@ draw_callback (GtkWidget *widget, cairo_t *cr, gpointer data)
     {
         cairo_surface_t *surf = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, width, height);
 
-        gint stride = cairo_image_surface_get_stride(surf);
         cairo_surface_flush (surf);
         guint8 *pixmap = cairo_image_surface_get_data(surf);
         for (gint y = 0; y < height; y++)
@@ -55,17 +100,8 @@ draw_callback (GtkWidget *widget, cairo_t *cr, gpointer data)
             
             for (gint x = 0; x < width; x++)
             {
-                if (le_matrix_at(prediction, 0, x) > 0.5f)
-                {
-                    pixmap[y * stride + x * 4 + 2] = 32;
-                    pixmap[y * stride + x * 4 + 1] = 96;
-                }
-                else
-                {
-                    pixmap[y * stride + x * 4 + 2] = 128;
-                    pixmap[y * stride + x * 4 + 1] = 96;
-                }
-                pixmap[y * stride + x * 4 + 3] = 255;
+                ARGB32 color = color_for_logistic(le_matrix_at(prediction, 0, x));
+                ((ARGB32 *)pixmap)[y * width + x] = color;
             }
         }
         cairo_surface_mark_dirty(surf);
