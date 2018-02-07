@@ -216,9 +216,8 @@ generate_activated (GSimpleAction *action, GVariant *parameter, gpointer data)
         le_matrix_add_scalar(input, -1.0f);
     }
     
-    LeMatrix *poly = le_matrix_new_polynomia(input);
-    window->trainig_data = le_training_data_new_take(poly, output);
-    window->classifier = le_logistic_classifier_new_train(poly, output);
+    window->trainig_data = le_training_data_new_take(input, output);
+    window->classifier = le_logistic_classifier_new_train(input, output, 0);
     
     if (window->classifier_visualisation)
     {
@@ -236,10 +235,10 @@ generate_activated (GSimpleAction *action, GVariant *parameter, gpointer data)
             le_matrix_set_element(column, 0, x, x * 2.0f / width - 1.0f);
             le_matrix_set_element(column, 1, x, y * -2.0f / height + 1.0f);
         }
-        LeMatrix *polynomia = le_matrix_new_polynomia(column);
-        le_matrix_free(column);
         
-        LeMatrix *prediction = le_logistic_classifier_prefict(window->classifier, polynomia);
+        LeMatrix *prediction = le_logistic_classifier_prefict(window->classifier, column);
+        
+        le_matrix_free(column);
         
         for (gint x = 0; x < width; x++)
         {

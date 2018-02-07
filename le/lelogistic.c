@@ -4,11 +4,12 @@
 struct LeLogisticClassifier
 {
     LeMatrix *w;
-    float    b;
+    float     b;
+    unsigned  polynomia_degree;
 };
 
 LeLogisticClassifier *
-le_logistic_classifier_new_train(LeMatrix *x_train, LeMatrix *y_train)
+le_logistic_classifier_new_train(LeMatrix *x_train, LeMatrix *y_train, unsigned polynomia_degree)
 {
     LeLogisticClassifier *self = NULL;
     unsigned features_count = le_matrix_get_height(x_train);
