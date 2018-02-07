@@ -32,7 +32,7 @@ le_training_data_get_input(LeTrainingData *data)
 }
 
 LeMatrix *
-le_training_data_get_output (LeTrainingData *data)
+le_training_data_get_output(LeTrainingData *data)
 {
     return data->y;
 }
@@ -40,5 +40,7 @@ le_training_data_get_output (LeTrainingData *data)
 void
 le_training_data_free(LeTrainingData *self)
 {
+    le_matrix_free(self->x);
+    le_matrix_free(self->y);
     free(self);
 }
