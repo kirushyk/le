@@ -1,3 +1,4 @@
+#include <stdlib.h>
 #include <gtk/gtk.h>
 #include <le/le.h>
 #include "menus.h"
@@ -41,8 +42,14 @@ main(int argc, char *argv[])
     GtkApplication *app;
     int status;
     
+#if __APPLE__
+    sranddev();
+#else
+    srand(time(nullptr));
+#endif
+    
     g_set_prgname ("le-gtk-demo");
-    g_set_application_name ("Le Gtk+ Demo");
+    g_set_application_name ("Le Playground");
     
     app = gtk_application_new ("org.kirushyk.le-gtk-demo", G_APPLICATION_HANDLES_OPEN);
     g_signal_connect (app, "activate", G_CALLBACK (le_activate), NULL);

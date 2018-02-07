@@ -13,8 +13,11 @@ struct _LEMainWindow
     GtkWidget *drawing_area;
     
     gboolean dark;
+    
     LeTrainingData *trainig_data;
     LeLogisticClassifier *classifier;
+    
+    cairo_surface_t *classifier_visualisation;
     
 };
 
@@ -81,33 +84,10 @@ draw_callback (GtkWidget *widget, cairo_t *cr, gpointer data)
     cairo_rectangle (cr, 0, 0, width, height);
     cairo_fill(cr);
   
-    if (window->classifier)
+    if (window->classifier_visualisation)
     {
-        cairo_surface_t *surf = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, width, height);
-
-        cairo_surface_flush (surf);
-        guint8 *pixmap = cairo_image_surface_get_data(surf);
-        for (gint y = 0; y < height; y++)
-        {
-            LeMatrix *column = le_matrix_new_zeros(2, width);
-            for (gint x = 0; x < width; x++)
-            {
-                le_matrix_set_element(column, 0, x, x * 2.0f / width - 1.0f);
-                le_matrix_set_element(column, 1, x, y * -2.0f / height + 1.0f);
-            }
-            
-            LeMatrix *prediction = le_logistic_classifier_prefict(window->classifier, column);
-            
-            for (gint x = 0; x < width; x++)
-            {
-                ARGB32 color = color_for_logistic(le_matrix_at(prediction, 0, x));
-                ((ARGB32 *)pixmap)[y * width + x] = color;
-            }
-        }
-        cairo_surface_mark_dirty(surf);
-        cairo_set_source_surface(cr, surf, 0, 0);
+        cairo_set_source_surface(cr, window->classifier_visualisation, 0, 0);
         cairo_paint(cr);
-        cairo_surface_destroy(surf);
     }
     
     if (window->trainig_data)
@@ -134,8 +114,6 @@ draw_callback (GtkWidget *widget, cairo_t *cr, gpointer data)
         }
     }
     
-    gtk_widget_queue_draw (GTK_WIDGET (window));
-    
     return FALSE;
 }
 
@@ -143,7 +121,11 @@ static void
 generate_activated (GSimpleAction *action, GVariant *parameter, gpointer data)
 {
     LEMainWindow *window = LE_MAIN_WINDOW (data);
+    guint width, height;
     
+    width = gtk_widget_get_allocated_width (window);
+    height = gtk_widget_get_allocated_height (window);
+
     guint examples_count = 256;
     
     LeMatrix *input = le_matrix_new_rand(2, examples_count);
@@ -234,10 +216,42 @@ generate_activated (GSimpleAction *action, GVariant *parameter, gpointer data)
         le_matrix_add_scalar(input, -1.0f);
     }
     
-    window->trainig_data = le_training_data_new_take(input, output);
-    window->classifier = le_logistic_classifier_new_train(input, output);
+    LeMatrix *poly = le_matrix_new_polynomia(input);
+    window->trainig_data = le_training_data_new_take(poly, output);
+    window->classifier = le_logistic_classifier_new_train(poly, output);
+    
+    if (window->classifier_visualisation)
+    {
+        cairo_surface_destroy(window->classifier_visualisation);
+    }
+    window->classifier_visualisation = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, width, height);
+    
+    cairo_surface_flush (window->classifier_visualisation);
+    guint8 *pixmap = cairo_image_surface_get_data(window->classifier_visualisation);
+    for (gint y = 0; y < height; y++)
+    {
+        LeMatrix *column = le_matrix_new_uninitialized(2, width);
+        for (gint x = 0; x < width; x++)
+        {
+            le_matrix_set_element(column, 0, x, x * 2.0f / width - 1.0f);
+            le_matrix_set_element(column, 1, x, y * -2.0f / height + 1.0f);
+        }
+        LeMatrix *polynomia = le_matrix_new_polynomia(column);
+        le_matrix_free(column);
+        
+        LeMatrix *prediction = le_logistic_classifier_prefict(window->classifier, polynomia);
+        
+        for (gint x = 0; x < width; x++)
+        {
+            ARGB32 color = color_for_logistic(le_matrix_at(prediction, 0, x));
+            ((ARGB32 *)pixmap)[y * width + x] = color;
+        }
+    }
+    cairo_surface_mark_dirty(window->classifier_visualisation);
     
     printf("training data generated\n");
+    
+    gtk_widget_queue_draw (GTK_WIDGET (window));
 }
 
 static void
@@ -304,6 +318,7 @@ le_main_window_init (LEMainWindow *self)
     self->dark = FALSE;
     self->trainig_data = NULL;
     self->classifier = NULL;
+    self->classifier_visualisation = NULL;
     
     self->drawing_area = gtk_drawing_area_new ();
     gtk_widget_set_size_request (self->drawing_area, 640, 480);
@@ -322,8 +337,9 @@ le_main_window_new (GtkApplication *application)
     
     window = g_object_new (LE_TYPE_MAIN_WINDOW, "application", application, NULL);
 
-    gtk_window_set_title (GTK_WINDOW (window), "Le Gtk+ Demo");
     gtk_window_set_default_size (GTK_WINDOW (window), 640, 480);
     
     return GTK_WIDGET (window);
 }
+
+// cairo_surface_destroy(window->classifier_visualisation);
