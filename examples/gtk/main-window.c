@@ -56,13 +56,13 @@ color_for_logistic (float scalar)
     if (scalar > 0)
     {
         color.r = 255;
-        color.g = 255;
+        color.g = (guint8)((1.f - scalar * 0.5) * 255);
         color.b = (guint8)((1.f - scalar) * 255);
     }
     else
     {
         color.r = (guint8)((scalar + 1.f) * 255);
-        color.g = (guint8)((scalar + 1.f) * 255);
+        color.g = (guint8)((0.5 * scalar + 1.f) * 255);
         color.b = 255;
     }
     color.a = 255;
