@@ -3,8 +3,8 @@
 #include <le/le.h>
 #include <math.h>
 
-#define LE_TYPE_MAIN_WINDOW le_main_window_get_type ()
-G_DECLARE_FINAL_TYPE (LEMainWindow, le_main_window, LE, MAIN_WINDOW, GtkApplicationWindow);
+#define LE_TYPE_MAIN_WINDOW le_main_window_get_type()
+G_DECLARE_FINAL_TYPE(LEMainWindow, le_main_window, LE, MAIN_WINDOW, GtkApplicationWindow);
 
 struct _LEMainWindow
 {
@@ -21,7 +21,7 @@ struct _LEMainWindow
     
 };
 
-G_DEFINE_TYPE (LEMainWindow, le_main_window, GTK_TYPE_APPLICATION_WINDOW);
+G_DEFINE_TYPE(LEMainWindow, le_main_window, GTK_TYPE_APPLICATION_WINDOW);
 
 typedef struct ARGB32
 {
@@ -29,19 +29,19 @@ typedef struct ARGB32
 } ARGB32;
 
 static ARGB32
-color_for_tanh (float scalar)
+color_for_tanh(float scalar)
 {
     ARGB32 color;
     if (scalar > 0)
     {
         color.r = 255;
-        color.g = 255;
+        color.g = (guint8)((1.f - scalar * 0.5) * 255);
         color.b = (guint8)((1.f - scalar) * 255);
     }
     else
     {
         color.r = (guint8)((scalar + 1.f) * 255);
-        color.g = (guint8)((scalar + 1.f) * 255);
+        color.g = (guint8)((0.5 * scalar + 1.f) * 255);
         color.b = 255;
     }
     color.a = 255;
@@ -49,7 +49,7 @@ color_for_tanh (float scalar)
 }
 
 static ARGB32
-color_for_logistic (float scalar)
+color_for_logistic(float scalar)
 {
     ARGB32 color;
     scalar = scalar * 2.f - 1.f;
@@ -70,18 +70,18 @@ color_for_logistic (float scalar)
 }
 
 static gboolean
-draw_callback (GtkWidget *widget, cairo_t *cr, gpointer data)
+draw_callback(GtkWidget *widget, cairo_t *cr, gpointer data)
 {
     gint i;
     guint width, height;
     LEMainWindow *window;
     
-    width = gtk_widget_get_allocated_width (widget);
-    height = gtk_widget_get_allocated_height (widget);
-    window = LE_MAIN_WINDOW (data);
+    width = gtk_widget_get_allocated_width(widget);
+    height = gtk_widget_get_allocated_height(widget);
+    window = LE_MAIN_WINDOW(data);
     
-    window->dark ? cairo_set_source_rgba (cr, 0.0, 0.0, 0.0, 1.0) : cairo_set_source_rgba (cr, 1.0, 1.0, 1.0, 1.0);
-    cairo_rectangle (cr, 0, 0, width, height);
+    window->dark ? cairo_set_source_rgba(cr, 0.0, 0.0, 0.0, 1.0) : cairo_set_source_rgba(cr, 1.0, 1.0, 1.0, 1.0);
+    cairo_rectangle(cr, 0, 0, width, height);
     cairo_fill(cr);
   
     if (window->classifier_visualisation)
@@ -100,7 +100,7 @@ draw_callback (GtkWidget *widget, cairo_t *cr, gpointer data)
             // window->dark ? cairo_set_source_rgba (cr, 0.0, 0.0, 0.0, 1.0) : cairo_set_source_rgba (cr, 1.0, 1.0, 1.0, 1.0);
             double x = width * 0.5 + height * 0.5 * le_matrix_at(input, 0, i);
             double y = height * 0.5 - height * 0.5 * le_matrix_at(input, 1, i);
-            window->dark ? cairo_set_source_rgba (cr, 1.0, 1.0, 1.0, 1.0) : cairo_set_source_rgba (cr, 0.0, 0.0, 0.0, 1.0);
+            window->dark ? cairo_set_source_rgba(cr, 1.0, 1.0, 1.0, 1.0) : cairo_set_source_rgba(cr, 0.0, 0.0, 0.0, 1.0);
             cairo_set_line_width(cr, 0.5);
             cairo_arc(cr, x, y, 2., 0., 2 * M_PI);
             if (le_matrix_at(output, 0, i) > 0.5)
@@ -118,13 +118,13 @@ draw_callback (GtkWidget *widget, cairo_t *cr, gpointer data)
 }
 
 static void
-generate_activated (GSimpleAction *action, GVariant *parameter, gpointer data)
+generate_activated(GSimpleAction *action, GVariant *parameter, gpointer data)
 {
-    LEMainWindow *window = LE_MAIN_WINDOW (data);
+    LEMainWindow *window = LE_MAIN_WINDOW(data);
     guint width, height;
     
-    width = gtk_widget_get_allocated_width (window);
-    height = gtk_widget_get_allocated_height (window);
+    width = gtk_widget_get_allocated_width(GTK_WIDGET(window));
+    height = gtk_widget_get_allocated_height(GTK_WIDGET(window));
 
     guint examples_count = 256;
     
@@ -225,7 +225,7 @@ generate_activated (GSimpleAction *action, GVariant *parameter, gpointer data)
     }
     window->classifier_visualisation = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, width, height);
     
-    cairo_surface_flush (window->classifier_visualisation);
+    cairo_surface_flush(window->classifier_visualisation);
     guint8 *pixmap = cairo_image_surface_get_data(window->classifier_visualisation);
     for (gint y = 0; y < height; y++)
     {
@@ -250,41 +250,41 @@ generate_activated (GSimpleAction *action, GVariant *parameter, gpointer data)
     
     printf("training data generated\n");
     
-    gtk_widget_queue_draw (GTK_WIDGET (window));
+    gtk_widget_queue_draw(GTK_WIDGET(window));
 }
 
 static void
-style_activated (GSimpleAction *action, GVariant *parameter, gpointer data)
+style_activated(GSimpleAction *action, GVariant *parameter, gpointer data)
 {
-    LEMainWindow *window = LE_MAIN_WINDOW (data);
-    g_assert (LE_IS_MAIN_WINDOW (window));
-    const gchar *style = g_variant_get_string (parameter, NULL);
-    window->dark = (g_strcmp0(style, "dark") == 0);
+    LEMainWindow *window = LE_MAIN_WINDOW(data);
+    g_assert(LE_IS_MAIN_WINDOW(window));
+    const gchar *style = g_variant_get_string(parameter, NULL);
+    window->dark = 0 == g_strcmp0(style, "dark");
     
     /// @fixme: Only redraw drawing area only
-    gtk_widget_queue_draw (GTK_WIDGET (window));
+    gtk_widget_queue_draw(GTK_WIDGET(window));
 }
 
 static void
-view_activated (GSimpleAction *action, GVariant *parameter, gpointer data)
+view_activated(GSimpleAction *action, GVariant *parameter, gpointer data)
 {
-    LEMainWindow *window = LE_MAIN_WINDOW (data);
-    g_assert (LE_IS_MAIN_WINDOW (window));
+    LEMainWindow *window = LE_MAIN_WINDOW(data);
+    g_assert(LE_IS_MAIN_WINDOW(window));
     /*const gchar *style = g_variant_get_string (parameter, NULL);
 
     if ((g_strcmp0(style, "q") == 0))
         window->projection = LE_PROJECTION_TIMEX;
     else if */
     
-    gtk_widget_queue_draw (GTK_WIDGET (window));
+    gtk_widget_queue_draw(GTK_WIDGET(window));
 }
 
 static void
-close_activated (GSimpleAction *action, GVariant *parameter, gpointer data)
+close_activated(GSimpleAction *action, GVariant *parameter, gpointer data)
 {
-    GtkWidget *window = GTK_WIDGET (data);
-    g_object_set (window, "application", NULL, NULL);
-    gtk_window_close (GTK_WINDOW (window));
+    GtkWidget *window = GTK_WIDGET(data);
+    g_object_set(window, "application", NULL, NULL);
+    gtk_window_close(GTK_WINDOW(window));
 }
 
 static GActionEntry win_entries[] =
@@ -297,36 +297,36 @@ static GActionEntry win_entries[] =
 };
 
 static void
-le_main_window_constructed (GObject *object)
+le_main_window_constructed(GObject *object)
 {
-    G_OBJECT_CLASS (le_main_window_parent_class)->constructed (object);
+    G_OBJECT_CLASS(le_main_window_parent_class)->constructed(object);
 }
 
 static void
-le_main_window_class_init (LEMainWindowClass *klass)
+le_main_window_class_init(LEMainWindowClass *klass)
 {
-    GObjectClass *object_class = G_OBJECT_CLASS (klass);
+    GObjectClass *object_class = G_OBJECT_CLASS(klass);
     
     object_class->constructed = le_main_window_constructed;
     
 }
 
 static void
-le_main_window_init (LEMainWindow *self)
+le_main_window_init(LEMainWindow *self)
 {
     self->dark = FALSE;
     self->trainig_data = NULL;
     self->classifier = NULL;
     self->classifier_visualisation = NULL;
     
-    self->drawing_area = gtk_drawing_area_new ();
-    gtk_widget_set_size_request (self->drawing_area, 640, 480);
+    self->drawing_area = gtk_drawing_area_new();
+    gtk_widget_set_size_request(self->drawing_area, 640, 480);
     
-    g_signal_connect (G_OBJECT (self->drawing_area), "draw", G_CALLBACK (draw_callback), self);
+    g_signal_connect(G_OBJECT(self->drawing_area), "draw", G_CALLBACK(draw_callback), self);
     
-    gtk_container_add (GTK_CONTAINER (self), self->drawing_area);
+    gtk_container_add(GTK_CONTAINER(self), self->drawing_area);
     
-    g_action_map_add_action_entries (G_ACTION_MAP (self), win_entries, G_N_ELEMENTS (win_entries), self);
+    g_action_map_add_action_entries(G_ACTION_MAP(self), win_entries, G_N_ELEMENTS(win_entries), self);
 }
 
 GtkWidget *
@@ -334,11 +334,11 @@ le_main_window_new (GtkApplication *application)
 {
     LEMainWindow *window;
     
-    window = g_object_new (LE_TYPE_MAIN_WINDOW, "application", application, NULL);
+    window = g_object_new(LE_TYPE_MAIN_WINDOW, "application", application, NULL);
 
-    gtk_window_set_default_size (GTK_WINDOW (window), 640, 480);
+    gtk_window_set_default_size(GTK_WINDOW(window), 640, 480);
     
-    return GTK_WIDGET (window);
+    return GTK_WIDGET(window);
 }
 
 // cairo_surface_destroy(window->classifier_visualisation);
