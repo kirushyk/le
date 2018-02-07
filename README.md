@@ -2,4 +2,6 @@
 
 Neat statistical learning framework.
 
-Unregularized logistic regression is the only learning algorithm supported at this moment.
+Learning algorithm supported at this moment:
+* logistic classification;
+* polynomial classification.
