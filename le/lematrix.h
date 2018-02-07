@@ -30,6 +30,9 @@ void       le_matrix_set_element        (LeMatrix     *matrix,
 
 LeMatrix * le_matrix_new_identity       (unsigned      size);
 
+LeMatrix * le_matrix_new_uninitialized  (unsigned      height,
+                                         unsigned      width);
+
 LeMatrix * le_matrix_new_zeros          (unsigned      height,
                                          unsigned      width);
 
@@ -61,5 +64,7 @@ void       le_matrix_free               (LeMatrix     *matrix);
 
 void       le_matrix_print              (LeMatrix     *matrix,
                                          FILE         *stream);
+
+LeMatrix * le_matrix_new_polynomia      (LeMatrix     *matrix);
 
 #endif
