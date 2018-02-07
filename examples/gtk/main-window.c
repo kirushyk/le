@@ -217,7 +217,7 @@ generate_activated (GSimpleAction *action, GVariant *parameter, gpointer data)
     }
     
     window->trainig_data = le_training_data_new_take(input, output);
-    window->classifier = le_logistic_classifier_new_train(input, output, 0);
+    window->classifier = le_logistic_classifier_new_train(input, output, 1);
     
     if (window->classifier_visualisation)
     {
