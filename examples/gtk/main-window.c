@@ -229,16 +229,16 @@ generate_activated (GSimpleAction *action, GVariant *parameter, gpointer data)
     guint8 *pixmap = cairo_image_surface_get_data(window->classifier_visualisation);
     for (gint y = 0; y < height; y++)
     {
-        LeMatrix *column = le_matrix_new_uninitialized(2, width);
+        LeMatrix *row = le_matrix_new_uninitialized(2, width);
         for (gint x = 0; x < width; x++)
         {
-            le_matrix_set_element(column, 0, x, x * 2.0f / width - 1.0f);
-            le_matrix_set_element(column, 1, x, y * -2.0f / height + 1.0f);
+            le_matrix_set_element(row, 0, x, x * 2.0f / width - 1.0f);
+            le_matrix_set_element(row, 1, x, y * -2.0f / height + 1.0f);
         }
         
-        LeMatrix *prediction = le_logistic_classifier_prefict(window->classifier, column);
+        LeMatrix *prediction = le_logistic_classifier_prefict(window->classifier, row);
         
-        le_matrix_free(column);
+        le_matrix_free(row);
         
         for (gint x = 0; x < width; x++)
         {
