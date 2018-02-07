@@ -1,7 +1,7 @@
 # Le
 
-Neat statistical learning framework.
+Neat machine learning framework.
 
-Learning algorithm supported at this moment:
+Learning algorithms supported at this moment:
 * logistic classification;
 * polynomial classification.
