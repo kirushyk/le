@@ -45,7 +45,7 @@ main(int argc, char *argv[])
 #if __APPLE__
     sranddev();
 #else
-    srand(time(nullptr));
+    srand(time(NULL));
 #endif
     
     g_set_prgname("le-gtk-demo");
