@@ -330,7 +330,19 @@ le_main_window_init(LEMainWindow *self)
     
     GtkWidget *data_vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
     GtkWidget *label = gtk_label_new("Data");
+    GtkWidget *rand_rb = gtk_radio_button_new_with_label(NULL, "Random");
+    GtkWidget *linsep_rb = gtk_radio_button_new_with_label_from_widget(GTK_RADIO_BUTTON(rand_rb), "Linearly Separable");
+    GtkWidget *nested_rb = gtk_radio_button_new_with_label_from_widget(GTK_RADIO_BUTTON(rand_rb), "Nested Circles");
+    GtkWidget *svb_rb = gtk_radio_button_new_with_label_from_widget(GTK_RADIO_BUTTON(rand_rb), "SV Border");
+    GtkWidget *spiral_rb = gtk_radio_button_new_with_label_from_widget(GTK_RADIO_BUTTON(rand_rb), "Spiral");
+    GtkWidget *generate = gtk_button_new_with_label("Generate");
     gtk_container_add(GTK_CONTAINER(data_vbox), label);
+    gtk_container_add(GTK_CONTAINER(data_vbox), rand_rb);
+    gtk_container_add(GTK_CONTAINER(data_vbox), linsep_rb);
+    gtk_container_add(GTK_CONTAINER(data_vbox), nested_rb);
+    gtk_container_add(GTK_CONTAINER(data_vbox), svb_rb);
+    gtk_container_add(GTK_CONTAINER(data_vbox), spiral_rb);
+    gtk_container_add(GTK_CONTAINER(data_vbox), generate);
     
     GtkWidget *model_vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
     label = gtk_label_new("Model");
