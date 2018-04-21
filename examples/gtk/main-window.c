@@ -319,13 +319,42 @@ le_main_window_init(LEMainWindow *self)
     self->classifier = NULL;
     self->classifier_visualisation = NULL;
     
+    GtkWidget *reset = gtk_button_new_from_icon_name("go-first", GTK_ICON_SIZE_LARGE_TOOLBAR);
+    GtkWidget *start = gtk_button_new_from_icon_name("media-playback-start", GTK_ICON_SIZE_LARGE_TOOLBAR);
+    GtkWidget *step = gtk_button_new_from_icon_name("go-next", GTK_ICON_SIZE_LARGE_TOOLBAR);
+
+    GtkWidget *learning_hbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
+    gtk_container_add(GTK_CONTAINER(learning_hbox), reset);
+    gtk_container_add(GTK_CONTAINER(learning_hbox), start);
+    gtk_container_add(GTK_CONTAINER(learning_hbox), step);
+    
+    GtkWidget *data_vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
+    GtkWidget *label = gtk_label_new("Data");
+    gtk_container_add(GTK_CONTAINER(data_vbox), label);
+    
+    GtkWidget *model_vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
+    label = gtk_label_new("Model");
+    gtk_container_add(GTK_CONTAINER(model_vbox), label);
+    
     self->drawing_area = gtk_drawing_area_new();
     gtk_widget_set_size_request(self->drawing_area, 256, 256);
-    
     g_signal_connect(G_OBJECT(self->drawing_area), "draw", G_CALLBACK(draw_callback), self);
     
-    gtk_container_add(GTK_CONTAINER(self), self->drawing_area);
+    GtkWidget *output_vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
+    label = gtk_label_new("Output");
+    gtk_container_add(GTK_CONTAINER(output_vbox), label);
+    gtk_container_add(GTK_CONTAINER(output_vbox), self->drawing_area);
     
+    GtkWidget *main_hbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
+    gtk_container_add(GTK_CONTAINER(main_hbox), data_vbox);
+    gtk_container_add(GTK_CONTAINER(main_hbox), model_vbox);
+    gtk_container_add(GTK_CONTAINER(main_hbox), output_vbox);
+
+    GtkWidget *vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
+    gtk_container_add(GTK_CONTAINER(vbox), learning_hbox);
+    gtk_container_add(GTK_CONTAINER(vbox), main_hbox);
+    
+    gtk_container_add(GTK_CONTAINER(self), vbox);
     g_action_map_add_action_entries(G_ACTION_MAP(self), win_entries, G_N_ELEMENTS(win_entries), self);
 }
 
