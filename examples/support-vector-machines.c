@@ -20,7 +20,7 @@ main(int argc, const char *argv[])
     
     LeSVM *svm = le_svm_new_train(x, y);
     
-    LeMatrix *h = le_svm_prefict(svm, x);
+    LeMatrix *h = le_svm_predict(svm, x);
     printf("Preficted value =\n");
     le_matrix_print(h, stdout);
     

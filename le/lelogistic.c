@@ -50,7 +50,7 @@ le_logistic_classifier_new_train(LeMatrix *x_train, LeMatrix *y_train, unsigned 
     
     for (i = 0; i < iterations_count; i++)
     {
-        LeMatrix *h = le_logistic_classifier_prefict(self, x_train);
+        LeMatrix *h = le_logistic_classifier_predict(self, x_train);
         le_matrix_subtract(h, y_train);
         le_matrix_multiply_by_scalar(h, 1.0 / examples_count);
         LeMatrix *dwt = le_matrix_new_product(h, xt);
@@ -71,7 +71,7 @@ le_logistic_classifier_new_train(LeMatrix *x_train, LeMatrix *y_train, unsigned 
 }
 
 LeMatrix *
-le_logistic_classifier_prefict(LeLogisticClassifier *self, LeMatrix *x)
+le_logistic_classifier_predict(LeLogisticClassifier *self, LeMatrix *x)
 {
     unsigned i;
     LeMatrix *wt = le_matrix_new_transpose(self->w);

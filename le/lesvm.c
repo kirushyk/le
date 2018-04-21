@@ -10,7 +10,7 @@ le_svm_new_train(LeMatrix *x_train, LeMatrix *y_train)
 }
 
 LeMatrix *
-le_svm_prefict(LeSVM *svm, LeMatrix *x)
+le_svm_predict(LeSVM *svm, LeMatrix *x)
 {
     LeMatrix *y = le_matrix_new_zeros(1, le_matrix_get_width(x));
     

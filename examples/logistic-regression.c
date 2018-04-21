@@ -20,7 +20,7 @@ main(int argc, const char *argv[])
     
     LeLogisticClassifier *lc = le_logistic_classifier_new_train(x, y);
     
-    LeMatrix *h = le_logistic_classifier_prefict(lc, x);
+    LeMatrix *h = le_logistic_classifier_predict(lc, x);
     printf("Preficted value =\n");
     le_matrix_print(h, stdout);
     

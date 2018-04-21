@@ -13,7 +13,7 @@ LeLogisticClassifier * le_logistic_classifier_new_train (LeMatrix             *x
                                                          LeMatrix             *y_train,
                                                          unsigned              polynomia_degree);
 
-LeMatrix *             le_logistic_classifier_prefict   (LeLogisticClassifier *classifier,
+LeMatrix *             le_logistic_classifier_predict   (LeLogisticClassifier *classifier,
                                                          LeMatrix             *x);
 
 void                   le_logistic_classifier_free      (LeLogisticClassifier *classifier);

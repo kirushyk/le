@@ -236,7 +236,7 @@ generate_activated(GSimpleAction *action, GVariant *parameter, gpointer data)
             le_matrix_set_element(row, 1, x, y * -2.0f / height + 1.0f);
         }
         
-        LeMatrix *prediction = le_logistic_classifier_prefict(window->classifier, row);
+        LeMatrix *prediction = le_logistic_classifier_predict(window->classifier, row);
         
         le_matrix_free(row);
         
@@ -320,7 +320,7 @@ le_main_window_init(LEMainWindow *self)
     self->classifier_visualisation = NULL;
     
     self->drawing_area = gtk_drawing_area_new();
-    gtk_widget_set_size_request(self->drawing_area, 640, 480);
+    gtk_widget_set_size_request(self->drawing_area, 256, 256);
     
     g_signal_connect(G_OBJECT(self->drawing_area), "draw", G_CALLBACK(draw_callback), self);
     
@@ -336,7 +336,7 @@ le_main_window_new (GtkApplication *application)
     
     window = g_object_new(LE_TYPE_MAIN_WINDOW, "application", application, NULL);
 
-    gtk_window_set_default_size(GTK_WINDOW(window), 640, 480);
+    gtk_window_set_default_size(GTK_WINDOW(window), 256, 256);
     
     return GTK_WIDGET(window);
 }
