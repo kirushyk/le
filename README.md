@@ -6,6 +6,6 @@ Algorithms supported at this moment:
 
 ## License
 
-Copyright 2017 Kyrylo Polezhaiev. All rights reserved.
+Copyright &copy; 2017 Kyrylo Polezhaiev. All rights reserved.
 
-Licensed under the [MIT](LICENSE) License.
+Le is released under the [MIT](LICENSE) License.
