@@ -14,6 +14,7 @@ struct _LEMainWindow
     GtkApplicationWindow parent_instance;
     
     GtkWidget *drawing_area;
+    GtkWidget *epoch_label;
     
     gboolean dark;
     
@@ -327,9 +328,18 @@ le_main_window_init(LEMainWindow *self)
     GtkWidget *step = gtk_button_new_from_icon_name("go-next", GTK_ICON_SIZE_LARGE_TOOLBAR);
 
     GtkWidget *learning_hbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
-    gtk_container_add(GTK_CONTAINER(learning_hbox), reset);
-    gtk_container_add(GTK_CONTAINER(learning_hbox), start);
-    gtk_container_add(GTK_CONTAINER(learning_hbox), step);
+    gtk_box_pack_start(GTK_BOX(learning_hbox), reset, TRUE, FALSE, 0);
+    gtk_box_pack_start(GTK_BOX(learning_hbox), start, TRUE, FALSE, 0);
+    gtk_box_pack_start(GTK_BOX(learning_hbox), step, TRUE, FALSE, 0);
+    GtkWidget *learning_grid = gtk_grid_new();
+    gtk_grid_set_row_baseline_position(GTK_GRID(learning_grid), 0, GTK_BASELINE_POSITION_CENTER);
+    gtk_grid_set_row_baseline_position(GTK_GRID(learning_grid), 1, GTK_BASELINE_POSITION_CENTER);
+    gtk_grid_attach(GTK_GRID(learning_grid), gtk_label_new("Epoch"), 0, 0, 1, 1);
+    gtk_grid_attach(GTK_GRID(learning_grid), self->epoch_label = gtk_label_new("0"), 0, 1, 1, 1);
+    gtk_grid_attach(GTK_GRID(learning_grid), gtk_label_new("Learning Rate"), 1, 0, 1, 1);
+    gtk_grid_attach(GTK_GRID(learning_grid), gtk_label_new("Regularization"), 1, 0, 1, 1);
+    gtk_grid_attach(GTK_GRID(learning_grid), gtk_label_new("Regularization Rate"), 1, 0, 1, 1);
+    gtk_box_pack_start(GTK_BOX(learning_hbox), learning_grid, TRUE, TRUE, 0);
     
     GtkWidget *data_vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
     GtkWidget *label = gtk_label_new("Data");
@@ -339,17 +349,17 @@ le_main_window_init(LEMainWindow *self)
     GtkWidget *svb_rb = gtk_radio_button_new_with_label_from_widget(GTK_RADIO_BUTTON(rand_rb), "SV Border");
     GtkWidget *spiral_rb = gtk_radio_button_new_with_label_from_widget(GTK_RADIO_BUTTON(rand_rb), "Spiral");
     GtkWidget *generate = gtk_button_new_with_label("Generate");
-    gtk_container_add(GTK_CONTAINER(data_vbox), label);
-    gtk_container_add(GTK_CONTAINER(data_vbox), rand_rb);
-    gtk_container_add(GTK_CONTAINER(data_vbox), linsep_rb);
-    gtk_container_add(GTK_CONTAINER(data_vbox), nested_rb);
-    gtk_container_add(GTK_CONTAINER(data_vbox), svb_rb);
-    gtk_container_add(GTK_CONTAINER(data_vbox), spiral_rb);
-    gtk_container_add(GTK_CONTAINER(data_vbox), generate);
+    gtk_box_pack_start(GTK_BOX(data_vbox), label, TRUE, FALSE, 0);
+    gtk_box_pack_start(GTK_BOX(data_vbox), rand_rb, TRUE, FALSE, 0);
+    gtk_box_pack_start(GTK_BOX(data_vbox), linsep_rb, TRUE, FALSE, 0);
+    gtk_box_pack_start(GTK_BOX(data_vbox), nested_rb, TRUE, FALSE, 0);
+    gtk_box_pack_start(GTK_BOX(data_vbox), svb_rb, TRUE, FALSE, 0);
+    gtk_box_pack_start(GTK_BOX(data_vbox), spiral_rb, TRUE, FALSE, 0);
+    gtk_box_pack_start(GTK_BOX(data_vbox), generate, TRUE, FALSE, 0);
     
     GtkWidget *model_vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
     label = gtk_label_new("Model");
-    gtk_container_add(GTK_CONTAINER(model_vbox), label);
+    gtk_box_pack_start(GTK_BOX(model_vbox), label, TRUE, FALSE, 0);
     
     self->drawing_area = gtk_drawing_area_new();
     gtk_widget_set_size_request(self->drawing_area, 256, 256);
@@ -357,17 +367,17 @@ le_main_window_init(LEMainWindow *self)
     
     GtkWidget *output_vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
     label = gtk_label_new("Output");
-    gtk_container_add(GTK_CONTAINER(output_vbox), label);
-    gtk_container_add(GTK_CONTAINER(output_vbox), self->drawing_area);
+    gtk_box_pack_start(GTK_BOX(output_vbox), label, TRUE, FALSE, 0);
+    gtk_box_pack_start(GTK_BOX(output_vbox), self->drawing_area, TRUE, TRUE, 0);
     
     GtkWidget *main_hbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
-    gtk_container_add(GTK_CONTAINER(main_hbox), data_vbox);
-    gtk_container_add(GTK_CONTAINER(main_hbox), model_vbox);
-    gtk_container_add(GTK_CONTAINER(main_hbox), output_vbox);
+    gtk_box_pack_start(GTK_BOX(main_hbox), data_vbox, TRUE, FALSE, 0);
+    gtk_box_pack_start(GTK_BOX(main_hbox), model_vbox, TRUE, TRUE, 0);
+    gtk_box_pack_start(GTK_BOX(main_hbox), output_vbox, TRUE, FALSE, 0);
 
     GtkWidget *vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
-    gtk_container_add(GTK_CONTAINER(vbox), learning_hbox);
-    gtk_container_add(GTK_CONTAINER(vbox), main_hbox);
+    gtk_box_pack_start(GTK_BOX(vbox), learning_hbox, TRUE, FALSE, 0);
+    gtk_box_pack_start(GTK_BOX(vbox), main_hbox, TRUE, TRUE, 0);
     
     gtk_container_add(GTK_CONTAINER(self), vbox);
     g_action_map_add_action_entries(G_ACTION_MAP(self), win_entries, G_N_ELEMENTS(win_entries), self);
