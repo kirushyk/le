@@ -15,6 +15,6 @@ executable('le-gtk-demo', le_gtk_demo_sources,
     dependencies: le_gtk_demo_deps,
     include_directories: incdir,
     link_with: le,
-    install: false
+    install: true
 )
 
