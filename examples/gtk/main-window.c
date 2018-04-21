@@ -332,8 +332,7 @@ le_main_window_init(LEMainWindow *self)
     gtk_box_pack_start(GTK_BOX(learning_hbox), start, FALSE, FALSE, 2);
     gtk_box_pack_start(GTK_BOX(learning_hbox), step, FALSE, FALSE, 2);
     GtkWidget *learning_grid = gtk_grid_new();
-    gtk_grid_set_row_baseline_position(GTK_GRID(learning_grid), 0, GTK_BASELINE_POSITION_CENTER);
-    gtk_grid_set_row_baseline_position(GTK_GRID(learning_grid), 1, GTK_BASELINE_POSITION_CENTER);
+    gtk_grid_set_column_spacing(GTK_GRID(learning_grid), 8);
     gtk_grid_attach(GTK_GRID(learning_grid), gtk_label_new("Epoch"), 0, 0, 1, 1);
     gtk_grid_attach(GTK_GRID(learning_grid), self->epoch_label = gtk_label_new("0"), 0, 1, 1, 1);
     gtk_grid_attach(GTK_GRID(learning_grid), gtk_label_new("Learning Rate"), 1, 0, 1, 1);
@@ -370,7 +369,8 @@ le_main_window_init(LEMainWindow *self)
     gtk_box_pack_start(GTK_BOX(learning_hbox), learning_grid, FALSE, FALSE, 2);
     
     GtkWidget *data_vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 2);
-    GtkWidget *label = gtk_label_new("Data");
+    GtkWidget *label = gtk_label_new("<b>DATA</b>");
+    gtk_label_set_use_markup(GTK_LABEL(label), TRUE);
     GtkWidget *rand_rb = gtk_radio_button_new_with_label(NULL, "Random");
     GtkWidget *linsep_rb = gtk_radio_button_new_with_label_from_widget(GTK_RADIO_BUTTON(rand_rb), "Linearly Separable");
     GtkWidget *nested_rb = gtk_radio_button_new_with_label_from_widget(GTK_RADIO_BUTTON(rand_rb), "Nested Circles");
@@ -386,7 +386,8 @@ le_main_window_init(LEMainWindow *self)
     gtk_box_pack_start(GTK_BOX(data_vbox), generate, FALSE, FALSE, 2);
     
     GtkWidget *model_vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 2);
-    label = gtk_label_new("Model");
+    label = gtk_label_new("<b>MODEL</b>");
+    gtk_label_set_use_markup(GTK_LABEL(label), TRUE);
     gtk_box_pack_start(GTK_BOX(model_vbox), label, FALSE, FALSE, 2);
     
     self->drawing_area = gtk_drawing_area_new();
@@ -394,17 +395,21 @@ le_main_window_init(LEMainWindow *self)
     g_signal_connect(G_OBJECT(self->drawing_area), "draw", G_CALLBACK(draw_callback), self);
     
     GtkWidget *output_vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 2);
-    label = gtk_label_new("Output");
+    label = gtk_label_new("<b>OUTPUT</b>");
+    gtk_label_set_use_markup(GTK_LABEL(label), TRUE);
     gtk_box_pack_start(GTK_BOX(output_vbox), label, FALSE, FALSE, 2);
     gtk_box_pack_start(GTK_BOX(output_vbox), self->drawing_area, FALSE, FALSE, 2);
     
     GtkWidget *main_hbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 2);
     gtk_box_pack_start(GTK_BOX(main_hbox), data_vbox, FALSE, FALSE, 2);
+    gtk_box_pack_start(GTK_BOX(main_hbox), gtk_separator_new(GTK_ORIENTATION_VERTICAL), FALSE, FALSE, 2);
     gtk_box_pack_start(GTK_BOX(main_hbox), model_vbox, TRUE, FALSE, 2);
+    gtk_box_pack_start(GTK_BOX(main_hbox), gtk_separator_new(GTK_ORIENTATION_VERTICAL), FALSE, FALSE, 2);
     gtk_box_pack_start(GTK_BOX(main_hbox), output_vbox, FALSE, FALSE, 2);
 
     GtkWidget *vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 2);
     gtk_box_pack_start(GTK_BOX(vbox), learning_hbox, FALSE, FALSE, 2);
+    gtk_box_pack_start(GTK_BOX(vbox), gtk_separator_new(GTK_ORIENTATION_HORIZONTAL), FALSE, FALSE, 2);
     gtk_box_pack_start(GTK_BOX(vbox), main_hbox, FALSE, FALSE, 2);
     
     gtk_container_add(GTK_CONTAINER(self), vbox);
