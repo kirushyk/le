@@ -1,6 +1,5 @@
-/**
- *
- */
+/** Copyright (c) Kyrylo Polezhaiev and contributors. All rights reserved.
+  * Released under the MIT license. See LICENSE file in the project root for full license information. */
 
 #ifndef __LELOGISTIC_H_
 #define __LELOGISTIC_H_
