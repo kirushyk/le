@@ -334,7 +334,9 @@ le_main_window_init(LEMainWindow *self)
     GtkWidget *learning_grid = gtk_grid_new();
     gtk_grid_set_column_spacing(GTK_GRID(learning_grid), 8);
     gtk_grid_attach(GTK_GRID(learning_grid), gtk_label_new("Epoch"), 0, 0, 1, 1);
-    gtk_grid_attach(GTK_GRID(learning_grid), self->epoch_label = gtk_label_new("0"), 0, 1, 1, 1);
+    self->epoch_label = gtk_label_new("<big>0</big>");
+    gtk_label_set_use_markup(GTK_LABEL(self->epoch_label), TRUE);
+    gtk_grid_attach(GTK_GRID(learning_grid), self->epoch_label, 0, 1, 1, 1);
     gtk_grid_attach(GTK_GRID(learning_grid), gtk_label_new("Learning Rate"), 1, 0, 1, 1);
     GtkWidget *alpha_combo = gtk_combo_box_text_new();
     gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(alpha_combo), "0.001");
