@@ -1,7 +1,11 @@
-# Le
+# Le - Machine Learning Framework.
 
-Neat machine learning framework.
-
-Learning algorithms supported at this moment:
+Algorithms supported at this moment:
 * logistic classification;
 * polynomial classification.
+
+## License
+
+Copyright 2017 Kyrylo Polezhaiev. All rights reserved.
+
+Licensed under the [MIT](LICENSE) License.
