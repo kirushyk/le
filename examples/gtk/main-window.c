@@ -325,11 +325,13 @@ le_main_window_init(LEMainWindow *self)
     
     GtkWidget *reset = gtk_button_new_from_icon_name("go-first", GTK_ICON_SIZE_LARGE_TOOLBAR);
     GtkWidget *start = gtk_button_new_from_icon_name("media-playback-start", GTK_ICON_SIZE_LARGE_TOOLBAR);
+    GtkWidget *stop = gtk_button_new_from_icon_name("media-playback-stop", GTK_ICON_SIZE_LARGE_TOOLBAR);
     GtkWidget *step = gtk_button_new_from_icon_name("go-next", GTK_ICON_SIZE_LARGE_TOOLBAR);
 
     GtkWidget *learning_hbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 2);
     gtk_box_pack_start(GTK_BOX(learning_hbox), reset, FALSE, FALSE, 2);
     gtk_box_pack_start(GTK_BOX(learning_hbox), start, FALSE, FALSE, 2);
+    gtk_box_pack_start(GTK_BOX(learning_hbox), stop, FALSE, FALSE, 2);
     gtk_box_pack_start(GTK_BOX(learning_hbox), step, FALSE, FALSE, 2);
     GtkWidget *learning_grid = gtk_grid_new();
     gtk_grid_set_column_spacing(GTK_GRID(learning_grid), 8);
