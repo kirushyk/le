@@ -390,6 +390,12 @@ le_main_window_init(LEMainWindow *self)
     label = gtk_label_new("<b>MODEL</b>");
     gtk_label_set_use_markup(GTK_LABEL(label), TRUE);
     gtk_box_pack_start(GTK_BOX(model_vbox), label, FALSE, FALSE, 2);
+    GtkWidget *model_combo = gtk_combo_box_text_new();
+    gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(model_combo), "Logistic Unit");
+    gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(model_combo), "Support Vector Machine");
+    gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(model_combo), "Neural Network");
+    gtk_combo_box_set_active(GTK_COMBO_BOX(model_combo), 0);
+    gtk_box_pack_start(GTK_BOX(model_vbox), model_combo, FALSE, FALSE, 2);
     
     self->drawing_area = gtk_drawing_area_new();
     gtk_widget_set_size_request(self->drawing_area, 256, 256);
