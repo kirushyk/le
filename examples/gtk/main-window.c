@@ -337,8 +337,8 @@ le_main_window_init(LEMainWindow *self)
     gtk_grid_attach(GTK_GRID(learning_grid), gtk_label_new("Epoch"), 0, 0, 1, 1);
     gtk_grid_attach(GTK_GRID(learning_grid), self->epoch_label = gtk_label_new("0"), 0, 1, 1, 1);
     gtk_grid_attach(GTK_GRID(learning_grid), gtk_label_new("Learning Rate"), 1, 0, 1, 1);
-    gtk_grid_attach(GTK_GRID(learning_grid), gtk_label_new("Regularization"), 1, 0, 1, 1);
-    gtk_grid_attach(GTK_GRID(learning_grid), gtk_label_new("Regularization Rate"), 1, 0, 1, 1);
+    gtk_grid_attach(GTK_GRID(learning_grid), gtk_label_new("Regularization"), 2, 0, 1, 1);
+    gtk_grid_attach(GTK_GRID(learning_grid), gtk_label_new("Regularization Rate"), 3, 0, 1, 1);
     gtk_box_pack_start(GTK_BOX(learning_hbox), learning_grid, FALSE, FALSE, 2);
     
     GtkWidget *data_vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 2);
