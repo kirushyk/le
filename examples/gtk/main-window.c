@@ -349,9 +349,10 @@ le_main_window_init(LEMainWindow *self)
     gtk_grid_attach(GTK_GRID(learning_grid), alpha_combo, 1, 1, 1, 1);
     gtk_grid_attach(GTK_GRID(learning_grid), gtk_label_new("Regularization"), 2, 0, 1, 1);
     GtkWidget *regularization_combo = gtk_combo_box_text_new();
+    gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(regularization_combo), "None");
     gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(regularization_combo), "L1");
     gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(regularization_combo), "L2");
-    gtk_combo_box_set_active(GTK_COMBO_BOX(regularization_combo), 1);
+    gtk_combo_box_set_active(GTK_COMBO_BOX(regularization_combo), 0);
     gtk_grid_attach(GTK_GRID(learning_grid), regularization_combo, 2, 1, 1, 1);
     gtk_grid_attach(GTK_GRID(learning_grid), gtk_label_new("Regularization Rate"), 3, 0, 1, 1);
     GtkWidget *lambda_combo = gtk_combo_box_text_new();
