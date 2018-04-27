@@ -3,16 +3,16 @@
 
 incdir = include_directories('../../')
 
-le_gtk_demo_sources = [
+le_playground_sources = [
     'main.c',
     'main-window.c',
     'menus.c'
 ]
 
-le_gtk_demo_deps = dependency('gtk+-3.0')
+le_playground_deps = dependency('gtk+-3.0')
 
-executable('le-gtk-demo', le_gtk_demo_sources,
-    dependencies: le_gtk_demo_deps,
+executable('le-playground', le_playground_sources,
+    dependencies: le_playground_deps,
     include_directories: incdir,
     link_with: le,
     install: true

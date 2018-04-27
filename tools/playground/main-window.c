@@ -32,6 +32,7 @@ typedef struct ARGB32
     guint8 b, g, r, a;
 } ARGB32;
 
+/*
 static ARGB32
 color_for_tanh(float scalar)
 {
@@ -51,6 +52,7 @@ color_for_tanh(float scalar)
     color.a = 255;
     return color;
 }
+ */
 
 static ARGB32
 color_for_logistic(float scalar)

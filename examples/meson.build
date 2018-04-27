@@ -8,7 +8,3 @@ executable('support-vector-machines', 'support-vector-machines.c',
     link_with: le,
     install: false
 )
-
-
-
-subdir('gtk')
