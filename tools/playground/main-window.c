@@ -164,9 +164,6 @@ generate_activated(GSimpleAction *action, GVariant *parameter, gpointer data)
         }
     }
     cairo_surface_mark_dirty(window->classifier_visualisation);
-    
-    printf("training data generated\n");
-    
     gtk_widget_queue_draw(GTK_WIDGET(window));
 }
 
@@ -177,8 +174,6 @@ style_activated(GSimpleAction *action, GVariant *parameter, gpointer data)
     g_assert(LE_IS_MAIN_WINDOW(window));
     const gchar *style = g_variant_get_string(parameter, NULL);
     window->dark = 0 == g_strcmp0(style, "dark");
-    
-    /// @fixme: Only redraw drawing area only
     gtk_widget_queue_draw(GTK_WIDGET(window));
 }
 
@@ -187,12 +182,6 @@ view_activated(GSimpleAction *action, GVariant *parameter, gpointer data)
 {
     LEMainWindow *window = LE_MAIN_WINDOW(data);
     g_assert(LE_IS_MAIN_WINDOW(window));
-    /*const gchar *style = g_variant_get_string (parameter, NULL);
-
-    if ((g_strcmp0(style, "q") == 0))
-        window->projection = LE_PROJECTION_TIMEX;
-    else if */
-    
     gtk_widget_queue_draw(GTK_WIDGET(window));
 }
 
@@ -222,10 +211,7 @@ le_main_window_constructed(GObject *object)
 static void
 le_main_window_class_init(LEMainWindowClass *klass)
 {
-    GObjectClass *object_class = G_OBJECT_CLASS(klass);
-    
-    object_class->constructed = le_main_window_constructed;
-    
+    G_OBJECT_CLASS(klass)->constructed = le_main_window_constructed;
 }
 
 static void
@@ -343,12 +329,8 @@ le_main_window_init(LEMainWindow *self)
 GtkWidget *
 le_main_window_new (GtkApplication *application)
 {
-    LEMainWindow *window;
-    
-    window = g_object_new(LE_TYPE_MAIN_WINDOW, "application", application, NULL);
-
+    LEMainWindow *window = g_object_new(LE_TYPE_MAIN_WINDOW, "application", application, NULL);
     gtk_window_set_default_size(GTK_WINDOW(window), 256, 256);
-    
     return GTK_WIDGET(window);
 }
 
