@@ -127,8 +127,8 @@ generate_activated(GSimpleAction *action, GVariant *parameter, gpointer data)
     LEMainWindow *window = LE_MAIN_WINDOW(data);
     guint width, height;
     
-    width = gtk_widget_get_allocated_width(GTK_WIDGET(window));
-    height = gtk_widget_get_allocated_height(GTK_WIDGET(window));
+    width = gtk_widget_get_allocated_width(GTK_WIDGET(window->drawing_area));
+    height = gtk_widget_get_allocated_height(GTK_WIDGET(window->drawing_area));
 
     guint examples_count = 256;
     
