@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include <le/le.h>
 #include <math.h>
+#include "pg-generate-data.h"
 
 #define LE_TYPE_MAIN_WINDOW le_main_window_get_type()
 G_DECLARE_FINAL_TYPE(LEMainWindow, le_main_window, LE, MAIN_WINDOW, GtkApplicationWindow);
@@ -131,99 +132,9 @@ generate_activated(GSimpleAction *action, GVariant *parameter, gpointer data)
     
     width = gtk_widget_get_allocated_width(GTK_WIDGET(window->drawing_area));
     height = gtk_widget_get_allocated_height(GTK_WIDGET(window->drawing_area));
-
-    guint examples_count = 256;
     
-    LeMatrix *input = le_matrix_new_rand(2, examples_count);
-    LeMatrix *output = le_matrix_new_rand(1, examples_count);
-    
-    const gchar *pattern_name = g_variant_get_string (parameter, NULL);
-    if (g_strcmp0(pattern_name, "spiral") == 0)
-    {
-        guint i;
-        for (i = 0; i < examples_count; i++)
-        {
-            gfloat scalar = (rand() * 2.0f / RAND_MAX) - 1.0f;
-            gfloat x = sinf(scalar * 3.0f * M_PI) * fabs(scalar);
-            gfloat y = cosf(scalar * 3.0f * M_PI) * scalar;
-            le_matrix_set_element(input, 0, i, x);
-            le_matrix_set_element(input, 1, i, y);
-            le_matrix_set_element(output, 0, i, scalar > 0.0f ? 1.0f : 0.0f);
-        }
-    }
-    else if (g_strcmp0(pattern_name, "nested") == 0)
-    {
-        guint i;
-        for (i = 0; i < examples_count; i++)
-        {
-            gfloat distance = (gfloat)rand() / RAND_MAX;
-            gfloat angle = rand() * 2.0f * M_PI / RAND_MAX;
-            gfloat x = sinf(angle) * distance;
-            gfloat y = cosf(angle) * distance;
-            le_matrix_set_element(input, 0, i, x);
-            le_matrix_set_element(input, 1, i, y);
-            le_matrix_set_element(output, 0, i, distance < 0.5f ? 1.0f : 0.0f);
-        }
-    }
-    else if (g_strcmp0(pattern_name, "linsep") == 0)
-    {
-        guint i;
-        gfloat bias = (gfloat)rand() / RAND_MAX - 0.5f;
-        gfloat slope = rand() * 20.0f / RAND_MAX - 10.0f;
-        le_matrix_multiply_by_scalar(input, 2.0f);
-        le_matrix_add_scalar(input, -1.0f);
-        for (i = 0; i < examples_count; i++)
-        {
-            gfloat x = le_matrix_at(input, 0, i);
-            gfloat y = le_matrix_at(input, 1, i);
-            
-            le_matrix_set_element(output, 0, i, y > bias + slope * x);
-        }
-    }
-    else if (g_strcmp0(pattern_name, "svb") == 0)
-    {
-        guint i, j;
-        
-#define SUPPORT_VECTORS_COUNT 4
-        gfloat svx[SUPPORT_VECTORS_COUNT], svy[SUPPORT_VECTORS_COUNT];
-        
-        for (j = 0; j < SUPPORT_VECTORS_COUNT; j++)
-        {
-            svx[j] = (rand() * 2.0f / RAND_MAX) - 1.0f;
-            svy[j] = (rand() * 2.0f / RAND_MAX) - 1.0f;
-        }
-        
-        le_matrix_multiply_by_scalar(input, 2.0f);
-        le_matrix_add_scalar(input, -1.0f);
-        for (i = 0; i < examples_count; i++)
-        {
-            guint closest_vector = 0;
-            gfloat min_squared_distance = 2.0f;
-            
-            gfloat x = le_matrix_at(input, 0, i);
-            gfloat y = le_matrix_at(input, 1, i);
-            
-            for (j = 0; j < SUPPORT_VECTORS_COUNT; j++)
-            {
-                gfloat squared_distance = (x - svx[j]) * (x - svx[j]) + (y - svy[j]) * (y - svy[j]);
-                if (squared_distance < min_squared_distance)
-                {
-                    min_squared_distance = squared_distance;
-                    closest_vector = j;
-                }
-            }
-            
-            le_matrix_set_element(output, 0, i, closest_vector >= SUPPORT_VECTORS_COUNT / 2);
-        }
-    }
-    else
-    {
-        le_matrix_multiply_by_scalar(input, 2.0f);
-        le_matrix_add_scalar(input, -1.0f);
-    }
-    
-    window->trainig_data = le_training_data_new_take(input, output);
-    window->classifier = le_logistic_classifier_new_train(input, output, 1);
+    window->trainig_data = pg_generate_data(g_variant_get_string(parameter, NULL));
+    window->classifier = le_logistic_classifier_new_train(le_training_data_get_input(window->trainig_data), le_training_data_get_output(window->trainig_data), 1);
     
     if (window->classifier_visualisation)
     {

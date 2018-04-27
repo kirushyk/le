@@ -6,7 +6,8 @@ incdir = include_directories('../../')
 le_playground_sources = [
     'main.c',
     'main-window.c',
-    'menus.c'
+    'menus.c',
+    'pg-generate-data.c'
 ]
 
 le_playground_deps = dependency('gtk+-3.0')
