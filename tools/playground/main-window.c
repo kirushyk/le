@@ -6,6 +6,7 @@
 #include <le/le.h>
 #include <math.h>
 #include "pg-generate-data.h"
+#include "pg-color.h"
 
 #define LE_TYPE_MAIN_WINDOW le_main_window_get_type()
 G_DECLARE_FINAL_TYPE(LEMainWindow, le_main_window, LE, MAIN_WINDOW, GtkApplicationWindow);
@@ -27,54 +28,6 @@ struct _LEMainWindow
 };
 
 G_DEFINE_TYPE(LEMainWindow, le_main_window, GTK_TYPE_APPLICATION_WINDOW);
-
-typedef struct ARGB32
-{
-    guint8 b, g, r, a;
-} ARGB32;
-
-/*
-static ARGB32
-color_for_tanh(float scalar)
-{
-    ARGB32 color;
-    if (scalar > 0)
-    {
-        color.r = 255;
-        color.g = (guint8)((1.f - scalar * 0.5) * 255);
-        color.b = (guint8)((1.f - scalar) * 255);
-    }
-    else
-    {
-        color.r = (guint8)((scalar + 1.f) * 255);
-        color.g = (guint8)((0.5 * scalar + 1.f) * 255);
-        color.b = 255;
-    }
-    color.a = 255;
-    return color;
-}
- */
-
-static ARGB32
-color_for_logistic(float scalar)
-{
-    ARGB32 color;
-    scalar = scalar * 2.f - 1.f;
-    if (scalar > 0)
-    {
-        color.r = 255;
-        color.g = (guint8)((1.f - scalar * 0.5) * 255);
-        color.b = (guint8)((1.f - scalar) * 255);
-    }
-    else
-    {
-        color.r = (guint8)((scalar + 1.f) * 255);
-        color.g = (guint8)((0.5 * scalar + 1.f) * 255);
-        color.b = 255;
-    }
-    color.a = 255;
-    return color;
-}
 
 static gboolean
 draw_callback(GtkWidget *widget, cairo_t *cr, gpointer data)

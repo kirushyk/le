@@ -7,7 +7,8 @@ le_playground_sources = [
     'main.c',
     'main-window.c',
     'menus.c',
-    'pg-generate-data.c'
+    'pg-generate-data.c',
+    'pg-color.c'
 ]
 
 le_playground_deps = dependency('gtk+-3.0')
