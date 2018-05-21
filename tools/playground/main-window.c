@@ -25,6 +25,11 @@ struct _LEMainWindow
     
     cairo_surface_t *classifier_visualisation;
     
+    GtkWidget *rand_rb;
+    GtkWidget *linsep_rb;
+    GtkWidget *nested_rb;
+    GtkWidget *svb_rb;
+    GtkWidget *spiral_rb;
 };
 
 G_DEFINE_TYPE(LEMainWindow, le_main_window, GTK_TYPE_APPLICATION_WINDOW);
@@ -77,26 +82,12 @@ draw_callback(GtkWidget *widget, cairo_t *cr, gpointer data)
     return FALSE;
 }
 
-static void
-generate_activated(GSimpleAction *action, GVariant *parameter, gpointer data)
+static cairo_surface_t *
+render_predictions(LeLogisticClassifier *classifier, guint width, guint height)
 {
-    LEMainWindow *window = LE_MAIN_WINDOW(data);
-    guint width, height;
-    
-    width = gtk_widget_get_allocated_width(GTK_WIDGET(window->drawing_area));
-    height = gtk_widget_get_allocated_height(GTK_WIDGET(window->drawing_area));
-    
-    window->trainig_data = pg_generate_data(g_variant_get_string(parameter, NULL));
-    window->classifier = le_logistic_classifier_new_train(le_training_data_get_input(window->trainig_data), le_training_data_get_output(window->trainig_data), 1);
-    
-    if (window->classifier_visualisation)
-    {
-        cairo_surface_destroy(window->classifier_visualisation);
-    }
-    window->classifier_visualisation = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, width, height);
-    
-    cairo_surface_flush(window->classifier_visualisation);
-    guint8 *pixmap = cairo_image_surface_get_data(window->classifier_visualisation);
+    cairo_surface_t *surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, width, height);
+    cairo_surface_flush(surface);
+    guint8 *pixmap = cairo_image_surface_get_data(surface);
     for (gint y = 0; y < height; y++)
     {
         LeMatrix *row = le_matrix_new_uninitialized(2, width);
@@ -106,7 +97,7 @@ generate_activated(GSimpleAction *action, GVariant *parameter, gpointer data)
             le_matrix_set_element(row, 1, x, y * -2.0f / height + 1.0f);
         }
         
-        LeMatrix *prediction = le_logistic_classifier_predict(window->classifier, row);
+        LeMatrix *prediction = le_logistic_classifier_predict(classifier, row);
         
         le_matrix_free(row);
         
@@ -116,8 +107,34 @@ generate_activated(GSimpleAction *action, GVariant *parameter, gpointer data)
             ((ARGB32 *)pixmap)[y * width + x] = color;
         }
     }
-    cairo_surface_mark_dirty(window->classifier_visualisation);
+    cairo_surface_mark_dirty(surface);
+    return surface;
+}
+
+static void
+le_main_window_generate_data(LEMainWindow *window, const gchar *pattern)
+{
+    guint width, height;
+
+    width = gtk_widget_get_allocated_width(GTK_WIDGET(window->drawing_area));
+    height = gtk_widget_get_allocated_height(GTK_WIDGET(window->drawing_area));
+    
+    window->trainig_data = pg_generate_data(pattern);
+    window->classifier = le_logistic_classifier_new_train(le_training_data_get_input(window->trainig_data), le_training_data_get_output(window->trainig_data), 1);
+    
+    if (window->classifier_visualisation)
+    {
+        cairo_surface_destroy(window->classifier_visualisation);
+    }
+    window->classifier_visualisation = render_predictions(window->classifier, width, height);
     gtk_widget_queue_draw(GTK_WIDGET(window));
+}
+
+static void
+generate_menu_activated(GSimpleAction *action, GVariant *parameter, gpointer data)
+{
+    LEMainWindow *window = LE_MAIN_WINDOW(data);
+    le_main_window_generate_data(window, g_variant_get_string(parameter, NULL));
 }
 
 static void
@@ -149,7 +166,7 @@ close_activated(GSimpleAction *action, GVariant *parameter, gpointer data)
 static GActionEntry win_entries[] =
 {
     { "style", style_activated, "s" },
-    { "gen", generate_activated, "s" },
+    { "gen", generate_menu_activated, "s" },
     { "style", style_activated, "s" },
     { "view", view_activated, "s", "\"q\"" },
     { "close", close_activated }
@@ -165,6 +182,22 @@ static void
 le_main_window_class_init(LEMainWindowClass *klass)
 {
     G_OBJECT_CLASS(klass)->constructed = le_main_window_constructed;
+}
+
+static void
+generate_button_clicked(GtkButton *button, gpointer user_data)
+{
+    LEMainWindow *window = LE_MAIN_WINDOW(user_data);
+    if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(window->rand_rb)))
+        le_main_window_generate_data(window, "rand");
+    else if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(window->linsep_rb)))
+        le_main_window_generate_data(window, "linsep");
+    else if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(window->nested_rb)))
+        le_main_window_generate_data(window, "nested");
+    else if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(window->svb_rb)))
+        le_main_window_generate_data(window, "svb");
+    else
+        le_main_window_generate_data(window, "spiral");
 }
 
 static void
@@ -228,18 +261,19 @@ le_main_window_init(LEMainWindow *self)
     GtkWidget *data_vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 2);
     GtkWidget *label = gtk_label_new("<b>DATA</b>");
     gtk_label_set_use_markup(GTK_LABEL(label), TRUE);
-    GtkWidget *rand_rb = gtk_radio_button_new_with_label(NULL, "Random");
-    GtkWidget *linsep_rb = gtk_radio_button_new_with_label_from_widget(GTK_RADIO_BUTTON(rand_rb), "Linearly Separable");
-    GtkWidget *nested_rb = gtk_radio_button_new_with_label_from_widget(GTK_RADIO_BUTTON(rand_rb), "Nested Circles");
-    GtkWidget *svb_rb = gtk_radio_button_new_with_label_from_widget(GTK_RADIO_BUTTON(rand_rb), "SV Border");
-    GtkWidget *spiral_rb = gtk_radio_button_new_with_label_from_widget(GTK_RADIO_BUTTON(rand_rb), "Spiral");
+    self->rand_rb = gtk_radio_button_new_with_label(NULL, "Random");
+    self->linsep_rb = gtk_radio_button_new_with_label_from_widget(GTK_RADIO_BUTTON(self->rand_rb), "Linearly Separable");
+    self->nested_rb = gtk_radio_button_new_with_label_from_widget(GTK_RADIO_BUTTON(self->rand_rb), "Nested Circles");
+    self->svb_rb = gtk_radio_button_new_with_label_from_widget(GTK_RADIO_BUTTON(self->rand_rb), "SV Border");
+    self->spiral_rb = gtk_radio_button_new_with_label_from_widget(GTK_RADIO_BUTTON(self->rand_rb), "Spiral");
     GtkWidget *generate = gtk_button_new_with_label("Generate");
+    g_signal_connect(G_OBJECT(generate), "clicked", G_CALLBACK(generate_button_clicked), self);
     gtk_box_pack_start(GTK_BOX(data_vbox), label, FALSE, FALSE, 2);
-    gtk_box_pack_start(GTK_BOX(data_vbox), rand_rb, FALSE, FALSE, 2);
-    gtk_box_pack_start(GTK_BOX(data_vbox), linsep_rb, FALSE, FALSE, 2);
-    gtk_box_pack_start(GTK_BOX(data_vbox), nested_rb, FALSE, FALSE, 2);
-    gtk_box_pack_start(GTK_BOX(data_vbox), svb_rb, FALSE, FALSE, 2);
-    gtk_box_pack_start(GTK_BOX(data_vbox), spiral_rb, FALSE, FALSE, 2);
+    gtk_box_pack_start(GTK_BOX(data_vbox), self->rand_rb, FALSE, FALSE, 2);
+    gtk_box_pack_start(GTK_BOX(data_vbox), self->linsep_rb, FALSE, FALSE, 2);
+    gtk_box_pack_start(GTK_BOX(data_vbox), self->nested_rb, FALSE, FALSE, 2);
+    gtk_box_pack_start(GTK_BOX(data_vbox), self->svb_rb, FALSE, FALSE, 2);
+    gtk_box_pack_start(GTK_BOX(data_vbox), self->spiral_rb, FALSE, FALSE, 2);
     gtk_box_pack_start(GTK_BOX(data_vbox), generate, FALSE, FALSE, 2);
     
     GtkWidget *model_vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 2);
