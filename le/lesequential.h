@@ -7,7 +7,7 @@
 
 typedef struct LeSequential LeSequential;
 
-LeSequential * le_sequential_new     ();
+LeSequential * le_sequential_new     (void);
 
 LeMatrix *     le_sequential_predict (LeSequential *model,
                                       LeMatrix     *x);
