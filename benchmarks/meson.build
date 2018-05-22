@@ -5,7 +5,7 @@ le_benchmarks = [
     'matrices.c'
 ]
 
-foreach filename : le_tests
+foreach filename : le_benchmarks
     test_name = filename.split('.')[0].underscorify() + '_benchmark'
         exe = executable(test_name, filename,
         include_directories: include_directories('..'),
