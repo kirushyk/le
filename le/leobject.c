@@ -4,11 +4,6 @@
 #include "leobject.h"
 #include <stdlib.h>
 
-struct LeObject
-{
-    
-};
-
 LeObject *
 le_object_alloc(void)
 {
