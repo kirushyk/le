@@ -2,9 +2,10 @@
    Released under the MIT license. See LICENSE file in the project root for full license information. */
 
 #ifndef __LE_MODEL_H__
-#   define __LE_MODEL_H__
-#   include "leobject.h"
-#   include "lematrix.h"
+#define __LE_MODEL_H__
+
+#include "leobject.h"
+#include "lematrix.h"
 
 typedef struct LeModel LeModel;
 
