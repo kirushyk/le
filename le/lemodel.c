@@ -3,21 +3,16 @@
 
 #include "lemodel.h"
 
-struct LeModel
+void le_model_construct(LeModel *model)
 {
     
-};
-
-LeModel *
-le_model_new(void)
-{
-    return NULL;
 }
+
 
 LeMatrix *
 le_model_predict(LeModel *self, LeMatrix *x)
 {
-    return NULL;
+    return ((LeModelClass *)((LeObject *)self)->klass)->predict(self, x);
 }
 
 void

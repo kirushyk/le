@@ -7,13 +7,25 @@
 #include "leobject.h"
 #include "lematrix.h"
 
+typedef struct LeModel
+{
+    LeObject parent;
+} LeModel;
+
+typedef struct LeModelClass
+{
+    LeClass parent;
+    LeMatrix * (*predict)(LeModel *model, LeMatrix *x);
+} LeModelClass;
+
 typedef struct LeModel LeModel;
 
-LeModel *  le_model_new     (void);
+void       le_model_construct (LeModel  *model);
 
-LeMatrix * le_model_predict (LeModel  *model,
-                             LeMatrix *x);
 
-void       le_model_free    (LeModel  *model);
+LeMatrix * le_model_predict   (LeModel  *model,
+                               LeMatrix *x);
+
+void       le_model_free      (LeModel  *model);
 
 #endif
