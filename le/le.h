@@ -5,8 +5,10 @@
 #define __LE_H__
 
 #include "lematrix.h"
+#include "leobject.h"
 #include "letrainingdata.h"
 #include "lelogistic.h"
 #include "lesvm.h"
+#include "lesequential.h"
 
 #endif
