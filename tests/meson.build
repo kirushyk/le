@@ -2,13 +2,14 @@
 # Released under the MIT license. See LICENSE file in the project root for full license information.
 
 le_tests = [
-    'objects.c',
-    'matrices.c'
+    ['objects/objects.c', 'objects/base.c', 'objects/a.c', 'objects/b.c'],
+    ['matrices.c']
 ]
 
-foreach filename : le_tests
+foreach filenames : le_tests
+    filename = filenames[0]
     test_name = filename.split('.')[0].underscorify()
-    exe = executable(test_name, filename,
+    exe = executable(test_name, filenames,
         include_directories: include_directories('..'),
         link_with: le,
         install: false
