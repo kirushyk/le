@@ -2,6 +2,7 @@
    Released under the MIT license. See LICENSE file in the project root for full license information. */
 
 #include <stdlib.h>
+#include <assert.h>
 #include <le/le.h>
 
 int
@@ -10,22 +11,22 @@ le_test_ensure_matrix_size(LeMatrix *a, unsigned height, unsigned width)
     if (a == NULL)
     {
         fprintf(stderr, "NULL pointer given");
-        return EXIT_FAILURE;
+        return 0;
     }
     
     if (le_matrix_get_width(a) != width)
     {
         fprintf(stderr, "Wrong matrix width.\n");
-        return EXIT_FAILURE;
+        return 0;
     }
     
     if (le_matrix_get_height(a) != height)
     {
         fprintf(stderr, "Wrong matrix height.\n");
-        return EXIT_FAILURE;
+        return 0;
     }
     
-    return EXIT_SUCCESS;
+    return 1;
 }
 
 #define MAX_DIMENSION 4
@@ -44,39 +45,23 @@ main()
     for (height = 1; height < MAX_DIMENSION; height++)
     {
         a = le_matrix_new_identity(height);
-        if (le_test_ensure_matrix_size(a, height, height) != EXIT_SUCCESS)
-        {
-            fprintf(stderr, "Problem occured when testing sizes of identity matrix.\n");
-            return EXIT_FAILURE;
-        }
+        assert(le_test_ensure_matrix_size(a, height, height));
         le_matrix_free(a);
         
         for (width = 1; width < MAX_DIMENSION; width++)
         {
             a = le_matrix_new_zeros(height, width);
-            if (le_test_ensure_matrix_size(a, height, width) != EXIT_SUCCESS)
-            {
-                fprintf(stderr, "Problem occured when testing sizes of zeros matrix.\n");
-                return EXIT_FAILURE;
-            }
+            assert(le_test_ensure_matrix_size(a, height, width));
             le_matrix_free(a);
             
             a = le_matrix_new_rand(height, width);
-            if (le_test_ensure_matrix_size(a, height, width) != EXIT_SUCCESS)
-            {
-                fprintf(stderr, "Problem occured when testing sizes of random matrix.\n");
-                return EXIT_FAILURE;
-            }
+            assert(le_test_ensure_matrix_size(a, height, width));
             
             for (second_width = 1; second_width < MAX_DIMENSION; second_width++)
             {
                 b = le_matrix_new_rand(width, second_width);
                 c = le_matrix_new_product(a, b);
-                if (le_test_ensure_matrix_size(c, height, second_width) != EXIT_SUCCESS)
-                {
-                    fprintf(stderr, "Problem occured when testing sizes of matrix product.\n");
-                    return EXIT_FAILURE;
-                }
+                assert(le_test_ensure_matrix_size(c, height, second_width));
                 le_matrix_free(c);
                 le_matrix_free(b);
             }
