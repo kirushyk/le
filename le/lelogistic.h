@@ -8,13 +8,16 @@
 
 typedef struct LeLogisticClassifier LeLogisticClassifier;
 
-LeLogisticClassifier * le_logistic_classifier_new_train (LeMatrix             *x_train,
-                                                         LeMatrix             *y_train,
-                                                         unsigned              polynomia_degree);
+LeLogisticClassifier * le_logistic_classifier_new     (void);
 
-LeMatrix *             le_logistic_classifier_predict   (LeLogisticClassifier *classifier,
-                                                         LeMatrix             *x);
+void                   le_logistic_classifier_train   (LeLogisticClassifier *classifier,
+                                                       LeMatrix             *x_train,
+                                                       LeMatrix             *y_train,
+                                                       unsigned              polynomia_degree);
 
-void                   le_logistic_classifier_free      (LeLogisticClassifier *classifier);
+LeMatrix *             le_logistic_classifier_predict (LeLogisticClassifier *classifier,
+                                                       LeMatrix             *x);
+
+void                   le_logistic_classifier_free    (LeLogisticClassifier *classifier);
 
 #endif

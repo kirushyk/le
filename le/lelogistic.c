@@ -12,9 +12,20 @@ struct LeLogisticClassifier
 };
 
 LeLogisticClassifier *
-le_logistic_classifier_new_train(LeMatrix *x_train, LeMatrix *y_train, unsigned polynomia_degree)
+le_logistic_classifier_new(void)
 {
-    LeLogisticClassifier *self = NULL;
+    LeLogisticClassifier *self = malloc(sizeof(struct LeLogisticClassifier));
+
+    self->w = NULL;
+    self->b = 0;
+    self->polynomia_degree = 0;
+    
+    return self;
+}
+
+void
+le_logistic_classifier_train(LeLogisticClassifier *self, LeMatrix *x_train, LeMatrix *y_train, unsigned polynomia_degree)
+{
     unsigned examples_count = le_matrix_get_width(x_train);
     unsigned iterations_count = 200;
     float learning_rate = 0.1;
@@ -22,7 +33,8 @@ le_logistic_classifier_new_train(LeMatrix *x_train, LeMatrix *y_train, unsigned 
     
     if (le_matrix_get_width(y_train) != examples_count)
     {
-        return NULL;
+        /** @todo: Handle this case */
+        return;
     }
     
     LeMatrix *x = x_train;
@@ -46,7 +58,6 @@ le_logistic_classifier_new_train(LeMatrix *x_train, LeMatrix *y_train, unsigned 
         le_matrix_free(x);
     }
     
-    self = malloc(sizeof(struct LeLogisticClassifier));
     self->w = le_matrix_new_zeros(features_count, 1);
     self->b = 0;
     self->polynomia_degree = polynomia_degree;
@@ -69,8 +80,6 @@ le_logistic_classifier_new_train(LeMatrix *x_train, LeMatrix *y_train, unsigned 
     }
     
     le_matrix_free(xt);
-    
-    return self;
 }
 
 LeMatrix *

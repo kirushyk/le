@@ -120,8 +120,9 @@ le_main_window_generate_data(LEMainWindow *window, const gchar *pattern)
     height = gtk_widget_get_allocated_height(GTK_WIDGET(window->drawing_area));
     
     window->trainig_data = pg_generate_data(pattern);
-    window->classifier = le_logistic_classifier_new_train(le_training_data_get_input(window->trainig_data), le_training_data_get_output(window->trainig_data), 1);
-    
+    window->classifier = le_logistic_classifier_new();
+    le_logistic_classifier_train(window->classifier, le_training_data_get_input(window->trainig_data), le_training_data_get_output(window->trainig_data), 1);
+
     if (window->classifier_visualisation)
     {
         cairo_surface_destroy(window->classifier_visualisation);

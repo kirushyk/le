@@ -21,7 +21,8 @@ main(int argc, const char *argv[])
     };
     LeMatrix *y = le_matrix_new_from_data(1, 4, y_data);
     
-    LeLogisticClassifier *lc = le_logistic_classifier_new_train(x, y);
+    LeLogisticClassifier *lc = le_logistic_classifier_new();
+    le_logistic_classifier_train(lc, x, y);
     
     LeMatrix *h = le_logistic_classifier_predict(lc, x);
     printf("Preficted value =\n");
