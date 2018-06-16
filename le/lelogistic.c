@@ -3,13 +3,21 @@
 
 #include <stdlib.h>
 #include "lelogistic.h"
+#include "lemodel.h"
 
-struct LeLogisticClassifier
+typedef struct LeLogisticClassifier
 {
+    LeModel   parent;
     LeMatrix *w;
     float     b;
     unsigned  polynomia_degree;
-};
+} LeLogisticClassifier;
+
+typedef struct LeLogisticClassifierClass
+{
+    LeModelClass parent;
+    LeMatrix * (*predict)(LeModel *model, LeMatrix *x);
+} LeLogisticClassifierClass;
 
 LeLogisticClassifier *
 le_logistic_classifier_new(void)
