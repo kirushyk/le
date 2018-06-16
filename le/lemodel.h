@@ -22,7 +22,6 @@ typedef struct LeModel LeModel;
 
 void       le_model_construct (LeModel  *model);
 
-
 LeMatrix * le_model_predict   (LeModel  *model,
                                LeMatrix *x);
 

@@ -3,11 +3,12 @@
 
 #include "lemodel.h"
 
+LeModelClass le_model_class;
+
 void le_model_construct(LeModel *model)
 {
-    
+    ((LeObject *)model)->klass = (LeClass *)&le_model_class;
 }
-
 
 LeMatrix *
 le_model_predict(LeModel *self, LeMatrix *x)
