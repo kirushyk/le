@@ -1,8 +1,8 @@
 /* Copyright (c) Kyrylo Polezhaiev and contributors. All rights reserved.
    Released under the MIT license. See LICENSE file in the project root for full license information. */
 
-#include <stdlib.h>
 #include "lelogistic.h"
+#include <stdlib.h>
 #include "lemodel.h"
 
 typedef struct LeLogisticClassifier
@@ -16,19 +16,69 @@ typedef struct LeLogisticClassifier
 typedef struct LeLogisticClassifierClass
 {
     LeModelClass parent;
-    LeMatrix * (*predict)(LeModel *model, LeMatrix *x);
 } LeLogisticClassifierClass;
+
+LeLogisticClassifierClass le_logistic_classifier_class;
+
+LeMatrix * le_logistic_classifier_predict(LeLogisticClassifier *self, LeMatrix *x);
+
+void
+le_logistic_classifier_class_ensure_init(void)
+{
+    static int le_logistic_classifier_class_initialized = 0;
+
+    if (!le_logistic_classifier_class_initialized)
+    {
+        le_logistic_classifier_class.parent.predict =
+            (LeMatrix *(*)(LeModel *, LeMatrix *))le_logistic_classifier_predict;
+        le_logistic_classifier_class_initialized = 1;
+    }
+}
+
+void
+le_logistic_classifier_construct(LeLogisticClassifier *self)
+{
+    le_model_construct((LeModel *)self);
+    le_logistic_classifier_class_ensure_init();
+    ((LeObject *)self)->klass = (LeClass *)&le_logistic_classifier_class;
+    self->w = NULL;
+    self->b = 0;
+    self->polynomia_degree = 0;
+}
 
 LeLogisticClassifier *
 le_logistic_classifier_new(void)
 {
     LeLogisticClassifier *self = malloc(sizeof(struct LeLogisticClassifier));
-
-    self->w = NULL;
-    self->b = 0;
-    self->polynomia_degree = 0;
-    
+    le_logistic_classifier_construct(self);
     return self;
+}
+
+LeMatrix *
+le_logistic_classifier_predict(LeLogisticClassifier *self, LeMatrix *x)
+{
+    unsigned i;
+    LeMatrix *wt = le_matrix_new_transpose(self->w);
+    LeMatrix *x_poly = x;
+    LeMatrix *x_prev = x;
+    for (i = 0; i < self->polynomia_degree; i++)
+    {
+        x_poly = le_matrix_new_polynomia(x_prev);
+        if (x_prev != x)
+        {
+            le_matrix_free(x_prev);
+        }
+        x_prev = x_poly;
+    }
+    LeMatrix *a = le_matrix_new_product(wt, x_poly);
+    le_matrix_free(wt);
+    if (x_poly != x)
+    {
+        le_matrix_free(x_poly);
+    }
+    le_matrix_add_scalar(a, self->b);
+    le_matrix_apply_sigmoid(a);
+    return a;
 }
 
 void
@@ -88,33 +138,6 @@ le_logistic_classifier_train(LeLogisticClassifier *self, LeMatrix *x_train, LeMa
     }
     
     le_matrix_free(xt);
-}
-
-LeMatrix *
-le_logistic_classifier_predict(LeLogisticClassifier *self, LeMatrix *x)
-{
-    unsigned i;
-    LeMatrix *wt = le_matrix_new_transpose(self->w);
-    LeMatrix *x_poly = x;
-    LeMatrix *x_prev = x;
-    for (i = 0; i < self->polynomia_degree; i++)
-    {
-        x_poly = le_matrix_new_polynomia(x_prev);
-        if (x_prev != x)
-        {
-            le_matrix_free(x_prev);
-        }
-        x_prev = x_poly;
-    }
-    LeMatrix *a = le_matrix_new_product(wt, x_poly);
-    le_matrix_free(wt);
-    if (x_poly != x)
-    {
-        le_matrix_free(x_poly);
-    }
-    le_matrix_add_scalar(a, self->b);
-    le_matrix_apply_sigmoid(a);
-    return a;
 }
 
 void

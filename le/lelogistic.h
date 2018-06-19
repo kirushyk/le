@@ -15,9 +15,6 @@ void                   le_logistic_classifier_train   (LeLogisticClassifier *cla
                                                        LeMatrix             *y_train,
                                                        unsigned              polynomia_degree);
 
-LeMatrix *             le_logistic_classifier_predict (LeLogisticClassifier *classifier,
-                                                       LeMatrix             *x);
-
 void                   le_logistic_classifier_free    (LeLogisticClassifier *classifier);
 
 #endif

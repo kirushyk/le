@@ -21,7 +21,7 @@ struct _LEMainWindow
     gboolean dark;
     
     LeTrainingData *trainig_data;
-    LeLogisticClassifier *classifier;
+    LeModel *model;
     
     cairo_surface_t *classifier_visualisation;
     
@@ -83,7 +83,7 @@ draw_callback(GtkWidget *widget, cairo_t *cr, gpointer data)
 }
 
 static cairo_surface_t *
-render_predictions(LeLogisticClassifier *classifier, guint width, guint height)
+render_predictions(LeModel *model, guint width, guint height)
 {
     cairo_surface_t *surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, width, height);
     cairo_surface_flush(surface);
@@ -97,7 +97,7 @@ render_predictions(LeLogisticClassifier *classifier, guint width, guint height)
             le_matrix_set_element(row, 1, x, y * -2.0f / height + 1.0f);
         }
         
-        LeMatrix *prediction = le_logistic_classifier_predict(classifier, row);
+        LeMatrix *prediction = le_model_predict(model, row);
         
         le_matrix_free(row);
         
@@ -120,14 +120,14 @@ le_main_window_generate_data(LEMainWindow *window, const gchar *pattern)
     height = gtk_widget_get_allocated_height(GTK_WIDGET(window->drawing_area));
     
     window->trainig_data = pg_generate_data(pattern);
-    window->classifier = le_logistic_classifier_new();
-    le_logistic_classifier_train(window->classifier, le_training_data_get_input(window->trainig_data), le_training_data_get_output(window->trainig_data), 1);
+    window->model = (LeModel *)le_logistic_classifier_new();
+    le_logistic_classifier_train((LeLogisticClassifier *)window->model, le_training_data_get_input(window->trainig_data), le_training_data_get_output(window->trainig_data), 1);
 
     if (window->classifier_visualisation)
     {
         cairo_surface_destroy(window->classifier_visualisation);
     }
-    window->classifier_visualisation = render_predictions(window->classifier, width, height);
+    window->classifier_visualisation = render_predictions(window->model, width, height);
     gtk_widget_queue_draw(GTK_WIDGET(window));
 }
 
@@ -206,7 +206,7 @@ le_main_window_init(LEMainWindow *self)
 {
     self->dark = FALSE;
     self->trainig_data = NULL;
-    self->classifier = NULL;
+    self->model = NULL;
     self->classifier_visualisation = NULL;
     
     GtkWidget *reset = gtk_button_new_from_icon_name("go-first", GTK_ICON_SIZE_LARGE_TOOLBAR);
