@@ -11,6 +11,13 @@
 #define LE_TYPE_MAIN_WINDOW le_main_window_get_type()
 G_DECLARE_FINAL_TYPE(LEMainWindow, le_main_window, LE, MAIN_WINDOW, GtkApplicationWindow);
 
+typedef enum PreferredModelType
+{
+    PREFERRED_MODEL_TYPE_POLYNOMIAL_REGRESSION,
+    PREFERRED_MODEL_TYPE_SUPPORT_VECTOR_MACHINE,
+    PREFERRED_MODEL_TYPE_NEURAL_NETWORK
+} PreferredModelType;
+
 struct _LEMainWindow
 {
     GtkApplicationWindow parent_instance;
@@ -30,6 +37,8 @@ struct _LEMainWindow
     GtkWidget *nested_rb;
     GtkWidget *svb_rb;
     GtkWidget *spiral_rb;
+    
+    PreferredModelType preferred_model_type;
 };
 
 G_DEFINE_TYPE(LEMainWindow, le_main_window, GTK_TYPE_APPLICATION_WINDOW);
@@ -86,6 +95,12 @@ static cairo_surface_t *
 render_predictions(LeModel *model, guint width, guint height)
 {
     cairo_surface_t *surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, width, height);
+    
+    if (model == NULL)
+    {
+        return surface;
+    }
+    
     cairo_surface_flush(surface);
     guint8 *pixmap = cairo_image_surface_get_data(surface);
     for (gint y = 0; y < height; y++)
@@ -111,24 +126,45 @@ render_predictions(LeModel *model, guint width, guint height)
     return surface;
 }
 
-static void
-le_main_window_generate_data(LEMainWindow *window, const gchar *pattern)
+void
+le_main_window_recreate_model(LEMainWindow *self)
 {
     guint width, height;
-
-    width = gtk_widget_get_allocated_width(GTK_WIDGET(window->drawing_area));
-    height = gtk_widget_get_allocated_height(GTK_WIDGET(window->drawing_area));
+    width = gtk_widget_get_allocated_width(GTK_WIDGET(self->drawing_area));
+    height = gtk_widget_get_allocated_height(GTK_WIDGET(self->drawing_area));
     
-    window->trainig_data = pg_generate_data(pattern);
-    window->model = (LeModel *)le_logistic_classifier_new();
-    le_logistic_classifier_train((LeLogisticClassifier *)window->model, le_training_data_get_input(window->trainig_data), le_training_data_get_output(window->trainig_data), 1);
-
-    if (window->classifier_visualisation)
+    switch (self->preferred_model_type)
     {
-        cairo_surface_destroy(window->classifier_visualisation);
+        case PREFERRED_MODEL_TYPE_SUPPORT_VECTOR_MACHINE:
+            self->model = NULL;
+            break;
+            
+        case PREFERRED_MODEL_TYPE_NEURAL_NETWORK:
+            self->model = NULL;
+            break;
+            
+        case PREFERRED_MODEL_TYPE_POLYNOMIAL_REGRESSION:
+        default:
+            self->model = (LeModel *)le_logistic_classifier_new();
+            le_logistic_classifier_train((LeLogisticClassifier *)self->model, le_training_data_get_input(self->trainig_data), le_training_data_get_output(self->trainig_data), 1);
+            break;
     }
-    window->classifier_visualisation = render_predictions(window->model, width, height);
-    gtk_widget_queue_draw(GTK_WIDGET(window));
+    
+    if (self->classifier_visualisation)
+    {
+        cairo_surface_destroy(self->classifier_visualisation);
+    }
+    
+    self->classifier_visualisation = render_predictions(self->model, width, height);
+    gtk_widget_queue_draw(GTK_WIDGET(self));
+}
+
+static void
+le_main_window_generate_data(LEMainWindow *self, const gchar *pattern)
+{
+    self->trainig_data = pg_generate_data(pattern);
+    
+    le_main_window_recreate_model(self);
 }
 
 static void
@@ -201,6 +237,30 @@ generate_button_clicked(GtkButton *button, gpointer user_data)
         le_main_window_generate_data(window, "spiral");
 }
 
+void
+model_combo_changed(GtkComboBox *widget, gpointer user_data)
+{
+    LEMainWindow *self = LE_MAIN_WINDOW(user_data);
+    
+    switch (gtk_combo_box_get_active(widget))
+    {
+    case 1:
+        self->preferred_model_type = PREFERRED_MODEL_TYPE_SUPPORT_VECTOR_MACHINE;
+        break;
+            
+    case 2:
+        self->preferred_model_type = PREFERRED_MODEL_TYPE_NEURAL_NETWORK;
+        break;
+            
+    case 0:
+    default:
+        self->preferred_model_type = PREFERRED_MODEL_TYPE_POLYNOMIAL_REGRESSION;
+        break;
+    }
+    
+    le_main_window_recreate_model(self);
+}
+
 static void
 le_main_window_init(LEMainWindow *self)
 {
@@ -208,6 +268,7 @@ le_main_window_init(LEMainWindow *self)
     self->trainig_data = NULL;
     self->model = NULL;
     self->classifier_visualisation = NULL;
+    self->preferred_model_type = PREFERRED_MODEL_TYPE_POLYNOMIAL_REGRESSION;
     
     GtkWidget *reset = gtk_button_new_from_icon_name("go-first", GTK_ICON_SIZE_LARGE_TOOLBAR);
     GtkWidget *start = gtk_button_new_from_icon_name("media-playback-start", GTK_ICON_SIZE_LARGE_TOOLBAR);
@@ -282,10 +343,11 @@ le_main_window_init(LEMainWindow *self)
     gtk_label_set_use_markup(GTK_LABEL(label), TRUE);
     gtk_box_pack_start(GTK_BOX(model_vbox), label, FALSE, FALSE, 2);
     GtkWidget *model_combo = gtk_combo_box_text_new();
-    gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(model_combo), "Logistic Unit");
+    gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(model_combo), "Polynomial Regression");
     gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(model_combo), "Support Vector Machine");
     gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(model_combo), "Neural Network");
     gtk_combo_box_set_active(GTK_COMBO_BOX(model_combo), 0);
+    g_signal_connect(G_OBJECT(model_combo), "changed", G_CALLBACK(model_combo_changed), self);
     gtk_box_pack_start(GTK_BOX(model_vbox), model_combo, FALSE, FALSE, 2);
     
     self->drawing_area = gtk_drawing_area_new();
