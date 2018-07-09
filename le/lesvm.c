@@ -23,7 +23,7 @@ le_svm_new(void)
 void
 le_svm_train(LeSVM *self, LeMatrix *x_train, LeMatrix *y_train, LeKernel kernel)
 {
-    
+    /// @todo: Sequential Minimal Optimization here
 }
 
 LeMatrix *
