@@ -130,24 +130,35 @@ void
 le_main_window_recreate_model(LEMainWindow *self)
 {
     guint width, height;
+    
+    if (self->trainig_data == NULL)
+        return;
+    
     width = gtk_widget_get_allocated_width(GTK_WIDGET(self->drawing_area));
     height = gtk_widget_get_allocated_height(GTK_WIDGET(self->drawing_area));
     
     switch (self->preferred_model_type)
     {
-        case PREFERRED_MODEL_TYPE_SUPPORT_VECTOR_MACHINE:
-            self->model = NULL;
-            break;
-            
-        case PREFERRED_MODEL_TYPE_NEURAL_NETWORK:
-            self->model = NULL;
-            break;
-            
-        case PREFERRED_MODEL_TYPE_POLYNOMIAL_REGRESSION:
-        default:
-            self->model = (LeModel *)le_logistic_classifier_new();
-            le_logistic_classifier_train((LeLogisticClassifier *)self->model, le_training_data_get_input(self->trainig_data), le_training_data_get_output(self->trainig_data), 1);
-            break;
+    case PREFERRED_MODEL_TYPE_SUPPORT_VECTOR_MACHINE:
+        self->model = (LeModel *)le_svm_new();
+        le_svm_train((LeSVM *)self->model,
+            le_training_data_get_input(self->trainig_data),
+            le_training_data_get_output(self->trainig_data),
+            LE_KERNEL_RBF);
+        break;
+        
+    case PREFERRED_MODEL_TYPE_NEURAL_NETWORK:
+        self->model = NULL;
+        break;
+        
+    case PREFERRED_MODEL_TYPE_POLYNOMIAL_REGRESSION:
+    default:
+        self->model = (LeModel *)le_logistic_classifier_new();
+        le_logistic_classifier_train((LeLogisticClassifier *)self->model,
+            le_training_data_get_input(self->trainig_data),
+            le_training_data_get_output(self->trainig_data),
+            1);
+        break;
     }
     
     if (self->classifier_visualisation)
