@@ -4,6 +4,14 @@
 #include "lesvm.h"
 #include <stdlib.h>
 
+struct LeSVM
+{
+    LeMatrix *w;
+    float     b;
+    float     c;
+    LeKernel  kernel;
+}
+
 LeSVM *
 le_svm_new(void)
 {
