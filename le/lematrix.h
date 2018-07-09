@@ -56,6 +56,9 @@ float      le_matrix_sum                (LeMatrix     *matrix);
 
 void       le_matrix_apply_sigmoid      (LeMatrix     *matrix);
 
+void       le_matrix_apply_greater_than (LeMatrix     *matrix,
+                                         float         scalar);
+
 void       le_matrix_free               (LeMatrix     *matrix);
 
 /** @note: Temporary */

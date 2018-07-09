@@ -290,6 +290,18 @@ le_matrix_apply_sigmoid(LeMatrix *self)
     }
 }
 
+void
+le_matrix_apply_greater_than(LeMatrix *self, float scalar)
+{
+    unsigned i;
+    unsigned elements_count = self->height * self->width;
+    
+    for (i = 0; i < elements_count; i++)
+    {
+        self->data[i] = self->data[i] > scalar ? 1.0f : 0.0f;
+    }
+}
+
 /** @note: Temporary */
 void
 le_matrix_print(LeMatrix *self, FILE *stream)
