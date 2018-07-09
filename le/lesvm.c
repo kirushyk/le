@@ -5,11 +5,17 @@
 #include <stdlib.h>
 
 LeSVM *
-le_svm_new_train(LeMatrix *x_train, LeMatrix *y_train)
+le_svm_new(void)
 {
     LeSVM *self = NULL;
     
     return self;
+}
+
+LeSVM *
+le_svm_train(LeSVM *svm, LeMatrix *x_train, LeMatrix *y_train, LeKernel kernel)
+{
+    
 }
 
 LeMatrix *

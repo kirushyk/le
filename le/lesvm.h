@@ -6,13 +6,20 @@
 
 #include "lematrix.h"
 
+typedef enum LeKernel
+{
+    LE_KERNEL_LINEAR,
+    LE_KERNEL_RBF
+} LeKernel;
+
 typedef struct LeSVM LeSVM;
 
-LeSVM *                le_svm_new_train                 (LeMatrix             *x_train,
-                                                         LeMatrix             *y_train);
+LeSVM *                le_svm_new                       (void);
 
-LeMatrix *             le_svm_predict                   (LeSVM                *svm,
-                                                         LeMatrix             *x);
+LeSVM *                le_svm_train                     (LeSVM                *svm,
+                                                         LeMatrix             *x_train,
+                                                         LeMatrix             *y_train,
+                                                         LeKernel              kernel);
 
 void                   le_svm_free                      (LeSVM                *svm);
 
