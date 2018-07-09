@@ -10,7 +10,7 @@ struct LeSVM
     float     b;
     float     c;
     LeKernel  kernel;
-}
+};
 
 LeSVM *
 le_svm_new(void)
@@ -20,22 +20,25 @@ le_svm_new(void)
     return self;
 }
 
-LeSVM *
-le_svm_train(LeSVM *svm, LeMatrix *x_train, LeMatrix *y_train, LeKernel kernel)
+void
+le_svm_train(LeSVM *self, LeMatrix *x_train, LeMatrix *y_train, LeKernel kernel)
 {
     
 }
 
 LeMatrix *
-le_svm_predict(LeSVM *svm, LeMatrix *x)
+le_svm_predict(LeSVM *self, LeMatrix *x)
 {
-    LeMatrix *y = le_matrix_new_zeros(1, le_matrix_get_width(x));
-    
-    return y;
+    LeMatrix *wt = le_matrix_new_transpose(self->w);
+    LeMatrix *a = le_matrix_new_product(wt, x);
+    le_matrix_free(wt);
+    le_matrix_add_scalar(a, self->b);
+    le_matrix_apply_greater_than(a, 0);
+    return a;
 }
 
 void
-le_svm_free(LeSVM *svm)
+le_svm_free(LeSVM *self)
 {
-    free(svm);
+    free(self);
 }

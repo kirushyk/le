@@ -16,7 +16,7 @@ typedef struct LeSVM LeSVM;
 
 LeSVM *                le_svm_new                       (void);
 
-LeSVM *                le_svm_train                     (LeSVM                *svm,
+void                   le_svm_train                     (LeSVM                *svm,
                                                          LeMatrix             *x_train,
                                                          LeMatrix             *y_train,
                                                          LeKernel              kernel);
