@@ -5,13 +5,13 @@
 #include <stdlib.h>
 #include "lemodel.h"
 
-typedef struct LeLogisticClassifier
+struct LeLogisticClassifier
 {
     LeModel   parent;
     LeMatrix *w;
     float     b;
     unsigned  polynomia_degree;
-} LeLogisticClassifier;
+};
 
 typedef struct LeLogisticClassifierClass
 {
