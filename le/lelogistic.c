@@ -8,8 +8,8 @@
 struct LeLogisticClassifier
 {
     LeModel   parent;
-    LeMatrix *w;
-    float     b;
+    LeMatrix *weights;
+    float     bias;
     unsigned  polynomia_degree;
 };
 
@@ -41,8 +41,8 @@ le_logistic_classifier_construct(LeLogisticClassifier *self)
     le_model_construct((LeModel *)self);
     le_logistic_classifier_class_ensure_init();
     ((LeObject *)self)->klass = (LeClass *)&le_logistic_classifier_class;
-    self->w = NULL;
-    self->b = 0;
+    self->weights = NULL;
+    self->bias = 0;
     self->polynomia_degree = 0;
 }
 
@@ -58,7 +58,7 @@ LeMatrix *
 le_logistic_classifier_predict(LeLogisticClassifier *self, LeMatrix *x)
 {
     unsigned i;
-    LeMatrix *wt = le_matrix_new_transpose(self->w);
+    LeMatrix *wt = le_matrix_new_transpose(self->weights);
     LeMatrix *x_poly = x;
     LeMatrix *x_prev = x;
     for (i = 0; i < self->polynomia_degree; i++)
@@ -76,7 +76,7 @@ le_logistic_classifier_predict(LeLogisticClassifier *self, LeMatrix *x)
     {
         le_matrix_free(x_poly);
     }
-    le_matrix_add_scalar(a, self->b);
+    le_matrix_add_scalar(a, self->bias);
     le_matrix_apply_sigmoid(a);
     return a;
 }
@@ -116,8 +116,8 @@ le_logistic_classifier_train(LeLogisticClassifier *self, LeMatrix *x_train, LeMa
         le_matrix_free(x);
     }
     
-    self->w = le_matrix_new_zeros(features_count, 1);
-    self->b = 0;
+    self->weights = le_matrix_new_zeros(features_count, 1);
+    self->bias = 0;
     self->polynomia_degree = polynomia_degree;
     
     for (i = 0; i < iterations_count; i++)
@@ -132,9 +132,9 @@ le_logistic_classifier_train(LeLogisticClassifier *self, LeMatrix *x_train, LeMa
         
         le_matrix_free(dwt);
         le_matrix_free(h);
-        le_matrix_subtract(self->w, dw);
+        le_matrix_subtract(self->weights, dw);
         le_matrix_free(dw);
-        self->b -= learning_rate * db;
+        self->bias -= learning_rate * db;
     }
     
     le_matrix_free(xt);
@@ -143,6 +143,6 @@ le_logistic_classifier_train(LeLogisticClassifier *self, LeMatrix *x_train, LeMa
 void
 le_logistic_classifier_free(LeLogisticClassifier *self)
 {
-    le_matrix_free(self->w);
+    le_matrix_free(self->weights);
     free(self);
 }
