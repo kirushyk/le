@@ -5,6 +5,7 @@ le_sources = [
     'letrainingdata.c',
     'lelogistic.c',
     'lematrix.c',
+    'lemodel.c',
     'lesvm.c'
 ]
 

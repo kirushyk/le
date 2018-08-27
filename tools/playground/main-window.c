@@ -116,10 +116,13 @@ render_predictions(LeModel *model, guint width, guint height)
         
         le_matrix_free(row);
         
-        for (gint x = 0; x < width; x++)
+        if (prediction != NULL)
         {
-            ARGB32 color = color_for_logistic(le_matrix_at(prediction, 0, x));
-            ((ARGB32 *)pixmap)[y * width + x] = color;
+            for (gint x = 0; x < width; x++)
+            {
+                ARGB32 color = color_for_logistic(le_matrix_at(prediction, 0, x));
+                ((ARGB32 *)pixmap)[y * width + x] = color;
+            }
         }
     }
     cairo_surface_mark_dirty(surface);
