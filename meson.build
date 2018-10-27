@@ -6,7 +6,7 @@ project('le', 'c',
     meson_version: '>= 0.40.1',
     default_options: [
         'warning_level=1',
-        'buildtype=debugoptimized'
+        'buildtype=debug'
     ]
 )
 
