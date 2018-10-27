@@ -1,1 +1,3 @@
 *.xcodeproj/
+gtk.xcconfig
+
