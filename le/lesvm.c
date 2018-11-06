@@ -8,7 +8,7 @@
 struct LeSVM
 {
     LeModel   parent;
-    LeMatrix *weights;
+    LeMatrix *a;
     float     bias;
     float     c;
     LeKernel  kernel;
@@ -42,7 +42,7 @@ le_svm_construct(LeSVM *self)
     le_model_construct((LeModel *)self);
     le_svm_class_ensure_init();
     ((LeObject *)self)->klass = (LeClass *)&le_svm_class;
-    self->weights = NULL;
+    self->a = NULL;
     self->c = 0.0;
     self->kernel = LE_KERNEL_LINEAR;
 }
@@ -66,9 +66,9 @@ le_svm_predict(LeSVM *self, LeMatrix *x)
 {
     if (self == NULL)
         return NULL;
-    if (self->weights == NULL)
+    if (self->a == NULL)
         return NULL;
-    LeMatrix *wt = le_matrix_new_transpose(self->weights);
+    LeMatrix *wt = le_matrix_new_transpose(self->a);
     LeMatrix *a = le_matrix_new_product(wt, x);
     le_matrix_free(wt);
     le_matrix_add_scalar(a, self->bias);
