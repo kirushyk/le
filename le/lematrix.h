@@ -27,6 +27,9 @@ void       le_matrix_set_element        (LeMatrix     *matrix,
                                          unsigned      x,
                                          float         value);
 
+LeMatrix * le_matrix_get_column         (LeMatrix     *matrix,
+                                         unsigned      x);
+
 LeMatrix * le_matrix_new_identity       (unsigned      size);
 
 LeMatrix * le_matrix_new_uninitialized  (unsigned      height,

@@ -66,6 +66,23 @@ le_matrix_set_element(LeMatrix *self, unsigned y, unsigned x, float value)
     self->data[y * self->width + x] = value;
 }
 
+LeMatrix *
+le_matrix_get_column(LeMatrix *self, unsigned x)
+{
+    /// @todo: Add dimension checks
+    
+    unsigned y;
+    unsigned height = le_matrix_get_height(self);
+    LeMatrix *column = le_matrix_new_uninitialized(height, 1);
+    
+    for (y = 0; y < height; y++)
+    {
+        column->data[y] = self->data[y * self->width + x];
+    }
+    
+    return column;
+}
+
 void
 le_matrix_empty(LeMatrix *self)
 {
