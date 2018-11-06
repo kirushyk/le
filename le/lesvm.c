@@ -10,7 +10,8 @@ struct LeSVM
     LeModel   parent;
     LeMatrix *a;
     float     bias;
-    float     c;
+    LeMatrix *x;
+    LeMatrix *y;
     LeKernel  kernel;
 };
 
@@ -43,7 +44,6 @@ le_svm_construct(LeSVM *self)
     le_svm_class_ensure_init();
     ((LeObject *)self)->klass = (LeClass *)&le_svm_class;
     self->a = NULL;
-    self->c = 0.0;
     self->kernel = LE_KERNEL_LINEAR;
 }
 
@@ -61,8 +61,8 @@ le_svm_train(LeSVM *self, LeMatrix *x_train, LeMatrix *y_train, LeKernel kernel)
     /// @todo: Sequential Minimal Optimization here
 }
 
-static float
-le_svm_kerfnel(LeMatrix *a, LeMatrix *b, LeKernel kernel)
+inline float
+le_svm_kernel(LeMatrix *a, LeMatrix *b, LeKernel kernel)
 {
     switch (kernel) {
     case LE_KERNEL_RBF:
@@ -71,6 +71,21 @@ le_svm_kerfnel(LeMatrix *a, LeMatrix *b, LeKernel kernel)
     default:
         return le_dot_product(a, b);
     }
+}
+
+static float
+le_svm_function(LeSVM *self, LeMatrix *x)
+{
+    unsigned i;
+    float result = 0;
+    /// @todo: fix m
+    unsigned m = 0;
+    for (i = 0; i < m; i++)
+    {
+        result += le_matrix_at(self->a, i, 0) * le_matrix_at(self->y, i, 0) * le_svm_kernel(self->x, x, self->kernel);
+    }
+    result += self->bias;
+    return result;
 }
 
 LeMatrix *
