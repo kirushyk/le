@@ -69,4 +69,8 @@ void       le_matrix_print              (LeMatrix     *matrix,
 
 LeMatrix * le_matrix_new_polynomia      (LeMatrix     *matrix);
 
+/** @note: Inner product of two column vectors */
+float      le_dot_product               (LeMatrix     *a,
+                                         LeMatrix     *b);
+
 #endif

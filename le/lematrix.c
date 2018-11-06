@@ -218,6 +218,28 @@ le_matrix_new_product(LeMatrix *a, LeMatrix *b)
     return self;
 }
 
+float
+le_dot_product(LeMatrix *a, LeMatrix *b)
+{
+    unsigned y;
+    
+    float result = 0;
+
+    /** @todo: Test results against transposed a multiplied by b */
+    if (a->height != b->height || a->width != 1 || b->width != 1)
+        return nanf("");
+    
+    for (y = 0; y < a->height; y++)
+    {
+        /** @note: This addressing is correct as we
+            ensured that widths of both matrices
+            (supposed to be column vectors) is 1 */
+        result += a->data[y] * b->data[y];
+    }
+    
+    return result;
+}
+
 void
 le_matrix_subtract(LeMatrix *a, LeMatrix *b)
 {
