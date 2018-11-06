@@ -58,10 +58,14 @@ le_svm_new(void)
 void
 le_svm_train(LeSVM *self, LeMatrix *x_train, LeMatrix *y_train, LeKernel kernel)
 {
+    /// @todo: Add checks
+    self->x = le_matrix_new_copy(x_train);
+    self->y = le_matrix_new_copy(y_train);
+    self->kernel = kernel;
     /// @todo: Sequential Minimal Optimization here
 }
 
-inline float
+float
 le_svm_kernel(LeMatrix *a, LeMatrix *b, LeKernel kernel)
 {
     switch (kernel) {
@@ -91,16 +95,26 @@ le_svm_function(LeSVM *self, LeMatrix *x)
 LeMatrix *
 le_svm_predict(LeSVM *self, LeMatrix *x)
 {
+    unsigned i;
+    unsigned examples_count;
+    
     if (self == NULL)
         return NULL;
     if (self->a == NULL)
         return NULL;
-    LeMatrix *wt = le_matrix_new_transpose(self->a);
-    LeMatrix *a = le_matrix_new_product(wt, x);
-    le_matrix_free(wt);
-    le_matrix_add_scalar(a, self->bias);
-    le_matrix_apply_greater_than(a, 0);
-    return a;
+    
+    examples_count = le_matrix_get_width(x);
+    
+    LeMatrix *y_pred = le_matrix_new_uninitialized(1, examples_count);
+    for (i = 0; i < examples_count; i++)
+    {
+        LeMatrix *example = le_matrix_get_column(x, i);
+        le_matrix_set_element(y_pred, 0, i, le_svm_function(self, example));
+        le_matrix_free(example);
+    }
+
+    le_matrix_apply_greater_than(y_pred, 0);
+    return y_pred;
 }
 
 void
