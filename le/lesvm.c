@@ -8,7 +8,7 @@
 struct LeSVM
 {
     LeModel   parent;
-    LeMatrix *a;
+    LeMatrix *alpha;
     float     bias;
     LeMatrix *x;
     LeMatrix *y;
@@ -43,7 +43,7 @@ le_svm_construct(LeSVM *self)
     le_model_construct((LeModel *)self);
     le_svm_class_ensure_init();
     ((LeObject *)self)->klass = (LeClass *)&le_svm_class;
-    self->a = NULL;
+    self->alpha = NULL;
     self->kernel = LE_KERNEL_LINEAR;
 }
 
@@ -63,6 +63,7 @@ le_svm_train(LeSVM *self, LeMatrix *x_train, LeMatrix *y_train, LeKernel kernel)
     self->y = le_matrix_new_copy(y_train);
     self->kernel = kernel;
     /// @todo: Sequential Minimal Optimization here
+    self->alpha = le_matrix_new_zeros(1, le_matrix_get_width(x_train));
 }
 
 float
@@ -86,7 +87,7 @@ le_svm_function(LeSVM *self, LeMatrix *x)
 
     for (i = 0; i < training_examples_count; i++)
     {
-        result += le_matrix_at(self->a, i, 0) * le_matrix_at(self->y, i, 0) * le_svm_kernel(self->x, x, self->kernel);
+        result += le_matrix_at(self->alpha, 0, i) * le_matrix_at(self->y, 0, i) * le_svm_kernel(self->x, x, self->kernel);
     }
     result += self->bias;
     return result;
@@ -100,7 +101,7 @@ le_svm_predict(LeSVM *self, LeMatrix *x)
     
     if (self == NULL)
         return NULL;
-    if (self->a == NULL)
+    if (self->alpha == NULL)
         return NULL;
     
     examples_count = le_matrix_get_width(x);
