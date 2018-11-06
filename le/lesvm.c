@@ -61,6 +61,18 @@ le_svm_train(LeSVM *self, LeMatrix *x_train, LeMatrix *y_train, LeKernel kernel)
     /// @todo: Sequential Minimal Optimization here
 }
 
+static float
+le_svm_kerfnel(LeMatrix *a, LeMatrix *b, LeKernel kernel)
+{
+    switch (kernel) {
+    case LE_KERNEL_RBF:
+        return 0.0f;
+    case LE_KERNEL_LINEAR:
+    default:
+        return le_dot_product(a, b);
+    }
+}
+
 LeMatrix *
 le_svm_predict(LeSVM *self, LeMatrix *x)
 {
