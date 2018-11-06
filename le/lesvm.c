@@ -82,9 +82,9 @@ le_svm_function(LeSVM *self, LeMatrix *x)
 {
     unsigned i;
     float result = 0;
-    /// @todo: fix m
-    unsigned m = 0;
-    for (i = 0; i < m; i++)
+    unsigned training_examples_count = le_matrix_get_width(self->x);
+
+    for (i = 0; i < training_examples_count; i++)
     {
         result += le_matrix_at(self->a, i, 0) * le_matrix_at(self->y, i, 0) * le_svm_kernel(self->x, x, self->kernel);
     }
