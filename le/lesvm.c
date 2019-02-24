@@ -102,54 +102,48 @@ le_svm_kernel(LeMatrix *a, LeMatrix *b, LeKernel kernel)
     }
 }
 
-static float
-le_svm_function(LeSVM *self, LeMatrix *x)
-{
-    unsigned i;
-    float result = 0;
-    unsigned training_examples_count = le_matrix_get_width(self->x);
-
-    for (i = 0; i < training_examples_count; i++)
-    {
-        result += le_matrix_at(self->alphas, 0, i) * le_matrix_at(self->y, 0, i) * le_svm_kernel(self->x, x, self->kernel);
-    }
-    result += self->bias;
-    return result;
-}
-
 LeMatrix *
 le_svm_predict(LeSVM *self, LeMatrix *x)
 {
-    unsigned i;
-    unsigned examples_count;
-    
     if (self == NULL)
         return NULL;
     
     /* In case we use linear kernel and have weights, apply linear classification */
     if (self->weights != NULL)
     {
-        LeMatrix *wt = le_matrix_new_transpose(self->weights);
-        LeMatrix *y_predicted = le_matrix_new_product(wt, x);
-        le_matrix_free(wt);
+        LeMatrix *weights_transposed = le_matrix_new_transpose(self->weights);
+        LeMatrix *y_predicted = le_matrix_new_product(weights_transposed, x);
+        le_matrix_free(weights_transposed);
         le_matrix_add_scalar(y_predicted, self->bias);
+        le_matrix_apply_svm_prediction(y_predicted);
+        return y_predicted;
     }
-    
-    if (self->alphas == NULL)
-        return NULL;
-    
-    examples_count = le_matrix_get_width(x);
-    
-    LeMatrix *y_pred = le_matrix_new_uninitialized(1, examples_count);
-    for (i = 0; i < examples_count; i++)
+    else
     {
-        LeMatrix *example = le_matrix_get_column(x, i);
-        le_matrix_set_element(y_pred, 0, i, le_svm_function(self, example));
-        le_matrix_free(example);
+        if (self->alphas == NULL)
+            return NULL;
+        
+        unsigned test_examples_count = le_matrix_get_width(x);
+        LeMatrix *y_predicted = le_matrix_new_uninitialized(1, test_examples_count);
+        for (unsigned i = 0; i < test_examples_count; i++)
+        {
+            LeMatrix *example = le_matrix_get_column(x, i);
+            
+            unsigned j;
+            float margin = 0;
+            unsigned training_examples_count = le_matrix_get_width(self->x);
+            for (j = 0; j < training_examples_count; j++)
+            {
+                margin += le_matrix_at(self->alphas, 0, i) * le_matrix_at(self->y, 0, i) * le_svm_kernel(self->x, example, self->kernel);
+            }
+            margin += self->bias;
+            
+            le_matrix_set_element(y_predicted, 0, i, margin);
+            le_matrix_free(example);
+        }
+        le_matrix_apply_svm_prediction(y_predicted);
+        return y_predicted;
     }
-
-    le_matrix_apply_greater_than(y_pred, 0);
-    return y_pred;
 }
 
 void
