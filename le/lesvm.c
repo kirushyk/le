@@ -76,7 +76,7 @@ le_svm_train(LeSVM *self, LeMatrix *x_train, LeMatrix *y_train, LeKernel kernel)
     self->y = le_matrix_new_copy(y_train);
     self->kernel = kernel;
     /// @todo: Sequential Minimal Optimization here
-    self->alpha = le_matrix_new_zeros(1, le_matrix_get_width(x_train));
+    self->alphas = le_matrix_new_zeros(1, le_matrix_get_width(x_train));
     self->bias = 0;
     
     while (passes < max_passes)
@@ -111,7 +111,7 @@ le_svm_function(LeSVM *self, LeMatrix *x)
 
     for (i = 0; i < training_examples_count; i++)
     {
-        result += le_matrix_at(self->alpha, 0, i) * le_matrix_at(self->y, 0, i) * le_svm_kernel(self->x, x, self->kernel);
+        result += le_matrix_at(self->alphas, 0, i) * le_matrix_at(self->y, 0, i) * le_svm_kernel(self->x, x, self->kernel);
     }
     result += self->bias;
     return result;
@@ -125,7 +125,7 @@ le_svm_predict(LeSVM *self, LeMatrix *x)
     
     if (self == NULL)
         return NULL;
-    if (self->alpha == NULL)
+    if (self->alphas == NULL)
         return NULL;
     
     examples_count = le_matrix_get_width(x);
