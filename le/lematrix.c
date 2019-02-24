@@ -341,6 +341,18 @@ le_matrix_apply_greater_than(LeMatrix *self, float scalar)
     }
 }
 
+void
+le_matrix_apply_svm_prediction(LeMatrix *self)
+{
+    unsigned i;
+    unsigned elements_count = self->height * self->width;
+    
+    for (i = 0; i < elements_count; i++)
+    {
+        self->data[i] = self->data[i] >= 0.0f ? 1.0f : -1.0f;
+    }
+}
+
 /** @note: Temporary */
 void
 le_matrix_print(LeMatrix *self, FILE *stream)
