@@ -9,11 +9,13 @@ struct LeSVM
 {
     LeModel   parent;
     
+    /* Training data */
     LeMatrix *x;
     LeMatrix *y;
     
     LeKernel  kernel;
     float     bias;
+    /* Weights for linear classifier */
     LeMatrix *weights;
     LeMatrix *alphas;
 };
@@ -46,7 +48,11 @@ le_svm_construct(LeSVM *self)
     le_model_construct((LeModel *)self);
     le_svm_class_ensure_init();
     ((LeObject *)self)->klass = (LeClass *)&le_svm_class;
-    self->alpha = NULL;
+    self->x = NULL;
+    self->y = NULL;
+    self->bias = 0.0f;
+    self->alphas = NULL;
+    self->weights = NULL;
     self->kernel = LE_KERNEL_LINEAR;
 }
 
