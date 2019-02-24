@@ -8,11 +8,14 @@
 struct LeSVM
 {
     LeModel   parent;
-    LeMatrix *alpha;
-    float     bias;
+    
     LeMatrix *x;
     LeMatrix *y;
+    
     LeKernel  kernel;
+    float     bias;
+    LeMatrix *weights;
+    LeMatrix *alphas;
 };
 
 typedef struct LeSVMClass
@@ -58,12 +61,27 @@ le_svm_new(void)
 void
 le_svm_train(LeSVM *self, LeMatrix *x_train, LeMatrix *y_train, LeKernel kernel)
 {
+    unsigned passes = 0;
+    /// @todo: Expose this parameter
+    unsigned max_passes = 127;
+
     /// @todo: Add checks
     self->x = le_matrix_new_copy(x_train);
     self->y = le_matrix_new_copy(y_train);
     self->kernel = kernel;
     /// @todo: Sequential Minimal Optimization here
     self->alpha = le_matrix_new_zeros(1, le_matrix_get_width(x_train));
+    self->bias = 0;
+    
+    while (passes < max_passes)
+    {
+        unsigned num_changed_alphas = 0;
+        
+        if (num_changed_alphas == 0)
+            passes += 1;
+        else
+            passes = 0;
+    }
 }
 
 float
