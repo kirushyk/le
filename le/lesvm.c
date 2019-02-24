@@ -125,6 +125,16 @@ le_svm_predict(LeSVM *self, LeMatrix *x)
     
     if (self == NULL)
         return NULL;
+    
+    /* In case we use linear kernel and have weights, apply linear classification */
+    if (self->weights != NULL)
+    {
+        LeMatrix *wt = le_matrix_new_transpose(self->weights);
+        LeMatrix *y_predicted = le_matrix_new_product(wt, x);
+        le_matrix_free(wt);
+        le_matrix_add_scalar(y_predicted, self->bias);
+    }
+    
     if (self->alphas == NULL)
         return NULL;
     
