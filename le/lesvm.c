@@ -134,7 +134,7 @@ le_svm_predict(LeSVM *self, LeMatrix *x)
             unsigned training_examples_count = le_matrix_get_width(self->x);
             for (j = 0; j < training_examples_count; j++)
             {
-                margin += le_matrix_at(self->alphas, 0, i) * le_matrix_at(self->y, 0, i) * le_svm_kernel(self->x, example, self->kernel);
+                margin += le_matrix_at(self->alphas, 0, j) * le_matrix_at(self->y, 0, j) * le_svm_kernel(self->x, example, self->kernel);
             }
             margin += self->bias;
             
