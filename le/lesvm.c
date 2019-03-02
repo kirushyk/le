@@ -100,24 +100,13 @@ le_svm_train(LeSVM *self, LeMatrix *x_train, LeMatrix *y_train, LeKernel kernel)
     if (kernel == LE_KERNEL_LINEAR)
     {
         /* For linear kernel, we calculate weights */
-        /*
-        this.w = new Array(this.D);
-        for(var j=0;j<this.D;j++) {
-            var s= 0.0;
-            for(var i=0;i<this.N;i++) {
-                s+= this.alpha[i] * labels[i] * data[i][j];
-            }
-            this.w[j] = s;
-            this.usew_ = true;
-        }
-        */
         self->weights = le_matrix_new_uninitialized(features_count, 1);
         for (int j = 0; j < features_count; j++)
         {
             float s = 0.0f;
             for (int i = 0; i < examples_count; i++)
             {
-                s += self->alphas[i] * le_matrix_at(y_train, i, 0) * le_matrix_at(x_train, j, i);
+                s += le_matrix_at(self->alphas, i, 0) * le_matrix_at(y_train, i, 0) * le_matrix_at(x_train, j, i);
             }
             le_matrix_set_element(self->weights, j, 0, s);
         }
