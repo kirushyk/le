@@ -2,6 +2,7 @@
    Released under the MIT license. See LICENSE file in the project root for full license information. */
 
 #include "lesvm.h"
+#include <assert.h>
 #include <stdlib.h>
 #include "lemodel.h"
 
@@ -70,21 +71,23 @@ le_svm_train(LeSVM *self, LeMatrix *x_train, LeMatrix *y_train, LeKernel kernel)
     unsigned passes = 0;
     /// @todo: Expose this parameter
     unsigned max_passes = 127;
+    
+    unsigned features_count = le_matrix_get_height(x_train);
+    unsigned examples_count = le_matrix_get_width(x_train);
+    /// @todo: Add more clever input data checks
+    assert(examples_count == le_matrix_get_width(y_train));
+
 
     /// @todo: Add checks
     self->x = le_matrix_new_copy(x_train);
     self->y = le_matrix_new_copy(y_train);
     self->kernel = kernel;
     /// @todo: Add cleanup here
-    self->alphas = le_matrix_new_zeros(1, le_matrix_get_width(x_train));
+    /// @note: Maybe use stack variable instead
+    self->alphas = le_matrix_new_zeros(1, examples_count);
     self->bias = 0;
     /// @todo: Add cleanup here
     self->weights = NULL;
-    
-    unsigned features_count = le_matrix_get_height(x_train);
-    unsigned examples_count = le_matrix_get_width(x_train);
-    /// @todo: Add more clever input data checks
-    assert(examples_count == le_matrix_get_width(y_train));
     
     /// @note: Sequential Minimal Optimization (SMO) algorithm
     while (passes < max_passes)
@@ -113,8 +116,38 @@ le_svm_train(LeSVM *self, LeMatrix *x_train, LeMatrix *y_train, LeKernel kernel)
     }
     else
     {
-        /* For other kernels, we remove alphas which close to zero */
+        /* For other kernels, we only retain alphas and training data for support vectors */
+        unsigned support_vectors_count = 0;
+        const float alpha_tolerance = 1e-4;
+        for (int i = 0; i < examples_count; i++)
+        {
+            if (le_matrix_at(self->alphas, i, 0) >= alpha_tolerance)
+                support_vectors_count++;
+        }
         
+        LeMatrix *new_alphas = le_matrix_new_zeros(1, support_vectors_count);
+        LeMatrix *new_x_train = le_matrix_new_zeros(features_count, support_vectors_count);
+        LeMatrix *new_y_train = le_matrix_new_zeros(1, support_vectors_count);
+
+        int j = 0; /// Iterator for new matrices
+        for (int i = 0; i < examples_count; i++)
+        {
+            if (le_matrix_at(self->alphas, i, 0) >= alpha_tolerance)
+            {
+                le_matrix_set_element(new_alphas, 1, j, le_matrix_at(self->alphas, 1, i));
+                le_matrix_set_element(new_y_train, 1, j, le_matrix_at(self->y, 1, i));
+                for (int k = 0; k < features_count; k++)
+                    le_matrix_set_element(new_x_train, k, j, le_matrix_at(self->x, k, i));
+                j++;
+            }
+        }
+
+        le_matrix_free(self->alphas);
+        self->alphas = new_alphas;
+        le_matrix_free(self->x);
+        self->x = new_x_train;
+        le_matrix_free(self->alphas);
+        self->y = new_y_train;
     }
 }
 
