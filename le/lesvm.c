@@ -146,7 +146,7 @@ le_svm_train(LeSVM *self, LeMatrix *x_train, LeMatrix *y_train, LeKernel kernel)
         self->alphas = new_alphas;
         le_matrix_free(self->x);
         self->x = new_x_train;
-        le_matrix_free(self->alphas);
+        le_matrix_free(self->y);
         self->y = new_y_train;
     }
 }
