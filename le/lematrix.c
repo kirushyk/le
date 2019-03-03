@@ -3,6 +3,7 @@
 
 #include "lematrix.h"
 #include "lematrix-imp.h"
+#include <assert.h>
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
@@ -57,12 +58,18 @@ le_matrix_get_height(LeMatrix *self)
 float
 le_matrix_at(LeMatrix *self, unsigned y, unsigned x)
 {
+    assert(y < self->height);
+    assert(x < self->width);
+    
     return self->data[y * self->width + x];
 }
 
 void
 le_matrix_set_element(LeMatrix *self, unsigned y, unsigned x, float value)
 {
+    assert(y < self->height);
+    assert(x < self->width);
+    
     self->data[y * self->width + x] = value;
 }
 
@@ -143,7 +150,7 @@ le_matrix_new_zeros(unsigned height, unsigned width)
     
     for (i = 0; i < elements_count; i++)
     {
-        self->data[i] = 0.0;
+        self->data[i] = 0.0f;
     }
     
     return self;

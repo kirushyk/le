@@ -84,7 +84,7 @@ le_svm_train(LeSVM *self, LeMatrix *x_train, LeMatrix *y_train, LeKernel kernel)
     self->kernel = kernel;
     /// @todo: Add cleanup here
     /// @note: Maybe use stack variable instead
-    self->alphas = le_matrix_new_zeros(1, examples_count);
+    self->alphas = le_matrix_new_rand(1, examples_count);
     self->bias = 0;
     /// @todo: Add cleanup here
     self->weights = NULL;
@@ -121,7 +121,7 @@ le_svm_train(LeSVM *self, LeMatrix *x_train, LeMatrix *y_train, LeKernel kernel)
         const float alpha_tolerance = 1e-4;
         for (int i = 0; i < examples_count; i++)
         {
-            if (le_matrix_at(self->alphas, i, 0) >= alpha_tolerance)
+            if (le_matrix_at(self->alphas, 0, i) >= alpha_tolerance)
                 support_vectors_count++;
         }
         
@@ -132,10 +132,10 @@ le_svm_train(LeSVM *self, LeMatrix *x_train, LeMatrix *y_train, LeKernel kernel)
         int j = 0; /// Iterator for new matrices
         for (int i = 0; i < examples_count; i++)
         {
-            if (le_matrix_at(self->alphas, i, 0) >= alpha_tolerance)
+            if (le_matrix_at(self->alphas, 0, i) >= alpha_tolerance)
             {
-                le_matrix_set_element(new_alphas, 1, j, le_matrix_at(self->alphas, 1, i));
-                le_matrix_set_element(new_y_train, 1, j, le_matrix_at(self->y, 1, i));
+                le_matrix_set_element(new_alphas, 0, j, le_matrix_at(self->alphas, 0, i));
+                le_matrix_set_element(new_y_train, 0, j, le_matrix_at(self->y, 0, i));
                 for (int k = 0; k < features_count; k++)
                     le_matrix_set_element(new_x_train, k, j, le_matrix_at(self->x, k, i));
                 j++;
