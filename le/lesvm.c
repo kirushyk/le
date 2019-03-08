@@ -65,18 +65,72 @@ le_svm_new(void)
     return self;
 }
 
+static float
+le_svm_kernel(LeMatrix *a, LeMatrix *b, LeKernel kernel)
+{
+    switch (kernel) {
+    case LE_KERNEL_RBF:
+        return 0.0f;
+    case LE_KERNEL_LINEAR:
+    default:
+        return le_dot_product(a, b);
+    }
+}
+
+LeMatrix *
+le_svm_margins(LeSVM *self, LeMatrix *x)
+{
+    if (self == NULL)
+        return NULL;
+    
+    /* In case we use linear kernel and have weights, apply linear classification */
+    if (self->weights != NULL)
+    {
+        LeMatrix *weights_transposed = le_matrix_new_transpose(self->weights);
+        LeMatrix *margins = le_matrix_new_product(weights_transposed, x);
+        le_matrix_free(weights_transposed);
+        le_matrix_add_scalar(margins, self->bias);
+        return margins;
+    }
+    else
+    {
+        if (self->alphas == NULL)
+            return NULL;
+        
+        unsigned test_examples_count = le_matrix_get_width(x);
+        LeMatrix *margins = le_matrix_new_uninitialized(1, test_examples_count);
+        for (unsigned i = 0; i < test_examples_count; i++)
+        {
+            LeMatrix *example = le_matrix_get_column(x, i);
+            
+            unsigned j;
+            float margin = 0;
+            unsigned training_examples_count = le_matrix_get_width(self->x);
+            for (j = 0; j < training_examples_count; j++)
+            {
+                margin += le_matrix_at(self->alphas, 0, j) * le_matrix_at(self->y, 0, j) * le_svm_kernel(self->x, example, self->kernel);
+            }
+            margin += self->bias;
+            
+            le_matrix_set_element(margins, 0, i, margin);
+            le_matrix_free(example);
+        }
+        return margins;
+    }
+}
+
 void
 le_svm_train(LeSVM *self, LeMatrix *x_train, LeMatrix *y_train, LeKernel kernel)
 {
     unsigned passes = 0;
     /// @todo: Expose this parameter
-    unsigned max_passes = 127;
+    unsigned max_passes = 10;
+    unsigned max_iterations = 10000;
     
     unsigned features_count = le_matrix_get_height(x_train);
     unsigned examples_count = le_matrix_get_width(x_train);
     /// @todo: Add more clever input data checks
     assert(examples_count == le_matrix_get_width(y_train));
-
 
     /// @todo: Add checks
     self->x = NULL;
@@ -84,17 +138,29 @@ le_svm_train(LeSVM *self, LeMatrix *x_train, LeMatrix *y_train, LeKernel kernel)
     self->kernel = kernel;
     /// @todo: Add cleanup here
     self->alphas = NULL;
-    /// @note: Maybe use stack variable instead
-    LeMatrix *alphas = le_matrix_new_rand(1, examples_count);
     self->bias = 0;
     /// @todo: Add cleanup here
     self->weights = NULL;
-    
+
+    /// @note: Maybe use stack variable instead
+    LeMatrix *alphas = le_matrix_new_zeros(1, examples_count);
     /// @note: Sequential Minimal Optimization (SMO) algorithm
-    while (passes < max_passes)
+    for (unsigned iteration = 0; passes < max_passes && iteration < max_iterations; iteration++)
     {
         unsigned num_changed_alphas = 0;
         
+        for (int i = 0; i < examples_count; i++)
+        {
+            /// @todo: Implement immutable matrix columns
+            LeMatrix *x_train_i = le_matrix_get_column(x_train, i);
+            /// @note: We will have 1x1 matrix here
+            LeMatrix *shallow_margin_matrix = le_svm_margins(self, x_train_i);
+            float margin = le_matrix_at(shallow_margin_matrix, 0, 0);
+            le_matrix_free(x_train_i);
+            float Ei = margin - le_matrix_at(y_train, i, 0);
+            le_matrix_free(x_train_i);
+        }
+
         if (num_changed_alphas == 0)
             passes++;
         else
@@ -145,60 +211,15 @@ le_svm_train(LeSVM *self, LeMatrix *x_train, LeMatrix *y_train, LeKernel kernel)
     }
 }
 
-float
-le_svm_kernel(LeMatrix *a, LeMatrix *b, LeKernel kernel)
-{
-    switch (kernel) {
-    case LE_KERNEL_RBF:
-        return 0.0f;
-    case LE_KERNEL_LINEAR:
-    default:
-        return le_dot_product(a, b);
-    }
-}
-
 LeMatrix *
 le_svm_predict(LeSVM *self, LeMatrix *x)
 {
-    if (self == NULL)
-        return NULL;
-    
-    /* In case we use linear kernel and have weights, apply linear classification */
-    if (self->weights != NULL)
-    {
-        LeMatrix *weights_transposed = le_matrix_new_transpose(self->weights);
-        LeMatrix *y_predicted = le_matrix_new_product(weights_transposed, x);
-        le_matrix_free(weights_transposed);
-        le_matrix_add_scalar(y_predicted, self->bias);
-        le_matrix_apply_svm_prediction(y_predicted);
-        return y_predicted;
-    }
-    else
-    {
-        if (self->alphas == NULL)
-            return NULL;
-        
-        unsigned test_examples_count = le_matrix_get_width(x);
-        LeMatrix *y_predicted = le_matrix_new_uninitialized(1, test_examples_count);
-        for (unsigned i = 0; i < test_examples_count; i++)
-        {
-            LeMatrix *example = le_matrix_get_column(x, i);
-            
-            unsigned j;
-            float margin = 0;
-            unsigned training_examples_count = le_matrix_get_width(self->x);
-            for (j = 0; j < training_examples_count; j++)
-            {
-                margin += le_matrix_at(self->alphas, 0, j) * le_matrix_at(self->y, 0, j) * le_svm_kernel(self->x, example, self->kernel);
-            }
-            margin += self->bias;
-            
-            le_matrix_set_element(y_predicted, 0, i, margin);
-            le_matrix_free(example);
-        }
-        le_matrix_apply_svm_prediction(y_predicted);
-        return y_predicted;
-    }
+    assert(self != NULL);
+    assert(x != NULL);
+
+    LeMatrix *y_predicted = le_svm_margins(self, x);
+    le_matrix_apply_svm_prediction(y_predicted);
+    return y_predicted;
 }
 
 void
