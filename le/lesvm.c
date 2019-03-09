@@ -2,6 +2,7 @@
    Released under the MIT license. See LICENSE file in the project root for full license information. */
 
 #include "lesvm.h"
+#include <math.h>
 #include <assert.h>
 #include <stdlib.h>
 #include "lemodel.h"
@@ -175,6 +176,23 @@ le_svm_train(LeSVM *self, LeMatrix *x_train, LeMatrix *y_train, LeKernel kernel)
                 float margin = le_matrix_at(shallow_margin_matrix, 0, 0);
                 le_matrix_free(shallow_margin_matrix);
                 float Ej = margin - le_matrix_at(y_train, 0, j);
+                
+                float ai = le_matrix_at(self->alphas, 0, i);
+                float aj = le_matrix_at(self->alphas, 0, j);
+                float L = 0, H = C;
+                if (le_matrix_at(y_train, 0, i) == le_matrix_at(y_train, 0, j))
+                {
+                    L = fmax(0, ai + aj - C);
+                    H = fmin(C, ai + aj);
+                }
+                else
+                {
+                    L = fmax(0, aj - ai);
+                    H = fmin(C, C + aj - ai);
+                }
+                
+                if (fabs(L - H) < 1e-4f)
+                    continue;
             }
         }
 
