@@ -67,7 +67,7 @@ le_svm_new(void)
 }
 
 static float
-kernel(LeMatrix *a, LeMatrix *b, LeKernel kernel)
+kernel_function(LeMatrix *a, LeMatrix *b, LeKernel kernel)
 {
     switch (kernel) {
     case LE_KERNEL_RBF:
@@ -109,7 +109,7 @@ le_svm_margins(LeSVM *self, LeMatrix *x)
             unsigned training_examples_count = le_matrix_get_width(self->x);
             for (j = 0; j < training_examples_count; j++)
             {
-                margin += le_matrix_at(self->alphas, 0, j) * le_matrix_at(self->y, 0, j) * kernel(self->x, example, self->kernel);
+                margin += le_matrix_at(self->alphas, 0, j) * le_matrix_at(self->y, 0, j) * kernel_function(self->x, example, self->kernel);
             }
             margin += self->bias;
             
@@ -158,7 +158,6 @@ le_svm_train(LeSVM *self, LeMatrix *x_train, LeMatrix *y_train, LeKernel kernel)
             LeMatrix *x_train_i = le_matrix_get_column(x_train, i);
             /// @note: We will have 1x1 matrix here
             LeMatrix *shallow_margin_matrix = le_svm_margins(self, x_train_i);
-            le_matrix_free(x_train_i);
             float margin = le_matrix_at(shallow_margin_matrix, 0, 0);
             le_matrix_free(shallow_margin_matrix);
             float Ei = margin - le_matrix_at(y_train, 0, i);
@@ -172,7 +171,6 @@ le_svm_train(LeSVM *self, LeMatrix *x_train, LeMatrix *y_train, LeKernel kernel)
                 LeMatrix *x_train_j = le_matrix_get_column(x_train, j);
                 /// @note: We will have 1x1 matrix here
                 LeMatrix *shallow_margin_matrix = le_svm_margins(self, x_train_j);
-                le_matrix_free(x_train_j);
                 float margin = le_matrix_at(shallow_margin_matrix, 0, 0);
                 le_matrix_free(shallow_margin_matrix);
                 float Ej = margin - le_matrix_at(y_train, 0, j);
@@ -191,9 +189,43 @@ le_svm_train(LeSVM *self, LeMatrix *x_train, LeMatrix *y_train, LeKernel kernel)
                     H = fmin(C, C + aj - ai);
                 }
                 
-                if (fabs(L - H) < 1e-4f)
-                    continue;
+                if (fabs(L - H) > 1e-4f)
+                {
+                    float eta = 2 * kernel_function(x_train_i, x_train_j, kernel) -
+                        kernel_function(x_train_i, x_train_i, kernel) -
+                        kernel_function(x_train_j, x_train_j, kernel);
+                    if (eta < 0)
+                    {
+                        // compute new alpha_j and clip it inside [0 C]x[0 C] box
+                        // then compute alpha_i based on it.
+                        float newaj = aj - le_matrix_at(y_train, 0, j) * (Ei - Ej) / eta;
+                        if (newaj > H)
+                            newaj = H;
+                        if (newaj < L)
+                            newaj = L;
+                        if (fabs(aj - newaj) >= 1e-4)
+                        {
+                            le_matrix_set_element(self->alphas, j, 0, newaj);
+                            float newai = ai + le_matrix_at(y_train, 0, i) * le_matrix_at(y_train, 0, j) * (aj - newaj);
+                            le_matrix_set_element(self->alphas, i, 0, newai);
+                            
+                            float b1 = self->bias - Ei - le_matrix_at(y_train, 0, i) * (newai - ai) * kernel_function(x_train_i, x_train_i, kernel)
+                            - le_matrix_at(y_train, 0, j) * (newaj - aj) * kernel_function(x_train_i, x_train_j, kernel);
+                            float b2 = self->bias - Ej - le_matrix_at(y_train, 0, i) * (newai - ai) * kernel_function(x_train_i, x_train_j, kernel)
+                            - le_matrix_at(y_train, 0, j) * (newaj - aj) * kernel_function(x_train_j, x_train_j, kernel);
+                            self->bias = 0.5f * (b1 + b2);
+                            if (newai > 0 && newai < C)
+                                self->bias = b1;
+                            if (newaj > 0 && newaj < C)
+                                self->bias = b2;
+                            
+                            num_changed_alphas++;
+                        }
+                    }
+                }
+                le_matrix_free(x_train_j);
             }
+            le_matrix_free(x_train_i);
         }
 
         if (num_changed_alphas == 0)
