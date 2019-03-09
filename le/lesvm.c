@@ -205,9 +205,9 @@ le_svm_train(LeSVM *self, LeMatrix *x_train, LeMatrix *y_train, LeKernel kernel)
                             newaj = L;
                         if (fabs(aj - newaj) >= 1e-4)
                         {
-                            le_matrix_set_element(self->alphas, j, 0, newaj);
+                            le_matrix_set_element(self->alphas, 0, j, newaj);
                             float newai = ai + le_matrix_at(y_train, 0, i) * le_matrix_at(y_train, 0, j) * (aj - newaj);
-                            le_matrix_set_element(self->alphas, i, 0, newai);
+                            le_matrix_set_element(self->alphas, 0, i, newai);
                             
                             float b1 = self->bias - Ei - le_matrix_at(y_train, 0, i) * (newai - ai) * kernel_function(x_train_i, x_train_i, kernel)
                             - le_matrix_at(y_train, 0, j) * (newaj - aj) * kernel_function(x_train_i, x_train_j, kernel);
