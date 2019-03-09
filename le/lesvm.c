@@ -71,7 +71,7 @@ kernel_function(LeMatrix *a, LeMatrix *b, LeKernel kernel)
 {
     switch (kernel) {
     case LE_KERNEL_RBF:
-        return 0.0f;
+        return le_rbf(a, b, 0.5f);
     case LE_KERNEL_LINEAR:
     default:
         return le_dot_product(a, b);
@@ -196,8 +196,6 @@ le_svm_train(LeSVM *self, LeMatrix *x_train, LeMatrix *y_train, LeKernel kernel)
                         kernel_function(x_train_j, x_train_j, kernel);
                     if (eta < 0)
                     {
-                        // compute new alpha_j and clip it inside [0 C]x[0 C] box
-                        // then compute alpha_i based on it.
                         float newaj = aj - le_matrix_at(y_train, 0, j) * (Ei - Ej) / eta;
                         if (newaj > H)
                             newaj = H;
