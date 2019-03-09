@@ -78,4 +78,9 @@ LeMatrix * le_matrix_new_polynomia        (LeMatrix     *matrix);
 float      le_dot_product                 (LeMatrix     *a,
                                            LeMatrix     *b);
 
+float      le_rbf                         (LeMatrix     *a,
+                                           LeMatrix     *b,
+                                           float         sigma);
+
+
 #endif

@@ -264,6 +264,24 @@ le_dot_product(LeMatrix *a, LeMatrix *b)
     return result;
 }
 
+float
+le_rbf(LeMatrix *a, LeMatrix *b, float sigma)
+{
+    float result = 0;
+    
+    /** @todo: Test results against transposed a multiplied by b */
+    if (a->height != b->height || a->width != 1 || b->width != 1)
+        return nanf("");
+    
+    for (unsigned y = 0; y < a->height; y++)
+    {
+        float sub = a->data[y] - b->data[y];
+        result += sub * sub;
+    }
+    
+    return expf(-result / (2.0f * sigma * sigma));
+}
+
 void
 le_matrix_subtract(LeMatrix *a, LeMatrix *b)
 {
