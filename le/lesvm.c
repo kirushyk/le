@@ -142,6 +142,9 @@ le_svm_train(LeSVM *self, LeMatrix *x_train, LeMatrix *y_train, LeKernel kernel)
     self->bias = 0;
     /// @todo: Add cleanup here
     self->weights = NULL;
+    
+    const float tol = 1e-4f;
+    const float C = 1.0f;
 
     /// @note: Sequential Minimal Optimization (SMO) algorithm
     for (unsigned iteration = 0; passes < max_passes && iteration < max_iterations; iteration++)
@@ -158,6 +161,11 @@ le_svm_train(LeSVM *self, LeMatrix *x_train, LeMatrix *y_train, LeKernel kernel)
             float margin = le_matrix_at(shallow_margin_matrix, 0, 0);
             le_matrix_free(shallow_margin_matrix);
             float Ei = margin - le_matrix_at(y_train, 0, i);
+            if ((le_matrix_at(y_train, 0, i) * Ei < -tol && le_matrix_at(self->alphas, 0, i) < C) ||
+                (le_matrix_at(y_train, 0, i) * Ei > tol && le_matrix_at(self->alphas, 0, i) > 0.0f))
+            {
+                
+            }
             le_matrix_free(x_train_i);
         }
 
@@ -176,7 +184,7 @@ le_svm_train(LeSVM *self, LeMatrix *x_train, LeMatrix *y_train, LeKernel kernel)
             float s = 0.0f;
             for (int i = 0; i < examples_count; i++)
             {
-                s += le_matrix_at(self->alphas, i, 0) * le_matrix_at(y_train, i, 0) * le_matrix_at(x_train, j, i);
+                s += le_matrix_at(self->alphas, 0, i) * le_matrix_at(y_train, 0, i) * le_matrix_at(x_train, j, i);
             }
             le_matrix_set_element(self->weights, j, 0, s);
         }
@@ -185,7 +193,7 @@ le_svm_train(LeSVM *self, LeMatrix *x_train, LeMatrix *y_train, LeKernel kernel)
     {
         /* For other kernels, we only retain alphas and training data for support vectors */
         unsigned support_vectors_count = 0;
-        const float alpha_tolerance = 1e-4;
+        const float alpha_tolerance = 1e-4f;
         for (int i = 0; i < examples_count; i++)
         {
             if (le_matrix_at(self->alphas, 0, i) >= alpha_tolerance)
