@@ -156,17 +156,26 @@ le_svm_train(LeSVM *self, LeMatrix *x_train, LeMatrix *y_train, LeKernel kernel)
             /// @todo: Implement immutable matrix columns
             LeMatrix *x_train_i = le_matrix_get_column(x_train, i);
             /// @note: We will have 1x1 matrix here
-            /// @todo: Use self->alphas
             LeMatrix *shallow_margin_matrix = le_svm_margins(self, x_train_i);
+            le_matrix_free(x_train_i);
             float margin = le_matrix_at(shallow_margin_matrix, 0, 0);
             le_matrix_free(shallow_margin_matrix);
             float Ei = margin - le_matrix_at(y_train, 0, i);
             if ((le_matrix_at(y_train, 0, i) * Ei < -tol && le_matrix_at(self->alphas, 0, i) < C) ||
                 (le_matrix_at(y_train, 0, i) * Ei > tol && le_matrix_at(self->alphas, 0, i) > 0.0f))
             {
-                
+                int j = i;
+                while (j == i)
+                    j = rand() % examples_count;
+                /// @todo: Implement immutable matrix columns
+                LeMatrix *x_train_j = le_matrix_get_column(x_train, j);
+                /// @note: We will have 1x1 matrix here
+                LeMatrix *shallow_margin_matrix = le_svm_margins(self, x_train_j);
+                le_matrix_free(x_train_j);
+                float margin = le_matrix_at(shallow_margin_matrix, 0, 0);
+                le_matrix_free(shallow_margin_matrix);
+                float Ej = margin - le_matrix_at(y_train, 0, j);
             }
-            le_matrix_free(x_train_i);
         }
 
         if (num_changed_alphas == 0)
