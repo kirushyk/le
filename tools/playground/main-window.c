@@ -38,6 +38,8 @@ struct _LEMainWindow
     GtkWidget *svb_rb;
     GtkWidget *spiral_rb;
     
+    float negative_label;
+    
     PreferredModelType preferred_model_type;
 };
 
@@ -176,7 +178,16 @@ le_main_window_recreate_model(LEMainWindow *self)
 static void
 le_main_window_generate_data(LEMainWindow *self, const gchar *pattern)
 {
-    self->trainig_data = pg_generate_data(pattern);
+    switch (self->preferred_model_type)
+    {
+    case PREFERRED_MODEL_TYPE_SUPPORT_VECTOR_MACHINE:
+        self->negative_label = -1.0f;
+        break;
+    default:
+        self->negative_label = 0.0f;
+        break;
+    }
+    self->trainig_data = pg_generate_data(pattern, self->negative_label);
     
     le_main_window_recreate_model(self);
 }

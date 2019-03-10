@@ -6,9 +6,9 @@
 #include <math.h>
 
 LeTrainingData *
-pg_generate_data(const char *pattern_name)
+pg_generate_data(const char *pattern_name, float negative_label)
 {
-    unsigned examples_count = 128;
+    unsigned examples_count = 16;
     
     LeMatrix *input = le_matrix_new_rand(2, examples_count);
     LeMatrix *output = le_matrix_new_rand(1, examples_count);
@@ -23,7 +23,7 @@ pg_generate_data(const char *pattern_name)
             float y = cosf(scalar * 3.0f * M_PI) * scalar;
             le_matrix_set_element(input, 0, i, x);
             le_matrix_set_element(input, 1, i, y);
-            le_matrix_set_element(output, 0, i, scalar > 0.0f ? 1.0f : 0.0f);
+            le_matrix_set_element(output, 0, i, scalar > 0.0f ? 1.0f : negative_label);
         }
     }
     else if (g_strcmp0(pattern_name, "nested") == 0)
@@ -37,7 +37,7 @@ pg_generate_data(const char *pattern_name)
             float y = cosf(angle) * distance;
             le_matrix_set_element(input, 0, i, x);
             le_matrix_set_element(input, 1, i, y);
-            le_matrix_set_element(output, 0, i, distance < 0.5f ? 1.0f : 0.0f);
+            le_matrix_set_element(output, 0, i, distance < 0.5f ? 1.0f : negative_label);
         }
     }
     else if (g_strcmp0(pattern_name, "linsep") == 0)
@@ -52,7 +52,7 @@ pg_generate_data(const char *pattern_name)
             float x = le_matrix_at(input, 0, i);
             float y = le_matrix_at(input, 1, i);
             
-            le_matrix_set_element(output, 0, i, y > bias + slope * x);
+            le_matrix_set_element(output, 0, i, (y > bias + slope * x) ? 1.0f : negative_label);
         }
     }
     else if (g_strcmp0(pattern_name, "svb") == 0)
@@ -88,7 +88,7 @@ pg_generate_data(const char *pattern_name)
                 }
             }
             
-            le_matrix_set_element(output, 0, i, closest_vector >= SUPPORT_VECTORS_COUNT / 2);
+            le_matrix_set_element(output, 0, i, (closest_vector >= SUPPORT_VECTORS_COUNT / 2) ? 1.0f : negative_label);
         }
     }
     else
