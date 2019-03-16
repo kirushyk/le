@@ -384,6 +384,9 @@ le_main_window_init(LEMainWindow *self)
     gtk_label_set_use_markup(GTK_LABEL(label), TRUE);
     gtk_box_pack_start(GTK_BOX(output_vbox), label, FALSE, FALSE, 2);
     gtk_box_pack_start(GTK_BOX(output_vbox), self->drawing_area, FALSE, FALSE, 2);
+    label = gtk_label_new("<b>LEARNING CURVES</b>");
+    gtk_label_set_use_markup(GTK_LABEL(label), TRUE);
+    gtk_box_pack_start(GTK_BOX(output_vbox), label, FALSE, FALSE, 2);
     
     GtkWidget *main_hbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 2);
     gtk_box_pack_start(GTK_BOX(main_hbox), data_vbox, FALSE, FALSE, 2);
