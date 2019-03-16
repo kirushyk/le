@@ -377,6 +377,12 @@ le_main_window_init(LEMainWindow *self)
     gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(lambda_combo), "3");
     gtk_combo_box_set_active(GTK_COMBO_BOX(lambda_combo), 0);
     gtk_box_pack_start(GTK_BOX(model_vbox), lambda_combo, FALSE, FALSE, 2);
+    gtk_box_pack_start(GTK_BOX(model_vbox), gtk_label_new("Kernel"), FALSE, FALSE, 2);
+    GtkWidget *kernel_combo = gtk_combo_box_text_new();
+    gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(kernel_combo), "Linear");
+    gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(kernel_combo), "Radial Basis Function");
+    gtk_combo_box_set_active(GTK_COMBO_BOX(kernel_combo), 0);
+    gtk_box_pack_start(GTK_BOX(model_vbox), kernel_combo, FALSE, FALSE, 2);
     gtk_box_pack_start(GTK_BOX(model_vbox), gtk_label_new("Regularization Parameter C"), FALSE, FALSE, 2);
     GtkWidget *svm_c_combo = gtk_combo_box_text_new();
     gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(svm_c_combo), "0.1");
