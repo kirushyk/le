@@ -22,9 +22,9 @@ main(int argc, const char *argv[])
     LeMatrix *y = le_matrix_new_from_data(1, 4, y_data);
     
     LeLogisticClassifier *lc = le_logistic_classifier_new();
-    le_logistic_classifier_train(lc, x, y);
+    le_logistic_classifier_train(lc, x, y, 0);
     
-    LeMatrix *h = le_logistic_classifier_predict(lc, x);
+    LeMatrix *h = le_model_predict((LeModel *)lc, x);
     printf("Preficted value =\n");
     le_matrix_print(h, stdout);
     

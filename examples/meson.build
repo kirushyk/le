@@ -8,3 +8,15 @@ executable('support-vector-machines', 'support-vector-machines.c',
     link_with: le,
     install: false
 )
+
+executable('logistic-regression', 'logistic-regression.c',
+    include_directories: incdir,
+    link_with: le,
+    install: false
+)
+
+executable('polynomia', 'polynomia.c',
+    include_directories: incdir,
+    link_with: le,
+    install: false
+)
