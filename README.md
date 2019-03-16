@@ -8,6 +8,6 @@ Algorithms supported at this moment:
 
 ## License
 
-Copyright &copy; 2017 Kyrylo Polezhaiev and contributors. All rights reserved.
+Copyright &copy; 2017, 2019 Kyrylo Polezhaiev and contributors. All rights reserved.
 
 Le is released under the [MIT](LICENSE) License.
