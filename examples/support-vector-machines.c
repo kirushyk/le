@@ -24,7 +24,7 @@ main(int argc, const char *argv[])
     LeSVM *svm = le_svm_new();
     le_svm_train(svm, x, y, LE_KERNEL_LINEAR);
     
-    LeMatrix *h = le_svm_predict(svm, x);
+    LeMatrix *h = le_model_predict((LeModel *)svm, x);
     printf("Preficted value =\n");
     le_matrix_print(h, stdout);
     
