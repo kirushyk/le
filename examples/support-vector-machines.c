@@ -10,14 +10,14 @@ main(int argc, const char *argv[])
 {
     const float x_data[] =
     {
-        1.0, 2.0, 3.0, 4.0,
-        4.0, 3.0, 2.0, 1.0
+        1.0f, 2.0f, 3.0f, 4.0f,
+        4.0f, 3.0f, 2.0f, 1.0f
     };
     LeMatrix *x = le_matrix_new_from_data(2, 4, x_data);
     
     const float y_data[] =
     {
-        0.0, 0.0, 1.0, 1.0
+        -1.0f, -1.0f, 1.0f, 1.0f
     };
     LeMatrix *y = le_matrix_new_from_data(1, 4, y_data);
     
