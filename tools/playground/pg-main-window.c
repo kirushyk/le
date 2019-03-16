@@ -377,7 +377,16 @@ le_main_window_init(LEMainWindow *self)
     gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(lambda_combo), "3");
     gtk_combo_box_set_active(GTK_COMBO_BOX(lambda_combo), 0);
     gtk_box_pack_start(GTK_BOX(model_vbox), lambda_combo, FALSE, FALSE, 2);
-    
+    gtk_box_pack_start(GTK_BOX(model_vbox), gtk_label_new("Regularization Parameter C"), FALSE, FALSE, 2);
+    GtkWidget *svm_c_combo = gtk_combo_box_text_new();
+    gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(svm_c_combo), "0.1");
+    gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(svm_c_combo), "0.3");
+    gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(svm_c_combo), "1");
+    gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(svm_c_combo), "3");
+    gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(svm_c_combo), "10");
+    gtk_combo_box_set_active(GTK_COMBO_BOX(svm_c_combo), 0);
+    gtk_box_pack_start(GTK_BOX(model_vbox), svm_c_combo, FALSE, FALSE, 2);
+
     self->drawing_area = gtk_drawing_area_new();
     gtk_widget_set_size_request(self->drawing_area, 256, 256);
     g_signal_connect(G_OBJECT(self->drawing_area), "draw", G_CALLBACK(draw_callback), self);
