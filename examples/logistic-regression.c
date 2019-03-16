@@ -21,11 +21,17 @@ main(int argc, const char *argv[])
     };
     LeMatrix *y = le_matrix_new_from_data(1, 4, y_data);
     
+    printf("Train set:\n");
+    printf("x =\n");
+    le_matrix_print(x, stdout);
+    printf("y =\n");
+    le_matrix_print(y, stdout);
+    
     LeLogisticClassifier *lc = le_logistic_classifier_new();
     le_logistic_classifier_train(lc, x, y, 0);
     
     LeMatrix *h = le_model_predict((LeModel *)lc, x);
-    printf("Preficted value =\n");
+    printf("Predicted value =\n");
     le_matrix_print(h, stdout);
     
     le_matrix_free(h);
