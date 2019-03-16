@@ -4,8 +4,8 @@
 #include <stdlib.h>
 #include <gtk/gtk.h>
 #include <le/le.h>
-#include "menus.h"
-#include "main-window.h"
+#include "pg-menus.h"
+#include "pg-main-window.h"
 
 static void
 quit_activated(GSimpleAction *action, GVariant *parameter, gpointer application)

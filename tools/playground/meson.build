@@ -5,8 +5,8 @@ incdir = include_directories('../../')
 
 le_playground_sources = [
     'main.c',
-    'main-window.c',
-    'menus.c',
+    'pg-main-window.c',
+    'pg-menus.c',
     'pg-generate-data.c',
     'pg-color.c'
 ]
