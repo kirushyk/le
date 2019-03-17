@@ -16,6 +16,12 @@ le_model_predict(LeModel *self, LeMatrix *x)
     return ((LeModelClass *)((LeObject *)self)->klass)->predict(self, x);
 }
 
+float
+le_model_train_iteration(LeModel *self)
+{
+    return ((LeModelClass *)((LeObject *)self)->klass)->train_iteration(self);
+}
+
 void
 le_model_free(LeModel *self)
 {
