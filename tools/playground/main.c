@@ -22,11 +22,9 @@ static void
 le_activate(GtkApplication *application, gpointer user_data)
 {
     GtkWidget *window;
-    
     window = le_main_window_new(application);
-    
     gtk_widget_show_all(window);
-
+    le_main_window_set_preffered_model(window, PREFERRED_MODEL_TYPE_POLYNOMIAL_REGRESSION);
 }
 
 

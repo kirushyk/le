@@ -11,13 +11,6 @@
 #define LE_TYPE_MAIN_WINDOW le_main_window_get_type()
 G_DECLARE_FINAL_TYPE(LEMainWindow, le_main_window, LE, MAIN_WINDOW, GtkApplicationWindow);
 
-typedef enum PreferredModelType
-{
-    PREFERRED_MODEL_TYPE_POLYNOMIAL_REGRESSION,
-    PREFERRED_MODEL_TYPE_SUPPORT_VECTOR_MACHINE,
-    PREFERRED_MODEL_TYPE_NEURAL_NETWORK
-} PreferredModelType;
-
 struct _LEMainWindow
 {
     GtkApplicationWindow parent_instance;
@@ -37,6 +30,9 @@ struct _LEMainWindow
     GtkWidget *nested_rb;
     GtkWidget *svb_rb;
     GtkWidget *spiral_rb;
+    
+    GtkWidget *pr_vbox;
+    GtkWidget *svm_vbox;
     
     float negative_label;
     
@@ -263,6 +259,33 @@ generate_button_clicked(GtkButton *button, gpointer user_data)
 }
 
 void
+le_main_window_set_preffered_model(GtkWidget *window, PreferredModelType model_type)
+{
+    LEMainWindow *self = LE_MAIN_WINDOW(window);
+
+    self->preferred_model_type = model_type;
+
+    switch (self->preferred_model_type)
+    {
+    case 1:
+        gtk_widget_show_all(self->svm_vbox);
+        gtk_widget_hide(self->pr_vbox);
+        break;
+        
+    case 2:
+        gtk_widget_hide(self->svm_vbox);
+        gtk_widget_hide(self->pr_vbox);
+        break;
+        
+    case 0:
+    default:
+        gtk_widget_hide(self->svm_vbox);
+        gtk_widget_show_all(self->pr_vbox);
+        break;
+    }
+}
+
+void
 model_combo_changed(GtkComboBox *widget, gpointer user_data)
 {
     LEMainWindow *self = LE_MAIN_WINDOW(user_data);
@@ -270,16 +293,16 @@ model_combo_changed(GtkComboBox *widget, gpointer user_data)
     switch (gtk_combo_box_get_active(widget))
     {
     case 1:
-        self->preferred_model_type = PREFERRED_MODEL_TYPE_SUPPORT_VECTOR_MACHINE;
+        le_main_window_set_preffered_model((GtkWidget *)self, PREFERRED_MODEL_TYPE_SUPPORT_VECTOR_MACHINE);
         break;
             
     case 2:
-        self->preferred_model_type = PREFERRED_MODEL_TYPE_NEURAL_NETWORK;
+        le_main_window_set_preffered_model((GtkWidget *)self, PREFERRED_MODEL_TYPE_NEURAL_NETWORK);
         break;
             
     case 0:
     default:
-        self->preferred_model_type = PREFERRED_MODEL_TYPE_POLYNOMIAL_REGRESSION;
+        le_main_window_set_preffered_model((GtkWidget *)self, PREFERRED_MODEL_TYPE_POLYNOMIAL_REGRESSION);
         break;
     }
     
@@ -347,8 +370,8 @@ le_main_window_init(LEMainWindow *self)
     gtk_label_set_use_markup(GTK_LABEL(label), TRUE);
     gtk_box_pack_start(GTK_BOX(model_vbox), label, FALSE, FALSE, 2);
     
-    GtkWidget *pr_vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
-    gtk_box_pack_start(GTK_BOX(pr_vbox), gtk_label_new("Learning Rate α"), FALSE, FALSE, 2);
+    self->pr_vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
+    gtk_box_pack_start(GTK_BOX(self->pr_vbox), gtk_label_new("Learning Rate α"), FALSE, FALSE, 2);
     GtkWidget *alpha_combo = gtk_combo_box_text_new();
     gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(alpha_combo), "0.001");
     gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(alpha_combo), "0.003");
@@ -359,15 +382,15 @@ le_main_window_init(LEMainWindow *self)
     gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(alpha_combo), "1");
     gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(alpha_combo), "3");
     gtk_combo_box_set_active(GTK_COMBO_BOX(alpha_combo), 4);
-    gtk_box_pack_start(GTK_BOX(pr_vbox), alpha_combo, FALSE, FALSE, 2);
-    gtk_box_pack_start(GTK_BOX(pr_vbox), gtk_label_new("Regularization"), FALSE, FALSE, 2);
+    gtk_box_pack_start(GTK_BOX(self->pr_vbox), alpha_combo, FALSE, FALSE, 2);
+    gtk_box_pack_start(GTK_BOX(self->pr_vbox), gtk_label_new("Regularization"), FALSE, FALSE, 2);
     GtkWidget *regularization_combo = gtk_combo_box_text_new();
     gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(regularization_combo), "None");
     gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(regularization_combo), "L1");
     gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(regularization_combo), "L2");
     gtk_combo_box_set_active(GTK_COMBO_BOX(regularization_combo), 0);
-    gtk_box_pack_start(GTK_BOX(pr_vbox), regularization_combo, FALSE, FALSE, 2);
-    gtk_box_pack_start(GTK_BOX(pr_vbox), gtk_label_new("Regularization Rate λ"), FALSE, FALSE, 2);
+    gtk_box_pack_start(GTK_BOX(self->pr_vbox), regularization_combo, FALSE, FALSE, 2);
+    gtk_box_pack_start(GTK_BOX(self->pr_vbox), gtk_label_new("Regularization Rate λ"), FALSE, FALSE, 2);
     GtkWidget *lambda_combo = gtk_combo_box_text_new();
     gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(lambda_combo), "0");
     gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(lambda_combo), "0.001");
@@ -379,17 +402,17 @@ le_main_window_init(LEMainWindow *self)
     gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(lambda_combo), "1");
     gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(lambda_combo), "3");
     gtk_combo_box_set_active(GTK_COMBO_BOX(lambda_combo), 0);
-    gtk_box_pack_start(GTK_BOX(pr_vbox), lambda_combo, FALSE, FALSE, 2);
-    gtk_box_pack_start(GTK_BOX(model_vbox), pr_vbox, FALSE, FALSE, 2);
+    gtk_box_pack_start(GTK_BOX(self->pr_vbox), lambda_combo, FALSE, FALSE, 2);
+    gtk_box_pack_start(GTK_BOX(model_vbox), self->pr_vbox, FALSE, FALSE, 2);
 
-    GtkWidget *svm_vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
-    gtk_box_pack_start(GTK_BOX(svm_vbox), gtk_label_new("Kernel"), FALSE, FALSE, 2);
+    self->svm_vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
+    gtk_box_pack_start(GTK_BOX(self->svm_vbox), gtk_label_new("Kernel"), FALSE, FALSE, 2);
     GtkWidget *kernel_combo = gtk_combo_box_text_new();
     gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(kernel_combo), "Linear");
     gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(kernel_combo), "Radial Basis Function");
     gtk_combo_box_set_active(GTK_COMBO_BOX(kernel_combo), 0);
-    gtk_box_pack_start(GTK_BOX(svm_vbox), kernel_combo, FALSE, FALSE, 2);
-    gtk_box_pack_start(GTK_BOX(svm_vbox), gtk_label_new("Regularization Parameter C"), FALSE, FALSE, 2);
+    gtk_box_pack_start(GTK_BOX(self->svm_vbox), kernel_combo, FALSE, FALSE, 2);
+    gtk_box_pack_start(GTK_BOX(self->svm_vbox), gtk_label_new("Regularization Parameter C"), FALSE, FALSE, 2);
     GtkWidget *svm_c_combo = gtk_combo_box_text_new();
     gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(svm_c_combo), "0.1");
     gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(svm_c_combo), "0.3");
@@ -397,8 +420,8 @@ le_main_window_init(LEMainWindow *self)
     gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(svm_c_combo), "3");
     gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(svm_c_combo), "10");
     gtk_combo_box_set_active(GTK_COMBO_BOX(svm_c_combo), 0);
-    gtk_box_pack_start(GTK_BOX(svm_vbox), svm_c_combo, FALSE, FALSE, 2);
-    gtk_box_pack_start(GTK_BOX(model_vbox), svm_vbox, FALSE, FALSE, 2);
+    gtk_box_pack_start(GTK_BOX(self->svm_vbox), svm_c_combo, FALSE, FALSE, 2);
+    gtk_box_pack_start(GTK_BOX(model_vbox), self->svm_vbox, FALSE, FALSE, 2);
 
     self->drawing_area = gtk_drawing_area_new();
     gtk_widget_set_size_request(self->drawing_area, 256, 256);
