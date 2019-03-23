@@ -128,10 +128,23 @@ render_predictions(LeModel *model, guint width, guint height)
 }
 
 void
+erase_model(LEMainWindow *self)
+{
+    if (self->model)
+        le_model_free(self->model);
+    self->model = NULL;
+    if (self->classifier_visualisation)
+        cairo_surface_destroy(self->classifier_visualisation);
+    self->classifier_visualisation = NULL;
+}
+
+void
 create_model_and_train(LEMainWindow *self)
 {
     if (self->trainig_data == NULL)
         return;
+    
+    erase_model(self);
     
     switch (self->preferred_model_type)
     {
@@ -157,8 +170,6 @@ create_model_and_train(LEMainWindow *self)
         break;
     }
     
-    if (self->classifier_visualisation)
-        cairo_surface_destroy(self->classifier_visualisation);
     self->classifier_visualisation = render_predictions(self->model,
         gtk_widget_get_allocated_width(GTK_WIDGET(self->drawing_area)),
         gtk_widget_get_allocated_height(GTK_WIDGET(self->drawing_area)));
@@ -167,7 +178,7 @@ create_model_and_train(LEMainWindow *self)
 }
 
 static void
-le_main_window_generate_data(LEMainWindow *self, const gchar *pattern)
+generate_data(LEMainWindow *self, const gchar *pattern)
 {
     switch (self->preferred_model_type)
     {
@@ -180,6 +191,8 @@ le_main_window_generate_data(LEMainWindow *self, const gchar *pattern)
     }
     self->trainig_data = pg_generate_data(pattern, self->negative_label);
     
+    erase_model(self);
+    
     gtk_widget_queue_draw(GTK_WIDGET(self));
 }
 
@@ -187,7 +200,7 @@ static void
 generate_menu_activated(GSimpleAction *action, GVariant *parameter, gpointer data)
 {
     LEMainWindow *window = LE_MAIN_WINDOW(data);
-    le_main_window_generate_data(window, g_variant_get_string(parameter, NULL));
+    generate_data(window, g_variant_get_string(parameter, NULL));
 }
 
 static void
@@ -242,15 +255,15 @@ generate_button_clicked(GtkButton *button, gpointer user_data)
 {
     LEMainWindow *window = LE_MAIN_WINDOW(user_data);
     if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(window->rand_rb)))
-        le_main_window_generate_data(window, "rand");
+        generate_data(window, "rand");
     else if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(window->linsep_rb)))
-        le_main_window_generate_data(window, "linsep");
+        generate_data(window, "linsep");
     else if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(window->nested_rb)))
-        le_main_window_generate_data(window, "nested");
+        generate_data(window, "nested");
     else if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(window->svb_rb)))
-        le_main_window_generate_data(window, "svb");
+        generate_data(window, "svb");
     else
-        le_main_window_generate_data(window, "spiral");
+        generate_data(window, "spiral");
 }
 
 void
