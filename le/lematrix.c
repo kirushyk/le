@@ -22,7 +22,9 @@ LeMatrix *
 le_matrix_new_copy(LeMatrix *another)
 {
     LeMatrix *self = malloc(sizeof(struct LeMatrix));
-    self->data = malloc(another->height * another->width * sizeof(float));
+    size_t data_size = another->height * another->width * sizeof(float);
+    self->data = malloc(data_size);
+    memcpy(self->data, another->data, data_size);
     self->height = another->height;
     self->width = another->width;
     return self;
