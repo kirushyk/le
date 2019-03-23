@@ -31,7 +31,7 @@ main(int argc, const char *argv[])
     LeSVMTrainingOptions options;
     options.kernel = LE_KERNEL_LINEAR;
     options.c = 1.0f;
-    le_svm_train(svm, x, y, );
+    le_svm_train(svm, x, y, options);
     
     LeMatrix *h = le_model_predict((LeModel *)svm, x);
     printf("Predicted value =\n");
