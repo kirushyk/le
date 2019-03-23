@@ -33,6 +33,8 @@ struct _LEMainWindow
     
     GtkWidget *pr_vbox;
     GtkWidget *svm_vbox;
+    GtkWidget *svm_kernel_combo;
+    GtkWidget *svm_c_combo;
     
     PreferredModelType preferred_model_type;
 };
@@ -150,7 +152,15 @@ create_model_and_train(LEMainWindow *self)
         self->model = (LeModel *)le_svm_new();
         {
             LeSVMTrainingOptions options;
-            options.kernel = LE_KERNEL_RBF;
+            switch (gtk_combo_box_get_active(GTK_COMBO_BOX(self->svm_kernel_combo))) {
+            case 1:
+                options.kernel = LE_KERNEL_RBF;
+                break;
+            case 0:
+            default:
+                options.kernel = LE_KERNEL_LINEAR;
+                break;
+            }
             options.c = 1.0f;
             LeMatrix *labels = le_matrix_new_copy(le_training_data_get_output(self->trainig_data));
             le_matrix_apply_svm_prediction(labels);
@@ -445,20 +455,20 @@ le_main_window_init(LEMainWindow *self)
 
     self->svm_vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
     gtk_box_pack_start(GTK_BOX(self->svm_vbox), gtk_label_new("Kernel"), FALSE, FALSE, 2);
-    GtkWidget *kernel_combo = gtk_combo_box_text_new();
-    gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(kernel_combo), "Linear");
-    gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(kernel_combo), "Radial Basis Function");
-    gtk_combo_box_set_active(GTK_COMBO_BOX(kernel_combo), 0);
-    gtk_box_pack_start(GTK_BOX(self->svm_vbox), kernel_combo, FALSE, FALSE, 2);
+    self->svm_kernel_combo = gtk_combo_box_text_new();
+    gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(self->svm_kernel_combo), "Linear");
+    gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(self->svm_kernel_combo), "Radial Basis Function");
+    gtk_combo_box_set_active(GTK_COMBO_BOX(self->svm_kernel_combo), 1);
+    gtk_box_pack_start(GTK_BOX(self->svm_vbox), self->svm_kernel_combo, FALSE, FALSE, 2);
     gtk_box_pack_start(GTK_BOX(self->svm_vbox), gtk_label_new("Regularization Parameter C"), FALSE, FALSE, 2);
-    GtkWidget *svm_c_combo = gtk_combo_box_text_new();
-    gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(svm_c_combo), "0.1");
-    gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(svm_c_combo), "0.3");
-    gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(svm_c_combo), "1");
-    gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(svm_c_combo), "3");
-    gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(svm_c_combo), "10");
-    gtk_combo_box_set_active(GTK_COMBO_BOX(svm_c_combo), 0);
-    gtk_box_pack_start(GTK_BOX(self->svm_vbox), svm_c_combo, FALSE, FALSE, 2);
+    self->svm_c_combo = gtk_combo_box_text_new();
+    gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(self->svm_c_combo), "0.1");
+    gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(self->svm_c_combo), "0.3");
+    gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(self->svm_c_combo), "1");
+    gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(self->svm_c_combo), "3");
+    gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(self->svm_c_combo), "10");
+    gtk_combo_box_set_active(GTK_COMBO_BOX(self->svm_c_combo), 2);
+    gtk_box_pack_start(GTK_BOX(self->svm_vbox), self->svm_c_combo, FALSE, FALSE, 2);
     gtk_box_pack_start(GTK_BOX(model_vbox), self->svm_vbox, FALSE, FALSE, 2);
 
     self->drawing_area = gtk_drawing_area_new();
