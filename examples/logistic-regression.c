@@ -28,7 +28,12 @@ main(int argc, const char *argv[])
     le_matrix_print(y, stdout);
     
     LeLogisticClassifier *lc = le_logistic_classifier_new();
-    le_logistic_classifier_train(lc, x, y, 0);
+    LeLogisticClassifierTrainingOptions options;
+    options.alpha = 1.0f;
+    options.polynomia_degree = 1;
+    options.regularization = LE_REGULARIZATION_NONE;
+    options.lambda = 0.0f;
+    le_logistic_classifier_train(lc, x, y, options);
     
     LeMatrix *h = le_model_predict((LeModel *)lc, x);
     printf("Predicted value =\n");

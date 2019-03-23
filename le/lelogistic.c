@@ -82,7 +82,7 @@ le_logistic_classifier_predict(LeLogisticClassifier *self, LeMatrix *x)
 }
 
 void
-le_logistic_classifier_train(LeLogisticClassifier *self, LeMatrix *x_train, LeMatrix *y_train, unsigned polynomia_degree)
+le_logistic_classifier_train(LeLogisticClassifier *self, LeMatrix *x_train, LeMatrix *y_train, LeLogisticClassifierTrainingOptions options)
 {
     unsigned examples_count = le_matrix_get_width(x_train);
     unsigned iterations_count = 200;
@@ -98,7 +98,7 @@ le_logistic_classifier_train(LeLogisticClassifier *self, LeMatrix *x_train, LeMa
     LeMatrix *x = x_train;
     LeMatrix *x_prev = x_train;
     
-    for (i = 0; i < polynomia_degree; i++)
+    for (i = 0; i < options.polynomia_degree; i++)
     {
         x = le_matrix_new_polynomia(x_prev);
         if (x_prev != x_train)
@@ -118,7 +118,7 @@ le_logistic_classifier_train(LeLogisticClassifier *self, LeMatrix *x_train, LeMa
     
     self->weights = le_matrix_new_zeros(features_count, 1);
     self->bias = 0;
-    self->polynomia_degree = polynomia_degree;
+    self->polynomia_degree = options.polynomia_degree;
     
     for (i = 0; i < iterations_count; i++)
     {

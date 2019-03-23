@@ -168,10 +168,17 @@ create_model_and_train(LEMainWindow *self)
     case PREFERRED_MODEL_TYPE_POLYNOMIAL_REGRESSION:
     default:
         self->model = (LeModel *)le_logistic_classifier_new();
-        le_logistic_classifier_train((LeLogisticClassifier *)self->model,
-            le_training_data_get_input(self->trainig_data),
-            le_training_data_get_output(self->trainig_data),
-            1);
+        {
+            LeLogisticClassifierTrainingOptions options;
+            options.alpha = 1.0f;
+            options.polynomia_degree = 1;
+            options.regularization = LE_REGULARIZATION_NONE;
+            options.lambda = 0.0f;
+            le_logistic_classifier_train((LeLogisticClassifier *)self->model,
+                le_training_data_get_input(self->trainig_data),
+                le_training_data_get_output(self->trainig_data),
+                options);
+        }
         break;
     }
     

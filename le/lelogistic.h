@@ -10,10 +10,26 @@ typedef struct LeLogisticClassifier LeLogisticClassifier;
 
 LeLogisticClassifier * le_logistic_classifier_new     (void);
 
+typedef enum LeRegularization
+{
+    LE_REGULARIZATION_NONE,
+    LE_REGULARIZATION_L1,
+    LE_REGULARIZATION_L2
+} LeRegularization;
+
+typedef struct LeLogisticClassifierTrainingOptions
+{
+    unsigned         polynomia_degree;
+    float            alpha;
+    LeRegularization regularization;
+    float            lambda;
+} LeLogisticClassifierTrainingOptions;
+
 void                   le_logistic_classifier_train   (LeLogisticClassifier *classifier,
                                                        LeMatrix             *x_train,
                                                        LeMatrix             *y_train,
-                                                       unsigned              polynomia_degree);
+                                                       LeLogisticClassifierTrainingOptions
+                                                                             options);
 
 void                   le_logistic_classifier_free    (LeLogisticClassifier *classifier);
 
