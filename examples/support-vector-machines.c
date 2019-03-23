@@ -28,7 +28,10 @@ main(int argc, const char *argv[])
     le_matrix_print(y, stdout);
 
     LeSVM *svm = le_svm_new();
-    le_svm_train(svm, x, y, LE_KERNEL_LINEAR);
+    LeSVMTrainingOptions options;
+    options.kernel = LE_KERNEL_LINEAR;
+    options.c = 1.0f;
+    le_svm_train(svm, x, y, );
     
     LeMatrix *h = le_model_predict((LeModel *)svm, x);
     printf("Predicted value =\n");

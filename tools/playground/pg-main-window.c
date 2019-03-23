@@ -150,10 +150,15 @@ create_model_and_train(LEMainWindow *self)
     {
     case PREFERRED_MODEL_TYPE_SUPPORT_VECTOR_MACHINE:
         self->model = (LeModel *)le_svm_new();
-        le_svm_train((LeSVM *)self->model,
-            le_training_data_get_input(self->trainig_data),
-            le_training_data_get_output(self->trainig_data),
-            LE_KERNEL_RBF);
+        {
+            LeSVMTrainingOptions options;
+            options.kernel = LE_KERNEL_RBF;
+            options.c = 1.0f;
+            le_svm_train((LeSVM *)self->model,
+                le_training_data_get_input(self->trainig_data),
+                le_training_data_get_output(self->trainig_data),
+                options);
+        }
         break;
         
     case PREFERRED_MODEL_TYPE_NEURAL_NETWORK:

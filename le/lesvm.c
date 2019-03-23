@@ -123,7 +123,7 @@ le_svm_margins(LeSVM *self, LeMatrix *x)
 }
 
 void
-le_svm_train(LeSVM *self, LeMatrix *x_train, LeMatrix *y_train, LeKernel kernel)
+le_svm_train(LeSVM *self, LeMatrix *x_train, LeMatrix *y_train, LeSVMTrainingOptions options)
 {
     unsigned passes = 0;
     /// @todo: Expose this parameter
@@ -138,7 +138,7 @@ le_svm_train(LeSVM *self, LeMatrix *x_train, LeMatrix *y_train, LeKernel kernel)
     /// @todo: Add checks
     self->x = x_train;
     self->y = y_train;
-    self->kernel = kernel;
+    self->kernel = options.kernel;
     /// @todo: Add cleanup here
     /// @note: Maybe use stack variable instead
     self->alphas = le_matrix_new_zeros(1, examples_count);
@@ -147,7 +147,7 @@ le_svm_train(LeSVM *self, LeMatrix *x_train, LeMatrix *y_train, LeKernel kernel)
     self->weights = NULL;
     
     const float tol = 1e-4f;
-    const float C = 1.0f;
+    const float C = options.c;
 
     /// @note: Sequential Minimal Optimization (SMO) algorithm
     for (unsigned iteration = 0; passes < max_passes && iteration < max_iterations; iteration++)
@@ -193,9 +193,9 @@ le_svm_train(LeSVM *self, LeMatrix *x_train, LeMatrix *y_train, LeKernel kernel)
                 
                 if (fabs(L - H) > 1e-4f)
                 {
-                    float eta = 2 * kernel_function(x_train_i, x_train_j, kernel) -
-                        kernel_function(x_train_i, x_train_i, kernel) -
-                        kernel_function(x_train_j, x_train_j, kernel);
+                    float eta = 2 * kernel_function(x_train_i, x_train_j, self->kernel) -
+                        kernel_function(x_train_i, x_train_i, self->kernel) -
+                        kernel_function(x_train_j, x_train_j, self->kernel);
                     if (eta < 0)
                     {
                         float newaj = aj - le_matrix_at(y_train, 0, j) * (Ei - Ej) / eta;
@@ -209,10 +209,10 @@ le_svm_train(LeSVM *self, LeMatrix *x_train, LeMatrix *y_train, LeKernel kernel)
                             float newai = ai + le_matrix_at(y_train, 0, i) * le_matrix_at(y_train, 0, j) * (aj - newaj);
                             le_matrix_set_element(self->alphas, 0, i, newai);
                             
-                            float b1 = self->bias - Ei - le_matrix_at(y_train, 0, i) * (newai - ai) * kernel_function(x_train_i, x_train_i, kernel)
-                            - le_matrix_at(y_train, 0, j) * (newaj - aj) * kernel_function(x_train_i, x_train_j, kernel);
-                            float b2 = self->bias - Ej - le_matrix_at(y_train, 0, i) * (newai - ai) * kernel_function(x_train_i, x_train_j, kernel)
-                            - le_matrix_at(y_train, 0, j) * (newaj - aj) * kernel_function(x_train_j, x_train_j, kernel);
+                            float b1 = self->bias - Ei - le_matrix_at(y_train, 0, i) * (newai - ai) * kernel_function(x_train_i, x_train_i, self->kernel)
+                            - le_matrix_at(y_train, 0, j) * (newaj - aj) * kernel_function(x_train_i, x_train_j, self->kernel);
+                            float b2 = self->bias - Ej - le_matrix_at(y_train, 0, i) * (newai - ai) * kernel_function(x_train_i, x_train_j, self->kernel)
+                            - le_matrix_at(y_train, 0, j) * (newaj - aj) * kernel_function(x_train_j, x_train_j, self->kernel);
                             self->bias = 0.5f * (b1 + b2);
                             if (newai > 0 && newai < C)
                                 self->bias = b1;
@@ -234,7 +234,7 @@ le_svm_train(LeSVM *self, LeMatrix *x_train, LeMatrix *y_train, LeKernel kernel)
             passes = 0;
     }
     
-    if (kernel == LE_KERNEL_LINEAR)
+    if (self->kernel == LE_KERNEL_LINEAR)
     {
         /* For linear kernel, we calculate weights */
         self->weights = le_matrix_new_uninitialized(features_count, 1);

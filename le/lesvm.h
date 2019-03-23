@@ -16,10 +16,16 @@ typedef struct LeSVM LeSVM;
 
 LeSVM *                le_svm_new                       (void);
 
+typedef struct LeSVMTrainingOptions
+{
+    LeKernel kernel;
+    float    c;
+} LeSVMTrainingOptions;
+
 void                   le_svm_train                     (LeSVM                *svm,
                                                          LeMatrix             *x_train,
                                                          LeMatrix             *y_train,
-                                                         LeKernel              kernel);
+                                                         LeSVMTrainingOptions  options);
 
 void                   le_svm_free                      (LeSVM                *svm);
 
