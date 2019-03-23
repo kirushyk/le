@@ -2,6 +2,7 @@
    Released under the MIT license. See LICENSE file in the project root for full license information. */
 
 #include "lelogistic.h"
+#include <assert.h>
 #include <stdlib.h>
 #include "lemodel.h"
 
@@ -88,11 +89,7 @@ le_logistic_classifier_train(LeLogisticClassifier *self, LeMatrix *x_train, LeMa
     unsigned iterations_count = 200;
     unsigned i;
     
-    if (le_matrix_get_width(y_train) != examples_count)
-    {
-        /** @todo: Handle this case */
-        return;
-    }
+    assert(le_matrix_get_width(y_train) == examples_count);
     
     LeMatrix *x = x_train;
     LeMatrix *x_prev = x_train;
