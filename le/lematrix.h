@@ -82,5 +82,4 @@ float      le_rbf                         (LeMatrix     *a,
                                            LeMatrix     *b,
                                            float         sigma);
 
-
 #endif

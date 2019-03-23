@@ -374,7 +374,7 @@ le_matrix_apply_svm_prediction(LeMatrix *self)
     
     for (i = 0; i < elements_count; i++)
     {
-        self->data[i] = self->data[i] >= 0.0f ? 1.0f : -1.0f;
+        self->data[i] = self->data[i] > 0.0f ? 1.0f : -1.0f;
     }
 }
 
