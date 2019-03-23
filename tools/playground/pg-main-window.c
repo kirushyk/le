@@ -162,7 +162,9 @@ create_model_and_train(LEMainWindow *self)
         cairo_surface_destroy(self->classifier_visualisation);
     }
     
-    self->classifier_visualisation = render_predictions(self->model, gtk_widget_get_allocated_width(GTK_WIDGET(self->drawing_area)), gtk_widget_get_allocated_height(GTK_WIDGET(self->drawing_area)));
+    self->classifier_visualisation = render_predictions(self->model,
+        gtk_widget_get_allocated_width(GTK_WIDGET(self->drawing_area)),
+        gtk_widget_get_allocated_height(GTK_WIDGET(self->drawing_area)));
     gtk_widget_queue_draw(GTK_WIDGET(self));
 }
 
