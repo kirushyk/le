@@ -185,7 +185,8 @@ le_main_window_generate_data(LEMainWindow *self, const gchar *pattern)
     }
     self->trainig_data = pg_generate_data(pattern, self->negative_label);
     
-    le_main_window_recreate_model(self);
+    // le_main_window_recreate_model(self);
+    gtk_widget_queue_draw(GTK_WIDGET(self));
 }
 
 static void
@@ -305,7 +306,14 @@ model_combo_changed(GtkComboBox *widget, gpointer user_data)
         le_main_window_set_preffered_model((GtkWidget *)self, PREFERRED_MODEL_TYPE_POLYNOMIAL_REGRESSION);
         break;
     }
-    
+}
+
+
+static void
+start_button_clicked(GtkButton *button, gpointer user_data)
+{
+    LEMainWindow *self = LE_MAIN_WINDOW(user_data);
+
     le_main_window_recreate_model(self);
 }
 
@@ -320,6 +328,7 @@ le_main_window_init(LEMainWindow *self)
     
     GtkWidget *reset = gtk_button_new_from_icon_name("go-first", GTK_ICON_SIZE_LARGE_TOOLBAR);
     GtkWidget *start = gtk_button_new_from_icon_name("media-playback-start", GTK_ICON_SIZE_LARGE_TOOLBAR);
+    g_signal_connect(G_OBJECT(start), "clicked", G_CALLBACK(start_button_clicked), self);
     GtkWidget *stop = gtk_button_new_from_icon_name("media-playback-stop", GTK_ICON_SIZE_LARGE_TOOLBAR);
     GtkWidget *step = gtk_button_new_from_icon_name("go-next", GTK_ICON_SIZE_LARGE_TOOLBAR);
 
