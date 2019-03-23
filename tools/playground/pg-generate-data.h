@@ -6,6 +6,6 @@
 
 #include <le/le.h>
 
-LeTrainingData * pg_generate_data (const char *pattern, float negative_label);
+LeTrainingData * pg_generate_data (const char *pattern);
 
 #endif

@@ -6,7 +6,7 @@
 #include <math.h>
 
 LeTrainingData *
-pg_generate_data(const char *pattern_name, float negative_label)
+pg_generate_data(const char *pattern_name)
 {
     unsigned examples_count = 16;
     
@@ -23,7 +23,7 @@ pg_generate_data(const char *pattern_name, float negative_label)
             float y = cosf(scalar * 3.0f * M_PI) * scalar;
             le_matrix_set_element(input, 0, i, x);
             le_matrix_set_element(input, 1, i, y);
-            le_matrix_set_element(output, 0, i, scalar > 0.0f ? 1.0f : negative_label);
+            le_matrix_set_element(output, 0, i, scalar > 0.0f ? 1.0f : 0.0f);
         }
     }
     else if (g_strcmp0(pattern_name, "nested") == 0)
@@ -37,7 +37,7 @@ pg_generate_data(const char *pattern_name, float negative_label)
             float y = cosf(angle) * distance;
             le_matrix_set_element(input, 0, i, x);
             le_matrix_set_element(input, 1, i, y);
-            le_matrix_set_element(output, 0, i, distance < 0.5f ? 1.0f : negative_label);
+            le_matrix_set_element(output, 0, i, distance < 0.5f ? 1.0f : 0.0f);
         }
     }
     else if (g_strcmp0(pattern_name, "linsep") == 0)
@@ -52,7 +52,7 @@ pg_generate_data(const char *pattern_name, float negative_label)
             float x = le_matrix_at(input, 0, i);
             float y = le_matrix_at(input, 1, i);
             
-            le_matrix_set_element(output, 0, i, (y > bias + slope * x) ? 1.0f : negative_label);
+            le_matrix_set_element(output, 0, i, (y > bias + slope * x) ? 1.0f : 0.0f);
         }
     }
     else if (g_strcmp0(pattern_name, "svb") == 0)
@@ -88,7 +88,7 @@ pg_generate_data(const char *pattern_name, float negative_label)
                 }
             }
             
-            le_matrix_set_element(output, 0, i, (closest_vector >= SUPPORT_VECTORS_COUNT / 2) ? 1.0f : negative_label);
+            le_matrix_set_element(output, 0, i, (closest_vector >= SUPPORT_VECTORS_COUNT / 2) ? 1.0f : 0.0f);
         }
     }
     else

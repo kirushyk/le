@@ -34,8 +34,6 @@ struct _LEMainWindow
     GtkWidget *pr_vbox;
     GtkWidget *svm_vbox;
     
-    float negative_label;
-    
     PreferredModelType preferred_model_type;
 };
 
@@ -154,10 +152,13 @@ create_model_and_train(LEMainWindow *self)
             LeSVMTrainingOptions options;
             options.kernel = LE_KERNEL_RBF;
             options.c = 1.0f;
+            LeMatrix *labels = le_matrix_new_copy(le_training_data_get_output(self->trainig_data));
+            le_matrix_apply_svm_prediction(labels);
             le_svm_train((LeSVM *)self->model,
                 le_training_data_get_input(self->trainig_data),
-                le_training_data_get_output(self->trainig_data),
+                labels,
                 options);
+            le_matrix_free(labels);
         }
         break;
         
@@ -192,16 +193,7 @@ create_model_and_train(LEMainWindow *self)
 static void
 generate_data(LEMainWindow *self, const gchar *pattern)
 {
-    switch (self->preferred_model_type)
-    {
-    case PREFERRED_MODEL_TYPE_SUPPORT_VECTOR_MACHINE:
-        self->negative_label = -1.0f;
-        break;
-    default:
-        self->negative_label = 0.0f;
-        break;
-    }
-    self->trainig_data = pg_generate_data(pattern, self->negative_label);
+    self->trainig_data = pg_generate_data(pattern);
     
     erase_model(self);
     
