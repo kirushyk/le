@@ -319,6 +319,14 @@ model_combo_changed(GtkComboBox *widget, gpointer user_data)
     }
 }
 
+static void
+reset_button_clicked(GtkButton *button, gpointer user_data)
+{
+    LEMainWindow *self = LE_MAIN_WINDOW(user_data);
+    
+    erase_model(self);
+    gtk_widget_queue_draw(GTK_WIDGET(self));
+}
 
 static void
 start_button_clicked(GtkButton *button, gpointer user_data)
@@ -338,6 +346,7 @@ le_main_window_init(LEMainWindow *self)
     self->preferred_model_type = PREFERRED_MODEL_TYPE_POLYNOMIAL_REGRESSION;
     
     GtkWidget *reset = gtk_button_new_from_icon_name("go-first", GTK_ICON_SIZE_LARGE_TOOLBAR);
+    g_signal_connect(G_OBJECT(reset), "clicked", G_CALLBACK(reset_button_clicked), self);
     GtkWidget *start = gtk_button_new_from_icon_name("media-playback-start", GTK_ICON_SIZE_LARGE_TOOLBAR);
     g_signal_connect(G_OBJECT(start), "clicked", G_CALLBACK(start_button_clicked), self);
     GtkWidget *stop = gtk_button_new_from_icon_name("media-playback-stop", GTK_ICON_SIZE_LARGE_TOOLBAR);
