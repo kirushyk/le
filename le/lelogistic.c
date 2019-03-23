@@ -86,7 +86,6 @@ le_logistic_classifier_train(LeLogisticClassifier *self, LeMatrix *x_train, LeMa
 {
     unsigned examples_count = le_matrix_get_width(x_train);
     unsigned iterations_count = 200;
-    float learning_rate = 0.1;
     unsigned i;
     
     if (le_matrix_get_width(y_train) != examples_count)
@@ -127,14 +126,14 @@ le_logistic_classifier_train(LeLogisticClassifier *self, LeMatrix *x_train, LeMa
         le_matrix_multiply_by_scalar(h, 1.0 / examples_count);
         LeMatrix *dwt = le_matrix_new_product(h, xt);
         LeMatrix *dw = le_matrix_new_transpose(dwt);
-        le_matrix_multiply_by_scalar(dw, learning_rate);
+        le_matrix_multiply_by_scalar(dw, options.alpha);
         float db = le_matrix_sum(h);
         
         le_matrix_free(dwt);
         le_matrix_free(h);
         le_matrix_subtract(self->weights, dw);
         le_matrix_free(dw);
-        self->bias -= learning_rate * db;
+        self->bias -= options.alpha * db;
     }
     
     le_matrix_free(xt);
