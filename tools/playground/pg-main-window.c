@@ -130,13 +130,8 @@ render_predictions(LeModel *model, guint width, guint height)
 void
 le_main_window_recreate_model(LEMainWindow *self)
 {
-    guint width, height;
-    
     if (self->trainig_data == NULL)
         return;
-    
-    width = gtk_widget_get_allocated_width(GTK_WIDGET(self->drawing_area));
-    height = gtk_widget_get_allocated_height(GTK_WIDGET(self->drawing_area));
     
     switch (self->preferred_model_type)
     {
@@ -167,7 +162,7 @@ le_main_window_recreate_model(LEMainWindow *self)
         cairo_surface_destroy(self->classifier_visualisation);
     }
     
-    self->classifier_visualisation = render_predictions(self->model, width, height);
+    self->classifier_visualisation = render_predictions(self->model, gtk_widget_get_allocated_width(GTK_WIDGET(self->drawing_area)), gtk_widget_get_allocated_height(GTK_WIDGET(self->drawing_area)));
     gtk_widget_queue_draw(GTK_WIDGET(self));
 }
 
