@@ -402,6 +402,13 @@ le_main_window_init(LEMainWindow *self)
     gtk_box_pack_start(GTK_BOX(model_vbox), label, FALSE, FALSE, 2);
     
     self->pr_vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
+    gtk_box_pack_start(GTK_BOX(self->pr_vbox), gtk_label_new("Polynomia Degree"), FALSE, FALSE, 2);
+    GtkWidget *polynomia_degree_combo = gtk_combo_box_text_new();
+    gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(polynomia_degree_combo), "0");
+    gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(polynomia_degree_combo), "1");
+    gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(polynomia_degree_combo), "2");
+    gtk_combo_box_set_active(GTK_COMBO_BOX(polynomia_degree_combo), 1);
+    gtk_box_pack_start(GTK_BOX(self->pr_vbox), polynomia_degree_combo, FALSE, FALSE, 2);
     gtk_box_pack_start(GTK_BOX(self->pr_vbox), gtk_label_new("Learning Rate α"), FALSE, FALSE, 2);
     GtkWidget *alpha_combo = gtk_combo_box_text_new();
     gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(alpha_combo), "0.001");
@@ -412,7 +419,7 @@ le_main_window_init(LEMainWindow *self)
     gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(alpha_combo), "0.3");
     gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(alpha_combo), "1");
     gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(alpha_combo), "3");
-    gtk_combo_box_set_active(GTK_COMBO_BOX(alpha_combo), 4);
+    gtk_combo_box_set_active(GTK_COMBO_BOX(alpha_combo), 6);
     gtk_box_pack_start(GTK_BOX(self->pr_vbox), alpha_combo, FALSE, FALSE, 2);
     gtk_box_pack_start(GTK_BOX(self->pr_vbox), gtk_label_new("Regularization"), FALSE, FALSE, 2);
     GtkWidget *regularization_combo = gtk_combo_box_text_new();
