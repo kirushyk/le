@@ -128,7 +128,7 @@ render_predictions(LeModel *model, guint width, guint height)
 }
 
 void
-le_main_window_recreate_model(LEMainWindow *self)
+create_model_and_train(LEMainWindow *self)
 {
     if (self->trainig_data == NULL)
         return;
@@ -180,7 +180,6 @@ le_main_window_generate_data(LEMainWindow *self, const gchar *pattern)
     }
     self->trainig_data = pg_generate_data(pattern, self->negative_label);
     
-    // le_main_window_recreate_model(self);
     gtk_widget_queue_draw(GTK_WIDGET(self));
 }
 
@@ -309,7 +308,7 @@ start_button_clicked(GtkButton *button, gpointer user_data)
 {
     LEMainWindow *self = LE_MAIN_WINDOW(user_data);
 
-    le_main_window_recreate_model(self);
+    create_model_and_train(self);
 }
 
 static void
