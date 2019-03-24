@@ -161,7 +161,7 @@ create_model_and_train(LEMainWindow *self)
                 options.kernel = LE_KERNEL_LINEAR;
                 break;
             }
-            options.c = 1.0f;
+            options.c = atof(gtk_combo_box_text_get_active_text(GTK_COMBO_BOX_TEXT(self->svm_c_combo)));
             LeMatrix *labels = le_matrix_new_copy(le_training_data_get_output(self->trainig_data));
             le_matrix_apply_svm_prediction(labels);
             le_svm_train((LeSVM *)self->model,
@@ -462,11 +462,11 @@ le_main_window_init(LEMainWindow *self)
     gtk_box_pack_start(GTK_BOX(self->svm_vbox), self->svm_kernel_combo, FALSE, FALSE, 2);
     gtk_box_pack_start(GTK_BOX(self->svm_vbox), gtk_label_new("Regularization Parameter C"), FALSE, FALSE, 2);
     self->svm_c_combo = gtk_combo_box_text_new();
-    gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(self->svm_c_combo), "0.1");
-    gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(self->svm_c_combo), "0.3");
     gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(self->svm_c_combo), "1");
     gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(self->svm_c_combo), "3");
     gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(self->svm_c_combo), "10");
+    gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(self->svm_c_combo), "30");
+    gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(self->svm_c_combo), "100");
     gtk_combo_box_set_active(GTK_COMBO_BOX(self->svm_c_combo), 2);
     gtk_box_pack_start(GTK_BOX(self->svm_vbox), self->svm_c_combo, FALSE, FALSE, 2);
     gtk_box_pack_start(GTK_BOX(model_vbox), self->svm_vbox, FALSE, FALSE, 2);
