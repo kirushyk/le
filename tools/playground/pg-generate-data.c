@@ -8,7 +8,7 @@
 LeTrainingData *
 pg_generate_data(const char *pattern_name)
 {
-    unsigned examples_count = 16;
+    unsigned examples_count = 64;
     
     LeMatrix *input = le_matrix_new_rand(2, examples_count);
     LeMatrix *output = le_matrix_new_rand(1, examples_count);
