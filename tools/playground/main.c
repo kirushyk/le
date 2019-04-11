@@ -27,7 +27,6 @@ le_activate(GtkApplication *application, gpointer user_data)
     le_main_window_set_preffered_model(window, PREFERRED_MODEL_TYPE_POLYNOMIAL_REGRESSION);
 }
 
-
 static void
 le_startup(GApplication *application, gpointer user_data)
 {
