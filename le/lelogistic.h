@@ -25,12 +25,11 @@ typedef struct LeLogisticClassifierTrainingOptions
     float            lambda;
 } LeLogisticClassifierTrainingOptions;
 
-void                   le_logistic_classifier_train   (LeLogisticClassifier *classifier,
-                                                       LeMatrix             *x_train,
-                                                       LeMatrix             *y_train,
-                                                       LeLogisticClassifierTrainingOptions
-                                                                             options);
+void                   le_logistic_classifier_train   (LeLogisticClassifier                *classifier,
+                                                       LeMatrix                            *x_train,
+                                                       LeMatrix                            *y_train,
+                                                       LeLogisticClassifierTrainingOptions  options);
 
-void                   le_logistic_classifier_free    (LeLogisticClassifier *classifier);
+void                   le_logistic_classifier_free    (LeLogisticClassifier                *classifier);
 
 #endif
