@@ -186,11 +186,21 @@ create_model_and_train(LEMainWindow *self)
         self->model = (LeModel *)le_logistic_classifier_new();
         {
             LeLogisticClassifierTrainingOptions options;
-            options.alpha = 1.0f;
-            options.alpha = atof(gtk_combo_box_text_get_active_text(GTK_COMBO_BOX_TEXT(self->svm_c_combo)));
-            options.polynomia_degree = 1;
-            options.regularization = LE_REGULARIZATION_NONE;
-            options.lambda = 0.0f;
+            options.polynomia_degree = atoi(gtk_combo_box_text_get_active_text(GTK_COMBO_BOX_TEXT(self->polynomia_degree_combo)));
+            options.alpha = atof(gtk_combo_box_text_get_active_text(GTK_COMBO_BOX_TEXT(self->alpha_combo)));
+            switch (gtk_combo_box_get_active(GTK_COMBO_BOX(self->regularization_combo))) {
+            case 1:
+                options.regularization = LE_REGULARIZATION_L1;
+                break;
+            case 2:
+                options.regularization = LE_REGULARIZATION_L2;
+                break;
+            case 0:
+            default:
+                options.regularization = LE_REGULARIZATION_NONE;
+                break;
+            }
+            options.lambda = atof(gtk_combo_box_text_get_active_text(GTK_COMBO_BOX_TEXT(self->lambda_combo)));
             le_logistic_classifier_train((LeLogisticClassifier *)self->model,
                 le_training_data_get_input(self->trainig_data),
                 le_training_data_get_output(self->trainig_data),
