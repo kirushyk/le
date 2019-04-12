@@ -443,7 +443,7 @@ le_main_window_init(LEMainWindow *self)
     gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(self->alpha_combo), "0.3");
     gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(self->alpha_combo), "1");
     gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(self->alpha_combo), "3");
-    gtk_combo_box_set_active(GTK_COMBO_BOX(self->alpha_combo), 6);
+    gtk_combo_box_set_active(GTK_COMBO_BOX(self->alpha_combo), 4);
     gtk_box_pack_start(GTK_BOX(self->pr_vbox), self->alpha_combo, FALSE, FALSE, 2);
     gtk_box_pack_start(GTK_BOX(self->pr_vbox), gtk_label_new("Regularization"), FALSE, FALSE, 2);
     self->regularization_combo = gtk_combo_box_text_new();
