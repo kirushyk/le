@@ -437,8 +437,6 @@ le_main_window_init(LEMainWindow *self)
     gtk_box_pack_start(GTK_BOX(self->pr_vbox), self->polynomia_degree_combo, FALSE, FALSE, 2);
     gtk_box_pack_start(GTK_BOX(self->pr_vbox), gtk_label_new("Learning Rate α"), FALSE, FALSE, 2);
     self->alpha_combo = gtk_combo_box_text_new();
-    gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(self->alpha_combo), "0.001");
-    gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(self->alpha_combo), "0.003");
     gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(self->alpha_combo), "0.01");
     gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(self->alpha_combo), "0.03");
     gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(self->alpha_combo), "0.1");
