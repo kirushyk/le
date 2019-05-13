@@ -127,7 +127,7 @@ le_svm_train(LeSVM *self, LeMatrix *x_train, LeMatrix *y_train, LeSVMTrainingOpt
 {
     unsigned passes = 0;
     /// @todo: Expose this parameter
-    unsigned max_passes = 10;
+    unsigned max_passes = 100;
     unsigned max_iterations = 10000;
     
     unsigned features_count = le_matrix_get_height(x_train);
