@@ -402,6 +402,19 @@ le_main_window_init(LEMainWindow *self)
     self->svb_rb = gtk_radio_button_new_with_label_from_widget(GTK_RADIO_BUTTON(self->rand_rb), "SV Border");
     self->spiral_rb = gtk_radio_button_new_with_label_from_widget(GTK_RADIO_BUTTON(self->rand_rb), "Spiral");
     
+    self->train_set_combo = gtk_combo_box_text_new();
+    gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(self->train_set_combo), "256");
+    gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(self->train_set_combo), "128");
+    gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(self->train_set_combo), "64");
+    gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(self->train_set_combo), "32");
+    gtk_combo_box_set_active(GTK_COMBO_BOX(self->train_set_combo), 1);
+    
+    self->test_set_combo = gtk_combo_box_text_new();
+    gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(self->test_set_combo), "32");
+    gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(self->test_set_combo), "16");
+    gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(self->test_set_combo), "8");
+    gtk_combo_box_set_active(GTK_COMBO_BOX(self->test_set_combo), 2);
+    
     GtkWidget *generate = gtk_button_new_with_label("Generate");
     g_signal_connect(G_OBJECT(generate), "clicked", G_CALLBACK(generate_button_clicked), self);
     gtk_box_pack_start(GTK_BOX(data_vbox), label, FALSE, FALSE, 2);
@@ -410,24 +423,11 @@ le_main_window_init(LEMainWindow *self)
     gtk_box_pack_start(GTK_BOX(data_vbox), self->nested_rb, FALSE, FALSE, 2);
     gtk_box_pack_start(GTK_BOX(data_vbox), self->svb_rb, FALSE, FALSE, 2);
     gtk_box_pack_start(GTK_BOX(data_vbox), self->spiral_rb, FALSE, FALSE, 2);
-    gtk_box_pack_start(GTK_BOX(data_vbox), generate, FALSE, FALSE, 2);
-    
     gtk_box_pack_start(GTK_BOX(data_vbox), gtk_label_new("Train Set Size"), FALSE, FALSE, 2);
-    self->train_set_combo = gtk_combo_box_text_new();
-    gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(self->train_set_combo), "256");
-    gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(self->train_set_combo), "128");
-    gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(self->train_set_combo), "64");
-    gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(self->train_set_combo), "32");
-    gtk_combo_box_set_active(GTK_COMBO_BOX(self->train_set_combo), 1);
     gtk_box_pack_start(GTK_BOX(data_vbox), self->train_set_combo, FALSE, FALSE, 2);
-    
     gtk_box_pack_start(GTK_BOX(data_vbox), gtk_label_new("Test Set Size"), FALSE, FALSE, 2);
-    self->test_set_combo = gtk_combo_box_text_new();
-    gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(self->test_set_combo), "32");
-    gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(self->test_set_combo), "16");
-    gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(self->test_set_combo), "8");
-    gtk_combo_box_set_active(GTK_COMBO_BOX(self->test_set_combo), 2);
     gtk_box_pack_start(GTK_BOX(data_vbox), self->test_set_combo, FALSE, FALSE, 2);
+    gtk_box_pack_start(GTK_BOX(data_vbox), generate, FALSE, FALSE, 2);
     
     GtkWidget *model_vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 2);
     label = gtk_label_new("<b>MODEL</b>");
