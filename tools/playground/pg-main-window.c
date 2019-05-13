@@ -418,8 +418,16 @@ le_main_window_init(LEMainWindow *self)
     gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(self->train_set_combo), "128");
     gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(self->train_set_combo), "64");
     gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(self->train_set_combo), "32");
-    gtk_combo_box_set_active(GTK_COMBO_BOX(self->train_set_combo), 3);
+    gtk_combo_box_set_active(GTK_COMBO_BOX(self->train_set_combo), 1);
     gtk_box_pack_start(GTK_BOX(data_vbox), self->train_set_combo, FALSE, FALSE, 2);
+    
+    gtk_box_pack_start(GTK_BOX(data_vbox), gtk_label_new("Test Set Size"), FALSE, FALSE, 2);
+    self->test_set_combo = gtk_combo_box_text_new();
+    gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(self->test_set_combo), "32");
+    gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(self->test_set_combo), "16");
+    gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(self->test_set_combo), "8");
+    gtk_combo_box_set_active(GTK_COMBO_BOX(self->test_set_combo), 2);
+    gtk_box_pack_start(GTK_BOX(data_vbox), self->test_set_combo, FALSE, FALSE, 2);
     
     GtkWidget *model_vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 2);
     label = gtk_label_new("<b>MODEL</b>");
