@@ -221,7 +221,8 @@ create_model_and_train(LEMainWindow *self)
 static void
 generate_data(LEMainWindow *self, const gchar *pattern)
 {
-    self->trainig_data = pg_generate_data(pattern);
+    unsigned examples_count = atoi(gtk_combo_box_text_get_active_text(GTK_COMBO_BOX_TEXT(self->train_set_combo)));
+    self->trainig_data = pg_generate_data(pattern, examples_count);
     
     erase_model(self);
     
