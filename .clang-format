@@ -1,0 +1,22 @@
+Standard: C99
+
+ColumnLimit: 120
+PointerBindsToType: false
+BreakBeforeBinaryOperators: None
+
+BreakBeforeBraces: Custom
+BraceWrapping:
+AfterClass: true
+AfterControlStatement: true
+AfterEnum: true
+AfterFunction: true
+AfterNamespace: true
+AfterObjCDeclaration: true
+AfterStruct: true
+AfterUnion: true
+BeforeCatch: true
+BeforeElse: true
+IndentBraces: false
+ContinuationIndentWidth: 6
+AlignAfterOpenBracket: true
+AllowShortFunctionsOnASingleLine: Inline
