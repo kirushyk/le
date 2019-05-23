@@ -21,6 +21,7 @@ struct _LEMainWindow
     gboolean dark;
     
     LeTrainingData *trainig_data;
+    LeTrainingData *test_data;
     LeModel *model;
     
     cairo_surface_t *classifier_visualisation;
