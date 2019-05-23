@@ -77,10 +77,32 @@ draw_callback(GtkWidget *widget, cairo_t *cr, gpointer data)
         gint examples_count = le_matrix_get_width(input);
         for (i = 0; i < examples_count; i++)
         {
-            // window->dark ? cairo_set_source_rgba (cr, 0.0, 0.0, 0.0, 1.0) : cairo_set_source_rgba (cr, 1.0, 1.0, 1.0, 1.0);
             double x = width * 0.5 + height * 0.5 * le_matrix_at(input, 0, i);
             double y = height * 0.5 - height * 0.5 * le_matrix_at(input, 1, i);
             window->dark ? cairo_set_source_rgba(cr, 1.0, 1.0, 1.0, 1.0) : cairo_set_source_rgba(cr, 0.0, 0.0, 0.0, 1.0);
+            cairo_set_line_width(cr, 0.5);
+            cairo_arc(cr, x, y, 2., 0., 2 * M_PI);
+            if (le_matrix_at(output, 0, i) > 0.5)
+            {
+                cairo_fill(cr);
+            }
+            else
+            {
+                cairo_stroke(cr);
+            }
+        }
+    }
+    
+    if (window->test_data)
+    {
+        LeMatrix *input = le_training_data_get_input(window->test_data);
+        LeMatrix *output = le_training_data_get_output(window->test_data);;
+        gint examples_count = le_matrix_get_width(input);
+        for (i = 0; i < examples_count; i++)
+        {
+            double x = width * 0.5 + height * 0.5 * le_matrix_at(input, 0, i);
+            double y = height * 0.5 - height * 0.5 * le_matrix_at(input, 1, i);
+            cairo_set_source_rgba(cr, 0.5, 0.5, 0.5, 1.0);
             cairo_set_line_width(cr, 0.5);
             cairo_arc(cr, x, y, 2., 0., 2 * M_PI);
             if (le_matrix_at(output, 0, i) > 0.5)
@@ -371,6 +393,7 @@ le_main_window_init(LEMainWindow *self)
 {
     self->dark = FALSE;
     self->train_data = NULL;
+    self->test_data = NULL;
     self->model = NULL;
     self->classifier_visualisation = NULL;
     self->preferred_model_type = PREFERRED_MODEL_TYPE_POLYNOMIAL_REGRESSION;
