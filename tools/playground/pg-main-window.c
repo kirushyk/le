@@ -246,6 +246,8 @@ generate_data(LEMainWindow *self, const gchar *pattern)
 {
     unsigned examples_count = atoi(gtk_combo_box_text_get_active_text(GTK_COMBO_BOX_TEXT(self->train_set_combo)));
     self->train_data = pg_generate_data(pattern, examples_count);
+    examples_count = atoi(gtk_combo_box_text_get_active_text(GTK_COMBO_BOX_TEXT(self->test_set_combo)));
+    self->test_data = pg_generate_data(pattern, examples_count);
     
     erase_model(self);
     
