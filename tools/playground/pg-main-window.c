@@ -102,7 +102,7 @@ draw_callback(GtkWidget *widget, cairo_t *cr, gpointer data)
         {
             double x = width * 0.5 + height * 0.5 * le_matrix_at(input, 0, i);
             double y = height * 0.5 - height * 0.5 * le_matrix_at(input, 1, i);
-            cairo_set_source_rgba(cr, 0.5, 0.5, 0.5, 1.0);
+            window->dark ? cairo_set_source_rgba(cr, 0.0, 1.0, 0.0, 1.0) : cairo_set_source_rgba(cr, 0.0, 0.5, 0.0, 1.0);
             cairo_set_line_width(cr, 0.5);
             cairo_arc(cr, x, y, 2., 0., 2 * M_PI);
             if (le_matrix_at(output, 0, i) > 0.5)
