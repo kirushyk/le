@@ -20,7 +20,7 @@ struct _LEMainWindow
     
     gboolean dark;
     
-    LeTrainingData *trainig_data;
+    LeTrainingData *train_data;
     LeTrainingData *test_data;
     LeModel *model;
     
@@ -70,10 +70,10 @@ draw_callback(GtkWidget *widget, cairo_t *cr, gpointer data)
         cairo_paint(cr);
     }
     
-    if (window->trainig_data)
+    if (window->train_data)
     {
-        LeMatrix *input = le_training_data_get_input(window->trainig_data);
-        LeMatrix *output = le_training_data_get_output(window->trainig_data);;
+        LeMatrix *input = le_training_data_get_input(window->train_data);
+        LeMatrix *output = le_training_data_get_output(window->train_data);;
         gint examples_count = le_matrix_get_width(input);
         for (i = 0; i < examples_count; i++)
         {
@@ -149,7 +149,7 @@ erase_model(LEMainWindow *self)
 void
 create_model_and_train(LEMainWindow *self)
 {
-    if (self->trainig_data == NULL)
+    if (self->train_data == NULL)
         return;
     
     erase_model(self);
@@ -170,10 +170,10 @@ create_model_and_train(LEMainWindow *self)
                 break;
             }
             options.c = atof(gtk_combo_box_text_get_active_text(GTK_COMBO_BOX_TEXT(self->svm_c_combo)));
-            LeMatrix *labels = le_matrix_new_copy(le_training_data_get_output(self->trainig_data));
+            LeMatrix *labels = le_matrix_new_copy(le_training_data_get_output(self->train_data));
             le_matrix_apply_svm_prediction(labels);
             le_svm_train((LeSVM *)self->model,
-                le_training_data_get_input(self->trainig_data),
+                le_training_data_get_input(self->train_data),
                 labels,
                 options);
             le_matrix_free(labels);
@@ -205,8 +205,8 @@ create_model_and_train(LEMainWindow *self)
             }
             options.lambda = atof(gtk_combo_box_text_get_active_text(GTK_COMBO_BOX_TEXT(self->lambda_combo)));
             le_logistic_classifier_train((LeLogisticClassifier *)self->model,
-                le_training_data_get_input(self->trainig_data),
-                le_training_data_get_output(self->trainig_data),
+                le_training_data_get_input(self->train_data),
+                le_training_data_get_output(self->train_data),
                 options);
         }
         break;
@@ -223,7 +223,7 @@ static void
 generate_data(LEMainWindow *self, const gchar *pattern)
 {
     unsigned examples_count = atoi(gtk_combo_box_text_get_active_text(GTK_COMBO_BOX_TEXT(self->train_set_combo)));
-    self->trainig_data = pg_generate_data(pattern, examples_count);
+    self->train_data = pg_generate_data(pattern, examples_count);
     
     erase_model(self);
     
@@ -370,7 +370,7 @@ static void
 le_main_window_init(LEMainWindow *self)
 {
     self->dark = FALSE;
-    self->trainig_data = NULL;
+    self->train_data = NULL;
     self->model = NULL;
     self->classifier_visualisation = NULL;
     self->preferred_model_type = PREFERRED_MODEL_TYPE_POLYNOMIAL_REGRESSION;
