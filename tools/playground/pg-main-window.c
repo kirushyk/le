@@ -203,7 +203,7 @@ create_model_and_train(LEMainWindow *self)
         break;
         
     case PREFERRED_MODEL_TYPE_NEURAL_NETWORK:
-        self->model = NULL;
+        self->model = (LeModel *)le_sequential_new();
         break;
         
     case PREFERRED_MODEL_TYPE_POLYNOMIAL_REGRESSION:
@@ -463,6 +463,7 @@ le_main_window_init(LEMainWindow *self)
     GtkWidget *model_combo = gtk_combo_box_text_new();
     gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(model_combo), "Polynomial Regression");
     gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(model_combo), "Support Vector Machine");
+    gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(model_combo), "Neural Network");
     /* gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(model_combo), "Neural Network"); */
     gtk_combo_box_set_active(GTK_COMBO_BOX(model_combo), 0);
     g_signal_connect(G_OBJECT(model_combo), "changed", G_CALLBACK(model_combo_changed), self);
