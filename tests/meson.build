@@ -3,6 +3,7 @@
 
 le_tests = [
     ['objects/objects.c', 'objects/base.c', 'objects/a.c', 'objects/b.c'],
+    ['list.c'],
     ['matrices.c']
 ]
 

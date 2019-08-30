@@ -1,9 +1,19 @@
-//
-//  list.c
-//  letest
-//
-//  Created by Cyril on 8/30/19.
-//  Copyright © 2019 kirushyk. All rights reserved.
-//
+/* Copyright (c) Kyrylo Polezhaiev and contributors. All rights reserved.
+ Released under the MIT license. See LICENSE file in the project root for full license information. */
 
-#include <stdio.h>
+#include <stdlib.h>
+#include <assert.h>
+#include <le/le.h>
+
+int
+main()
+{
+    LeList *a = le_list_append(NULL, (void *)0x12345678);
+    
+    assert(a);
+    assert(a->next == NULL);
+    assert(a->prev == NULL);
+    assert(a->data == 0x12345678);
+    
+    return EXIT_SUCCESS;
+}
