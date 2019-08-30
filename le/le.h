@@ -10,5 +10,6 @@
 #include "lelogistic.h"
 #include "lesvm.h"
 #include "lesequential.h"
+#include "lelist.h"
 
 #endif

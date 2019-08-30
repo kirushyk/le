@@ -2,6 +2,8 @@
 # Released under the MIT license. See LICENSE file in the project root for full license information.
 
 le_sources = [
+    'lelist.c',
+    'lesequential.c',
     'letrainingdata.c',
     'lelogistic.c',
     'lematrix.c',

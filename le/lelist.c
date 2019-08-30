@@ -1,6 +1,7 @@
 /* Copyright (c) Kyrylo Polezhaiev and contributors. All rights reserved.
  Released under the MIT license. See LICENSE file in the project root for full license information. */
 
+#include <stdlib.h>
 #include "lelist.h"
 
 LeList *
@@ -20,7 +21,7 @@ le_list_last(LeList *list)
 LeList *
 le_list_append(LeList *list, void *data)
 {
-    LeList *new_element = malloc();
+    LeList *new_element = malloc(sizeof(struct LeList));
     new_element->data = data;
     new_element->next = NULL;
     
