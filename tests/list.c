@@ -13,7 +13,7 @@ main()
     assert(a);
     assert(a->next == NULL);
     assert(a->prev == NULL);
-    assert(a->data == 0x12345678);
+    assert(a->data == (void *)0x12345678);
     
     return EXIT_SUCCESS;
 }
