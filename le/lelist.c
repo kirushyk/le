@@ -34,7 +34,7 @@ le_list_append(LeList *list, void *data)
     }
     else
     {
-        list->prev = NULL;
+        new_element->prev = NULL;
         return list;
     }
 }
