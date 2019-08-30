@@ -27,7 +27,7 @@ le_list_append(LeList *list, void *data)
     
     if (list)
     {
-        LeList *list = le_list_last(list);
+        list = le_list_last(list);
         list->next = new_element;
         new_element->prev = list;
         return list;
@@ -35,6 +35,6 @@ le_list_append(LeList *list, void *data)
     else
     {
         new_element->prev = NULL;
-        return list;
+        return new_element;
     }
 }
