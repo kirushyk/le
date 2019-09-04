@@ -3,10 +3,11 @@
 
 #include "lesequential.h"
 #include <stdlib.h>
+#include "lelist.h"
 
 struct LeSequential
 {
-    
+    LeList *layers;
 };
 
 typedef struct LeSequentialClass
@@ -35,6 +36,8 @@ le_sequential_construct(LeSequential *self)
     le_model_construct((LeModel *)self);
     le_sequential_class_ensure_init();
     ((LeObject *)self)->klass = (LeClass *)&le_sequential_class;
+    
+    self->layers = NULL;
 }
 
 LeSequential *
