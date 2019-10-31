@@ -14,10 +14,10 @@ typedef enum LeActivation
     LE_ACTIVATION_RELU,
 } LeActivation;
 
-struct LeLayer
+typedef struct LeLayer
 {
     LeMatrix *weights;
     LeActivation activation;
-};
+} LeLayer;
 
 #endif

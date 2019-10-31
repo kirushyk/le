@@ -4,6 +4,7 @@
 #include "lesequential.h"
 #include <stdlib.h>
 #include "lelist.h"
+#include "lelayer.h"
 
 struct LeSequential
 {
@@ -51,8 +52,16 @@ le_sequential_new(void)
 LeMatrix *
 le_sequential_predict(LeSequential *self, LeMatrix *x)
 {
-    LeMatrix *y = NULL;
-    return y;
+    LeMatrix *signal = x;
+    for (LeList *current = self->layers; current != NULL; current = current->next)
+    {
+        LeLayer *current_layer = (LeLayer *)current->data;
+        LeMatrix *wx;
+        wx = le_matrix_new_product(current_layer->weights, signal);
+        le_matrix_apply_sigmoid(wx);
+        
+    }
+    return signal;
 }
 
 void
