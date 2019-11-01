@@ -53,9 +53,11 @@ static void
 le_main_window_init(LEMainWindow *self)
 {
     self->drawing_area = gtk_drawing_area_new();
-    gtk_widget_set_size_request(self->drawing_area, 256, 256);
+    gtk_widget_set_size_request(self->drawing_area, 112, 112);
 
     GtkWidget *grid = gtk_grid_new();
+    gtk_grid_set_row_spacing(GTK_GRID(grid), 2);
+    gtk_grid_set_column_spacing(GTK_GRID(grid), 2);
     gtk_grid_attach(GTK_GRID(grid), gtk_label_new("Set:"), 0, 0, 1, 1);
     self->set_selection_combo = gtk_combo_box_text_new();
     gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(self->set_selection_combo), "Train");
