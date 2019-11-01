@@ -16,6 +16,9 @@ struct _LEMainWindow
     GtkApplicationWindow parent_instance;
     
     GtkWidget *drawing_area;
+    GtkWidget *set_selection_combo;
+    GtkWidget *index_entry;
+    GtkWidget *label_entry;
 
 };
 
@@ -54,8 +57,18 @@ le_main_window_init(LEMainWindow *self)
 
     GtkWidget *grid = gtk_grid_new();
     gtk_grid_attach(GTK_GRID(grid), gtk_label_new("Set:"), 0, 0, 1, 1);
+    self->set_selection_combo = gtk_combo_box_text_new();
+    gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(self->set_selection_combo), "Train");
+    gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(self->set_selection_combo), "Test");
+    gtk_combo_box_set_active(GTK_COMBO_BOX(self->set_selection_combo), 1);
+    gtk_grid_attach(GTK_GRID(grid), self->set_selection_combo, 1, 0, 1, 1);
     gtk_grid_attach(GTK_GRID(grid), gtk_label_new("Index:"), 0, 1, 1, 1);
+    self->index_entry = gtk_entry_new();
+    gtk_grid_attach(GTK_GRID(grid), self->index_entry, 1, 1, 1, 1);
     gtk_grid_attach(GTK_GRID(grid), gtk_label_new("Label:"), 0, 2, 1, 1);
+    self->label_entry = gtk_entry_new();
+    g_object_set(self->label_entry, "editable", FALSE, NULL);
+    gtk_grid_attach(GTK_GRID(grid), self->label_entry, 1, 2, 1, 1);
 
     GtkWidget *hbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 2);
     gtk_box_pack_start(GTK_BOX(hbox), self->drawing_area, TRUE, TRUE, 2);
