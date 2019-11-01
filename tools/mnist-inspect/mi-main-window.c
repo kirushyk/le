@@ -46,6 +46,16 @@ le_main_window_class_init(LEMainWindowClass *klass)
 static void
 le_main_window_init(LEMainWindow *self)
 {
+    GtkWidget *drawing_area = gtk_drawing_area_new();
+    GtkWidget *vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 2);
+
+    GtkWidget *hbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 2);
+    gtk_box_pack_start(GTK_BOX(hbox), drawing_area, FALSE, TRUE, 2);
+    gtk_box_pack_start(GTK_BOX(hbox), gtk_separator_new(GTK_ORIENTATION_VERTICAL), FALSE, FALSE, 2);
+    gtk_box_pack_start(GTK_BOX(hbox), vbox, FALSE, FALSE, 2);
+    
+    gtk_container_add(GTK_CONTAINER(self), vbox);
+
     g_action_map_add_action_entries(G_ACTION_MAP(self), win_entries, G_N_ELEMENTS(win_entries), self);
 }
 

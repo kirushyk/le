@@ -9,7 +9,7 @@ mnist_inspect_sources = [
 
 mnist_inspect_deps = dependency('gtk+-3.0')
 
-executable('mnist-inspect-playground', mnist_inspect_sources,
+executable('mnist-inspect', mnist_inspect_sources,
     dependencies: mnist_inspect_deps,
     include_directories: incdir,
     link_with: le,
