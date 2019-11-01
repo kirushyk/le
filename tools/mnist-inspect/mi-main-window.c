@@ -17,7 +17,7 @@ struct _LEMainWindow
     
     GtkWidget *drawing_area;
     GtkWidget *set_selection_combo;
-    GtkWidget *index_entry;
+    GtkWidget *index_spin_button;
     GtkWidget *label_entry;
 
 };
@@ -63,8 +63,8 @@ le_main_window_init(LEMainWindow *self)
     gtk_combo_box_set_active(GTK_COMBO_BOX(self->set_selection_combo), 1);
     gtk_grid_attach(GTK_GRID(grid), self->set_selection_combo, 1, 0, 1, 1);
     gtk_grid_attach(GTK_GRID(grid), gtk_label_new("Index:"), 0, 1, 1, 1);
-    self->index_entry = gtk_entry_new();
-    gtk_grid_attach(GTK_GRID(grid), self->index_entry, 1, 1, 1, 1);
+    self->index_spin_button = gtk_spin_button_new_with_range(0, 59999, 1);
+    gtk_grid_attach(GTK_GRID(grid), self->index_spin_button, 1, 1, 1, 1);
     gtk_grid_attach(GTK_GRID(grid), gtk_label_new("Label:"), 0, 2, 1, 1);
     self->label_entry = gtk_entry_new();
     g_object_set(self->label_entry, "editable", FALSE, NULL);
