@@ -14,6 +14,9 @@ G_DECLARE_FINAL_TYPE(LEMainWindow, le_main_window, LE, MAIN_WINDOW, GtkApplicati
 struct _LEMainWindow
 {
     GtkApplicationWindow parent_instance;
+    
+    GtkWidget *drawing_area;
+
 };
 
 G_DEFINE_TYPE(LEMainWindow, le_main_window, GTK_TYPE_APPLICATION_WINDOW);
@@ -46,13 +49,18 @@ le_main_window_class_init(LEMainWindowClass *klass)
 static void
 le_main_window_init(LEMainWindow *self)
 {
-    GtkWidget *drawing_area = gtk_drawing_area_new();
-    GtkWidget *vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 2);
+    self->drawing_area = gtk_drawing_area_new();
+    gtk_widget_set_size_request(self->drawing_area, 256, 256);
+
+    GtkWidget *grid = gtk_grid_new();
+    gtk_grid_attach(GTK_GRID(grid), gtk_label_new("Set:"), 0, 0, 1, 1);
+    gtk_grid_attach(GTK_GRID(grid), gtk_label_new("Index:"), 0, 1, 1, 1);
+    gtk_grid_attach(GTK_GRID(grid), gtk_label_new("Label:"), 0, 2, 1, 1);
 
     GtkWidget *hbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 2);
-    gtk_box_pack_start(GTK_BOX(hbox), drawing_area, FALSE, TRUE, 2);
+    gtk_box_pack_start(GTK_BOX(hbox), self->drawing_area, TRUE, TRUE, 2);
     gtk_box_pack_start(GTK_BOX(hbox), gtk_separator_new(GTK_ORIENTATION_VERTICAL), FALSE, FALSE, 2);
-    gtk_box_pack_start(GTK_BOX(hbox), vbox, FALSE, FALSE, 2);
+    gtk_box_pack_start(GTK_BOX(hbox), grid, FALSE, FALSE, 2);
     
     gtk_container_add(GTK_CONTAINER(self), hbox);
 
@@ -63,6 +71,5 @@ GtkWidget *
 le_main_window_new(GtkApplication *application)
 {
     LEMainWindow *window = g_object_new(LE_TYPE_MAIN_WINDOW, "application", application, NULL);
-    gtk_window_set_default_size(GTK_WINDOW(window), 256, 256);
     return GTK_WIDGET(window);
 }
