@@ -5,7 +5,7 @@
 #include <glib.h>
 #include <math.h>
 
-LeTrainingData *
+LeDataSet *
 pg_generate_data(const char *pattern_name, unsigned examples_count)
 {
     LeMatrix *input = le_matrix_new_rand(2, examples_count);
@@ -95,5 +95,5 @@ pg_generate_data(const char *pattern_name, unsigned examples_count)
         le_matrix_add_scalar(input, -1.0f);
     }
     
-    return le_training_data_new_take(input, output);
+    return le_data_set_new_take(input, output);
 }

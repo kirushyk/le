@@ -4,7 +4,7 @@
 le_sources = [
     'lelist.c',
     'lesequential.c',
-    'letrainingdata.c',
+    'ledataset.c',
     'lelogistic.c',
     'lematrix.c',
     'lemodel.c',

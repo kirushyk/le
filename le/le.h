@@ -6,7 +6,7 @@
 
 #include "lematrix.h"
 #include "leobject.h"
-#include "letrainingdata.h"
+#include "ledataset.h"
 #include "lelogistic.h"
 #include "lesvm.h"
 #include "lesequential.h"

@@ -20,8 +20,8 @@ struct _LEMainWindow
     
     gboolean dark;
     
-    LeTrainingData *train_data;
-    LeTrainingData *test_data;
+    LeDataSet *train_data;
+    LeDataSet *test_data;
     LeModel *model;
     
     cairo_surface_t *classifier_visualisation;
@@ -72,8 +72,8 @@ draw_callback(GtkWidget *widget, cairo_t *cr, gpointer data)
     
     if (window->train_data)
     {
-        LeMatrix *input = le_training_data_get_input(window->train_data);
-        LeMatrix *output = le_training_data_get_output(window->train_data);;
+        LeMatrix *input = le_data_set_get_input(window->train_data);
+        LeMatrix *output = le_data_set_get_output(window->train_data);;
         gint examples_count = le_matrix_get_width(input);
         for (i = 0; i < examples_count; i++)
         {
@@ -95,8 +95,8 @@ draw_callback(GtkWidget *widget, cairo_t *cr, gpointer data)
     
     if (window->test_data)
     {
-        LeMatrix *input = le_training_data_get_input(window->test_data);
-        LeMatrix *output = le_training_data_get_output(window->test_data);;
+        LeMatrix *input = le_data_set_get_input(window->test_data);
+        LeMatrix *output = le_data_set_get_output(window->test_data);;
         gint examples_count = le_matrix_get_width(input);
         for (i = 0; i < examples_count; i++)
         {
@@ -192,10 +192,10 @@ create_model_and_train(LEMainWindow *self)
                 break;
             }
             options.c = atof(gtk_combo_box_text_get_active_text(GTK_COMBO_BOX_TEXT(self->svm_c_combo)));
-            LeMatrix *labels = le_matrix_new_copy(le_training_data_get_output(self->train_data));
+            LeMatrix *labels = le_matrix_new_copy(le_data_set_get_output(self->train_data));
             le_matrix_apply_svm_prediction(labels);
             le_svm_train((LeSVM *)self->model,
-                le_training_data_get_input(self->train_data),
+                le_data_set_get_input(self->train_data),
                 labels,
                 options);
             le_matrix_free(labels);
@@ -227,8 +227,8 @@ create_model_and_train(LEMainWindow *self)
             }
             options.lambda = atof(gtk_combo_box_text_get_active_text(GTK_COMBO_BOX_TEXT(self->lambda_combo)));
             le_logistic_classifier_train((LeLogisticClassifier *)self->model,
-                le_training_data_get_input(self->train_data),
-                le_training_data_get_output(self->train_data),
+                le_data_set_get_input(self->train_data),
+                le_data_set_get_output(self->train_data),
                 options);
         }
         break;

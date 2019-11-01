@@ -6,6 +6,6 @@
 
 #include <le/le.h>
 
-LeTrainingData * pg_generate_data (const char *pattern, unsigned examples_count);
+LeDataSet * pg_generate_data (const char *pattern, unsigned examples_count);
 
 #endif
