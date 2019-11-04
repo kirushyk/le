@@ -1,13 +1,17 @@
-//
-//  letype.h
-//  le
-//
-//  Created by Cyril on 11/4/19.
-//  Copyright © 2019 kirushyk. All rights reserved.
-//
+/* Copyright (c) Kyrylo Polezhaiev and contributors. All rights reserved.
+   Released under the MIT license. See LICENSE file in the project root for full license information. */
 
-#ifndef letype_h
-#define letype_h
+#ifndef __LETYPE_H__
+#define __LETYPE_H__
 
+typedef enum LeType
+{
+    LE_TYPE_UINT8,
+    LE_TYPE_INT8,
+    LE_TYPE_INT16,
+    LE_TYPE_INT32,
+    LE_TYPE_FLOAT32,
+    LE_TYPE_FLOAT64
+};
 
-#endif /* letype_h */
+#endif
