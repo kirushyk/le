@@ -15,6 +15,7 @@ le_matrix_new(void)
     self->data = NULL;
     self->height = 0;
     self->width = 0;
+    self->element_type = LE_TYPE_FLOAT32;
     return self;
 }
 
@@ -27,6 +28,7 @@ le_matrix_new_copy(LeMatrix *another)
     memcpy(self->data, another->data, data_size);
     self->height = another->height;
     self->width = another->width;
+    self->element_type = another->element_type;
     return self;
 }
 
@@ -40,6 +42,7 @@ le_matrix_new_from_data(unsigned height, unsigned width, const float *data)
     self->data = malloc(data_size);
     self->height = height;
     self->width = width;
+    self->element_type = LE_TYPE_FLOAT32;
     memcpy(self->data, data, data_size);
     
     return self;
@@ -112,6 +115,7 @@ le_matrix_new_identity(unsigned size)
     self->data = malloc(size * size * sizeof(float));
     self->height = size;
     self->width = size;
+    self->element_type = LE_TYPE_FLOAT32;
     
     for (y = 0; y < size; y++)
     {
@@ -133,6 +137,7 @@ le_matrix_new_uninitialized(unsigned height, unsigned width)
     self->data = malloc(height * width * sizeof(float));
     self->height = height;
     self->width = width;
+    self->element_type = LE_TYPE_FLOAT32;
     
     return self;
 }
@@ -148,6 +153,7 @@ le_matrix_new_zeros(unsigned height, unsigned width)
     self->data = malloc(height * width * sizeof(float));
     self->height = height;
     self->width = width;
+    self->element_type = LE_TYPE_FLOAT32;
     elements_count = height * width;
     
     for (i = 0; i < elements_count; i++)
@@ -170,6 +176,7 @@ le_matrix_new_rand(unsigned height, unsigned width)
     self->data = malloc(height * width * sizeof(float));
     self->height = height;
     self->width = width;
+    self->element_type = LE_TYPE_FLOAT32;
     
     for (y = 0; y < self->height; y++)
     {
@@ -200,6 +207,7 @@ le_matrix_new_transpose(LeMatrix *a)
     self->data = malloc(a->width * a->height * sizeof(float));
     self->height = a->width;
     self->width = a->height;
+    self->element_type = a->element_type;
     
     for (y = 0; y < self->height; y++)
     {
@@ -223,11 +231,15 @@ le_matrix_new_product(LeMatrix *a, LeMatrix *b)
     
     if (a->width != b->height)
         return le_matrix_new();
+        
+    if (a->element_type != b->element_type)
+        return le_matrix_new();
     
     self = malloc(sizeof(struct LeMatrix));
     self->data = malloc(a->height * b->width * sizeof(float));
     self->height = a->height;
     self->width = b->width;
+    self->element_type = a->element_type;
     
     for (y = 0; y < self->height; y++)
     {

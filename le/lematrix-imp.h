@@ -4,6 +4,8 @@
 #ifndef __LEMATRIX_IMP_H__
 #define __LEMATRIX_IMP_H__
 
+#include "letype.h"
+
 struct LeMatrix
 {
     float *data;
@@ -11,6 +13,7 @@ struct LeMatrix
     /** @note: Temporary */
     unsigned width;
     unsigned height;
+    LeType element_type;
 };
 
 #endif

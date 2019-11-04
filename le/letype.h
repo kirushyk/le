@@ -6,12 +6,13 @@
 
 typedef enum LeType
 {
+    LE_TYPE_VOID,
     LE_TYPE_UINT8,
     LE_TYPE_INT8,
     LE_TYPE_INT16,
     LE_TYPE_INT32,
     LE_TYPE_FLOAT32,
     LE_TYPE_FLOAT64
-};
+} LeType;
 
 #endif
