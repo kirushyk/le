@@ -3,15 +3,16 @@
 
 le_sources = [
     'lelist.c',
-    'lesequential.c',
     'ledataset.c',
-    'lelogistic.c',
     'letype.c',
     'leshape.c',
-    'lematrix.c',
     'letensor.c',
+    'lematrix.c',
+    'lepolynomia.c',
+    'lelogistic.c',
     'lemodel.c',
-    'lesvm.c'
+    'lesvm.c',
+    'lesequential.c'
 ]
 
 le_deps = [

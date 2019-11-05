@@ -16,33 +16,10 @@ LeTensor * le_matrix_new_from_data        (unsigned      height,
                                            unsigned      width,
                                            const float  *data);
 
-unsigned   le_matrix_get_width            (LeTensor     *matrix);
-
-unsigned   le_matrix_get_height           (LeTensor     *matrix);
-
 void       le_matrix_set_element          (LeTensor     *matrix,
                                            unsigned      y,
                                            unsigned      x,
                                            float         value);
-
-LeTensor * le_matrix_get_column           (LeTensor     *matrix,
-                                           unsigned      x);
-
-LeTensor * le_matrix_new_identity         (unsigned      size);
-
-LeTensor * le_matrix_new_uninitialized    (unsigned      height,
-                                           unsigned      width);
-
-LeTensor * le_matrix_new_zeros            (unsigned      height,
-                                           unsigned      width);
-
-LeTensor * le_matrix_new_rand             (unsigned      height,
-                                           unsigned      width);
-
-LeTensor * le_matrix_new_transpose        (LeTensor     *a);
-
-LeTensor * le_matrix_new_product          (LeTensor     *a,
-                                           LeTensor     *b);
 
 void       le_matrix_subtract             (LeTensor     *a,
                                            LeTensor     *b);
@@ -69,8 +46,6 @@ void       le_matrix_free                 (LeTensor     *matrix);
 
 void       le_matrix_print                (LeTensor     *matrix,
                                            FILE         *stream);
-
-LeTensor * le_matrix_new_polynomia        (LeTensor     *matrix);
 
 /** @note: Inner product of two column vectors */
 float      le_dot_product                 (LeTensor     *a,

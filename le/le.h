@@ -6,6 +6,7 @@
 
 #include "letensor.h"
 #include "lematrix.h"
+#include "lepolynomia.h"
 #include "leobject.h"
 #include "ledataset.h"
 #include "lelogistic.h"

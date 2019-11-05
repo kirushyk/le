@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include "lelist.h"
 #include "lelayer.h"
+#include "lematrix.h"
 
 struct LeSequential
 {
