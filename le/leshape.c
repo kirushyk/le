@@ -12,6 +12,7 @@ le_shape_new(unsigned num_dimensions, ...)
 {
     LeShape *self = malloc(sizeof(LeShape));
     self->num_dimensions = num_dimensions;
+    self->sizes = malloc(num_dimensions * sizeof(uint32_t));
     
     va_list args;
     va_start(args, num_dimensions);
@@ -46,4 +47,34 @@ le_shape_free(LeShape *self)
         free(self->sizes);
         free(self);
     }
+}
+
+uint32_t
+le_shape_get_elements_count(LeShape *shape)
+{
+    uint32_t count = 0;
+    if (shape)
+    {
+        count = 1;
+        for (unsigned i = 0; i < shape->num_dimensions; i++)
+        {
+            count *= shape->sizes[i];
+        }
+    }
+    return count;
+}
+
+bool
+le_shape_equal(LeShape *a, LeShape *b)
+{
+    if (a->num_dimensions != b->num_dimensions)
+        return false;
+    
+    for (unsigned i = 0; i < a->num_dimensions; i++)
+    {
+        if (a->sizes[i] != b->sizes[i])
+            return false;
+    }
+    
+    return true;
 }
