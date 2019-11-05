@@ -4,6 +4,7 @@
 #include "pg-main-window.h"
 #include <stdlib.h>
 #include <le/le.h>
+#include <le/ext/lemnist.h>
 #include <math.h>
 #include "pg-generate-data.h"
 #include "pg-color.h"
@@ -19,6 +20,8 @@ struct _LEMainWindow
     GtkWidget *set_selection_combo;
     GtkWidget *index_spin_button;
     GtkWidget *label_entry;
+    
+    MNIST *data_set;
 
 };
 
@@ -78,6 +81,8 @@ le_main_window_init(LEMainWindow *self)
     gtk_box_pack_start(GTK_BOX(hbox), grid, FALSE, FALSE, 2);
     
     gtk_container_add(GTK_CONTAINER(self), hbox);
+    
+    self->data_set = le_mnist_load(".");
 
     g_action_map_add_action_entries(G_ACTION_MAP(self), win_entries, G_N_ELEMENTS(win_entries), self);
 }
