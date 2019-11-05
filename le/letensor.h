@@ -3,8 +3,8 @@
 
 #include "letype.h"
 
-#ifndef __LEMATRIX_H__
-#define __LEMATRIX_H__
+#ifndef __LETENSOR_H__
+#define __LETENSOR_H__
 
 typedef struct LeTensor LeTensor;
 
