@@ -6,6 +6,8 @@ le_sources = [
     'lesequential.c',
     'ledataset.c',
     'lelogistic.c',
+    'letype.c',
+    'leshape.c',
     'lematrix.c',
     'lemodel.c',
     'lesvm.c'

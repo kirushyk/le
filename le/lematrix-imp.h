@@ -5,15 +5,13 @@
 #define __LEMATRIX_IMP_H__
 
 #include "letype.h"
+#include "leshape.h"
 
 struct LeMatrix
 {
-    float *data;
-    
-    /** @note: Temporary */
-    unsigned width;
-    unsigned height;
-    LeType element_type;
+    LeType   element_type;
+    LeShape *shape;
+    float   *data;
 };
 
 #endif

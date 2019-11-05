@@ -13,9 +13,8 @@ le_matrix_new(void)
 {
     LeMatrix *self = malloc(sizeof(struct LeMatrix));
     self->data = NULL;
-    self->height = 0;
-    self->width = 0;
-    self->element_type = LE_TYPE_FLOAT32;
+    self->shape = NULL;
+    self->element_type = LE_TYPE_VOID;
     return self;
 }
 
@@ -23,12 +22,11 @@ LeMatrix *
 le_matrix_new_copy(LeMatrix *another)
 {
     LeMatrix *self = malloc(sizeof(struct LeMatrix));
-    size_t data_size = another->height * another->width * sizeof(float);
+    self->element_type = another->element_type;
+    size_t data_size = le_shape_get_elements_count(another->shape) * le_type_size(self->element_type);
     self->data = malloc(data_size);
     memcpy(self->data, another->data, data_size);
-    self->height = another->height;
-    self->width = another->width;
-    self->element_type = another->element_type;
+    self->shape = le_shape_copy(another->shape);
     return self;
 }
 
@@ -40,8 +38,7 @@ le_matrix_new_from_data(unsigned height, unsigned width, const float *data)
     
     self = malloc(sizeof(struct LeMatrix));
     self->data = malloc(data_size);
-    self->height = height;
-    self->width = width;
+    self->shape = le_shape_new(2, height, width);
     self->element_type = LE_TYPE_FLOAT32;
     memcpy(self->data, data, data_size);
     
@@ -51,36 +48,45 @@ le_matrix_new_from_data(unsigned height, unsigned width, const float *data)
 unsigned
 le_matrix_get_width(LeMatrix *self)
 {
-    return self->width;
+    assert(self->shape->num_dimensions == 2);
+    
+    return self->shape->sizes[1];
 }
 
 unsigned
 le_matrix_get_height(LeMatrix *self)
 {
-    return self->height;
+    assert(self->shape->num_dimensions == 2);
+    
+    return self->shape->sizes[0];
 }
 
 float
 le_matrix_at(LeMatrix *self, unsigned y, unsigned x)
 {
-    assert(y < self->height);
-    assert(x < self->width);
+    assert(self->shape->num_dimensions == 2);
     
-    return self->data[y * self->width + x];
+    assert(y < self->shape->sizes[0]);
+    assert(x < self->shape->sizes[1]);
+    
+    return self->data[y * self->shape->sizes[1] + x];
 }
 
 void
 le_matrix_set_element(LeMatrix *self, unsigned y, unsigned x, float value)
 {
-    assert(y < self->height);
-    assert(x < self->width);
+    assert(self->shape->num_dimensions == 2);
     
-    self->data[y * self->width + x] = value;
+    assert(y < self->shape->sizes[0]);
+    assert(x < self->shape->sizes[1]);
+    
+    self->data[y * self->shape->sizes[1] + x] = value;
 }
 
 LeMatrix *
 le_matrix_get_column(LeMatrix *self, unsigned x)
 {
+    assert(self->shape->num_dimensions == 2);
     /// @todo: Add dimension checks
     
     unsigned y;
@@ -89,7 +95,7 @@ le_matrix_get_column(LeMatrix *self, unsigned x)
     
     for (y = 0; y < height; y++)
     {
-        column->data[y] = self->data[y * self->width + x];
+        column->data[y] = self->data[y * self->shape->sizes[1] + x];
     }
     
     return column;
@@ -100,8 +106,9 @@ le_matrix_empty(LeMatrix *self)
 {
     free(self->data);
     self->data = NULL;
-    self->width = 0;
-    self->height = 0;
+    free(self->shape);
+    self->shape = NULL;
+    self->element_type = LE_TYPE_VOID;
 }
 
 LeMatrix *
@@ -113,15 +120,14 @@ le_matrix_new_identity(unsigned size)
     
     self = malloc(sizeof(struct LeMatrix));
     self->data = malloc(size * size * sizeof(float));
-    self->height = size;
-    self->width = size;
+    self->shape = le_shape_new(2, size, size);
     self->element_type = LE_TYPE_FLOAT32;
     
     for (y = 0; y < size; y++)
     {
         for (x = 0; x < size; x++)
         {
-            self->data[y * self->width + x] = (x == y) ? 1.0 : 0.0;
+            self->data[y * size + x] = (x == y) ? 1.0 : 0.0;
         }
     }
     
@@ -135,8 +141,7 @@ le_matrix_new_uninitialized(unsigned height, unsigned width)
     
     self = malloc(sizeof(struct LeMatrix));
     self->data = malloc(height * width * sizeof(float));
-    self->height = height;
-    self->width = width;
+    self->shape = le_shape_new(2, height, width);
     self->element_type = LE_TYPE_FLOAT32;
     
     return self;
@@ -151,8 +156,7 @@ le_matrix_new_zeros(unsigned height, unsigned width)
     
     self = malloc(sizeof(struct LeMatrix));
     self->data = malloc(height * width * sizeof(float));
-    self->height = height;
-    self->width = width;
+    self->shape = le_shape_new(2, height, width);
     self->element_type = LE_TYPE_FLOAT32;
     elements_count = height * width;
     
@@ -174,15 +178,14 @@ le_matrix_new_rand(unsigned height, unsigned width)
     
     self = malloc(sizeof(struct LeMatrix));
     self->data = malloc(height * width * sizeof(float));
-    self->height = height;
-    self->width = width;
+    self->shape = le_shape_new(2, height, width);
     self->element_type = LE_TYPE_FLOAT32;
     
-    for (y = 0; y < self->height; y++)
+    for (y = 0; y < self->shape->sizes[0]; y++)
     {
-        for (x = 0; x < self->width; x++)
+        for (x = 0; x < self->shape->sizes[1]; x++)
         {
-            self->data[y * self->width + x] = rand() / (float)RAND_MAX;
+            self->data[y * self->shape->sizes[1] + x] = rand() / (float)RAND_MAX;
         }
     }
     
@@ -192,6 +195,7 @@ le_matrix_new_rand(unsigned height, unsigned width)
 void
 le_matrix_free(LeMatrix *self)
 {
+    free(self->shape);
     free(self->data);
     free(self);
 }
@@ -199,21 +203,22 @@ le_matrix_free(LeMatrix *self)
 LeMatrix *
 le_matrix_new_transpose(LeMatrix *a)
 {
+    assert(a->shape->num_dimensions == 2);
+
     unsigned x;
     unsigned y;
     LeMatrix *self;
     
     self = malloc(sizeof(struct LeMatrix));
-    self->data = malloc(a->width * a->height * sizeof(float));
-    self->height = a->width;
-    self->width = a->height;
+    self->data = malloc(a->shape->sizes[1] * a->shape->sizes[0] * sizeof(float));
+    self->shape = le_shape_new(2, a->shape->sizes[1], a->shape->sizes[0]);
     self->element_type = a->element_type;
     
-    for (y = 0; y < self->height; y++)
+    for (y = 0; y < self->shape->sizes[0]; y++)
     {
-        for (x = 0; x < self->width; x++)
+        for (x = 0; x < self->shape->sizes[1]; x++)
         {
-            self->data[y * self->width + x] = a->data[x * a->width + y];
+            self->data[y * self->shape->sizes[1] + x] = a->data[x * a->shape->sizes[1] + y];
         }
     }
     
@@ -223,32 +228,34 @@ le_matrix_new_transpose(LeMatrix *a)
 LeMatrix *
 le_matrix_new_product(LeMatrix *a, LeMatrix *b)
 {
+    assert(a->shape->num_dimensions == 2);
+    assert(b->shape->num_dimensions == 2);
+
     unsigned x;
     unsigned y;
     unsigned i;
     
     LeMatrix *self;
     
-    if (a->width != b->height)
+    if (a->shape->sizes[1] != b->shape->sizes[0])
         return le_matrix_new();
         
     if (a->element_type != b->element_type)
         return le_matrix_new();
     
     self = malloc(sizeof(struct LeMatrix));
-    self->data = malloc(a->height * b->width * sizeof(float));
-    self->height = a->height;
-    self->width = b->width;
+    self->shape = le_shape_new(2, a->shape->sizes[0], b->shape->sizes[1]);
+    self->data = malloc(le_shape_get_elements_count(self->shape) * sizeof(float));
     self->element_type = a->element_type;
     
-    for (y = 0; y < self->height; y++)
+    for (y = 0; y < self->shape->sizes[0]; y++)
     {
-        for (x = 0; x < self->width; x++)
+        for (x = 0; x < self->shape->sizes[1]; x++)
         {
-            self->data[y * self->width + x] = 0.0f;
-            for (i = 0; i < a->width; i++)
+            self->data[y * self->shape->sizes[1] + x] = 0.0f;
+            for (i = 0; i < a->shape->sizes[1]; i++)
             {
-                self->data[y * self->width + x] += a->data[y * a->width + i] * b->data[i * b->width + x];
+                self->data[y * self->shape->sizes[1] + x] += a->data[y * a->shape->sizes[1] + i] * b->data[i * b->shape->sizes[1] + x];
             }
         }
     }
@@ -259,15 +266,18 @@ le_matrix_new_product(LeMatrix *a, LeMatrix *b)
 float
 le_dot_product(LeMatrix *a, LeMatrix *b)
 {
+    assert(a->shape->num_dimensions == 2);
+    assert(b->shape->num_dimensions == 2);
+    
     unsigned y;
     
     float result = 0;
 
     /** @todo: Test results against transposed a multiplied by b */
-    if (a->height != b->height || a->width != 1 || b->width != 1)
+    if (a->shape->sizes[0] != b->shape->sizes[0] || a->shape->sizes[1] != 1 || b->shape->sizes[1] != 1)
         return nanf("");
     
-    for (y = 0; y < a->height; y++)
+    for (y = 0; y < a->shape->sizes[0]; y++)
     {
         /** @note: This addressing is correct as we
             ensured that widths of both matrices
@@ -281,13 +291,16 @@ le_dot_product(LeMatrix *a, LeMatrix *b)
 float
 le_rbf(LeMatrix *a, LeMatrix *b, float sigma)
 {
+    assert(a->shape->num_dimensions == 2);
+    assert(b->shape->num_dimensions == 2);
+
     float result = 0;
     
     /** @todo: Test results against transposed a multiplied by b */
-    if (a->height != b->height || a->width != 1 || b->width != 1)
+    if (a->shape->sizes[0] != b->shape->sizes[0] || a->shape->sizes[1] != 1 || b->shape->sizes[1] != 1)
         return nanf("");
     
-    for (unsigned y = 0; y < a->height; y++)
+    for (unsigned y = 0; y < a->shape->sizes[0]; y++)
     {
         float sub = a->data[y] - b->data[y];
         result += sub * sub;
@@ -299,10 +312,10 @@ le_rbf(LeMatrix *a, LeMatrix *b, float sigma)
 void
 le_matrix_subtract(LeMatrix *a, LeMatrix *b)
 {
-    if (a->height == b->height && a->width == b->width)
+    if (le_shape_equal(a->shape, b->shape))
     {
         unsigned i;
-        unsigned elements_count = a->height * a->width;
+        unsigned elements_count = le_shape_get_elements_count(a->shape);
         
         for (i = 0; i < elements_count; i++)
         {
@@ -315,7 +328,7 @@ void
 le_matrix_multiply_by_scalar(LeMatrix *self, float b)
 {
     unsigned i;
-    unsigned elements_count = self->height * self->width;
+    unsigned elements_count = le_shape_get_elements_count(self->shape);
     
     for (i = 0; i < elements_count; i++)
     {
@@ -327,7 +340,7 @@ void
 le_matrix_add_scalar(LeMatrix *self, float b)
 {
     unsigned i;
-    unsigned elements_count = self->height * self->width;
+    unsigned elements_count = le_shape_get_elements_count(self->shape);
     
     for (i = 0; i < elements_count; i++)
     {
@@ -340,7 +353,7 @@ le_matrix_sum(LeMatrix *self)
 {
     float sum = 0.0;
     unsigned i;
-    unsigned elements_count = self->height * self->width;
+    unsigned elements_count = le_shape_get_elements_count(self->shape);
     
     for (i = 0; i < elements_count; i++)
     {
@@ -360,7 +373,7 @@ void
 le_matrix_apply_sigmoid(LeMatrix *self)
 {
     unsigned i;
-    unsigned elements_count = self->height * self->width;
+    unsigned elements_count = le_shape_get_elements_count(self->shape);
     
     for (i = 0; i < elements_count; i++)
     {
@@ -372,7 +385,7 @@ void
 le_matrix_apply_greater_than(LeMatrix *self, float scalar)
 {
     unsigned i;
-    unsigned elements_count = self->height * self->width;
+    unsigned elements_count = le_shape_get_elements_count(self->shape);
     
     for (i = 0; i < elements_count; i++)
     {
@@ -384,7 +397,7 @@ void
 le_matrix_apply_svm_prediction(LeMatrix *self)
 {
     unsigned i;
-    unsigned elements_count = self->height * self->width;
+    unsigned elements_count = le_shape_get_elements_count(self->shape);
     
     for (i = 0; i < elements_count; i++)
     {
@@ -396,20 +409,26 @@ le_matrix_apply_svm_prediction(LeMatrix *self)
 void
 le_matrix_print(LeMatrix *self, FILE *stream)
 {
+    if (self->shape->num_dimensions != 2)
+    {
+        fprintf(stream, "<%dD tensor>\n", self->shape->num_dimensions);
+        return;
+    }
+    
     unsigned x;
     unsigned y;
     fprintf(stream, "[");
-    for (y = 0; y < self->height; y++)
+    for (y = 0; y < self->shape->sizes[0]; y++)
     {
-        for (x = 0; x < self->width; x++)
+        for (x = 0; x < self->shape->sizes[1]; x++)
         {
-            fprintf(stream, "%1.3f", self->data[y * self->width + x]);
-            if (x < self->width - 1)
+            fprintf(stream, "%1.3f", self->data[y * self->shape->sizes[1] + x]);
+            if (x < self->shape->sizes[1] - 1)
             {
                 fprintf(stream, " ");
             }
         }
-        if (y < self->height - 1)
+        if (y < self->shape->sizes[0] - 1)
         {
             fprintf(stream, ";\n ");
         }
