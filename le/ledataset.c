@@ -43,7 +43,7 @@ le_data_set_get_output(LeDataSet *data)
 void
 le_data_set_free(LeDataSet *self)
 {
-    le_matrix_free(self->x);
-    le_matrix_free(self->y);
+    le_tensor_free(self->x);
+    le_tensor_free(self->y);
     free(self);
 }

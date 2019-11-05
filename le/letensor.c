@@ -240,7 +240,7 @@ le_matrix_print(LeTensor *self, FILE *stream)
 }
 
 void
-le_matrix_free(LeTensor *self)
+le_tensor_free(LeTensor *self)
 {
     free(self->shape);
     free(self->data);

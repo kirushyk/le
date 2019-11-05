@@ -39,7 +39,7 @@ void       le_matrix_apply_greater_than   (LeTensor     *matrix,
 
 void       le_matrix_apply_svm_prediction (LeTensor     *matrix);
 
-void       le_matrix_free                 (LeTensor     *matrix);
+void       le_tensor_free                 (LeTensor     *matrix);
 
 /** @note: Temporary */
 #include <stdio.h>

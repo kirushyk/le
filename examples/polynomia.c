@@ -19,9 +19,9 @@ main(int argc, const char *argv[])
     printf("poly(poly(a)) =\n");
     le_matrix_print(c, stdout);
     
-    le_matrix_free(c);
-    le_matrix_free(b);
-    le_matrix_free(a);
+    le_tensor_free(c);
+    le_tensor_free(b);
+    le_tensor_free(a);
     
     return 0;
 }

@@ -69,15 +69,15 @@ le_logistic_classifier_predict(LeLogisticClassifier *self, LeTensor *x)
         x_poly = le_matrix_new_polynomia(x_prev);
         if (x_prev != x)
         {
-            le_matrix_free(x_prev);
+            le_tensor_free(x_prev);
         }
         x_prev = x_poly;
     }
     LeTensor *a = le_matrix_new_product(wt, x_poly);
-    le_matrix_free(wt);
+    le_tensor_free(wt);
     if (x_poly != x)
     {
-        le_matrix_free(x_poly);
+        le_tensor_free(x_poly);
     }
     le_matrix_add_scalar(a, self->bias);
     le_matrix_apply_sigmoid(a);
@@ -101,7 +101,7 @@ le_logistic_classifier_train(LeLogisticClassifier *self, LeTensor *x_train, LeTe
         x = le_matrix_new_polynomia(x_prev);
         if (x_prev != x_train)
         {
-            le_matrix_free(x_prev);
+            le_tensor_free(x_prev);
         }
         x_prev = x;
     }
@@ -111,7 +111,7 @@ le_logistic_classifier_train(LeLogisticClassifier *self, LeTensor *x_train, LeTe
     
     if (x != x_train)
     {
-        le_matrix_free(x);
+        le_tensor_free(x);
     }
     
     self->weights = le_matrix_new_zeros(features_count, 1);
@@ -128,19 +128,19 @@ le_logistic_classifier_train(LeLogisticClassifier *self, LeTensor *x_train, LeTe
         le_matrix_multiply_by_scalar(dw, options.alpha);
         float db = le_matrix_sum(h);
         
-        le_matrix_free(dwt);
-        le_matrix_free(h);
+        le_tensor_free(dwt);
+        le_tensor_free(h);
         le_tensor_subtract(self->weights, dw);
-        le_matrix_free(dw);
+        le_tensor_free(dw);
         self->bias -= options.alpha * db;
     }
     
-    le_matrix_free(xt);
+    le_tensor_free(xt);
 }
 
 void
 le_logistic_classifier_free(LeLogisticClassifier *self)
 {
-    le_matrix_free(self->weights);
+    le_tensor_free(self->weights);
     free(self);
 }

@@ -90,7 +90,7 @@ le_svm_margins(LeSVM *self, LeTensor *x)
     {
         LeTensor *weights_transposed = le_matrix_new_transpose(self->weights);
         LeTensor *margins = le_matrix_new_product(weights_transposed, x);
-        le_matrix_free(weights_transposed);
+        le_tensor_free(weights_transposed);
         le_matrix_add_scalar(margins, self->bias);
         return margins;
     }
@@ -112,12 +112,12 @@ le_svm_margins(LeSVM *self, LeTensor *x)
             {
                 LeTensor *x_train_j = le_matrix_get_column(self->x, j);
                 margin += le_matrix_at(self->alphas, 0, j) * le_matrix_at(self->y, 0, j) * kernel_function(x_train_j, example, self->kernel);
-                le_matrix_free(x_train_j);
+                le_tensor_free(x_train_j);
             }
             margin += self->bias;
             
             le_matrix_set_element(margins, 0, i, margin);
-            le_matrix_free(example);
+            le_tensor_free(example);
         }
         return margins;
     }
@@ -162,7 +162,7 @@ le_svm_train(LeSVM *self, LeTensor *x_train, LeTensor *y_train, LeSVMTrainingOpt
             /// @note: We will have 1x1 matrix here
             LeTensor *shallow_margin_matrix = le_svm_margins(self, x_train_i);
             float margin = le_matrix_at(shallow_margin_matrix, 0, 0);
-            le_matrix_free(shallow_margin_matrix);
+            le_tensor_free(shallow_margin_matrix);
             float Ei = margin - le_matrix_at(y_train, 0, i);
             if ((le_matrix_at(y_train, 0, i) * Ei < -tol && le_matrix_at(self->alphas, 0, i) < C) ||
                 (le_matrix_at(y_train, 0, i) * Ei > tol && le_matrix_at(self->alphas, 0, i) > 0.0f))
@@ -175,7 +175,7 @@ le_svm_train(LeSVM *self, LeTensor *x_train, LeTensor *y_train, LeSVMTrainingOpt
                 /// @note: We will have 1x1 matrix here
                 LeTensor *shallow_margin_matrix = le_svm_margins(self, x_train_j);
                 float margin = le_matrix_at(shallow_margin_matrix, 0, 0);
-                le_matrix_free(shallow_margin_matrix);
+                le_tensor_free(shallow_margin_matrix);
                 float Ej = margin - le_matrix_at(y_train, 0, j);
                 
                 float ai = le_matrix_at(self->alphas, 0, i);
@@ -224,9 +224,9 @@ le_svm_train(LeSVM *self, LeTensor *x_train, LeTensor *y_train, LeSVMTrainingOpt
                         }
                     }
                 }
-                le_matrix_free(x_train_j);
+                le_tensor_free(x_train_j);
             }
-            le_matrix_free(x_train_i);
+            le_tensor_free(x_train_i);
         }
 
         if (num_changed_alphas == 0)
@@ -277,7 +277,7 @@ le_svm_train(LeSVM *self, LeTensor *x_train, LeTensor *y_train, LeSVMTrainingOpt
             }
         }
         
-        le_matrix_free(self->alphas);
+        le_tensor_free(self->alphas);
         self->alphas = new_alphas;
     }
 }

@@ -37,9 +37,9 @@ main(int argc, const char *argv[])
     printf("Predicted value =\n");
     le_matrix_print(h, stdout);
     
-    le_matrix_free(h);
-    le_matrix_free(y);
-    le_matrix_free(x);
+    le_tensor_free(h);
+    le_tensor_free(y);
+    le_tensor_free(x);
     
     return 0;
 }

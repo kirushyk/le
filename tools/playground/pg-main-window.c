@@ -142,7 +142,7 @@ render_predictions(LeModel *model, guint width, guint height)
         
         LeTensor *prediction = le_model_predict(model, row);
         
-        le_matrix_free(row);
+        le_tensor_free(row);
         
         if (prediction != NULL)
         {
@@ -198,7 +198,7 @@ create_model_and_train(LEMainWindow *self)
                 le_data_set_get_input(self->train_data),
                 labels,
                 options);
-            le_matrix_free(labels);
+            le_tensor_free(labels);
         }
         break;
         

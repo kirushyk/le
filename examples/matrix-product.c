@@ -23,10 +23,10 @@ main(int argc, const char *argv[])
     printf("d = c' =\n");
     le_matrix_print(d, stdout);
     
-    le_matrix_free(d);
-    le_matrix_free(c);
-    le_matrix_free(b);
-    le_matrix_free(a);
+    le_tensor_free(d);
+    le_tensor_free(c);
+    le_tensor_free(b);
+    le_tensor_free(a);
     
     return 0;
 }

@@ -46,13 +46,13 @@ main()
     {
         a = le_matrix_new_identity(height);
         assert(le_test_ensure_matrix_size(a, height, height));
-        le_matrix_free(a);
+        le_tensor_free(a);
         
         for (width = 1; width < MAX_DIMENSION; width++)
         {
             a = le_matrix_new_zeros(height, width);
             assert(le_test_ensure_matrix_size(a, height, width));
-            le_matrix_free(a);
+            le_tensor_free(a);
             
             a = le_matrix_new_rand(height, width);
             assert(le_test_ensure_matrix_size(a, height, width));
@@ -62,11 +62,11 @@ main()
                 b = le_matrix_new_rand(width, second_width);
                 c = le_matrix_new_product(a, b);
                 assert(le_test_ensure_matrix_size(c, height, second_width));
-                le_matrix_free(c);
-                le_matrix_free(b);
+                le_tensor_free(c);
+                le_tensor_free(b);
             }
             
-            le_matrix_free(a);
+            le_tensor_free(a);
         }
     }
     return EXIT_SUCCESS;

@@ -28,11 +28,11 @@ main()
             {
                 b = le_matrix_new_rand(width, second_width);
                 c = le_matrix_new_product(a, b);
-                le_matrix_free(c);
-                le_matrix_free(b);
+                le_tensor_free(c);
+                le_tensor_free(b);
             }
             
-            le_matrix_free(a);
+            le_tensor_free(a);
         }
     }
     return EXIT_SUCCESS;
