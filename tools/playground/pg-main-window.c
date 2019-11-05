@@ -73,7 +73,7 @@ draw_callback(GtkWidget *widget, cairo_t *cr, gpointer data)
     if (window->train_data)
     {
         LeMatrix *input = le_data_set_get_input(window->train_data);
-        LeMatrix *output = le_data_set_get_output(window->train_data);;
+        LeMatrix *output = le_data_set_get_output(window->train_data);
         gint examples_count = le_matrix_get_width(input);
         for (i = 0; i < examples_count; i++)
         {
