@@ -121,7 +121,7 @@ le_logistic_classifier_train(LeLogisticClassifier *self, LeTensor *x_train, LeTe
     for (i = 0; i < iterations_count; i++)
     {
         LeTensor *h = le_logistic_classifier_predict(self, x_train);
-        le_matrix_subtract(h, y_train);
+        le_tensor_subtract(h, y_train);
         le_matrix_multiply_by_scalar(h, 1.0 / examples_count);
         LeTensor *dwt = le_matrix_new_product(h, xt);
         LeTensor *dw = le_matrix_new_transpose(dwt);
@@ -130,7 +130,7 @@ le_logistic_classifier_train(LeLogisticClassifier *self, LeTensor *x_train, LeTe
         
         le_matrix_free(dwt);
         le_matrix_free(h);
-        le_matrix_subtract(self->weights, dw);
+        le_tensor_subtract(self->weights, dw);
         le_matrix_free(dw);
         self->bias -= options.alpha * db;
     }

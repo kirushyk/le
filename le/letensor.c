@@ -113,7 +113,7 @@ le_rbf(LeTensor *a, LeTensor *b, float sigma)
 }
 
 void
-le_matrix_subtract(LeTensor *a, LeTensor *b)
+le_tensor_subtract(LeTensor *a, LeTensor *b)
 {
     if (le_shape_equal(a->shape, b->shape))
     {

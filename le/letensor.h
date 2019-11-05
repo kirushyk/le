@@ -21,7 +21,7 @@ void       le_matrix_set_element          (LeTensor     *matrix,
                                            unsigned      x,
                                            float         value);
 
-void       le_matrix_subtract             (LeTensor     *a,
+void       le_tensor_subtract             (LeTensor     *a,
                                            LeTensor     *b);
 
 void       le_matrix_multiply_by_scalar   (LeTensor     *a,
