@@ -46,17 +46,6 @@ le_matrix_new_from_data(unsigned height, unsigned width, const float *data)
 }
 
 void
-le_matrix_set_element(LeTensor *self, unsigned y, unsigned x, float value)
-{
-    assert(self->shape->num_dimensions == 2);
-    
-    assert(y < self->shape->sizes[0]);
-    assert(x < self->shape->sizes[1]);
-    
-    self->data[y * self->shape->sizes[1] + x] = value;
-}
-
-void
 le_matrix_empty(LeTensor *self)
 {
     free(self->data);

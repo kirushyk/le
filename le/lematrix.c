@@ -33,6 +33,17 @@ le_matrix_at(LeTensor *self, unsigned y, unsigned x)
     return self->data[y * self->shape->sizes[1] + x];
 }
 
+void
+le_matrix_set_element(LeTensor *self, unsigned y, unsigned x, float value)
+{
+    assert(self->shape->num_dimensions == 2);
+    
+    assert(y < self->shape->sizes[0]);
+    assert(x < self->shape->sizes[1]);
+    
+    self->data[y * self->shape->sizes[1] + x] = value;
+}
+
 LeTensor *
 le_matrix_new_identity(unsigned size)
 {
