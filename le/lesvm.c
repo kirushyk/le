@@ -91,7 +91,7 @@ le_svm_margins(LeSVM *self, LeTensor *x)
         LeTensor *weights_transposed = le_matrix_new_transpose(self->weights);
         LeTensor *margins = le_matrix_new_product(weights_transposed, x);
         le_tensor_free(weights_transposed);
-        le_matrix_add_scalar(margins, self->bias);
+        le_tensor_add_scalar(margins, self->bias);
         return margins;
     }
     else
@@ -289,7 +289,7 @@ le_svm_predict(LeSVM *self, LeTensor *x)
     assert(x != NULL);
 
     LeTensor *y_predicted = le_svm_margins(self, x);
-    le_matrix_apply_svm_prediction(y_predicted);
+    le_tensor_apply_svm_prediction(y_predicted);
     return y_predicted;
 }
 

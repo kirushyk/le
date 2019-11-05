@@ -43,8 +43,8 @@ pg_generate_data(const char *pattern_name, unsigned examples_count)
         unsigned i;
         float bias = (float)rand() / RAND_MAX - 0.5f;
         float slope = rand() * 20.0f / RAND_MAX - 10.0f;
-        le_matrix_multiply_by_scalar(input, 2.0f);
-        le_matrix_add_scalar(input, -1.0f);
+        le_tensor_multiply_by_scalar(input, 2.0f);
+        le_tensor_add_scalar(input, -1.0f);
         for (i = 0; i < examples_count; i++)
         {
             float x = le_matrix_at(input, 0, i);
@@ -66,8 +66,8 @@ pg_generate_data(const char *pattern_name, unsigned examples_count)
             svy[j] = (rand() * 2.0f / RAND_MAX) - 1.0f;
         }
         
-        le_matrix_multiply_by_scalar(input, 2.0f);
-        le_matrix_add_scalar(input, -1.0f);
+        le_tensor_multiply_by_scalar(input, 2.0f);
+        le_tensor_add_scalar(input, -1.0f);
         for (i = 0; i < examples_count; i++)
         {
             unsigned closest_vector = 0;
@@ -91,8 +91,8 @@ pg_generate_data(const char *pattern_name, unsigned examples_count)
     }
     else
     {
-        le_matrix_multiply_by_scalar(input, 2.0f);
-        le_matrix_add_scalar(input, -1.0f);
+        le_tensor_multiply_by_scalar(input, 2.0f);
+        le_tensor_add_scalar(input, -1.0f);
     }
     
     return le_data_set_new_take(input, output);

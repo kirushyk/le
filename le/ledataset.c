@@ -14,8 +14,8 @@ LeDataSet *
 le_data_set_new_copy(LeTensor *x, LeTensor *y)
 {
     LeDataSet *data = malloc(sizeof(LeDataSet));
-    data->x = le_matrix_new_copy(x);
-    data->y = le_matrix_new_copy(y);
+    data->x = le_tensor_new_copy(x);
+    data->y = le_tensor_new_copy(y);
     return data;
 }
 

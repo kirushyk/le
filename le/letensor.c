@@ -19,7 +19,7 @@ le_matrix_new(void)
 }
 
 LeTensor *
-le_matrix_new_copy(LeTensor *another)
+le_tensor_new_copy(LeTensor *another)
 {
     LeTensor *self = malloc(sizeof(struct LeTensor));
     self->element_type = another->element_type;
@@ -117,7 +117,7 @@ le_tensor_subtract(LeTensor *a, LeTensor *b)
 }
 
 void
-le_matrix_multiply_by_scalar(LeTensor *self, float b)
+le_tensor_multiply_by_scalar(LeTensor *self, float b)
 {
     unsigned i;
     unsigned elements_count = le_shape_get_elements_count(self->shape);
@@ -129,7 +129,7 @@ le_matrix_multiply_by_scalar(LeTensor *self, float b)
 }
 
 void
-le_matrix_add_scalar(LeTensor *self, float b)
+le_tensor_add_scalar(LeTensor *self, float b)
 {
     unsigned i;
     unsigned elements_count = le_shape_get_elements_count(self->shape);
@@ -141,7 +141,7 @@ le_matrix_add_scalar(LeTensor *self, float b)
 }
 
 float
-le_matrix_sum(LeTensor *self)
+le_tensor_sum(LeTensor *self)
 {
     float sum = 0.0;
     unsigned i;
@@ -162,7 +162,7 @@ le_sigmoid(const float a)
 }
 
 void
-le_matrix_apply_sigmoid(LeTensor *self)
+le_tensor_apply_sigmoid(LeTensor *self)
 {
     unsigned i;
     unsigned elements_count = le_shape_get_elements_count(self->shape);
@@ -174,7 +174,7 @@ le_matrix_apply_sigmoid(LeTensor *self)
 }
 
 void
-le_matrix_apply_greater_than(LeTensor *self, float scalar)
+le_tensor_apply_greater_than(LeTensor *self, float scalar)
 {
     unsigned i;
     unsigned elements_count = le_shape_get_elements_count(self->shape);
@@ -186,7 +186,7 @@ le_matrix_apply_greater_than(LeTensor *self, float scalar)
 }
 
 void
-le_matrix_apply_svm_prediction(LeTensor *self)
+le_tensor_apply_svm_prediction(LeTensor *self)
 {
     unsigned i;
     unsigned elements_count = le_shape_get_elements_count(self->shape);

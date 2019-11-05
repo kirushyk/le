@@ -59,7 +59,7 @@ le_sequential_predict(LeSequential *self, LeTensor *x)
         LeLayer *current_layer = (LeLayer *)current->data;
         LeTensor *wx;
         wx = le_matrix_new_product(current_layer->weights, signal);
-        le_matrix_apply_sigmoid(wx);
+        le_tensor_apply_sigmoid(wx);
         
     }
     return signal;
