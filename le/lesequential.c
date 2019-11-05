@@ -26,7 +26,7 @@ le_sequential_class_ensure_init()
     if (!le_sequential_class_initialized)
     {
         le_sequential_class.parent.predict =
-        (LeMatrix *(*)(LeModel *, LeMatrix *))le_sequential_predict;
+        (LeTensor *(*)(LeModel *, LeTensor *))le_sequential_predict;
         le_sequential_class_initialized = 1;
     }
 }
@@ -49,14 +49,14 @@ le_sequential_new(void)
     return self;
 }
 
-LeMatrix *
-le_sequential_predict(LeSequential *self, LeMatrix *x)
+LeTensor *
+le_sequential_predict(LeSequential *self, LeTensor *x)
 {
-    LeMatrix *signal = x;
+    LeTensor *signal = x;
     for (LeList *current = self->layers; current != NULL; current = current->next)
     {
         LeLayer *current_layer = (LeLayer *)current->data;
-        LeMatrix *wx;
+        LeTensor *wx;
         wx = le_matrix_new_product(current_layer->weights, signal);
         le_matrix_apply_sigmoid(wx);
         

@@ -11,8 +11,8 @@ void le_model_construct(LeModel *model)
     ((LeObject *)model)->klass = (LeClass *)&le_model_class;
 }
 
-LeMatrix *
-le_model_predict(LeModel *self, LeMatrix *x)
+LeTensor *
+le_model_predict(LeModel *self, LeTensor *x)
 {
     assert(self);
     assert(((LeObject *)self)->klass);

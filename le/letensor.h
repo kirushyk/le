@@ -6,82 +6,82 @@
 #ifndef __LEMATRIX_H__
 #define __LEMATRIX_H__
 
-typedef struct LeMatrix LeMatrix;
+typedef struct LeTensor LeTensor;
 
-LeMatrix * le_matrix_new                  (void);
+LeTensor * le_matrix_new                  (void);
 
-LeMatrix * le_matrix_new_copy             (LeMatrix     *another);
+LeTensor * le_matrix_new_copy             (LeTensor     *another);
 
-LeMatrix * le_matrix_new_from_data        (unsigned      height,
+LeTensor * le_matrix_new_from_data        (unsigned      height,
                                            unsigned      width,
                                            const float  *data);
 
-unsigned   le_matrix_get_width            (LeMatrix     *matrix);
+unsigned   le_matrix_get_width            (LeTensor     *matrix);
 
-unsigned   le_matrix_get_height           (LeMatrix     *matrix);
+unsigned   le_matrix_get_height           (LeTensor     *matrix);
 
-float      le_matrix_at                   (LeMatrix     *matrix,
+float      le_matrix_at                   (LeTensor     *matrix,
                                            unsigned      y,
                                            unsigned      x);
 
-void       le_matrix_set_element          (LeMatrix     *matrix,
+void       le_matrix_set_element          (LeTensor     *matrix,
                                            unsigned      y,
                                            unsigned      x,
                                            float         value);
 
-LeMatrix * le_matrix_get_column           (LeMatrix     *matrix,
+LeTensor * le_matrix_get_column           (LeTensor     *matrix,
                                            unsigned      x);
 
-LeMatrix * le_matrix_new_identity         (unsigned      size);
+LeTensor * le_matrix_new_identity         (unsigned      size);
 
-LeMatrix * le_matrix_new_uninitialized    (unsigned      height,
+LeTensor * le_matrix_new_uninitialized    (unsigned      height,
                                            unsigned      width);
 
-LeMatrix * le_matrix_new_zeros            (unsigned      height,
+LeTensor * le_matrix_new_zeros            (unsigned      height,
                                            unsigned      width);
 
-LeMatrix * le_matrix_new_rand             (unsigned      height,
+LeTensor * le_matrix_new_rand             (unsigned      height,
                                            unsigned      width);
 
-LeMatrix * le_matrix_new_transpose        (LeMatrix     *a);
+LeTensor * le_matrix_new_transpose        (LeTensor     *a);
 
-LeMatrix * le_matrix_new_product          (LeMatrix     *a,
-                                           LeMatrix     *b);
+LeTensor * le_matrix_new_product          (LeTensor     *a,
+                                           LeTensor     *b);
 
-void       le_matrix_subtract             (LeMatrix     *a,
-                                           LeMatrix     *b);
+void       le_matrix_subtract             (LeTensor     *a,
+                                           LeTensor     *b);
 
-void       le_matrix_multiply_by_scalar   (LeMatrix     *a,
+void       le_matrix_multiply_by_scalar   (LeTensor     *a,
                                            float         b);
 
-void       le_matrix_add_scalar           (LeMatrix     *a,
+void       le_matrix_add_scalar           (LeTensor     *a,
                                            float         b);
 
-float      le_matrix_sum                  (LeMatrix     *matrix);
+float      le_matrix_sum                  (LeTensor     *matrix);
 
-void       le_matrix_apply_sigmoid        (LeMatrix     *matrix);
+void       le_matrix_apply_sigmoid        (LeTensor     *matrix);
 
-void       le_matrix_apply_greater_than   (LeMatrix     *matrix,
+void       le_matrix_apply_greater_than   (LeTensor     *matrix,
                                            float         scalar);
 
-void       le_matrix_apply_svm_prediction (LeMatrix     *matrix);
+void       le_matrix_apply_svm_prediction (LeTensor     *matrix);
 
-void       le_matrix_free                 (LeMatrix     *matrix);
+void       le_matrix_free                 (LeTensor     *matrix);
 
 /** @note: Temporary */
 #include <stdio.h>
 
-void       le_matrix_print                (LeMatrix     *matrix,
+void       le_matrix_print                (LeTensor     *matrix,
                                            FILE         *stream);
 
-LeMatrix * le_matrix_new_polynomia        (LeMatrix     *matrix);
+LeTensor * le_matrix_new_polynomia        (LeTensor     *matrix);
 
 /** @note: Inner product of two column vectors */
-float      le_dot_product                 (LeMatrix     *a,
-                                           LeMatrix     *b);
+float      le_dot_product                 (LeTensor     *a,
+                                           LeTensor     *b);
 
-float      le_rbf                         (LeMatrix     *a,
-                                           LeMatrix     *b,
+float      le_rbf                         (LeTensor     *a,
+                                           LeTensor     *b,
                                            float         sigma);
 
 #endif

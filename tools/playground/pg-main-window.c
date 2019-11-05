@@ -72,8 +72,8 @@ draw_callback(GtkWidget *widget, cairo_t *cr, gpointer data)
     
     if (window->train_data)
     {
-        LeMatrix *input = le_data_set_get_input(window->train_data);
-        LeMatrix *output = le_data_set_get_output(window->train_data);
+        LeTensor *input = le_data_set_get_input(window->train_data);
+        LeTensor *output = le_data_set_get_output(window->train_data);
         gint examples_count = le_matrix_get_width(input);
         for (i = 0; i < examples_count; i++)
         {
@@ -95,8 +95,8 @@ draw_callback(GtkWidget *widget, cairo_t *cr, gpointer data)
     
     if (window->test_data)
     {
-        LeMatrix *input = le_data_set_get_input(window->test_data);
-        LeMatrix *output = le_data_set_get_output(window->test_data);;
+        LeTensor *input = le_data_set_get_input(window->test_data);
+        LeTensor *output = le_data_set_get_output(window->test_data);;
         gint examples_count = le_matrix_get_width(input);
         for (i = 0; i < examples_count; i++)
         {
@@ -133,14 +133,14 @@ render_predictions(LeModel *model, guint width, guint height)
     guint8 *pixmap = cairo_image_surface_get_data(surface);
     for (gint y = 0; y < height; y++)
     {
-        LeMatrix *row = le_matrix_new_uninitialized(2, width);
+        LeTensor *row = le_matrix_new_uninitialized(2, width);
         for (gint x = 0; x < width; x++)
         {
             le_matrix_set_element(row, 0, x, x * 2.0f / width - 1.0f);
             le_matrix_set_element(row, 1, x, y * -2.0f / height + 1.0f);
         }
         
-        LeMatrix *prediction = le_model_predict(model, row);
+        LeTensor *prediction = le_model_predict(model, row);
         
         le_matrix_free(row);
         
@@ -192,7 +192,7 @@ create_model_and_train(LEMainWindow *self)
                 break;
             }
             options.c = atof(gtk_combo_box_text_get_active_text(GTK_COMBO_BOX_TEXT(self->svm_c_combo)));
-            LeMatrix *labels = le_matrix_new_copy(le_data_set_get_output(self->train_data));
+            LeTensor *labels = le_matrix_new_copy(le_data_set_get_output(self->train_data));
             le_matrix_apply_svm_prediction(labels);
             le_svm_train((LeSVM *)self->model,
                 le_data_set_get_input(self->train_data),

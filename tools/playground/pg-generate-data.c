@@ -8,8 +8,8 @@
 LeDataSet *
 pg_generate_data(const char *pattern_name, unsigned examples_count)
 {
-    LeMatrix *input = le_matrix_new_rand(2, examples_count);
-    LeMatrix *output = le_matrix_new_rand(1, examples_count);
+    LeTensor *input = le_matrix_new_rand(2, examples_count);
+    LeTensor *output = le_matrix_new_rand(1, examples_count);
     
     if (g_strcmp0(pattern_name, "spiral") == 0)
     {

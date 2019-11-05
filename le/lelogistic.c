@@ -9,7 +9,7 @@
 struct LeLogisticClassifier
 {
     LeModel   parent;
-    LeMatrix *weights;
+    LeTensor *weights;
     float     bias;
     unsigned  polynomia_degree;
 };
@@ -21,7 +21,7 @@ typedef struct LeLogisticClassifierClass
 
 LeLogisticClassifierClass le_logistic_classifier_class;
 
-LeMatrix * le_logistic_classifier_predict(LeLogisticClassifier *self, LeMatrix *x);
+LeTensor * le_logistic_classifier_predict(LeLogisticClassifier *self, LeTensor *x);
 
 void
 le_logistic_classifier_class_ensure_init(void)
@@ -31,7 +31,7 @@ le_logistic_classifier_class_ensure_init(void)
     if (!le_logistic_classifier_class_initialized)
     {
         le_logistic_classifier_class.parent.predict =
-            (LeMatrix *(*)(LeModel *, LeMatrix *))le_logistic_classifier_predict;
+            (LeTensor *(*)(LeModel *, LeTensor *))le_logistic_classifier_predict;
         le_logistic_classifier_class_initialized = 1;
     }
 }
@@ -55,13 +55,13 @@ le_logistic_classifier_new(void)
     return self;
 }
 
-LeMatrix *
-le_logistic_classifier_predict(LeLogisticClassifier *self, LeMatrix *x)
+LeTensor *
+le_logistic_classifier_predict(LeLogisticClassifier *self, LeTensor *x)
 {
     unsigned i;
-    LeMatrix *wt = le_matrix_new_transpose(self->weights);
-    LeMatrix *x_poly = x;
-    LeMatrix *x_prev = x;
+    LeTensor *wt = le_matrix_new_transpose(self->weights);
+    LeTensor *x_poly = x;
+    LeTensor *x_prev = x;
     for (i = 0; i < self->polynomia_degree; i++)
     {
         x_poly = le_matrix_new_polynomia(x_prev);
@@ -71,7 +71,7 @@ le_logistic_classifier_predict(LeLogisticClassifier *self, LeMatrix *x)
         }
         x_prev = x_poly;
     }
-    LeMatrix *a = le_matrix_new_product(wt, x_poly);
+    LeTensor *a = le_matrix_new_product(wt, x_poly);
     le_matrix_free(wt);
     if (x_poly != x)
     {
@@ -83,7 +83,7 @@ le_logistic_classifier_predict(LeLogisticClassifier *self, LeMatrix *x)
 }
 
 void
-le_logistic_classifier_train(LeLogisticClassifier *self, LeMatrix *x_train, LeMatrix *y_train, LeLogisticClassifierTrainingOptions options)
+le_logistic_classifier_train(LeLogisticClassifier *self, LeTensor *x_train, LeTensor *y_train, LeLogisticClassifierTrainingOptions options)
 {
     unsigned examples_count = le_matrix_get_width(x_train);
     unsigned iterations_count = 200;
@@ -91,8 +91,8 @@ le_logistic_classifier_train(LeLogisticClassifier *self, LeMatrix *x_train, LeMa
     
     assert(le_matrix_get_width(y_train) == examples_count);
     
-    LeMatrix *x = x_train;
-    LeMatrix *x_prev = x_train;
+    LeTensor *x = x_train;
+    LeTensor *x_prev = x_train;
     
     for (i = 0; i < options.polynomia_degree; i++)
     {
@@ -105,7 +105,7 @@ le_logistic_classifier_train(LeLogisticClassifier *self, LeMatrix *x_train, LeMa
     }
     
     unsigned features_count = le_matrix_get_height(x);
-    LeMatrix *xt = le_matrix_new_transpose(x);
+    LeTensor *xt = le_matrix_new_transpose(x);
     
     if (x != x_train)
     {
@@ -118,11 +118,11 @@ le_logistic_classifier_train(LeLogisticClassifier *self, LeMatrix *x_train, LeMa
     
     for (i = 0; i < iterations_count; i++)
     {
-        LeMatrix *h = le_logistic_classifier_predict(self, x_train);
+        LeTensor *h = le_logistic_classifier_predict(self, x_train);
         le_matrix_subtract(h, y_train);
         le_matrix_multiply_by_scalar(h, 1.0 / examples_count);
-        LeMatrix *dwt = le_matrix_new_product(h, xt);
-        LeMatrix *dw = le_matrix_new_transpose(dwt);
+        LeTensor *dwt = le_matrix_new_product(h, xt);
+        LeTensor *dw = le_matrix_new_transpose(dwt);
         le_matrix_multiply_by_scalar(dw, options.alpha);
         float db = le_matrix_sum(h);
         

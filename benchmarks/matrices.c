@@ -14,9 +14,9 @@ main()
     unsigned height;
     unsigned second_width;
     
-    LeMatrix *a;
-    LeMatrix *b;
-    LeMatrix *c;
+    LeTensor *a;
+    LeTensor *b;
+    LeTensor *c;
     
     for (height = MIN_DIMENSION; height <= MAX_DIMENSION; height++)
     {

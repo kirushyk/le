@@ -12,14 +12,14 @@ struct LeSVM
     LeModel   parent;
     
     /* Training data */
-    LeMatrix *x;
-    LeMatrix *y;
+    LeTensor *x;
+    LeTensor *y;
     
     LeKernel  kernel;
     float     bias;
     /* Weights for linear classifier */
-    LeMatrix *weights;
-    LeMatrix *alphas;
+    LeTensor *weights;
+    LeTensor *alphas;
 };
 
 typedef struct LeSVMClass
@@ -29,7 +29,7 @@ typedef struct LeSVMClass
 
 LeSVMClass le_svm_class;
 
-LeMatrix * le_svm_predict(LeSVM *self, LeMatrix *x);
+LeTensor * le_svm_predict(LeSVM *self, LeTensor *x);
 
 void
 le_svm_class_ensure_init(void)
@@ -39,7 +39,7 @@ le_svm_class_ensure_init(void)
     if (!le_svm_class_initialized)
     {
         le_svm_class.parent.predict =
-        (LeMatrix *(*)(LeModel *, LeMatrix *))le_svm_predict;
+        (LeTensor *(*)(LeModel *, LeTensor *))le_svm_predict;
         le_svm_class_initialized = 1;
     }
 }
@@ -67,7 +67,7 @@ le_svm_new(void)
 }
 
 static float
-kernel_function(LeMatrix *a, LeMatrix *b, LeKernel kernel)
+kernel_function(LeTensor *a, LeTensor *b, LeKernel kernel)
 {
     switch (kernel) {
     case LE_KERNEL_RBF:
@@ -78,8 +78,8 @@ kernel_function(LeMatrix *a, LeMatrix *b, LeKernel kernel)
     }
 }
 
-LeMatrix *
-le_svm_margins(LeSVM *self, LeMatrix *x)
+LeTensor *
+le_svm_margins(LeSVM *self, LeTensor *x)
 {
     if (self == NULL)
         return NULL;
@@ -87,8 +87,8 @@ le_svm_margins(LeSVM *self, LeMatrix *x)
     /* In case we use linear kernel and have weights, apply linear classification */
     if (self->weights != NULL)
     {
-        LeMatrix *weights_transposed = le_matrix_new_transpose(self->weights);
-        LeMatrix *margins = le_matrix_new_product(weights_transposed, x);
+        LeTensor *weights_transposed = le_matrix_new_transpose(self->weights);
+        LeTensor *margins = le_matrix_new_product(weights_transposed, x);
         le_matrix_free(weights_transposed);
         le_matrix_add_scalar(margins, self->bias);
         return margins;
@@ -99,17 +99,17 @@ le_svm_margins(LeSVM *self, LeMatrix *x)
             return NULL;
         
         unsigned test_examples_count = le_matrix_get_width(x);
-        LeMatrix *margins = le_matrix_new_uninitialized(1, test_examples_count);
+        LeTensor *margins = le_matrix_new_uninitialized(1, test_examples_count);
         for (unsigned i = 0; i < test_examples_count; i++)
         {
-            LeMatrix *example = le_matrix_get_column(x, i);
+            LeTensor *example = le_matrix_get_column(x, i);
             
             unsigned j;
             float margin = 0;
             unsigned training_examples_count = le_matrix_get_width(self->x);
             for (j = 0; j < training_examples_count; j++)
             {
-                LeMatrix *x_train_j = le_matrix_get_column(self->x, j);
+                LeTensor *x_train_j = le_matrix_get_column(self->x, j);
                 margin += le_matrix_at(self->alphas, 0, j) * le_matrix_at(self->y, 0, j) * kernel_function(x_train_j, example, self->kernel);
                 le_matrix_free(x_train_j);
             }
@@ -123,7 +123,7 @@ le_svm_margins(LeSVM *self, LeMatrix *x)
 }
 
 void
-le_svm_train(LeSVM *self, LeMatrix *x_train, LeMatrix *y_train, LeSVMTrainingOptions options)
+le_svm_train(LeSVM *self, LeTensor *x_train, LeTensor *y_train, LeSVMTrainingOptions options)
 {
     unsigned passes = 0;
     /// @todo: Expose this parameter
@@ -157,9 +157,9 @@ le_svm_train(LeSVM *self, LeMatrix *x_train, LeMatrix *y_train, LeSVMTrainingOpt
         for (int i = 0; i < examples_count; i++)
         {
             /// @todo: Implement immutable matrix columns
-            LeMatrix *x_train_i = le_matrix_get_column(x_train, i);
+            LeTensor *x_train_i = le_matrix_get_column(x_train, i);
             /// @note: We will have 1x1 matrix here
-            LeMatrix *shallow_margin_matrix = le_svm_margins(self, x_train_i);
+            LeTensor *shallow_margin_matrix = le_svm_margins(self, x_train_i);
             float margin = le_matrix_at(shallow_margin_matrix, 0, 0);
             le_matrix_free(shallow_margin_matrix);
             float Ei = margin - le_matrix_at(y_train, 0, i);
@@ -170,9 +170,9 @@ le_svm_train(LeSVM *self, LeMatrix *x_train, LeMatrix *y_train, LeSVMTrainingOpt
                 while (j == i)
                     j = rand() % examples_count;
                 /// @todo: Implement immutable matrix columns
-                LeMatrix *x_train_j = le_matrix_get_column(x_train, j);
+                LeTensor *x_train_j = le_matrix_get_column(x_train, j);
                 /// @note: We will have 1x1 matrix here
-                LeMatrix *shallow_margin_matrix = le_svm_margins(self, x_train_j);
+                LeTensor *shallow_margin_matrix = le_svm_margins(self, x_train_j);
                 float margin = le_matrix_at(shallow_margin_matrix, 0, 0);
                 le_matrix_free(shallow_margin_matrix);
                 float Ej = margin - le_matrix_at(y_train, 0, j);
@@ -259,7 +259,7 @@ le_svm_train(LeSVM *self, LeMatrix *x_train, LeMatrix *y_train, LeSVMTrainingOpt
                 support_vectors_count++;
         }
         
-        LeMatrix *new_alphas = le_matrix_new_uninitialized(1, support_vectors_count);
+        LeTensor *new_alphas = le_matrix_new_uninitialized(1, support_vectors_count);
         self->x = le_matrix_new_uninitialized(features_count, support_vectors_count);
         self->y = le_matrix_new_uninitialized(1, support_vectors_count);
 
@@ -281,13 +281,13 @@ le_svm_train(LeSVM *self, LeMatrix *x_train, LeMatrix *y_train, LeSVMTrainingOpt
     }
 }
 
-LeMatrix *
-le_svm_predict(LeSVM *self, LeMatrix *x)
+LeTensor *
+le_svm_predict(LeSVM *self, LeTensor *x)
 {
     assert(self != NULL);
     assert(x != NULL);
 
-    LeMatrix *y_predicted = le_svm_margins(self, x);
+    LeTensor *y_predicted = le_svm_margins(self, x);
     le_matrix_apply_svm_prediction(y_predicted);
     return y_predicted;
 }

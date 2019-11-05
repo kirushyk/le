@@ -16,7 +16,7 @@ typedef enum LeActivation
 
 typedef struct LeLayer
 {
-    LeMatrix *weights;
+    LeTensor *weights;
     LeActivation activation;
 } LeLayer;
 

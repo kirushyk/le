@@ -23,8 +23,8 @@ typedef struct LeSVMTrainingOptions
 } LeSVMTrainingOptions;
 
 void                   le_svm_train                     (LeSVM                *svm,
-                                                         LeMatrix             *x_train,
-                                                         LeMatrix             *y_train,
+                                                         LeTensor             *x_train,
+                                                         LeTensor             *y_train,
                                                          LeSVMTrainingOptions  options);
 
 void                   le_svm_free                      (LeSVM                *svm);

@@ -6,7 +6,7 @@
 #include <le/le.h>
 
 int
-le_test_ensure_matrix_size(LeMatrix *a, unsigned height, unsigned width)
+le_test_ensure_matrix_size(LeTensor *a, unsigned height, unsigned width)
 {
     if (a == NULL)
     {
@@ -38,9 +38,9 @@ main()
     unsigned height;
     unsigned second_width;
     
-    LeMatrix *a;
-    LeMatrix *b;
-    LeMatrix *c;
+    LeTensor *a;
+    LeTensor *b;
+    LeTensor *c;
     
     for (height = 1; height < MAX_DIMENSION; height++)
     {

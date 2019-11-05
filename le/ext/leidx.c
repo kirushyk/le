@@ -20,9 +20,9 @@ struct IDXHeader
     uint8_t dimensionality;
 };
 
-LeMatrix * le_idx_read(const char *filename)
+LeTensor * le_idx_read(const char *filename)
 {
-    LeMatrix *matrix = NULL;
+    LeTensor *matrix = NULL;
     FILE *fin = fopen(filename, "r");
     
     if (fin)

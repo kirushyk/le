@@ -8,15 +8,15 @@
 
 typedef struct LeDataSet LeDataSet;
 
-LeDataSet *      le_data_set_new_copy   (LeMatrix  *input,
-                                         LeMatrix  *output);
+LeDataSet *      le_data_set_new_copy   (LeTensor  *input,
+                                         LeTensor  *output);
 
-LeDataSet *      le_data_set_new_take   (LeMatrix  *input,
-                                         LeMatrix  *output);
+LeDataSet *      le_data_set_new_take   (LeTensor  *input,
+                                         LeTensor  *output);
 
-LeMatrix *       le_data_set_get_input  (LeDataSet *data);
+LeTensor *       le_data_set_get_input  (LeDataSet *data);
 
-LeMatrix *       le_data_set_get_output (LeDataSet *data);
+LeTensor *       le_data_set_get_output (LeDataSet *data);
 
 void             le_data_set_free       (LeDataSet *data);
 

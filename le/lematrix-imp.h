@@ -7,7 +7,7 @@
 #include "letype.h"
 #include "leshape.h"
 
-struct LeMatrix
+struct LeTensor
 {
     LeType   element_type;
     LeShape *shape;

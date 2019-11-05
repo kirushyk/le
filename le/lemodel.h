@@ -15,7 +15,7 @@ typedef struct LeModel
 typedef struct LeModelClass
 {
     LeClass parent;
-    LeMatrix * (*predict)(LeModel *model, LeMatrix *x);
+    LeTensor * (*predict)(LeModel *model, LeTensor *x);
     float (*train_iteration)(LeModel *model);
 } LeModelClass;
 
@@ -23,8 +23,8 @@ typedef struct LeModel LeModel;
 
 void       le_model_construct       (LeModel  *model);
 
-LeMatrix * le_model_predict         (LeModel  *model,
-                                     LeMatrix *x);
+LeTensor * le_model_predict         (LeModel  *model,
+                                     LeTensor *x);
 
 float      le_model_train_iteration (LeModel  *model);
 

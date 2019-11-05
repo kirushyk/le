@@ -6,12 +6,12 @@
 
 struct LeDataSet
 {
-    LeMatrix *x;
-    LeMatrix *y;
+    LeTensor *x;
+    LeTensor *y;
 };
 
 LeDataSet *
-le_data_set_new_copy(LeMatrix *x, LeMatrix *y)
+le_data_set_new_copy(LeTensor *x, LeTensor *y)
 {
     LeDataSet *data = malloc(sizeof(LeDataSet));
     data->x = le_matrix_new_copy(x);
@@ -20,7 +20,7 @@ le_data_set_new_copy(LeMatrix *x, LeMatrix *y)
 }
 
 LeDataSet *
-le_data_set_new_take(LeMatrix *input, LeMatrix *output)
+le_data_set_new_take(LeTensor *input, LeTensor *output)
 {
     LeDataSet *data = malloc(sizeof(LeDataSet));
     data->x = input;
@@ -28,13 +28,13 @@ le_data_set_new_take(LeMatrix *input, LeMatrix *output)
     return data;
 }
 
-LeMatrix *
+LeTensor *
 le_data_set_get_input(LeDataSet *data)
 {
     return data->x;
 }
 
-LeMatrix *
+LeTensor *
 le_data_set_get_output(LeDataSet *data)
 {
     return data->y;

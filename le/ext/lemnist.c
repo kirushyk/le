@@ -13,8 +13,8 @@ le_mnist_load(const char *path)
 {
     MNIST *mnist = malloc(sizeof(MNIST));
     
-    LeMatrix *input = le_idx_read("t10k-images-idx3-ubyte");
-    LeMatrix *output = le_idx_read("t10k-labels-idx1-ubyte");
+    LeTensor *input = le_idx_read("t10k-images-idx3-ubyte");
+    LeTensor *output = le_idx_read("t10k-labels-idx1-ubyte");
     mnist->train = le_data_set_new_take(input, output);
     
     mnist->test = NULL;

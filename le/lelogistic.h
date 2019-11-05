@@ -26,8 +26,8 @@ typedef struct LeLogisticClassifierTrainingOptions
 } LeLogisticClassifierTrainingOptions;
 
 void                   le_logistic_classifier_train   (LeLogisticClassifier                *classifier,
-                                                       LeMatrix                            *x_train,
-                                                       LeMatrix                            *y_train,
+                                                       LeTensor                            *x_train,
+                                                       LeTensor                            *y_train,
                                                        LeLogisticClassifierTrainingOptions  options);
 
 void                   le_logistic_classifier_free    (LeLogisticClassifier                *classifier);
