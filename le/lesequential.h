@@ -4,7 +4,7 @@
 #ifndef __LE_SEQUENTIAL_H__
 #define __LE_SEQUENTIAL_H__
 
-#include "lematrix.h"
+#include "letensor.h"
 #include "lemodel.h"
 
 typedef struct LeSequential LeSequential;

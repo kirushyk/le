@@ -4,7 +4,7 @@
 #ifndef __LESVM_H__
 #define __LESVM_H__
 
-#include "lematrix.h"
+#include "letensor.h"
 
 typedef enum LeKernel
 {

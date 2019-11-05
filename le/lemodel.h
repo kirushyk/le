@@ -5,7 +5,7 @@
 #define __LE_MODEL_H__
 
 #include "leobject.h"
-#include "lematrix.h"
+#include "letensor.h"
 
 typedef struct LeModel
 {

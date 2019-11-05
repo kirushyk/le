@@ -1,7 +1,7 @@
 /* Copyright (c) Kyrylo Polezhaiev and contributors. All rights reserved.
    Released under the MIT license. See LICENSE file in the project root for full license information. */
 
-#include "lematrix.h"
+#include "letensor.h"
 #include "lematrix-imp.h"
 #include <assert.h>
 #include <stdlib.h>

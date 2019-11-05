@@ -4,7 +4,7 @@
 #ifndef __LETRAININGDATA_H__
 #define __LETRAININGDATA_H__
 
-#include "lematrix.h"
+#include "letensor.h"
 
 typedef struct LeDataSet LeDataSet;
 

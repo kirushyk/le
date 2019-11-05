@@ -4,7 +4,7 @@
 #ifndef __LELAYER_H__
 #define __LELAYER_H__
 
-#include "lematrix.h"
+#include "letensor.h"
 
 typedef enum LeActivation
 {

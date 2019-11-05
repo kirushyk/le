@@ -4,7 +4,7 @@
 #ifndef __LELOGISTIC_H__
 #define __LELOGISTIC_H__
 
-#include "lematrix.h"
+#include "letensor.h"
 
 typedef struct LeLogisticClassifier LeLogisticClassifier;
 

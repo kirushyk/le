@@ -4,7 +4,7 @@
 #ifndef __LE_H__
 #define __LE_H__
 
-#include "lematrix.h"
+#include "letensor.h"
 #include "leobject.h"
 #include "ledataset.h"
 #include "lelogistic.h"
