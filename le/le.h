@@ -5,6 +5,7 @@
 #define __LE_H__
 
 #include "letensor.h"
+#include "lematrix.h"
 #include "leobject.h"
 #include "ledataset.h"
 #include "lelogistic.h"

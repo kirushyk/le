@@ -8,6 +8,7 @@ le_sources = [
     'lelogistic.c',
     'letype.c',
     'leshape.c',
+    'lematrix.c',
     'letensor.c',
     'lemodel.c',
     'lesvm.c'

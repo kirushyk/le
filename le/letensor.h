@@ -20,10 +20,6 @@ unsigned   le_matrix_get_width            (LeTensor     *matrix);
 
 unsigned   le_matrix_get_height           (LeTensor     *matrix);
 
-float      le_matrix_at                   (LeTensor     *matrix,
-                                           unsigned      y,
-                                           unsigned      x);
-
 void       le_matrix_set_element          (LeTensor     *matrix,
                                            unsigned      y,
                                            unsigned      x,
