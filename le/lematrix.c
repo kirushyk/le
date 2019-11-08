@@ -45,6 +45,21 @@ le_matrix_set_element(LeTensor *self, unsigned y, unsigned x, float value)
 }
 
 LeTensor *
+le_matrix_new_from_data(unsigned height, unsigned width, const float *data)
+{
+    LeTensor *self;
+    size_t data_size = height * width * sizeof(float);
+    
+    self = malloc(sizeof(struct LeTensor));
+    self->data = malloc(data_size);
+    self->shape = le_shape_new(2, height, width);
+    self->element_type = LE_TYPE_FLOAT32;
+    memcpy(self->data, data, data_size);
+    
+    return self;
+}
+
+LeTensor *
 le_matrix_new_identity(unsigned size)
 {
     unsigned x;

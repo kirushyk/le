@@ -12,10 +12,6 @@ LeTensor * le_matrix_new                  (void);
 
 LeTensor * le_tensor_new_copy             (LeTensor     *another);
 
-LeTensor * le_matrix_new_from_data        (unsigned      height,
-                                           unsigned      width,
-                                           const float  *data);
-
 void       le_tensor_subtract             (LeTensor     *a,
                                            LeTensor     *b);
 

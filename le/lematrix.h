@@ -19,6 +19,10 @@ void       le_matrix_set_element          (LeTensor     *matrix,
                                            unsigned      x,
                                            float         value);
 
+LeTensor * le_matrix_new_from_data        (unsigned      height,
+                                           unsigned      width,
+                                           const float  *data);
+
 LeTensor * le_matrix_new_identity         (unsigned      size);
 
 LeTensor * le_matrix_new_uninitialized    (unsigned      height,
