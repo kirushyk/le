@@ -22,7 +22,7 @@ struct IDXHeader
 
 LeTensor * le_idx_read(const char *filename)
 {
-    LeTensor *matrix = NULL;
+    LeTensor *tensor = NULL;
     FILE *fin = fopen(filename, "r");
     
     if (fin)
@@ -84,12 +84,10 @@ LeTensor * le_idx_read(const char *filename)
             uint8_t *data = malloc(element_size * elements_count);
             fread(data, element_size, elements_count, fin);
             free(sizes);
-//            0x08: unsigned byte
-//            0x09: signed byte
-//            0x0B: short (2 bytes)
-//            0x0C: int (4 bytes)
-//            0x0D: float (4 bytes)
-//            0x0E: double (8 bytes)
+            
+            LeShape *shape = le_shape_new(0);
+            
+            tensor = le_tensor_new_from_data(type, shape, data);
         }
         else
         {
@@ -99,5 +97,5 @@ LeTensor * le_idx_read(const char *filename)
         fclose(fin);
     }
     
-    return matrix;
+    return tensor;
 }
