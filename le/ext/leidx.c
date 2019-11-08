@@ -40,30 +40,38 @@ LeTensor * le_idx_read(const char *filename)
                 sizes[i] = bswap_32(sizes[i]);
             }
             
-            size_t element_size = 1;
             size_t elements_count = 1;
+            
+            LeType type = LE_TYPE_VOID;
             
             switch (header.type) {
             case 0x08:
+                type = LE_TYPE_UINT8;
+                break;
+                    
             case 0x09:
-                element_size = 1;
+                type = LE_TYPE_INT8;
                 break;
                     
             case 0x0B:
-                element_size = 2;
+                type = LE_TYPE_INT16;
                 break;
 
             case 0x0C:
+                type = LE_TYPE_INT32;
+                break;
+                        
             case 0x0D:
-                element_size = 4;
+                type = LE_TYPE_FLOAT32;
                 break;
 
             case 0x0E:
-                element_size = 8;
+                type = LE_TYPE_FLOAT64;
                 break;
 
             default:
                 /// @note: Error in IDX file
+                type = LE_TYPE_VOID;
                 break;
             }
             
@@ -72,6 +80,7 @@ LeTensor * le_idx_read(const char *filename)
                 elements_count = elements_count * sizes[i];
             }
 
+            size_t element_size = le_type_size(type);
             uint8_t *data = malloc(element_size * elements_count);
             fread(data, element_size, elements_count, fin);
             free(sizes);
