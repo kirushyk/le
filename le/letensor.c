@@ -19,6 +19,16 @@ le_tensor_new(void)
 }
 
 LeTensor *
+le_tensor_new_from_data(LeType element_type, LeShape *shape, void *data)
+{
+    LeTensor *self = malloc(sizeof(struct LeTensor));
+    self->data = NULL;
+    self->shape = NULL;
+    self->element_type = LE_TYPE_VOID;
+    return self;
+}
+
+LeTensor *
 le_tensor_new_copy(LeTensor *another)
 {
     LeTensor *self = malloc(sizeof(struct LeTensor));

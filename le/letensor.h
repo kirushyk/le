@@ -2,6 +2,7 @@
    Released under the MIT license. See LICENSE file in the project root for full license information. */
 
 #include "letype.h"
+#include "leshape.h"
 
 #ifndef __LETENSOR_H__
 #define __LETENSOR_H__
@@ -9,6 +10,10 @@
 typedef struct LeTensor LeTensor;
 
 LeTensor * le_tensor_new                  (void);
+
+LeTensor * le_tensor_new_from_data        (LeType        element_type,
+                                           LeShape      *shape,
+                                           void         *data);
 
 LeTensor * le_tensor_new_copy             (LeTensor     *another);
 
