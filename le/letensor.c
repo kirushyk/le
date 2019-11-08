@@ -9,7 +9,7 @@
 #include <math.h>
 
 LeTensor *
-le_matrix_new(void)
+le_tensor_new(void)
 {
     LeTensor *self = malloc(sizeof(struct LeTensor));
     self->data = NULL;

@@ -8,7 +8,7 @@
 
 typedef struct LeTensor LeTensor;
 
-LeTensor * le_matrix_new                  (void);
+LeTensor * le_tensor_new                  (void);
 
 LeTensor * le_tensor_new_copy             (LeTensor     *another);
 

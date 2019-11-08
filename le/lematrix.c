@@ -4,6 +4,7 @@
 #include "lematrix.h"
 #include <assert.h>
 #include <stdlib.h>
+#include <string.h>
 #include "letensor-imp.h"
 
 unsigned
@@ -178,10 +179,10 @@ le_matrix_new_product(LeTensor *a, LeTensor *b)
     LeTensor *self;
     
     if (a->shape->sizes[1] != b->shape->sizes[0])
-        return le_matrix_new();
+        return le_tensor_new();
         
     if (a->element_type != b->element_type)
-        return le_matrix_new();
+        return le_tensor_new();
     
     self = malloc(sizeof(struct LeTensor));
     self->shape = le_shape_new(2, a->shape->sizes[0], b->shape->sizes[1]);
