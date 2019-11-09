@@ -69,7 +69,7 @@ le_dot_product(LeTensor *a, LeTensor *b)
         /** @note: This addressing is correct as we
             ensured that widths of both matrices
             (supposed to be column vectors) is 1 */
-        result += a->data[y] * b->data[y];
+        result += ((float *)a->data)[y] * ((float *)b->data)[y];
     }
     
     return result;
@@ -89,7 +89,7 @@ le_rbf(LeTensor *a, LeTensor *b, float sigma)
     
     for (unsigned y = 0; y < a->shape->sizes[0]; y++)
     {
-        float sub = a->data[y] - b->data[y];
+        float sub = ((float *)a->data)[y] - ((float *)b->data)[y];
         result += sub * sub;
     }
     
@@ -106,7 +106,7 @@ le_tensor_subtract(LeTensor *a, LeTensor *b)
         
         for (i = 0; i < elements_count; i++)
         {
-            a->data[i] -= b->data[i];
+            ((float *)a->data)[i] -= ((float *)b->data)[i];
         }
     }
 }
@@ -119,7 +119,7 @@ le_tensor_multiply_by_scalar(LeTensor *self, float b)
     
     for (i = 0; i < elements_count; i++)
     {
-        self->data[i] *= b;
+        ((float *)self->data)[i] *= b;
     }
 }
 
@@ -131,7 +131,7 @@ le_tensor_add_scalar(LeTensor *self, float b)
     
     for (i = 0; i < elements_count; i++)
     {
-        self->data[i] += b;
+        ((float *)self->data)[i] += b;
     }
 }
 
@@ -144,7 +144,7 @@ le_tensor_sum(LeTensor *self)
     
     for (i = 0; i < elements_count; i++)
     {
-        sum += self->data[i];
+        sum += ((float *)self->data)[i];
     }
     
     return sum;
@@ -164,7 +164,7 @@ le_tensor_apply_sigmoid(LeTensor *self)
     
     for (i = 0; i < elements_count; i++)
     {
-        self->data[i] = le_sigmoid(self->data[i]);
+        ((float *)self->data)[i] = le_sigmoid(((float *)self->data)[i]);
     }
 }
 
@@ -176,7 +176,7 @@ le_tensor_apply_greater_than(LeTensor *self, float scalar)
     
     for (i = 0; i < elements_count; i++)
     {
-        self->data[i] = self->data[i] > scalar ? 1.0f : 0.0f;
+        ((float *)self->data)[i] = ((float *)self->data)[i] > scalar ? 1.0f : 0.0f;
     }
 }
 
@@ -188,7 +188,7 @@ le_tensor_apply_svm_prediction(LeTensor *self)
     
     for (i = 0; i < elements_count; i++)
     {
-        self->data[i] = self->data[i] > 0.0f ? 1.0f : -1.0f;
+        ((float *)self->data)[i] = ((float *)self->data)[i] > 0.0f ? 1.0f : -1.0f;
     }
 }
 
@@ -209,7 +209,7 @@ le_matrix_print(LeTensor *self, FILE *stream)
     {
         for (x = 0; x < self->shape->sizes[1]; x++)
         {
-            fprintf(stream, "%1.3f", self->data[y * self->shape->sizes[1] + x]);
+            fprintf(stream, "%1.3f", ((float *)self->data)[y * self->shape->sizes[1] + x]);
             if (x < self->shape->sizes[1] - 1)
             {
                 fprintf(stream, " ");

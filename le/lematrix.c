@@ -31,7 +31,7 @@ le_matrix_at(LeTensor *self, unsigned y, unsigned x)
     assert(y < self->shape->sizes[0]);
     assert(x < self->shape->sizes[1]);
     
-    return self->data[y * self->shape->sizes[1] + x];
+    return ((float *)self->data)[y * self->shape->sizes[1] + x];
 }
 
 void
@@ -42,7 +42,7 @@ le_matrix_set_element(LeTensor *self, unsigned y, unsigned x, float value)
     assert(y < self->shape->sizes[0]);
     assert(x < self->shape->sizes[1]);
     
-    self->data[y * self->shape->sizes[1] + x] = value;
+    ((float *)self->data)[y * self->shape->sizes[1] + x] = value;
 }
 
 LeTensor *
@@ -76,7 +76,7 @@ le_matrix_new_identity(unsigned size)
     {
         for (x = 0; x < size; x++)
         {
-            self->data[y * size + x] = (x == y) ? 1.0 : 0.0;
+            ((float *)self->data)[y * size + x] = (x == y) ? 1.0 : 0.0;
         }
     }
     
@@ -111,7 +111,7 @@ le_matrix_new_zeros(unsigned height, unsigned width)
     
     for (i = 0; i < elements_count; i++)
     {
-        self->data[i] = 0.0f;
+        ((float *)self->data)[i] = 0.0f;
     }
     
     return self;
@@ -134,7 +134,7 @@ le_matrix_new_rand(unsigned height, unsigned width)
     {
         for (x = 0; x < self->shape->sizes[1]; x++)
         {
-            self->data[y * self->shape->sizes[1] + x] = rand() / (float)RAND_MAX;
+            ((float *)self->data)[y * self->shape->sizes[1] + x] = rand() / (float)RAND_MAX;
         }
     }
     
@@ -159,7 +159,7 @@ le_matrix_new_transpose(LeTensor *a)
     {
         for (x = 0; x < self->shape->sizes[1]; x++)
         {
-            self->data[y * self->shape->sizes[1] + x] = a->data[x * a->shape->sizes[1] + y];
+            ((float *)self->data)[y * self->shape->sizes[1] + x] = ((float *)(float *)a->data)[x * a->shape->sizes[1] + y];
         }
     }
     
@@ -193,10 +193,10 @@ le_matrix_new_product(LeTensor *a, LeTensor *b)
     {
         for (x = 0; x < self->shape->sizes[1]; x++)
         {
-            self->data[y * self->shape->sizes[1] + x] = 0.0f;
+            ((float *)self->data)[y * self->shape->sizes[1] + x] = 0.0f;
             for (i = 0; i < a->shape->sizes[1]; i++)
             {
-                self->data[y * self->shape->sizes[1] + x] += a->data[y * a->shape->sizes[1] + i] * b->data[i * b->shape->sizes[1] + x];
+                ((float *)self->data)[y * self->shape->sizes[1] + x] += ((float *)a->data)[y * a->shape->sizes[1] + i] * ((float *)b->data)[i * b->shape->sizes[1] + x];
             }
         }
     }
@@ -216,7 +216,7 @@ le_matrix_get_column(LeTensor *self, unsigned x)
     
     for (y = 0; y < height; y++)
     {
-        column->data[y] = self->data[y * self->shape->sizes[1] + x];
+        ((float *)column->data)[y] = ((float *)self->data)[y * self->shape->sizes[1] + x];
     }
     
     return column;

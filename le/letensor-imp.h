@@ -11,7 +11,7 @@ struct LeTensor
 {
     LeType   element_type;
     LeShape *shape;
-    float   *data;
+    void    *data;
 };
 
 #endif
