@@ -3,19 +3,18 @@
 
 incdir = include_directories('../../')
 
-mnist_inspect_sources = [
-    'main.c'
+mnist_sources = [
+    'leidx.c',
+    'lemnist.c'
 ]
 
-mnist_inspect_deps = dependency('gtk+-3.0')
+mnist_deps = [
+    cc.find_library('m')
+]
 
-executable('mnist-inspect', mnist_inspect_sources,
-    dependencies: mnist_inspect_deps,
+mnist = static_library('le_mnist', mnist_sources,
+    dependencies: mnist_deps,
     include_directories: incdir,
-    link_with: [
-        le,
-        mnist
-    ]
-    install: true
+    link_with: le,
 )
 

@@ -14,6 +14,7 @@ project('le', 'c',
 cc = meson.get_compiler('c')
 
 subdir('le')
+subdir('ext')
 subdir('tests')
 subdir('benchmarks')
 subdir('examples')
