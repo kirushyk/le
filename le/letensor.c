@@ -57,6 +57,12 @@ le_tensor_pick(LeTensor *another, uint32_t index)
     return self;
 }
 
+uint8_t
+le_tensor_at(LeTensor *tensor, uint32_t index)
+{
+    return ((uint8_t *)tensor->data)[index];
+}
+
 void
 le_matrix_empty(LeTensor *self)
 {
