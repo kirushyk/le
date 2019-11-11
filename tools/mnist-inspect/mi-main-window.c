@@ -5,7 +5,7 @@
 #include <stdlib.h>
 #include <le/le.h>
 #include <le/letensor-imp.h>
-#include <le/ext/lemnist.h>
+#include <ext/mnist/lemnist.h>
 #include <math.h>
 #include "pg-generate-data.h"
 #include "pg-color.h"
