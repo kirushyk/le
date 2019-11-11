@@ -101,6 +101,28 @@ le_main_window_class_init(LEMainWindowClass *klass)
 }
 
 static void
+update_image(LEMainWindow *window)
+{
+    if (window->image_visualisation) {
+        cairo_surface_destroy(window->image_visualisation);
+        window->image_visualisation = NULL;
+    }
+    
+    LeTensor *images = le_data_set_get_input(window->data_set->train);
+    LeTensor *image = le_tensor_pick(images, window->index);
+    if (image) {
+        window->image_visualisation = render_image(image->data);
+    }
+    
+    int label = le_tensor_at(le_data_set_get_output(window->data_set->train), window->index);
+    char buffer[8];
+    sprintf(buffer, "%d", label);
+    gtk_entry_set_text(GTK_ENTRY(window->label_entry), buffer);
+
+    gtk_widget_queue_draw(GTK_WIDGET(window));
+}
+
+static void
 set_changed(GtkComboBox *combo_box, gpointer data)
 {
     LEMainWindow *window = LE_MAIN_WINDOW(data);
@@ -122,32 +144,18 @@ set_changed(GtkComboBox *combo_box, gpointer data)
     }
 
     gtk_spin_button_set_range(GTK_SPIN_BUTTON(window->index_spin_button), 0, test_examples_count - 1);
+    
+    update_image(window);
 }
 
 static void
 index_changed(GtkSpinButton *spin_button, gpointer data)
 {
     LEMainWindow *window = LE_MAIN_WINDOW(data);
-    
-    if (window->image_visualisation) {
-        cairo_surface_destroy(window->image_visualisation);
-        window->image_visualisation = NULL;
-    }
-    
+        
     window->index = (uint32_t)gtk_spin_button_get_value(spin_button);
     
-    LeTensor *images = le_data_set_get_input(window->data_set->train);
-    LeTensor *image = le_tensor_pick(images, window->index);
-    if (image) {
-        window->image_visualisation = render_image(image->data);
-    }
-    
-    int label = le_tensor_at(le_data_set_get_output(window->data_set->train), window->index);
-    char buffer[8];
-    sprintf(buffer, "%d", label);
-    gtk_entry_set_text(GTK_ENTRY(window->label_entry), buffer);
-    
-    gtk_widget_queue_draw(GTK_WIDGET(window));
+    update_image(window);
 }
 
 static void
