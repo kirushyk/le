@@ -54,6 +54,7 @@ le_tensor_pick(LeTensor *another, uint32_t index)
     self->data = malloc(data_size);
     
     memcpy(self->data, another->data + index * data_size, data_size);
+    
     return self;
 }
 
