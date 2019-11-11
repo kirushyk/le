@@ -108,16 +108,19 @@ update_image(LEMainWindow *window)
         window->image_visualisation = NULL;
     }
     
-    LeTensor *images = le_data_set_get_input(window->data_set->train);
-    LeTensor *image = le_tensor_pick(images, window->index);
-    if (image) {
-        window->image_visualisation = render_image(image->data);
+    if (window->input) {
+        LeTensor *image = le_tensor_pick(window->input, window->index);
+        if (image) {
+            window->image_visualisation = render_image(image->data);
+        }
     }
     
-    int label = le_tensor_at(le_data_set_get_output(window->data_set->train), window->index);
-    char buffer[8];
-    sprintf(buffer, "%d", label);
-    gtk_entry_set_text(GTK_ENTRY(window->label_entry), buffer);
+    if (window->output) {
+        int label = le_tensor_at(window->output, window->index);
+        char buffer[8];
+        sprintf(buffer, "%d", label);
+        gtk_entry_set_text(GTK_ENTRY(window->label_entry), buffer);
+    }
 
     gtk_widget_queue_draw(GTK_WIDGET(window));
 }
@@ -173,7 +176,7 @@ le_main_window_init(LEMainWindow *self)
     g_signal_connect(G_OBJECT(self->set_selection_combo), "changed", G_CALLBACK(set_changed), self);
     gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(self->set_selection_combo), "Train");
     gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(self->set_selection_combo), "Test");
-    gtk_combo_box_set_active(GTK_COMBO_BOX(self->set_selection_combo), 1);
+    gtk_combo_box_set_active(GTK_COMBO_BOX(self->set_selection_combo), 0);
     gtk_grid_attach(GTK_GRID(grid), self->set_selection_combo, 1, 0, 1, 1);
     gtk_grid_attach(GTK_GRID(grid), gtk_label_new("Index:"), 0, 1, 1, 1);
     self->index_spin_button = gtk_spin_button_new_with_range(0, 59999, 1);
@@ -195,7 +198,8 @@ le_main_window_init(LEMainWindow *self)
     self->image_visualisation = NULL;
     self->input = NULL;
     self->output = NULL;
-    index_changed(self->index_spin_button, self);
+    index_changed(GTK_SPIN_BUTTON(self->index_spin_button), self);
+    set_changed(GTK_COMBO_BOX(self->set_selection_combo), self);
 
     g_action_map_add_action_entries(G_ACTION_MAP(self), win_entries, G_N_ELEMENTS(win_entries), self);
 }
