@@ -33,10 +33,24 @@ le_tensor_new_copy(LeTensor *another)
 {
     LeTensor *self = malloc(sizeof(struct LeTensor));
     self->element_type = another->element_type;
-    size_t data_size = le_shape_get_elements_count(another->shape) * le_type_size(self->element_type);
+    self->shape = le_shape_copy(another->shape);
+    size_t data_size = le_shape_get_elements_count(another->shape) * le_type_size(another->element_type);
     self->data = malloc(data_size);
     memcpy(self->data, another->data, data_size);
+    return self;
+}
+
+LeTensor *
+le_tensor_pick(LeTensor *another, uint32_t index)
+{
+    LeTensor *self = malloc(sizeof(struct LeTensor));
+    self->element_type = another->element_type;
     self->shape = le_shape_copy(another->shape);
+    
+    size_t data_size = le_shape_get_elements_count(self->shape) * le_type_size(self->element_type);
+    self->data = malloc(data_size);
+    
+    memcpy(self->data, another->data, data_size);
     return self;
 }
 

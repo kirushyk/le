@@ -17,6 +17,9 @@ LeTensor * le_tensor_new_from_data        (LeType        element_type,
 
 LeTensor * le_tensor_new_copy             (LeTensor     *another);
 
+LeTensor * le_tensor_pick                 (LeTensor     *another,
+                                           uint32_t      index);
+
 void       le_tensor_subtract             (LeTensor     *a,
                                            LeTensor     *b);
 
