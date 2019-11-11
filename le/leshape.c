@@ -49,6 +49,18 @@ le_shape_copy(LeShape *another)
     return self;
 }
 
+LeShape *
+le_shape_lower_dimension(LeShape *another)
+{
+    /// @todo: Add assertions
+    LeShape *self = malloc(sizeof(LeShape));
+    self->num_dimensions = another->num_dimensions - 1;
+    size_t size = self->num_dimensions * sizeof(uint32_t);
+    self->sizes = malloc(size);
+    memcpy(self->sizes, another->sizes + 1, size);
+    return self;
+}
+
 void
 le_shape_free(LeShape *self)
 {

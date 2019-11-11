@@ -21,6 +21,8 @@ LeShape * le_shape_new_from_data      (unsigned  num_dimensions,
 
 LeShape * le_shape_copy               (LeShape  *shape);
 
+LeShape * le_shape_lower_dimension    (LeShape  *shape);
+
 void      le_shape_free               (LeShape  *shape);
 
 uint32_t  le_shape_get_elements_count (LeShape  *shape);
