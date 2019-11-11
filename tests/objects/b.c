@@ -4,10 +4,10 @@
 
 /* Subclass B */
 
-typedef struct B
+struct B
 {
     Base parent;
-} B;
+};
 
 char
 b_polymorphic(B *b)
