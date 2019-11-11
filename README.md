@@ -12,13 +12,13 @@ Learning algorithms supported at this moment:
 
 Small utility to play with binary classifier models:
 
-![Le Playground](http://kirushyk.github.io/projects/le.png)
+![Le Playground|50%](http://kirushyk.github.io/projects/le.png)
 
 ## MNIST Inspector
 
 Visual tool to navigate MNIST dataset:
 
-![Le Playground](http://kirushyk.github.io/projects/le-mnist.png)
+![Le Playground|50%](http://kirushyk.github.io/projects/le-mnist.png)
 
 ## License
 
