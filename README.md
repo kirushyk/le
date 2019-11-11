@@ -1,6 +1,6 @@
 # Le - Machine Learning Framework.
 
-Le is written in Pure C.
+Le is Machine Learning framework written in Pure C. It provides library for:
 * Linear Algebra.
 * Tensor Manipulation.
 
