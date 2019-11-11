@@ -24,7 +24,7 @@ le_tensor_new_from_data(LeType element_type, LeShape *shape, void *data)
     LeTensor *self = malloc(sizeof(struct LeTensor));
     self->data = data;
     self->shape = shape;
-    self->element_type = LE_TYPE_VOID;
+    self->element_type = element_type;
     return self;
 }
 
@@ -48,12 +48,12 @@ le_tensor_pick(LeTensor *another, uint32_t index)
     
     LeTensor *self = malloc(sizeof(struct LeTensor));
     self->element_type = another->element_type;
-    self->shape = le_shape_copy(another->shape);
+    self->shape = le_shape_lower_dimension(another->shape);
     
     size_t data_size = le_shape_get_elements_count(self->shape) * le_type_size(self->element_type);
     self->data = malloc(data_size);
     
-    memcpy(self->data, another->data, data_size);
+    memcpy(self->data, another->data + index * another->shape->sizes[0], data_size);
     return self;
 }
 
