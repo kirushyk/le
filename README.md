@@ -1,8 +1,22 @@
 # Le - Machine Learning Framework.
 
-Algorithms supported at this moment:
+Le is written in Pure C.
+* Linear Algebra.
+* Tensor Manipulation.
+
+Learning algorithms supported at this moment:
 * Polynomial Regression.
 * Support Vector Machines (SVM).
+
+## Playground
+
+Small utility to play with binary classifier models:
+
+![Le Playground](http://kirushyk.github.io/projects/le.png)
+
+## MNIST Inspector
+
+Visual tool to navigate MNIST dataset:
 
 ![Le Playground](http://kirushyk.github.io/projects/le.png)
 
