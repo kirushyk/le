@@ -12,12 +12,19 @@ MNIST *
 le_mnist_load(const char *path)
 {
     MNIST *mnist = malloc(sizeof(MNIST));
+    char buffer[1024];
     
-    LeTensor *input = le_idx_read("t10k-images-idx3-ubyte");
-    LeTensor *output = le_idx_read("t10k-labels-idx1-ubyte");
+    sprintf(buffer, "%s/t10k-images-idx3-ubyte", path);
+    LeTensor *input = le_idx_read(buffer);
+    sprintf(buffer, "%s/t10k-labels-idx1-ubyte", path);
+    LeTensor *output = le_idx_read(buffer);
     mnist->train = le_data_set_new_take(input, output);
     
-    mnist->test = NULL;
+    sprintf(buffer, "%s/train-images-idx3-ubyte", path);
+    input = le_idx_read(buffer);
+    sprintf(buffer, "%s/train-labels-idx1-ubyte", path);
+    output = le_idx_read(buffer);
+    mnist->test = le_data_set_new_take(input, output);
     
     return mnist;
 }
