@@ -18,7 +18,7 @@ Small utility to play with binary classifier models:
 
 Visual tool to navigate MNIST dataset:
 
-![Le Playground](http://kirushyk.github.io/projects/le.png)
+![Le Playground](http://kirushyk.github.io/projects/le-mnist.png)
 
 ## License
 
