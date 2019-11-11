@@ -83,9 +83,8 @@ LeTensor * le_idx_read(const char *filename)
             size_t element_size = le_type_size(type);
             uint8_t *data = malloc(element_size * elements_count);
             fread(data, element_size, elements_count, fin);
-            free(sizes);
             
-            LeShape *shape = le_shape_new(0);
+            LeShape *shape = le_shape_new_from_data(header.dimensionality, sizes);
             
             tensor = le_tensor_new_from_data(type, shape, data);
         }
