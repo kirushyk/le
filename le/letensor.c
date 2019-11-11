@@ -43,6 +43,9 @@ le_tensor_new_copy(LeTensor *another)
 LeTensor *
 le_tensor_pick(LeTensor *another, uint32_t index)
 {
+    if (!another)
+        return NULL;
+    
     LeTensor *self = malloc(sizeof(struct LeTensor));
     self->element_type = another->element_type;
     self->shape = le_shape_copy(another->shape);
