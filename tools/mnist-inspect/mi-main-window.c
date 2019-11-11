@@ -194,7 +194,7 @@ le_main_window_init(LEMainWindow *self)
     
     gtk_container_add(GTK_CONTAINER(self), hbox);
     
-    self->data_set = le_mnist_load("/Users/cyril/Developer/mnist");
+    self->data_set = le_mnist_load(NULL);
     self->image_visualisation = NULL;
     self->input = NULL;
     self->output = NULL;
