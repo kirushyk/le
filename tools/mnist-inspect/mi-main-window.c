@@ -153,6 +153,7 @@ le_main_window_init(LEMainWindow *self)
     
     self->data_set = le_mnist_load("/Users/cyril/Developer/mnist");
     self->image_visualisation = NULL;
+    index_changed(self->index_spin_button, self);
 
     g_action_map_add_action_entries(G_ACTION_MAP(self), win_entries, G_N_ELEMENTS(win_entries), self);
 }
