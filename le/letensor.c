@@ -22,8 +22,8 @@ LeTensor *
 le_tensor_new_from_data(LeType element_type, LeShape *shape, void *data)
 {
     LeTensor *self = malloc(sizeof(struct LeTensor));
-    self->data = NULL;
-    self->shape = NULL;
+    self->data = data;
+    self->shape = shape;
     self->element_type = LE_TYPE_VOID;
     return self;
 }
