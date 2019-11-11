@@ -19,8 +19,6 @@ typedef struct LeModelClass
     float (*train_iteration)(LeModel *model);
 } LeModelClass;
 
-typedef struct LeModel LeModel;
-
 void       le_model_construct       (LeModel  *model);
 
 LeTensor * le_model_predict         (LeModel  *model,
