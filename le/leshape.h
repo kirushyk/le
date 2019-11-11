@@ -16,6 +16,9 @@ typedef struct LeShape
 LeShape * le_shape_new                (unsigned  num_dimensions,
                                        ...);
 
+LeShape * le_shape_new_from_data      (unsigned  num_dimensions,
+                                       uint32_t *sizes);
+
 LeShape * le_shape_copy               (LeShape  *shape);
 
 void      le_shape_free               (LeShape  *shape);

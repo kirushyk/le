@@ -29,6 +29,16 @@ le_shape_new(unsigned num_dimensions, ...)
 }
 
 LeShape *
+le_shape_new_from_data(unsigned num_dimensions, uint32_t *sizes)
+{
+    LeShape *self = malloc(sizeof(LeShape));
+    self->num_dimensions = num_dimensions;
+    self->sizes = sizes;
+    
+    return self;
+}
+
+LeShape *
 le_shape_copy(LeShape *another)
 {
     LeShape *self = malloc(sizeof(LeShape));
