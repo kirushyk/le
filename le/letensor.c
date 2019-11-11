@@ -12,9 +12,10 @@ LeTensor *
 le_tensor_new(void)
 {
     LeTensor *self = malloc(sizeof(struct LeTensor));
-    self->data = NULL;
-    self->shape = NULL;
     self->element_type = LE_TYPE_VOID;
+    self->shape = NULL;
+    self->owns_data = false;
+    self->data = NULL;
     return self;
 }
 
@@ -22,9 +23,10 @@ LeTensor *
 le_tensor_new_from_data(LeType element_type, LeShape *shape, void *data)
 {
     LeTensor *self = malloc(sizeof(struct LeTensor));
-    self->data = data;
-    self->shape = shape;
     self->element_type = element_type;
+    self->shape = shape;
+    self->owns_data = true;
+    self->data = data;
     return self;
 }
 
@@ -34,6 +36,7 @@ le_tensor_new_copy(LeTensor *another)
     LeTensor *self = malloc(sizeof(struct LeTensor));
     self->element_type = another->element_type;
     self->shape = le_shape_copy(another->shape);
+    self->owns_data = true;
     size_t data_size = le_shape_get_elements_count(another->shape) * le_type_size(another->element_type);
     self->data = malloc(data_size);
     memcpy(self->data, another->data, data_size);
@@ -49,8 +52,26 @@ le_tensor_pick(LeTensor *another, uint32_t index)
     LeTensor *self = malloc(sizeof(struct LeTensor));
     self->element_type = another->element_type;
     self->shape = le_shape_lower_dimension(another->shape);
+
+    size_t data_size = le_shape_get_elements_count(self->shape) * le_type_size(self->element_type);
+    self->owns_data = false;
+    self->data = another->data + index * data_size;
+    
+    return self;
+}
+
+LeTensor *
+le_tensor_pick_copy(LeTensor *another, uint32_t index)
+{
+    if (!another)
+        return NULL;
+    
+    LeTensor *self = malloc(sizeof(struct LeTensor));
+    self->element_type = another->element_type;
+    self->shape = le_shape_lower_dimension(another->shape);
     
     size_t data_size = le_shape_get_elements_count(self->shape) * le_type_size(self->element_type);
+    self->owns_data = true;
     self->data = malloc(data_size);
     
     memcpy(self->data, another->data + index * data_size, data_size);
@@ -250,7 +271,10 @@ le_matrix_print(LeTensor *self, FILE *stream)
 void
 le_tensor_free(LeTensor *self)
 {
+    if (self->owns_data)
+    {
+        free(self->data);
+    }
     free(self->shape);
-    free(self->data);
     free(self);
 }

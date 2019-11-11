@@ -4,6 +4,7 @@
 #ifndef __LEMATRIX_IMP_H__
 #define __LEMATRIX_IMP_H__
 
+#include <stdbool.h>
 #include "letype.h"
 #include "leshape.h"
 
@@ -11,6 +12,7 @@ struct LeTensor
 {
     LeType   element_type;
     LeShape *shape;
+    bool     owns_data;
     void    *data;
 };
 

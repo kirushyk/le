@@ -20,6 +20,9 @@ LeTensor * le_tensor_new_copy             (LeTensor     *another);
 LeTensor * le_tensor_pick                 (LeTensor     *another,
                                            uint32_t      index);
 
+LeTensor * le_tensor_pick_copy            (LeTensor     *another,
+                                           uint32_t      index);
+
 uint8_t    le_tensor_at                   (LeTensor     *tensor,
                                            uint32_t      index);
 
