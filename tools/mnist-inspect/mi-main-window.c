@@ -116,6 +116,11 @@ index_changed(GtkSpinButton *spin_button, gpointer data)
         window->image_visualisation = render_image(image->data);
     }
     
+    int label = le_tensor_at(le_data_set_get_output(window->data_set->train), index);
+    char buffer[8];
+    sprintf(buffer, "%d", label);
+    gtk_entry_set_text(GTK_ENTRY(window->label_entry), buffer);
+    
     gtk_widget_queue_draw(GTK_WIDGET(window));
 }
 
