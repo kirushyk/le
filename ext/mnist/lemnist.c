@@ -4,6 +4,7 @@
 #include "lemnist.h"
 #include <stdlib.h>
 #include "leidx.h"
+#include <mnist-config.h>
 
 #define IMAGE_WIDTH 28
 #define IMAGE_HEIGHT 28
@@ -11,6 +12,11 @@
 MNIST *
 le_mnist_load(const char *path)
 {
+    if (!path)
+    {
+        path = MNIST_DATASET_PATH;
+    }
+
     MNIST *mnist = malloc(sizeof(MNIST));
     char buffer[1024];
     

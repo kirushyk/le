@@ -3,7 +3,7 @@
 
 project('le', 'c',
     version: '0.0.1',
-    meson_version: '>= 0.40.1',
+    meson_version: '>= 0.49.0',
     default_options: [
         'c_std=c99',
         'warning_level=1',
