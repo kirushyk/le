@@ -6,6 +6,8 @@
 #ifndef __LEIDX_H__
 #define __LEIDX_H__
 
-LeTensor * le_idx_read(const char *filename);
+LeTensor * le_idx_read    (const char *filename);
+
+LeTensor * le_idx_gz_read (const char *filename);
 
 #endif

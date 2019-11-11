@@ -9,7 +9,8 @@ mnist_sources = [
 ]
 
 mnist_deps = [
-    cc.find_library('m')
+    cc.find_library('m'),
+    cc.find_library('z'),
 ]
 
 mnist = static_library('le_mnist', mnist_sources,
