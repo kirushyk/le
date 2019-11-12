@@ -3,6 +3,7 @@
 
 le_tests = [
     ['objects/objects.c', 'objects/base.c', 'objects/a.c', 'objects/b.c'],
+    ['mnist.c'],
     ['list.c'],
     ['matrices.c']
 ]
@@ -12,7 +13,10 @@ foreach filenames : le_tests
     test_name = filename.split('.')[0].underscorify()
     exe = executable(test_name, filenames,
         include_directories: include_directories('..'),
-        link_with: le,
+        link_with: [
+            le,
+            mnist
+        ],
         install: false
     )
     test(test_name, exe, timeout : 3 * 60)
