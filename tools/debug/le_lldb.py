@@ -15,4 +15,6 @@ def LeShapeSummary(value, internal_dict):
     return summary
 
 def LeTensorSummary(value, internal_dict):
-    return LeShapeSummary(value.GetChildMemberWithName("shape"), internal_dict)
+    summary = str(value.GetChildMemberWithName("element_type").GetValue()) + " "
+    summary += LeShapeSummary(value.GetChildMemberWithName("shape"), internal_dict)
+    return summary
