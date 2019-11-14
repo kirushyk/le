@@ -6,6 +6,7 @@
 #include <stddef.h>
 #include <string.h>
 #include <stdarg.h>
+#include <assert.h>
 
 LeShape *
 le_shape_new(unsigned num_dimensions, ...)
@@ -89,6 +90,9 @@ le_shape_get_elements_count(LeShape *shape)
 bool
 le_shape_equal(LeShape *a, LeShape *b)
 {
+    assert(a);
+    assert(b);
+    
     if (a->num_dimensions != b->num_dimensions)
         return false;
     
