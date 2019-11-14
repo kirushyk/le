@@ -206,7 +206,7 @@ le_matrix_new_one_hot(LeTensor *a, unsigned num_classes)
     LeTensor *self;
     
     self = malloc(sizeof(struct LeTensor));
-    self->element_type = a->element_type;
+    self->element_type = LE_TYPE_FLOAT32;
     self->shape = le_shape_new(2, num_classes, a->shape->sizes[1]);
     self->owns_data = true;
     self->data = malloc(le_shape_get_elements_count(self->shape) * le_type_size(self->element_type));
