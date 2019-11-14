@@ -6,6 +6,7 @@
 #include <assert.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdarg.h>
 #include <math.h>
 
 LeTensor *
@@ -41,6 +42,40 @@ le_tensor_new_copy(LeTensor *another)
     self->data = malloc(data_size);
     memcpy(self->data, another->data, data_size);
     return self;
+}
+
+bool     
+le_tensor_reshape(LeTensor *self, unsigned num_dimensions, ...)
+{
+    /// @todo: Add more assertions
+
+    uint32_t *sizes = malloc(num_dimensions * sizeof(uint32_t));
+    va_list args;
+    va_start(args, num_dimensions);
+    
+    for (uint8_t i = 0; i < num_dimensions; i++)
+    {
+        int size = va_arg(args, int);
+        sizes[i] = size;
+    }
+    
+    va_end(args);
+    
+    LeShape *new_shape = le_shape_new_from_data(num_dimensions, sizes);
+
+    if (le_shape_get_elements_count(new_shape) == le_shape_get_elements_count(self->shape))
+    {
+        le_shape_free(self->shape);
+        self->shape = new_shape;
+
+        return true;
+    }
+    else
+    {
+        le_shape_free(self->shape);
+
+        return false;
+    }
 }
 
 LeTensor *

@@ -1,6 +1,7 @@
 /* Copyright (c) Kyrylo Polezhaiev and contributors. All rights reserved.
    Released under the MIT license. See LICENSE file in the project root for full license information. */
 
+#include <stdbool.h>
 #include "letype.h"
 #include "leshape.h"
 
@@ -16,6 +17,10 @@ LeTensor * le_tensor_new_from_data        (LeType        element_type,
                                            void         *data);
 
 LeTensor * le_tensor_new_copy             (LeTensor     *another);
+
+bool       le_tensor_reshape              (LeTensor     *tensor,
+                                           unsigned      num_dimensions,
+                                           ...);
 
 LeTensor * le_tensor_pick                 (LeTensor     *another,
                                            uint32_t      index);
