@@ -146,6 +146,14 @@ le_matrix_new_rand(unsigned height, unsigned width)
     return self;
 }
 
+#define TRNASPOSE(type) for (y = 0; y < self->shape->sizes[0]; y++) \
+{ \
+    for (x = 0; x < self->shape->sizes[1]; x++) \
+    { \
+        ((type *)self->data)[y * self->shape->sizes[1] + x] = ((type *)a->data)[x * a->shape->sizes[1] + y]; \
+    } \
+}
+
 LeTensor *
 le_matrix_new_transpose(LeTensor *a)
 {
@@ -159,18 +167,34 @@ le_matrix_new_transpose(LeTensor *a)
     self->element_type = a->element_type;
     self->shape = le_shape_new(2, a->shape->sizes[1], a->shape->sizes[0]);
     self->owns_data = true;
-    self->data = malloc(a->shape->sizes[1] * a->shape->sizes[0] * sizeof(float));
+    self->data = malloc(le_shape_get_elements_count(self->shape) * le_type_size(self->element_type));
     
-    for (y = 0; y < self->shape->sizes[0]; y++)
+    switch (le_type_size(self->element_type))
     {
-        for (x = 0; x < self->shape->sizes[1]; x++)
-        {
-            ((float *)self->data)[y * self->shape->sizes[1] + x] = ((float *)(float *)a->data)[x * a->shape->sizes[1] + y];
-        }
+    case 1:
+        TRNASPOSE(uint8_t);
+        break;
+
+    case 2:
+        TRNASPOSE(uint16_t);
+        break;
+
+    case 4:
+        TRNASPOSE(uint32_t);
+        break;
+
+    case 8:
+        TRNASPOSE(uint64_t);
+        break;
+
+    default:
+        break;
     }
     
     return self;
 }
+
+#undef TRANSPOSE
 
 LeTensor *
 le_matrix_new_product(LeTensor *a, LeTensor *b)
@@ -210,7 +234,7 @@ le_matrix_new_product(LeTensor *a, LeTensor *b)
     
     return self;
 }
-
+                  
 LeTensor *
 le_matrix_get_column(LeTensor *self, unsigned x)
 {
