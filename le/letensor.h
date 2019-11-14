@@ -42,21 +42,21 @@ void       le_tensor_multiply_by_scalar   (LeTensor     *a,
 void       le_tensor_add_scalar           (LeTensor     *a,
                                            float         b);
 
-float      le_tensor_sum                  (LeTensor     *matrix);
+float      le_tensor_sum                  (LeTensor     *tensor);
 
-void       le_tensor_apply_sigmoid        (LeTensor     *matrix);
+void       le_tensor_apply_sigmoid        (LeTensor     *tensor);
 
-void       le_tensor_apply_greater_than   (LeTensor     *matrix,
+void       le_tensor_apply_greater_than   (LeTensor     *tensor,
                                            float         scalar);
 
-void       le_tensor_apply_svm_prediction (LeTensor     *matrix);
+void       le_tensor_apply_svm_prediction (LeTensor     *tensor);
 
-void       le_tensor_free                 (LeTensor     *matrix);
+void       le_tensor_free                 (LeTensor     *tensor);
 
 /** @note: Temporary */
 #include <stdio.h>
 
-void       le_matrix_print                (LeTensor     *matrix,
+void       le_tensor_print                (LeTensor     *tensor,
                                            FILE         *stream);
 
 /** @note: Inner product of two column vectors */
