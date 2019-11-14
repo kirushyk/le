@@ -23,6 +23,7 @@ typedef struct LeLogisticClassifierTrainingOptions
     float            alpha;
     LeRegularization regularization;
     float            lambda;
+    unsigned         max_iterations;
 } LeLogisticClassifierTrainingOptions;
 
 void                   le_logistic_classifier_train   (LeLogisticClassifier                *classifier,

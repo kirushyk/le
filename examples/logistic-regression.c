@@ -29,6 +29,7 @@ main(int argc, const char *argv[])
     
     LeLogisticClassifier *lc = le_logistic_classifier_new();
     LeLogisticClassifierTrainingOptions options;
+    options.max_iterations = 100;
     options.alpha = 1.0f;
     options.polynomia_degree = 1;
     options.regularization = LE_REGULARIZATION_NONE;

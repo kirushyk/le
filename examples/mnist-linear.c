@@ -29,6 +29,7 @@ main()
     
     LeLogisticClassifier *classifier = le_logistic_classifier_new();
     LeLogisticClassifierTrainingOptions options;
+    options.max_iterations = 10;
     options.polynomia_degree = 0;
     options.alpha = 0.1f;
     options.regularization = LE_REGULARIZATION_NONE;
