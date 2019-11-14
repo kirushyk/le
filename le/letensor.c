@@ -44,6 +44,28 @@ le_tensor_new_copy(LeTensor *another)
     return self;
 }
 
+LeTensor *
+le_tensor_new_cast_f32(LeTensor *another)
+{
+    unsigned i;
+    
+    LeTensor *self = malloc(sizeof(struct LeTensor));
+    self->element_type = LE_TYPE_FLOAT32;
+    self->shape = le_shape_copy(another->shape);
+    self->owns_data = true;
+    unsigned elements_count = le_shape_get_elements_count(self->shape);
+    size_t data_size = elements_count * le_type_size(self->element_type);
+    self->data = malloc(data_size);
+    
+    /// @todo: Add support for types other than UINT8
+    for (i = 0; i < elements_count; i++)
+    {
+        ((float *)self->data)[i] = ((uint8_t *)another->data)[i] * (2.0f / 255.0f) - 1.0f;
+    }
+    
+    return self;
+}
+
 bool     
 le_tensor_reshape(LeTensor *self, unsigned num_dimensions, ...)
 {
