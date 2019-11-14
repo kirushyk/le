@@ -27,6 +27,15 @@ main()
     le_tensor_reshape(test_labels, 2, 1, 10000);
     LeTensor *test_output = le_matrix_new_one_hot(test_labels, 10);
     
+    LeLogisticClassifier *classifier = le_logistic_classifier_new();
+    LeLogisticClassifierTrainingOptions options;
+    options.polynomia_degree = 0;
+    options.alpha = 0.1f;
+    options.regularization = LE_REGULARIZATION_NONE;
+    options.lambda = 0.0f;
+    le_logistic_classifier_train(classifier, train_input_f32, train_output, options);
+    le_logistic_classifier_free(classifier);
+    
     le_tensor_free(test_output);
     le_tensor_free(test_input_f32);
     le_tensor_free(test_input);
