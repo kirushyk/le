@@ -75,6 +75,9 @@ le_shape_free(LeShape *self)
 uint32_t
 le_shape_get_elements_count(LeShape *shape)
 {
+    assert(shape);
+    assert(shape->sizes);
+    
     uint32_t count = 0;
     if (shape)
     {
