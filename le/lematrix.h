@@ -1,6 +1,8 @@
 /* Copyright (c) Kyrylo Polezhaiev and contributors. All rights reserved.
    Released under the MIT license. See LICENSE file in the project root for full license information. */
 
+/* Linear Algebra for two-dimensional Tensors */
+
 #include "letensor.h"
 
 #ifndef __LEMATRIX_H__
@@ -35,6 +37,9 @@ LeTensor * le_matrix_new_rand             (unsigned      height,
                                            unsigned      width);
 
 LeTensor * le_matrix_new_transpose        (LeTensor     *a);
+
+LeTensor * le_matrix_new_one_hot          (LeTensor     *a,
+                                           unsigned      num_classes);
 
 LeTensor * le_matrix_new_product          (LeTensor     *a,
                                            LeTensor     *b);

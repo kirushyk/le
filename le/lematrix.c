@@ -197,6 +197,33 @@ le_matrix_new_transpose(LeTensor *a)
 #undef TRANSPOSE
 
 LeTensor *
+le_matrix_new_one_hot(LeTensor *a, unsigned num_classes)
+{
+    assert(a->shape->num_dimensions == 2);
+    assert(a->shape->sizes[0] == 1);
+    
+    unsigned example, klass;
+    LeTensor *self;
+    
+    self = malloc(sizeof(struct LeTensor));
+    self->element_type = a->element_type;
+    self->shape = le_shape_new(2, num_classes, a->shape->sizes[1]);
+    self->owns_data = true;
+    self->data = malloc(le_shape_get_elements_count(self->shape) * le_type_size(self->element_type));
+    
+    for (example = 0; example < a->shape->sizes[1]; example++)
+    {
+        for (klass = 0; klass < num_classes; klass++)
+        {
+            float label = (klass == le_tensor_at(a, example)) ? 1.0f : 0.0f;
+            le_matrix_set_element(self, klass, example, label);
+        }
+    }
+
+    return self;
+}
+
+LeTensor *
 le_matrix_new_product(LeTensor *a, LeTensor *b)
 {
     assert(a->shape->num_dimensions == 2);
