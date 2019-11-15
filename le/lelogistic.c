@@ -5,6 +5,7 @@
 #include <assert.h>
 #include <stdlib.h>
 #include "lemodel.h"
+#include "letensor-imp.h"
 #include "lematrix.h"
 #include "lepolynomia.h"
 
@@ -84,6 +85,28 @@ le_logistic_classifier_predict(LeLogisticClassifier *self, LeTensor *x)
     return a;
 }
 
+float
+logistic_error(LeTensor *h, LeTensor *y)
+{
+    assert(h->shape->num_dimensions == 2);
+    assert(y->shape->num_dimensions == 2);
+    assert(h->shape->sizes[0] == 1);
+    assert(y->shape->sizes[0] == 1);
+    assert(h->shape->sizes[1] == y->shape->sizes[1]);
+    
+    float result = 0.0f;
+    unsigned i;
+    
+    for (i = 0; i < h->shape->sizes[1]; i++)
+    {
+        float yi = le_matrix_at(y, 0, i);
+        float hi = le_matrix_at(h, 0, i);
+        result -= yi * log(hi) + (1.0f - yi) * log(1.0f - hi);
+    }
+    
+    return result;
+}
+
 void
 le_logistic_classifier_train(LeLogisticClassifier *self, LeTensor *x_train, LeTensor *y_train, LeLogisticClassifierTrainingOptions options)
 {
@@ -120,7 +143,12 @@ le_logistic_classifier_train(LeLogisticClassifier *self, LeTensor *x_train, LeTe
     
     for (i = 0; i < iterations_count; i++)
     {
+        printf("Iteration %u. ", i);
+        
         LeTensor *h = le_logistic_classifier_predict(self, x_train);
+        
+        float train_set_error = logistic_error(h, y_train);
+        
         le_tensor_subtract(h, y_train);
         le_tensor_multiply_by_scalar(h, 1.0 / examples_count);
         LeTensor *dwt = le_matrix_new_product(h, xt);
@@ -133,6 +161,8 @@ le_logistic_classifier_train(LeLogisticClassifier *self, LeTensor *x_train, LeTe
         le_tensor_subtract(self->weights, dw);
         le_tensor_free(dw);
         self->bias -= options.alpha * db;
+        
+        printf("Train Set Error: %f\n", train_set_error);
     }
     
     le_tensor_free(xt);
