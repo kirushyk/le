@@ -211,7 +211,7 @@ create_model_and_train(LEMainWindow *self)
         self->model = (LeModel *)le_logistic_classifier_new();
         {
             LeLogisticClassifierTrainingOptions options;
-            opgions.max_iterations = 400;
+            options.max_iterations = 400;
             options.polynomia_degree = atoi(gtk_combo_box_text_get_active_text(GTK_COMBO_BOX_TEXT(self->polynomia_degree_combo)));
             options.alpha = atof(gtk_combo_box_text_get_active_text(GTK_COMBO_BOX_TEXT(self->alpha_combo)));
             switch (gtk_combo_box_get_active(GTK_COMBO_BOX(self->regularization_combo))) {
