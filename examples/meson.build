@@ -20,3 +20,9 @@ executable('polynomia', 'polynomia.c',
     link_with: le,
     install: false
 )
+
+executable('mnist-logistic-regression', 'mnist-logistic-regression.c',
+    include_directories: incdir,
+    link_with: le,
+    install: false
+)
