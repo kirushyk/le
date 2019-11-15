@@ -2,6 +2,7 @@
    Released under the MIT license. See LICENSE file in the project root for full license information. */
 
 #include "lelogistic.h"
+#include <math.h>
 #include <assert.h>
 #include <stdlib.h>
 #include "lemodel.h"
@@ -104,7 +105,7 @@ logistic_error(LeTensor *h, LeTensor *y)
         result -= yi * log(hi) + (1.0f - yi) * log(1.0f - hi);
     }
     
-    return result;
+    return result / h->shape->sizes[1];
 }
 
 void
