@@ -18,7 +18,10 @@ LeTensor * le_tensor_new_from_data        (LeType        element_type,
 
 LeTensor * le_tensor_new_copy             (LeTensor     *another);
 
-LeTensor * le_tensor_new_cast_f32         (LeTensor     *a);
+LeTensor * le_tensor_new_cast_f32         (LeTensor     *tensor);
+
+LeTensor * le_tensor_new_f32_equal_u8     (LeTensor     *tensor,
+                                           uint8_t       scalar);
 
 bool       le_tensor_reshape              (LeTensor     *tensor,
                                            unsigned      num_dimensions,
