@@ -15,7 +15,6 @@ struct Le1LayerNN
     LeModel   parent;
     LeTensor *weights;
     float     bias;
-    unsigned  polynomia_degree;
 };
 
 typedef struct Le1LayerNNClass
@@ -48,7 +47,6 @@ le_1_layer_nn_construct(Le1LayerNN *self)
     ((LeObject *)self)->klass = (LeClass *)&le_1_layer_nn_class;
     self->weights = NULL;
     self->bias = 0;
-    self->polynomia_degree = 0;
 }
 
 Le1LayerNN *
@@ -62,25 +60,9 @@ le_1_layer_nn_new(void)
 LeTensor *
 le_1_layer_nn_predict(Le1LayerNN *self, LeTensor *x)
 {
-    unsigned i;
     LeTensor *wt = le_matrix_new_transpose(self->weights);
-    LeTensor *x_poly = x;
-    LeTensor *x_prev = x;
-    for (i = 0; i < self->polynomia_degree; i++)
-    {
-        x_poly = le_matrix_new_polynomia(x_prev);
-        if (x_prev != x)
-        {
-            le_tensor_free(x_prev);
-        }
-        x_prev = x_poly;
-    }
-    LeTensor *a = le_matrix_new_product(wt, x_poly);
+    LeTensor *a = le_matrix_new_product(wt, x);
     le_tensor_free(wt);
-    if (x_poly != x)
-    {
-        le_tensor_free(x_poly);
-    }
     le_tensor_add_scalar(a, self->bias);
     le_tensor_apply_sigmoid(a);
     return a;
@@ -90,6 +72,7 @@ void
 le_1_layer_nn_train(Le1LayerNN *self, LeTensor *x_train, LeTensor *y_train, Le1LayerNNTrainingOptions options)
 {
     unsigned examples_count = le_matrix_get_width(x_train);
+    unsigned classes_count = le_matrix_get_height(y_train);
     unsigned iterations_count = options.max_iterations;
     unsigned i;
     
@@ -98,7 +81,7 @@ le_1_layer_nn_train(Le1LayerNN *self, LeTensor *x_train, LeTensor *y_train, Le1L
     unsigned features_count = le_matrix_get_height(x_train);
     LeTensor *xt = le_matrix_new_transpose(x_train);
     
-    self->weights = le_matrix_new_zeros(features_count, 1);
+    self->weights = le_matrix_new_zeros(features_count, classes_count);
     self->bias = 0;
     
     for (i = 0; i < iterations_count; i++)
