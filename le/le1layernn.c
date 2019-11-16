@@ -83,6 +83,7 @@ le_1_layer_nn_train(Le1LayerNN *self, LeTensor *x_train, LeTensor *y_train, Le1L
     LeTensor *xt = le_matrix_new_transpose(x_train);
     
     self->weights = le_matrix_new_zeros(classes_count, features_count);
+
     self->bias = 0;
     
     for (i = 0; i < iterations_count; i++)

@@ -128,8 +128,8 @@ le_matrix_new_zeros(unsigned height, unsigned width)
 LeTensor *
 le_matrix_new_rand(unsigned height, unsigned width)
 {
-    unsigned x;
-    unsigned y;
+    unsigned i;
+    unsigned elements_count;
     LeTensor *self;
     
     self = malloc(sizeof(struct LeTensor));
@@ -137,13 +137,11 @@ le_matrix_new_rand(unsigned height, unsigned width)
     self->shape = le_shape_new(2, height, width);
     self->owns_data = true;
     self->data = malloc(height * width * sizeof(float));
+    elements_count = height * width;
     
-    for (y = 0; y < self->shape->sizes[0]; y++)
+    for (i = 0; i < elements_count; i++)
     {
-        for (x = 0; x < self->shape->sizes[1]; x++)
-        {
-            ((float *)self->data)[y * self->shape->sizes[1] + x] = rand() / (float)RAND_MAX;
-        }
+        ((float *)self->data)[i] = rand() / (float)RAND_MAX;
     }
     
     return self;
