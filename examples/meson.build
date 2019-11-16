@@ -21,8 +21,4 @@ executable('polynomia', 'polynomia.c',
     install: false
 )
 
-executable('mnist-logistic-regression', 'mnist-logistic-regression.c',
-    include_directories: incdir,
-    link_with: le,
-    install: false
-)
+subdir('mnist')

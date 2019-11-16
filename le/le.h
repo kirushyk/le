@@ -10,6 +10,7 @@
 #include "leobject.h"
 #include "ledataset.h"
 #include "lelogistic.h"
+#include "le1layernn.h"
 #include "lesvm.h"
 #include "lesequential.h"
 #include "lelist.h"
