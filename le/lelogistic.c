@@ -99,8 +99,8 @@ logistic_error(LeTensor *h, LeTensor *y)
     unsigned elements_count = le_shape_get_elements_count(h->shape);
     for (i = 0; i < elements_count; i++)
     {
-        float yi = le_tensor_at(y, i);
-        float hi = le_tensor_at(h, i);
+        float yi = le_tensor_f32_at(y, i);
+        float hi = le_tensor_f32_at(h, i);
         result -= yi * log(hi) + (1.0f - yi) * log(1.0f - hi);
     }
     

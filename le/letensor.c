@@ -159,9 +159,19 @@ le_tensor_pick_copy(LeTensor *another, uint32_t index)
 }
 
 uint8_t
-le_tensor_at(LeTensor *tensor, uint32_t index)
+le_tensor_u8_at(LeTensor *tensor, uint32_t index)
 {
+    assert(tensor->element_type == LE_TYPE_UINT8);
+
     return ((uint8_t *)tensor->data)[index];
+}
+
+float
+le_tensor_f32_at(LeTensor *tensor, uint32_t index)
+{
+    assert(tensor->element_type == LE_TYPE_FLOAT32);
+    
+    return ((float *)tensor->data)[index];
 }
 
 void
