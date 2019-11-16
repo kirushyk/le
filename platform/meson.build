@@ -1,1 +1,2 @@
 subdir('accelerate')
+subdir('cuda')
