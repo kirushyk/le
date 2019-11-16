@@ -3,10 +3,10 @@
 
 #include <le/le.h>
 
-#ifndef __LEMATRIX_BLAS_H__
-#define __LEMATRIX_BLAS_H__
+#ifndef __LEACCELERATE_H__
+#define __LEACCELERATE_H__
 
-LeTensor * le_accelerate_matrix_new_product (LeTensor     *a,
-                                             LeTensor     *b);
+LeTensor * le_accelerate_matrix_new_product (LeTensor *a,
+                                             LeTensor *b);
 
 #endif
