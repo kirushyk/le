@@ -60,13 +60,14 @@ le_1_layer_nn_new(void)
 LeTensor *
 le_1_layer_nn_predict(Le1LayerNN *self, LeTensor *x)
 {
-    LeTensor *wt = le_matrix_new_transpose(self->weights);
-    LeTensor *a = le_matrix_new_product(wt, x);
-    le_tensor_free(wt);
+    LeTensor *a = le_matrix_new_product(self->weights, x);
     le_tensor_add_scalar(a, self->bias);
     le_tensor_apply_sigmoid(a);
     return a;
 }
+
+float
+logistic_error(LeTensor *h, LeTensor *y);
 
 void
 le_1_layer_nn_train(Le1LayerNN *self, LeTensor *x_train, LeTensor *y_train, Le1LayerNNTrainingOptions options)
@@ -81,25 +82,29 @@ le_1_layer_nn_train(Le1LayerNN *self, LeTensor *x_train, LeTensor *y_train, Le1L
     unsigned features_count = le_matrix_get_height(x_train);
     LeTensor *xt = le_matrix_new_transpose(x_train);
     
-    self->weights = le_matrix_new_zeros(features_count, classes_count);
+    self->weights = le_matrix_new_zeros(classes_count, features_count);
     self->bias = 0;
     
     for (i = 0; i < iterations_count; i++)
     {
+        printf("Iteration %u. ", i);
+
         LeTensor *h = le_1_layer_nn_predict(self, x_train);
-                
+
+        float train_set_error = logistic_error(h, y_train);
+
         le_tensor_subtract(h, y_train);
         le_tensor_multiply_by_scalar(h, 1.0 / examples_count);
-        LeTensor *dwt = le_matrix_new_product(h, xt);
-        LeTensor *dw = le_matrix_new_transpose(dwt);
+        LeTensor *dw = le_matrix_new_product(h, xt);
         le_tensor_multiply_by_scalar(dw, options.alpha);
         float db = le_tensor_sum(h);
         
-        le_tensor_free(dwt);
         le_tensor_free(h);
         le_tensor_subtract(self->weights, dw);
         le_tensor_free(dw);
         self->bias -= options.alpha * db;
+        
+        printf("Train Set Error: %f\n", train_set_error);
     }
     
     le_tensor_free(xt);
