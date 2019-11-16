@@ -91,21 +91,20 @@ logistic_error(LeTensor *h, LeTensor *y)
 {
     assert(h->shape->num_dimensions == 2);
     assert(y->shape->num_dimensions == 2);
-    assert(h->shape->sizes[0] == 1);
-    assert(y->shape->sizes[0] == 1);
     assert(h->shape->sizes[1] == y->shape->sizes[1]);
     
     float result = 0.0f;
     unsigned i;
     
-    for (i = 0; i < h->shape->sizes[1]; i++)
+    unsigned elements_count = le_shape_get_elements_count(h->shape);
+    for (i = 0; i < elements_count; i++)
     {
-        float yi = le_matrix_at(y, 0, i);
-        float hi = le_matrix_at(h, 0, i);
+        float yi = le_tensor_at(y, i);
+        float hi = le_tensor_at(h, i);
         result -= yi * log(hi) + (1.0f - yi) * log(1.0f - hi);
     }
     
-    return result / h->shape->sizes[1];
+    return result / elements_count;
 }
 
 void
