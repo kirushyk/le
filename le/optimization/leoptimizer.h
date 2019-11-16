@@ -20,6 +20,5 @@ void le_optimizer_construct (LeOptimizer *optimizer);
 
 void le_optimizer_free      (LeOptimizer *optimizer);
 
-
 #endif
 
