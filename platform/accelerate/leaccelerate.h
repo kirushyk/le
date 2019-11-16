@@ -1,7 +1,7 @@
 /* Copyright (c) Kyrylo Polezhaiev and contributors. All rights reserved.
    Released under the MIT license. See LICENSE file in the project root for full license information. */
 
-#include "letensor.h"
+#include <le/le.h>
 
 #ifndef __LEMATRIX_BLAS_H__
 #define __LEMATRIX_BLAS_H__

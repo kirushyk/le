@@ -1,6 +1,8 @@
 # Copyright (c) Kyrylo Polezhaiev and contributors. All rights reserved.
 # Released under the MIT license. See LICENSE file in the project root for full license information.
 
+incdir = include_directories('../')
+
 le_sources = [
     'lelist.c',
     'ledataset.c',
@@ -10,6 +12,7 @@ le_sources = [
     'lematrix.c',
     'lepolynomia.c',
     'lelogistic.c',
+    'le1layernn.c',
     'lemodel.c',
     'lesvm.c',
     'lesequential.c'
@@ -19,7 +22,15 @@ le_deps = [
     cc.find_library('m')
 ]
 
+le_libs = []
+
+if accelerate.found()
+    le_libs += le_accelerate
+endif
+
 le = static_library('le', le_sources,
+    include_directories: incdir,
+    link_with: le_libs,
     dependencies: le_deps
 )
 

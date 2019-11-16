@@ -13,6 +13,7 @@ project('le', 'c',
 
 cc = meson.get_compiler('c')
 
+subdir('platform')
 subdir('le')
 subdir('ext')
 subdir('tests')

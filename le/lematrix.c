@@ -7,7 +7,7 @@
 #include <string.h>
 #include "letensor-imp.h"
 #ifdef __APPLE__
-#include "../ext/accelerate/leaccelerate.h"
+#include "../platform/accelerate/leaccelerate.h"
 #endif
 
 unsigned
