@@ -6,6 +6,9 @@
 #include <stdlib.h>
 #include <string.h>
 #include "letensor-imp.h"
+#ifdef __APPLE__
+#include "../ext/blas/lematrix_blas.h"
+#endif
 
 unsigned
 le_matrix_get_width(LeTensor *self)
@@ -226,6 +229,9 @@ le_matrix_new_one_hot(LeTensor *a, unsigned num_classes)
 LeTensor *
 le_matrix_new_product(LeTensor *a, LeTensor *b)
 {
+#ifdef __APPLE__
+    return le_blas_matrix_new_product(a, b);
+#else
     assert(a->shape->num_dimensions == 2);
     assert(b->shape->num_dimensions == 2);
 
@@ -260,6 +266,7 @@ le_matrix_new_product(LeTensor *a, LeTensor *b)
     }
     
     return self;
+#endif
 }
                   
 LeTensor *
