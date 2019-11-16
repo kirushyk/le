@@ -1,14 +1,14 @@
 /* Copyright (c) Kyrylo Polezhaiev and contributors. All rights reserved.
    Released under the MIT license. See LICENSE file in the project root for full license information. */
 
-#include "lematrix_blas.h"
+#include "leaccelerate.h"
 #include <assert.h>
 #include <le/le.h>
 #include <le/letensor-imp.h>
 #include <Accelerate/Accelerate.h>
 
 LeTensor *
-le_blas_matrix_new_product(LeTensor *a, LeTensor *b)
+le_accelerate_matrix_new_product(LeTensor *a, LeTensor *b)
 {
     assert(a->shape->num_dimensions == 2);
     assert(b->shape->num_dimensions == 2);

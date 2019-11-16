@@ -7,7 +7,7 @@
 #include <string.h>
 #include "letensor-imp.h"
 #ifdef __APPLE__
-#include "../ext/blas/lematrix_blas.h"
+#include "../ext/accelerate/leaccelerate.h"
 #endif
 
 unsigned
@@ -230,7 +230,7 @@ LeTensor *
 le_matrix_new_product(LeTensor *a, LeTensor *b)
 {
 #ifdef __APPLE__
-    return le_blas_matrix_new_product(a, b);
+    return le_accelerate_matrix_new_product(a, b);
 #else
     assert(a->shape->num_dimensions == 2);
     assert(b->shape->num_dimensions == 2);

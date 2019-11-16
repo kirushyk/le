@@ -6,7 +6,7 @@
 #ifndef __LEMATRIX_BLAS_H__
 #define __LEMATRIX_BLAS_H__
 
-LeTensor * le_blas_matrix_new_product     (LeTensor     *a,
-                                           LeTensor     *b);
+LeTensor * le_accelerate_matrix_new_product (LeTensor     *a,
+                                             LeTensor     *b);
 
 #endif
