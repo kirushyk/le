@@ -27,7 +27,11 @@ main(int argc, const char *argv[])
     unsigned i;
     for (i = 0; i < 10; i++)
     {
+        printf("Iteration %u. ", i);
         le_optimizer_step((LeOptimizer *)optimizer);
+        float w_ = le_tensor_f32_at(w, 0);
+        float grad = dJdw(w_);
+        printf("J(%0.2f) = %0.2f. Gradient = %0.2f\n", w_, J(w_), grad);
     }
     return EXIT_SUCCESS;
 }
