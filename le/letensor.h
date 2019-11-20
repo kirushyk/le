@@ -12,6 +12,8 @@ typedef struct LeTensor LeTensor;
 
 LeTensor * le_tensor_new                  (void);
 
+LeTensor * le_scalar_new_f32              (float         scalar);
+
 LeTensor * le_tensor_new_from_data        (LeType        element_type,
                                            LeShape      *shape,
                                            void         *data);
