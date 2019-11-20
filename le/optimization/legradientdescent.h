@@ -5,18 +5,12 @@
 #define __LEGRADIENTDESCENT_H__
 
 #include "leoptimizer.h"
+#include <le/lelist.h>
 
-typedef struct LeGradientDescent
-{
-    LeOptimizer parent;
-} LeGradientDescent;
+typedef struct LeGradientDescent LeGradientDescent;
 
-typedef struct LeGradientDescentClass
-{
-    LeOptimizerClass parent;
-} LeGradientDescentClass;
-
-LeGradientDescent * le_gradient_descent_new  (void);
+LeGradientDescent * le_gradient_descent_new  (LeList            *parameters,
+                                              float              learning_rate);
 
 void                le_gradient_descent_free (LeGradientDescent *optimizer);
 

@@ -3,17 +3,28 @@
 
 #include "leoptimizer.h"
 #include <stdlib.h>
+#include <assert.h>
 
 LeOptimizerClass le_optimizer_class;
 
 void
-le_optimizer_construct(LeOptimizer *optimizer)
+le_optimizer_construct(LeOptimizer *self)
 {
-    ((LeObject *)optimizer)->klass = (LeClass *)&le_optimizer_class;
+    ((LeObject *)self)->klass = (LeClass *)&le_optimizer_class;
 }
 
 void
-le_optimizer_free(LeOptimizer *optimizer)
+le_optimizer_step(LeOptimizer *self)
 {
-    free(optimizer);
+    assert(self);
+    assert(((LeObject *)self)->klass);
+    assert(((LeOptimizerClass *)((LeObject *)self)->klass)->step);
+    
+    ((LeOptimizerClass *)((LeObject *)self)->klass)->step(self);
+}
+
+void
+le_optimizer_free(LeOptimizer *self)
+{
+    free(self);
 }
