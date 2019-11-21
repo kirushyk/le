@@ -5,10 +5,13 @@
 #define __LEOPTIMIZER_H__
 
 #include "../leobject.h"
+#include <le/lelist.h>
 
 typedef struct LeOptimizer
 {
     LeObject parent;
+    LeList *parameters;
+    LeList *gradients;
 } LeOptimizer;
 
 typedef struct LeOptimizerClass

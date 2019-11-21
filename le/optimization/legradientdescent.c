@@ -9,7 +9,6 @@ struct LeGradientDescent
 {
     LeOptimizer parent;
     float learning_rate;
-    LeList *parameters;
 };
 
 typedef struct LeGradientDescentClass
@@ -23,10 +22,9 @@ static void
 le_gradient_descent_step(LeOptimizer *optimizer)
 {
     LeGradientDescent *self = (LeGradientDescent *)optimizer;
-    LeList *gradients = NULL;
     LeList *parameters_iterator;
     LeList *gradients_iterator;
-    for (parameters_iterator = self->parameters, gradients_iterator = gradients;
+    for (parameters_iterator = optimizer->parameters, gradients_iterator = optimizer->gradients;
          (parameters_iterator != NULL) && (gradients_iterator != NULL);
          parameters_iterator = parameters_iterator->next, gradients_iterator = gradients_iterator->next)
     {
@@ -62,7 +60,7 @@ le_gradient_descent_new(LeList *parameters, float learning_rate)
 {
     LeGradientDescent *self = malloc(sizeof(LeGradientDescent));
     le_gradient_descent_construct(self);
-    self->parameters = parameters;
+    ((LeOptimizer *)self)->parameters = parameters;
     self->learning_rate = learning_rate;
     return self;
 }
