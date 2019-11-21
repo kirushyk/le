@@ -44,6 +44,10 @@ float      le_tensor_f32_at               (LeTensor     *tensor,
 void       le_tensor_subtract             (LeTensor     *a,
                                            LeTensor     *b);
 
+void       le_tensor_subtract_scaled      (LeTensor     *a,
+                                           float         scale,
+                                           LeTensor     *b);
+
 void       le_tensor_multiply_by_scalar   (LeTensor     *a,
                                            float         b);
 

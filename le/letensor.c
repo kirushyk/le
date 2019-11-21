@@ -257,6 +257,20 @@ le_tensor_subtract(LeTensor *a, LeTensor *b)
 }
 
 void
+le_tensor_subtract_scaled(LeTensor *a, float scale, LeTensor *b)
+{
+    assert(le_shape_equal(a->shape, b->shape));
+    
+    unsigned i;
+    unsigned elements_count = le_shape_get_elements_count(a->shape);
+    
+    for (i = 0; i < elements_count; i++)
+    {
+        ((float *)a->data)[i] -= scale * ((float *)b->data)[i];
+    }
+}
+
+void
 le_tensor_multiply_by_scalar(LeTensor *self, float b)
 {
     unsigned i;
