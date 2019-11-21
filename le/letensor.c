@@ -187,6 +187,14 @@ le_tensor_f32_at(LeTensor *tensor, uint32_t index)
 }
 
 void
+le_tensor_f32_set(LeTensor *tensor, uint32_t index, float value)
+{
+    assert(tensor->element_type == LE_TYPE_FLOAT32);
+    
+    ((float *)tensor->data)[index] = value;
+}
+
+void
 le_matrix_empty(LeTensor *self)
 {
     free(self->data);

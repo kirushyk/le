@@ -41,6 +41,10 @@ uint8_t    le_tensor_u8_at                (LeTensor     *tensor,
 float      le_tensor_f32_at               (LeTensor     *tensor,
                                            uint32_t      index);
 
+void       le_tensor_f32_set              (LeTensor     *tensor,
+                                           uint32_t      index,
+                                           float         value);
+
 void       le_tensor_subtract             (LeTensor     *a,
                                            LeTensor     *b);
 
