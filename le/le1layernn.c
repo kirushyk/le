@@ -15,6 +15,7 @@ struct Le1LayerNN
     LeModel   parent;
     LeTensor *weights;
     float     bias;
+
 };
 
 typedef struct Le1LayerNNClass

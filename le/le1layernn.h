@@ -16,11 +16,11 @@ typedef struct Le1LayerNNTrainingOptions
     unsigned         max_iterations;
 } Le1LayerNNTrainingOptions;
 
-void         le_1_layer_nn_train (Le1LayerNN                *classifier,
-                                  LeTensor                  *x_train,
-                                  LeTensor                  *y_train,
-                                  Le1LayerNNTrainingOptions  options);
+void     le_1_layer_nn_train          (Le1LayerNN                *classifier,
+                                       LeTensor                  *x_train,
+                                       LeTensor                  *y_train,
+                                       Le1LayerNNTrainingOptions  options);
 
-void         le_1_layer_nn_free  (Le1LayerNN                *classifier);
+void     le_1_layer_nn_free           (Le1LayerNN                *classifier);
 
 #endif
