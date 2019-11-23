@@ -16,6 +16,9 @@ float      le_matrix_at                   (LeTensor     *matrix,
                                            unsigned      y,
                                            unsigned      x);
 
+void       le_matrix_add                  (LeTensor     *matrix,
+                                           LeTensor     *another);
+
 void       le_matrix_set_element          (LeTensor     *matrix,
                                            unsigned      y,
                                            unsigned      x,
@@ -37,6 +40,9 @@ LeTensor * le_matrix_new_rand             (unsigned      height,
                                            unsigned      width);
 
 LeTensor * le_matrix_new_transpose        (LeTensor     *a);
+
+LeTensor * le_matrix_new_sum              (LeTensor     *a,
+                                           unsigned      dimension);
 
 LeTensor * le_matrix_new_one_hot          (LeTensor     *a,
                                            unsigned      num_classes);

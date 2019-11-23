@@ -38,6 +38,26 @@ le_matrix_at(LeTensor *self, unsigned y, unsigned x)
 }
 
 void
+le_matrix_add(LeTensor *self, LeTensor *another)
+{
+    unsigned x, y;
+    
+    assert(self->shape->num_dimensions == 2);
+    
+    /// @note: Add horizontal broadcasting
+    assert(self->shape->sizes[0] == another->shape->sizes[0]);
+    assert(another->shape->sizes[1] == 1);
+    
+    for (y = 0; y < self->shape->sizes[0]; y++)
+    {
+        for (x = 0; x < self->shape->sizes[1]; x++)
+        {
+            ((float *)self->data)[y * self->shape->sizes[1] + x] += ((float *)another->data)[y];
+        }
+    }
+}
+
+void
 le_matrix_set_element(LeTensor *self, unsigned y, unsigned x, float value)
 {
     assert(self->shape->num_dimensions == 2);
@@ -196,6 +216,35 @@ le_matrix_new_transpose(LeTensor *a)
 }
 
 #undef TRANSPOSE
+
+
+LeTensor *
+le_matrix_new_sum(LeTensor *a, unsigned dimension)
+{
+    unsigned x, y;
+    
+    assert(a->shape->num_dimensions == 2);
+
+    LeTensor *self;
+    
+    self = malloc(sizeof(struct LeTensor));
+    self->element_type = LE_TYPE_FLOAT32;
+    self->shape = le_shape_new(2, a->shape->sizes[0], 1/*a->shape->sizes[1]*/);
+    self->owns_data = true;
+    self->data = malloc(le_shape_get_elements_count(self->shape) * le_type_size(self->element_type));
+    
+    assert(/*(dimension == 0) || */(dimension == 1));
+    for (y = 0; y < a->shape->sizes[0]; y++)
+    {
+        ((float *)self->data)[y] = 0.0f;
+        for (x = 0; x < a->shape->sizes[1]; x++)
+        {
+            ((float *)self->data)[y] += ((float *)a->data)[y * a->shape->sizes[1] + x];
+        }
+    }
+
+    return self;
+}
 
 LeTensor *
 le_matrix_new_one_hot(LeTensor *a, unsigned num_classes)
