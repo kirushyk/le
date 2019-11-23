@@ -27,13 +27,18 @@ main()
     le_tensor_reshape(test_labels, 2, 1, 10000);
     LeTensor *test_output = le_matrix_new_one_hot(test_labels, 10);
     
-    Le1LayerNN *classifier = le_1_layer_nn_new();
+    Le1LayerNN *neural_network = le_1_layer_nn_new();
     Le1LayerNNTrainingOptions options;
-    options.max_iterations = 2500;
+    options.max_iterations = 250;
     options.alpha = 0.03f;
-    le_1_layer_nn_train(classifier, train_input_f32, train_output, options);
-    le_1_layer_nn_free(classifier);
+    le_1_layer_nn_train(neural_network, train_input_f32, train_output, options);
     
+    LeTensor *test_prediction = le_model_predict((LeModel *)neural_network, test_input_f32);
+    float test_set_error = logistic_error(test_prediction, test_output);
+    printf("Test Set Error: %f\n", test_set_error);
+
+    le_1_layer_nn_free(neural_network);
+    le_tensor_free(test_prediction);
     le_tensor_free(test_output);
     le_tensor_free(test_input_f32);
     le_tensor_free(test_input);
