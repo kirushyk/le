@@ -6,10 +6,12 @@
 
 #include "leobject.h"
 #include "letensor.h"
+#include "lelist.h"
 
 typedef struct LeModel
 {
-    LeObject parent;
+    LeObject  parent;
+    LeList   *parameters;
 } LeModel;
 
 typedef struct LeModelClass
@@ -25,6 +27,8 @@ LeTensor * le_model_predict         (LeModel  *model,
                                      LeTensor *x);
 
 float      le_model_train_iteration (LeModel  *model);
+
+LeList *   le_model_get_parameters  (LeModel  *model);
 
 void       le_model_free            (LeModel  *model);
 

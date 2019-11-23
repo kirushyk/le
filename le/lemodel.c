@@ -9,6 +9,7 @@ LeModelClass le_model_class;
 void le_model_construct(LeModel *model)
 {
     ((LeObject *)model)->klass = (LeClass *)&le_model_class;
+    model->parameters = NULL;
 }
 
 LeTensor *
@@ -25,6 +26,12 @@ float
 le_model_train_iteration(LeModel *self)
 {
     return ((LeModelClass *)((LeObject *)self)->klass)->train_iteration(self);
+}
+
+LeList *
+le_model_get_parameters(LeModel *self)
+{
+    return self->parameters;
 }
 
 void
