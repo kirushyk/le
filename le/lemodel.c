@@ -37,5 +37,5 @@ le_model_get_parameters(LeModel *self)
 void
 le_model_free(LeModel *self)
 {
-    
+    free(self);
 }
