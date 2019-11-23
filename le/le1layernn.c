@@ -14,7 +14,7 @@ struct Le1LayerNN
 {
     LeModel   parent;
     LeTensor *weights;
-    float     bias;
+    LeTensor *bias;
 
 };
 
@@ -62,7 +62,7 @@ LeTensor *
 le_1_layer_nn_predict(Le1LayerNN *self, LeTensor *x)
 {
     LeTensor *a = le_matrix_new_product(self->weights, x);
-    le_tensor_add_scalar(a, self->bias);
+    le_matrix_add(a, self->bias);
     le_tensor_apply_sigmoid(a);
     return a;
 }
@@ -84,8 +84,7 @@ le_1_layer_nn_train(Le1LayerNN *self, LeTensor *x_train, LeTensor *y_train, Le1L
     LeTensor *xt = le_matrix_new_transpose(x_train);
     
     self->weights = le_matrix_new_zeros(classes_count, features_count);
-
-    self->bias = 0;
+    self->bias = le_matrix_new_zeros(classes_count, 1);
     
     for (i = 0; i < iterations_count; i++)
     {
@@ -99,12 +98,13 @@ le_1_layer_nn_train(Le1LayerNN *self, LeTensor *x_train, LeTensor *y_train, Le1L
         le_tensor_multiply_by_scalar(h, 1.0 / examples_count);
         LeTensor *dw = le_matrix_new_product(h, xt);
         le_tensor_multiply_by_scalar(dw, options.alpha);
-        float db = le_tensor_sum(h);
+        LeTensor *db = le_matrix_new_sum(h, 1);
         
         le_tensor_free(h);
         le_tensor_subtract(self->weights, dw);
         le_tensor_free(dw);
-        self->bias -= options.alpha * db;
+        le_tensor_subtract_scaled(self->bias, options.alpha, db);
+        le_tensor_free(db);
         
         printf("Train Set Error: %f\n", train_set_error);
     }
@@ -116,5 +116,6 @@ void
 le_1_layer_nn_free(Le1LayerNN *self)
 {
     le_tensor_free(self->weights);
+    le_tensor_free(self->bias);
     free(self);
 }
