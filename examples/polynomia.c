@@ -9,15 +9,15 @@ main(int argc, const char *argv[])
 {
     LeTensor *a = le_matrix_new_rand(2, 4);
     printf("a =\n");
-    le_matrix_print(a, stdout);
+    le_tensor_print(a, stdout);
     
     LeTensor *b = le_matrix_new_polynomia(a);
     printf("poly(a) =\n");
-    le_matrix_print(b, stdout);
+    le_tensor_print(b, stdout);
     
     LeTensor *c = le_matrix_new_polynomia(b);
     printf("poly(poly(a)) =\n");
-    le_matrix_print(c, stdout);
+    le_tensor_print(c, stdout);
     
     le_tensor_free(c);
     le_tensor_free(b);

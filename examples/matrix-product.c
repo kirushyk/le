@@ -9,19 +9,19 @@ main(int argc, const char *argv[])
 {
     LeTensor *a = le_matrix_new_rand(4, 2);
     printf("a =\n");
-    le_matrix_print(a, stdout);
+    le_tensor_print(a, stdout);
     
     LeTensor *b = le_matrix_new_rand(2, 4);
     printf("b =\n");
-    le_matrix_print(b, stdout);
+    le_tensor_print(b, stdout);
     
     LeTensor *c = le_matrix_new_product(a, b);
     printf("c = a * b =\n");
-    le_matrix_print(c, stdout);
+    le_tensor_print(c, stdout);
     
     LeTensor *d = le_matrix_new_transpose(c);
     printf("d = c' =\n");
-    le_matrix_print(d, stdout);
+    le_tensor_print(d, stdout);
     
     le_tensor_free(d);
     le_tensor_free(c);

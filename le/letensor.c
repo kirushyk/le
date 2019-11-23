@@ -361,7 +361,7 @@ le_tensor_apply_svm_prediction(LeTensor *self)
 
 /** @note: Temporary */
 void
-le_matrix_print(LeTensor *self, FILE *stream)
+le_tensor_print(LeTensor *self, FILE *stream)
 {
     if (self->shape->num_dimensions != 2)
     {

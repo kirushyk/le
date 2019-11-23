@@ -23,9 +23,9 @@ main(int argc, const char *argv[])
     
     printf("Train set:\n");
     printf("x =\n");
-    le_matrix_print(x, stdout);
+    le_tensor_print(x, stdout);
     printf("y =\n");
-    le_matrix_print(y, stdout);
+    le_tensor_print(y, stdout);
     
     LeLogisticClassifier *lc = le_logistic_classifier_new();
     LeLogisticClassifierTrainingOptions options;
@@ -38,7 +38,7 @@ main(int argc, const char *argv[])
     
     LeTensor *h = le_model_predict((LeModel *)lc, x);
     printf("Predicted value =\n");
-    le_matrix_print(h, stdout);
+    le_tensor_print(h, stdout);
     
     le_tensor_free(h);
     le_tensor_free(y);

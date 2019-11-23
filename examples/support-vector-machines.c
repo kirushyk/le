@@ -23,9 +23,9 @@ main(int argc, const char *argv[])
     
     printf("Train set:\n");
     printf("x =\n");
-    le_matrix_print(x, stdout);
+    le_tensor_print(x, stdout);
     printf("y =\n");
-    le_matrix_print(y, stdout);
+    le_tensor_print(y, stdout);
 
     LeSVM *svm = le_svm_new();
     LeSVMTrainingOptions options;
@@ -35,7 +35,7 @@ main(int argc, const char *argv[])
     
     LeTensor *h = le_model_predict((LeModel *)svm, x);
     printf("Predicted value =\n");
-    le_matrix_print(h, stdout);
+    le_tensor_print(h, stdout);
     
     le_tensor_free(h);
     le_tensor_free(y);
