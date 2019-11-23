@@ -30,7 +30,7 @@ main()
     Le1LayerNN *classifier = le_1_layer_nn_new();
     Le1LayerNNTrainingOptions options;
     options.max_iterations = 2500;
-    options.alpha = 0.05f;
+    options.alpha = 0.03f;
     le_1_layer_nn_train(classifier, train_input_f32, train_output, options);
     le_1_layer_nn_free(classifier);
     
