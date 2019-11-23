@@ -1,8 +1,9 @@
 /* Copyright (c) Kyrylo Polezhaiev and contributors. All rights reserved.
    Released under the MIT license. See LICENSE file in the project root for full license information. */
 
-#include <assert.h>
 #include "lemodel.h"
+#include <assert.h>
+#include <stdlib.h>
 
 LeModelClass le_model_class;
 
