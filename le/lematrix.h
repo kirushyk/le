@@ -50,6 +50,11 @@ LeTensor * le_matrix_new_one_hot          (LeTensor     *a,
 LeTensor * le_matrix_new_product          (LeTensor     *a,
                                            LeTensor     *b);
 
+LeTensor * le_matrix_new_product_full     (LeTensor     *a,
+                                           bool          a_transposed,
+                                           LeTensor     *b,
+                                           bool          b_transposed);
+
 LeTensor * le_matrix_get_column           (LeTensor     *matrix,
                                            unsigned      x);
 

@@ -276,8 +276,14 @@ le_matrix_new_one_hot(LeTensor *a, unsigned num_classes)
 LeTensor *
 le_matrix_new_product(LeTensor *a, LeTensor *b)
 {
+    return le_matrix_new_product_full(a, false, b, false);
+}
+
+LeTensor *
+le_matrix_new_product_full(LeTensor *a, bool a_transposed, LeTensor *b, bool b_transposed)
+{
 #ifdef __APPLE__
-    return le_accelerate_matrix_new_product(a, b);
+    return le_accelerate_matrix_new_product(a, a_transposed, b, b_transposed);
 #else
     assert(a->shape->num_dimensions == 2);
     assert(b->shape->num_dimensions == 2);
@@ -288,8 +294,10 @@ le_matrix_new_product(LeTensor *a, LeTensor *b)
     
     LeTensor *self;
     
+    /*
     if (a->shape->sizes[1] != b->shape->sizes[0])
         return le_tensor_new();
+    */
         
     if (a->element_type != b->element_type)
         return le_tensor_new();

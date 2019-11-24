@@ -7,6 +7,8 @@
 #define __LEACCELERATE_H__
 
 LeTensor * le_accelerate_matrix_new_product (LeTensor *a,
-                                             LeTensor *b);
+                                             bool      transpose_a,
+                                             LeTensor *b,
+                                             bool      transpose_b);
 
 #endif
