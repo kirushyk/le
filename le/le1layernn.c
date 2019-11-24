@@ -28,6 +28,8 @@ Le1LayerNNClass le_1_layer_nn_class;
 
 LeTensor * le_1_layer_nn_predict(Le1LayerNN *self, LeTensor *x);
 
+LeList * le_1_layer_nn_get_gradients(Le1LayerNN *self, LeTensor *x, LeTensor *y);
+
 void
 le_1_layer_nn_class_ensure_init(void)
 {
@@ -37,6 +39,8 @@ le_1_layer_nn_class_ensure_init(void)
     {
         le_1_layer_nn_class.parent.predict =
             (LeTensor *(*)(LeModel *, LeTensor *))le_1_layer_nn_predict;
+        le_1_layer_nn_class.parent.get_gradients =
+            (LeList *(*)(LeModel *, LeTensor *, LeTensor *))le_1_layer_nn_get_gradients;
         le_1_layer_nn_class_initialized = 1;
     }
 }
@@ -66,6 +70,28 @@ le_1_layer_nn_predict(Le1LayerNN *self, LeTensor *x)
     le_matrix_add(a, self->bias);
     le_tensor_apply_sigmoid(a);
     return a;
+}
+
+LeList *
+le_1_layer_nn_get_gradients(Le1LayerNN *self, LeTensor *x, LeTensor *y)
+{
+    unsigned examples_count = le_matrix_get_width(x);
+
+    LeTensor *h = le_1_layer_nn_predict(self, x);
+    le_tensor_subtract(h, y);
+    le_tensor_multiply_by_scalar(h, 1.0 / examples_count);
+    LeTensor *xt = le_matrix_new_transpose(x);
+    LeTensor *dw = le_matrix_new_product(h, xt);
+    le_tensor_free(xt);
+    LeTensor *db = le_matrix_new_sum(h, 1);
+    le_tensor_free(h);
+
+    LeList *gradients = NULL;
+    
+    gradients = le_list_append(gradients, dw);
+    gradients = le_list_append(gradients, db);
+
+    return gradients;
 }
 
 void
