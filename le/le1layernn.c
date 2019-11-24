@@ -71,8 +71,23 @@ float
 logistic_error(LeTensor *h, LeTensor *y);
 
 void
+le_1_layer_nn_init(Le1LayerNN *self, unsigned features_count, unsigned classes_count)
+{
+    assert(self);
+    assert(self->bias == NULL);
+    assert(self->weights == NULL);
+    
+    self->weights = le_matrix_new_zeros(classes_count, features_count);
+    self->bias = le_matrix_new_zeros(classes_count, 1);
+}
+
+void
 le_1_layer_nn_train(Le1LayerNN *self, LeTensor *x_train, LeTensor *y_train, Le1LayerNNTrainingOptions options)
 {
+    assert(self);
+    assert(self->bias);
+    assert(self->weights);
+
     unsigned examples_count = le_matrix_get_width(x_train);
     unsigned classes_count = le_matrix_get_height(y_train);
     unsigned iterations_count = options.max_iterations;
@@ -83,8 +98,9 @@ le_1_layer_nn_train(Le1LayerNN *self, LeTensor *x_train, LeTensor *y_train, Le1L
     unsigned features_count = le_matrix_get_height(x_train);
     LeTensor *xt = le_matrix_new_transpose(x_train);
     
-    self->weights = le_matrix_new_zeros(classes_count, features_count);
-    self->bias = le_matrix_new_zeros(classes_count, 1);
+    assert(le_matrix_get_width(self->weights) == features_count);
+    assert(le_matrix_get_height(self->weights) == classes_count);
+    assert(le_matrix_get_height(self->bias) == classes_count);
     
     for (i = 0; i < iterations_count; i++)
     {

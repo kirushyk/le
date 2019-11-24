@@ -31,6 +31,7 @@ main()
     Le1LayerNNTrainingOptions options;
     options.max_iterations = 250;
     options.alpha = 0.03f;
+    le_1_layer_nn_init(neural_network, 28 * 28, 10);
     le_1_layer_nn_train(neural_network, train_input_f32, train_output, options);
     
     LeTensor *test_prediction = le_model_predict((LeModel *)neural_network, test_input_f32);
