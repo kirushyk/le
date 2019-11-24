@@ -7,40 +7,40 @@
 
 LeModelClass le_model_class;
 
-void le_model_construct(LeModel *model)
+void le_model_construct(LeModel *self)
 {
-    ((LeObject *)model)->klass = (LeClass *)&le_model_class;
-    model->parameters = NULL;
+    LE_OBJECT_CLASS(self) = (LeClass *)&le_model_class;
+    self->parameters = NULL;
 }
 
 LeTensor *
 le_model_predict(LeModel *self, LeTensor *x)
 {
     assert(self);
-    assert(((LeObject *)self)->klass);
-    assert(((LeModelClass *)((LeObject *)self)->klass)->predict);
+    assert(LE_OBJECT_CLASS(self));
+    assert(((LeModelClass *)LE_OBJECT_CLASS(self))->predict);
     
-    return ((LeModelClass *)((LeObject *)self)->klass)->predict(self, x);
+    return ((LeModelClass *)LE_OBJECT_CLASS(self))->predict(self, x);
 }
 
 LeList *
 le_model_get_gradients(LeModel *self, LeTensor *x, LeTensor *y)
 {
     assert(self);
-    assert(((LeObject *)self)->klass);
+    assert(LE_OBJECT_CLASS(self));
     
-    if (((LeModelClass *)((LeObject *)self)->klass)->get_gradients == NULL)
+    if (((LeModelClass *)LE_OBJECT_CLASS(self))->get_gradients == NULL)
     {
         return NULL;
     };
     
-    return ((LeModelClass *)((LeObject *)self)->klass)->get_gradients(self, x, y);
+    return ((LeModelClass *)LE_OBJECT_CLASS(self))->get_gradients(self, x, y);
 }
 
 float
 le_model_train_iteration(LeModel *self)
 {
-    return ((LeModelClass *)((LeObject *)self)->klass)->train_iteration(self);
+    return ((LeModelClass *)LE_OBJECT_CLASS(self))->train_iteration(self);
 }
 
 LeList *
