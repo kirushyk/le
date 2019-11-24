@@ -36,7 +36,7 @@ main()
     }
     //le_1_layer_nn_train(neural_network, train_input_f32, train_output, options);
     LeTensor *test_prediction = le_model_predict(LE_MODEL(neural_network), test_input_f32);
-    float test_set_error = logistic_error(test_prediction, test_output);
+    float test_set_error = le_cross_entropy(test_prediction, test_output);
     printf("Test Set Error: %f\n", test_set_error);
 
     le_1_layer_nn_free(neural_network);

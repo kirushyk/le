@@ -8,9 +8,6 @@
 
 typedef struct LeLogisticClassifier LeLogisticClassifier;
 
-float                  logistic_error                 (LeTensor *h,
-                                                       LeTensor *y);
-
 LeLogisticClassifier * le_logistic_classifier_new     (void);
 
 typedef enum LeRegularization

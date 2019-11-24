@@ -15,5 +15,6 @@
 #include "lesequential.h"
 #include "lelist.h"
 #include "optimization/lebgd.h"
+#include "leloss.h"
 
 #endif

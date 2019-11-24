@@ -17,7 +17,8 @@ le_sources = [
     'lesvm.c',
     'lesequential.c',
     'optimization/leoptimizer.c',
-    'optimization/lebgd.c'
+    'optimization/lebgd.c',
+    'leloss.c'
 ]
 
 le_deps = [

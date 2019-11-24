@@ -9,6 +9,7 @@
 #include "letensor-imp.h"
 #include "lematrix.h"
 #include "lepolynomia.h"
+#include "leloss.h"
 
 struct Le1LayerNN
 {
@@ -67,9 +68,6 @@ le_1_layer_nn_predict(Le1LayerNN *self, LeTensor *x)
     return a;
 }
 
-float
-logistic_error(LeTensor *h, LeTensor *y);
-
 void
 le_1_layer_nn_init(Le1LayerNN *self, unsigned features_count, unsigned classes_count)
 {
@@ -111,7 +109,7 @@ le_1_layer_nn_train(Le1LayerNN *self, LeTensor *x_train, LeTensor *y_train, Le1L
 
         LeTensor *h = le_1_layer_nn_predict(self, x_train);
 
-        float train_set_error = logistic_error(h, y_train);
+        float train_set_error = le_cross_entropy(h, y_train);
 
         le_tensor_subtract(h, y_train);
         le_tensor_multiply_by_scalar(h, 1.0 / examples_count);
