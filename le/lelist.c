@@ -38,3 +38,29 @@ le_list_append(LeList *list, void *data)
         return new_element;
     }
 }
+
+void
+le_list_foreach(LeList *list, LeFunction function)
+{
+    if (list)
+    {
+        while (list->next)
+        {
+            function(list->data);
+            list = list->next;
+        }
+    }
+}
+
+void
+le_list_foreach2(LeList *list, LeCallback callback, void *user_data)
+{
+    if (list)
+    {
+        while (list->next)
+        {
+            callback(list->data, user_data);
+            list = list->next;
+        }
+    }
+}
