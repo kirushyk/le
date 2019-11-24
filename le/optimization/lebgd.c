@@ -4,6 +4,7 @@
 #include "lebgd.h"
 #include <le/letensor.h>
 #include <stdlib.h>
+#include <stdio.h>
 
 struct LeBGD
 {
@@ -60,7 +61,11 @@ le_bgd_new(LeList *parameters, float learning_rate)
 {
     LeBGD *self = malloc(sizeof(LeBGD));
     le_bgd_construct(self);
-    ((LeOptimizer *)self)->parameters = parameters;
+    if (parameters == NULL)
+    {
+        fprintf(stderr, "[bgd] WARNING: Empty list of parameters to optimize");
+    }
+    LE_OPTIMIZER(self)->parameters = parameters;
     self->learning_rate = learning_rate;
     return self;
 }
