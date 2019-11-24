@@ -294,6 +294,7 @@ le_matrix_new_product_full(LeTensor *a, bool a_transposed, LeTensor *b, bool b_t
     
     LeTensor *self;
     
+    assert(!(a_transposed || b_transposed));
     /*
     if (a->shape->sizes[1] != b->shape->sizes[0])
         return le_tensor_new();
