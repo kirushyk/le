@@ -11,11 +11,11 @@
 #include "leoptimizer.h"
 #include <le/lelist.h>
 
-typedef struct LeGradientDescent LeGradientDescent;
+typedef struct LeBGD LeBGD;
 
-LeGradientDescent * le_gradient_descent_new  (LeList            *parameters,
-                                              float              learning_rate);
+LeBGD * le_bgd_new  (LeList *parameters,
+                     float   learning_rate);
 
-void                le_gradient_descent_free (LeGradientDescent *optimizer);
+void    le_bgd_free (LeBGD  *optimizer);
 
 #endif

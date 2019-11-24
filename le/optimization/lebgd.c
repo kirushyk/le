@@ -1,27 +1,27 @@
 /* Copyright (c) Kyrylo Polezhaiev and contributors. All rights reserved.
    Released under the MIT license. See LICENSE file in the project root for full license information. */
 
-#include "legradientdescent.h"
+#include "Lebgd.h"
 #include <le/letensor.h>
 #include <stdlib.h>
 
-struct LeGradientDescent
+struct LeBGD
 {
     LeOptimizer parent;
     float learning_rate;
 };
 
-typedef struct LeGradientDescentClass
+typedef struct LeBGDClass
 {
     LeOptimizerClass parent;
-} LeGradientDescentClass;
+} LeBGDClass;
 
-LeGradientDescentClass le_gradient_descent_class;
+LeBGDClass le_bgd_class;
 
 static void
-le_gradient_descent_step(LeOptimizer *optimizer)
+le_bgd_step(LeOptimizer *optimizer)
 {
-    LeGradientDescent *self = (LeGradientDescent *)optimizer;
+    LeBGD *self = (LeBGD *)optimizer;
     LeList *parameters_iterator;
     LeList *gradients_iterator;
     for (parameters_iterator = optimizer->parameters, gradients_iterator = optimizer->gradients;
@@ -35,38 +35,38 @@ le_gradient_descent_step(LeOptimizer *optimizer)
 }
 
 void
-le_gradient_descent_class_ensure_init(void)
+le_bgd_class_ensure_init(void)
 {
-    static int le_gradient_descent_class_initialized = 0;
+    static int le_bgd_class_initialized = 0;
 
-    if (!le_gradient_descent_class_initialized)
+    if (!le_bgd_class_initialized)
     {
-        le_gradient_descent_class.parent.step =
-            (void (*)(LeOptimizer *))le_gradient_descent_step;
-        le_gradient_descent_class_initialized = 1;
+        le_bgd_class.parent.step =
+            (void (*)(LeOptimizer *))le_bgd_step;
+        le_bgd_class_initialized = 1;
     }
 }
 
 void
-le_gradient_descent_construct(LeGradientDescent *self)
+le_bgd_construct(LeBGD *self)
 {
     le_optimizer_construct((LeOptimizer *)self);
-    le_gradient_descent_class_ensure_init();
-    ((LeObject *)self)->klass = (LeClass *)&le_gradient_descent_class;
+    le_bgd_class_ensure_init();
+    ((LeObject *)self)->klass = (LeClass *)&le_bgd_class;
 }
 
-LeGradientDescent *
-le_gradient_descent_new(LeList *parameters, float learning_rate)
+LeBGD *
+le_bgd_new(LeList *parameters, float learning_rate)
 {
-    LeGradientDescent *self = malloc(sizeof(LeGradientDescent));
-    le_gradient_descent_construct(self);
+    LeBGD *self = malloc(sizeof(LeBGD));
+    le_bgd_construct(self);
     ((LeOptimizer *)self)->parameters = parameters;
     self->learning_rate = learning_rate;
     return self;
 }
 
 void
-le_gradient_descent_free(LeGradientDescent *optimizer)
+le_bgd_free(LeBGD *optimizer)
 {
     free(optimizer);
 }

@@ -4,7 +4,6 @@
 #include <stdlib.h>
 #include <math.h>
 #include <le/le.h>
-#include <le/optimization/legradientdescent.h>
 
 float
 J(float w)
@@ -27,7 +26,7 @@ main(int argc, const char *argv[])
     LeTensor *dw = le_scalar_new_f32(0.0f);
     LeList *gradients = le_list_append(NULL, dw);
     
-    LeGradientDescent *optimizer = le_gradient_descent_new(parameters, 0.2f);
+    LeBGD *optimizer = le_bgd_new(parameters, 0.2f);
     ((LeOptimizer *)optimizer)->gradients = gradients;
     
     unsigned i;
@@ -40,5 +39,8 @@ main(int argc, const char *argv[])
         float grad_ = le_tensor_f32_at(dw, 0);
         printf("J(%0.2f) = %0.2f. Gradient = %0.2f\n", w_, J(w_), grad_);
     }
+    
+    
+    
     return EXIT_SUCCESS;
 }
