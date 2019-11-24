@@ -79,6 +79,9 @@ le_1_layer_nn_init(Le1LayerNN *self, unsigned features_count, unsigned classes_c
     
     self->weights = le_matrix_new_zeros(classes_count, features_count);
     self->bias = le_matrix_new_zeros(classes_count, 1);
+    
+    LE_MODEL(self)->parameters = le_list_append(LE_MODEL(self)->parameters, self->weights);
+    LE_MODEL(self)->parameters = le_list_append(LE_MODEL(self)->parameters, self->bias);
 }
 
 void
