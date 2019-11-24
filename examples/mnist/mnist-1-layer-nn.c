@@ -28,12 +28,9 @@ main()
     LeTensor *test_output = le_matrix_new_one_hot(test_labels, 10);
     
     Le1LayerNN *neural_network = le_1_layer_nn_new();
-    Le1LayerNNTrainingOptions options;
-    options.max_iterations = 250;
-    options.alpha = 0.03f;
+    LeBGD *optimizer = le_bgd_new(LE_MODEL(neural_network)->parameters, 0.03f);
     le_1_layer_nn_init(neural_network, 28 * 28, 10);
-    le_1_layer_nn_train(neural_network, train_input_f32, train_output, options);
-    
+    //le_1_layer_nn_train(neural_network, train_input_f32, train_output, options);
     LeTensor *test_prediction = le_model_predict((LeModel *)neural_network, test_input_f32);
     float test_set_error = logistic_error(test_prediction, test_output);
     printf("Test Set Error: %f\n", test_set_error);
