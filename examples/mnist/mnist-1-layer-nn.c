@@ -33,7 +33,11 @@ main()
     le_1_layer_nn_init(neural_network, 28 * 28, 10);
     for (unsigned i = 0; i < 250; i++)
     {
+        LeList *gradients = le_model_get_gradients(LE_MODEL(neural_network),
+                                                   train_input_f32, train_output);
+        LE_OPTIMIZER(optimizer)->gradients = gradients;
         le_optimizer_step(LE_OPTIMIZER(optimizer));
+        le_list_foreach(gradients, (LeFunction)le_tensor_free);
     }
     //le_1_layer_nn_train(neural_network, train_input_f32, train_output, options);
     LeTensor *test_prediction = le_model_predict(LE_MODEL(neural_network), test_input_f32);
