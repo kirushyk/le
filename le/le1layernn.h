@@ -12,7 +12,7 @@ Le1LayerNN * le_1_layer_nn_new   (void);
 
 typedef struct Le1LayerNNTrainingOptions
 {
-    float            alpha;
+    float            learning_rate;
     unsigned         max_iterations;
 } Le1LayerNNTrainingOptions;
 

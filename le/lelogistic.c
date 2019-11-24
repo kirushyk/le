@@ -133,14 +133,14 @@ le_logistic_classifier_train(LeLogisticClassifier *self, LeTensor *x_train, LeTe
         le_tensor_multiply_by_scalar(h, 1.0 / examples_count);
         LeTensor *dwt = le_matrix_new_product(h, xt);
         LeTensor *dw = le_matrix_new_transpose(dwt);
-        le_tensor_multiply_by_scalar(dw, options.alpha);
+        le_tensor_multiply_by_scalar(dw, options.learning_rate);
         float db = le_tensor_sum(h);
         
         le_tensor_free(dwt);
         le_tensor_free(h);
         le_tensor_subtract(self->weights, dw);
         le_tensor_free(dw);
-        self->bias -= options.alpha * db;
+        self->bias -= options.learning_rate * db;
         
         printf("Train Set Error: %f\n", train_set_error);
     }

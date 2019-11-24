@@ -213,7 +213,7 @@ create_model_and_train(LEMainWindow *self)
             LeLogisticClassifierTrainingOptions options;
             options.max_iterations = 400;
             options.polynomia_degree = atoi(gtk_combo_box_text_get_active_text(GTK_COMBO_BOX_TEXT(self->polynomia_degree_combo)));
-            options.alpha = atof(gtk_combo_box_text_get_active_text(GTK_COMBO_BOX_TEXT(self->alpha_combo)));
+            options.learning_rate = atof(gtk_combo_box_text_get_active_text(GTK_COMBO_BOX_TEXT(self->alpha_combo)));
             switch (gtk_combo_box_get_active(GTK_COMBO_BOX(self->regularization_combo))) {
             case 1:
                 options.regularization = LE_REGULARIZATION_L1;
