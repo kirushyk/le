@@ -5,8 +5,8 @@
  
  */
 
-#ifndef __LEGRADIENTDESCENT_H__
-#define __LEGRADIENTDESCENT_H__
+#ifndef __LEBGD_H__
+#define __LEBGD_H__
 
 #include "leoptimizer.h"
 #include <le/lelist.h>
