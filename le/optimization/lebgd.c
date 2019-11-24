@@ -1,7 +1,7 @@
 /* Copyright (c) Kyrylo Polezhaiev and contributors. All rights reserved.
    Released under the MIT license. See LICENSE file in the project root for full license information. */
 
-#include "Lebgd.h"
+#include "lebgd.h"
 #include <le/letensor.h>
 #include <stdlib.h>
 

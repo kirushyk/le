@@ -22,3 +22,4 @@ executable('polynomia', 'polynomia.c',
 )
 
 subdir('mnist')
+subdir('optimization')
