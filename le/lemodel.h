@@ -14,6 +14,8 @@ typedef struct LeModel
     LeList   *parameters;
 } LeModel;
 
+#define LE_MODEL(obj) ((LeModel *)obj)
+
 typedef struct LeModelClass
 {
     LeClass parent;
