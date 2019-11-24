@@ -1,5 +1,9 @@
 /* Copyright (c) Kyrylo Polezhaiev and contributors. All rights reserved.
-   Released under the MIT license. See LICENSE file in the project root for full license information. */
+   Released under the MIT license. See LICENSE file in the project root for full license information.
+ 
+   Vanilla Batch Gradient Descent Optimization Algorithm
+ 
+ */
 
 #ifndef __LEGRADIENTDESCENT_H__
 #define __LEGRADIENTDESCENT_H__
