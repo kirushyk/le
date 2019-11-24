@@ -20,6 +20,7 @@ typedef struct LeModelClass
 {
     LeClass parent;
     LeTensor * (*predict)(LeModel *model, LeTensor *x);
+    LeList * (*get_gradients)(LeModel *model, LeTensor *x, LeTensor *y);
     float (*train_iteration)(LeModel *model);
 } LeModelClass;
 
@@ -27,6 +28,10 @@ void       le_model_construct       (LeModel  *model);
 
 LeTensor * le_model_predict         (LeModel  *model,
                                      LeTensor *x);
+
+LeList *   le_model_get_gradients   (LeModel  *model,
+                                     LeTensor *x,
+                                     LeTensor *y);
 
 float      le_model_train_iteration (LeModel  *model);
 

@@ -23,6 +23,20 @@ le_model_predict(LeModel *self, LeTensor *x)
     return ((LeModelClass *)((LeObject *)self)->klass)->predict(self, x);
 }
 
+LeList *
+le_model_get_gradients(LeModel *self, LeTensor *x, LeTensor *y)
+{
+    assert(self);
+    assert(((LeObject *)self)->klass);
+    
+    if (((LeModelClass *)((LeObject *)self)->klass)->get_gradients == NULL)
+    {
+        return NULL;
+    };
+    
+    return ((LeModelClass *)((LeObject *)self)->klass)->get_gradients(self, x, y);
+}
+
 float
 le_model_train_iteration(LeModel *self)
 {
