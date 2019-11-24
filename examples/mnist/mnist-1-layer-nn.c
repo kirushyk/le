@@ -28,10 +28,10 @@ main()
     LeTensor *test_output = le_matrix_new_one_hot(test_labels, 10);
     
     Le1LayerNN *neural_network = le_1_layer_nn_new();
+    le_1_layer_nn_init(neural_network, 28 * 28, 10);
     LeBGD *optimizer = le_bgd_new(le_model_get_parameters(LE_MODEL(neural_network)),
                                   0.03f);
-    le_1_layer_nn_init(neural_network, 28 * 28, 10);
-    for (unsigned i = 0; i < 250; i++)
+    for (unsigned i = 0; i < 25; i++)
     {
         LeList *gradients = le_model_get_gradients(LE_MODEL(neural_network),
                                                    train_input_f32, train_output);
