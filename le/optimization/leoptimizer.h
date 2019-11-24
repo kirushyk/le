@@ -14,6 +14,8 @@ typedef struct LeOptimizer
     LeList *gradients;
 } LeOptimizer;
 
+#define LE_OPTIMIZER(obj) ((LeOptimizer *)(obj))
+
 typedef struct LeOptimizerClass
 {
     LeClass parent;
