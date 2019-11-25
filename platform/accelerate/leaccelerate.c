@@ -21,7 +21,7 @@ le_accelerate_matrix_new_product(LeTensor *a, bool transpose_a, LeTensor *b, boo
     unsigned c_height = transpose_a ? a->shape->sizes[1] : a->shape->sizes[0];
     unsigned c_width = transpose_b ? b->shape->sizes[0] : b->shape->sizes[1];
     
-    LeTensor *c = le_matrix_new_zeros(c_height, c_width);
+    LeTensor *c = le_matrix_new_uninitialized(c_height, c_width);
     
     cblas_sgemm(CblasRowMajor,
                 transpose_a ? CblasTrans : CblasNoTrans,
