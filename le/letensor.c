@@ -100,6 +100,27 @@ le_tensor_new_f32_equal_u8(LeTensor *another, uint8_t scalar)
     return self;
 }
 
+bool
+le_tensor_equal(LeTensor *a, LeTensor *b)
+{
+    if (a == b)
+        return true;
+    
+    if ((a && !b) || (!a && b))
+        return false;
+    
+    if (a->element_type != b->element_type)
+        return false;
+    
+    if (!le_shape_equal(a->shape, b->shape))
+        return false;
+    
+    if (memcmp(a->data, b->data, le_shape_get_elements_count(a->shape) * le_type_size(a->element_type)))
+        return false;
+    
+    return true;
+}
+
 bool     
 le_tensor_reshape(LeTensor *self, unsigned num_dimensions, ...)
 {

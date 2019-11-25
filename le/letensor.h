@@ -25,6 +25,9 @@ LeTensor * le_tensor_new_cast_f32         (LeTensor     *tensor);
 LeTensor * le_tensor_new_f32_equal_u8     (LeTensor     *tensor,
                                            uint8_t       scalar);
 
+bool       le_tensor_equal                (LeTensor     *a,
+                                           LeTensor     *b);
+
 bool       le_tensor_reshape              (LeTensor     *tensor,
                                            unsigned      num_dimensions,
                                            ...);
