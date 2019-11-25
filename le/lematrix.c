@@ -282,7 +282,7 @@ le_matrix_new_product(LeTensor *a, LeTensor *b)
 LeTensor *
 le_matrix_new_product_full(LeTensor *a, bool transpose_a, LeTensor *b, bool transpose_b)
 {
-#ifdef __QAPPLE__
+#ifdef __APPLE__
     return le_accelerate_matrix_new_product(a, transpose_a, b, transpose_b);
 #else
     assert(a->shape->num_dimensions == 2);
