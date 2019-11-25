@@ -110,12 +110,13 @@ le_logistic_classifier_train(LeLogisticClassifier *self, LeTensor *x_train, LeTe
     }
     
     unsigned features_count = le_matrix_get_height(x);
-    LeTensor *xt = le_matrix_new_transpose(x);
     
+    /*
     if (x != x_train)
     {
         le_tensor_free(x);
     }
+    */
     
     self->weights = le_matrix_new_zeros(features_count, 1);
     self->bias = 0;
@@ -131,7 +132,7 @@ le_logistic_classifier_train(LeLogisticClassifier *self, LeTensor *x_train, LeTe
         
         le_tensor_subtract(h, y_train);
         le_tensor_multiply_by_scalar(h, 1.0 / examples_count);
-        LeTensor *dwt = le_matrix_new_product(h, xt);
+        LeTensor *dwt = le_matrix_new_product_full(h, false, x, true);
         LeTensor *dw = le_matrix_new_transpose(dwt);
         le_tensor_multiply_by_scalar(dw, options.learning_rate);
         float db = le_tensor_sum(h);
@@ -144,8 +145,6 @@ le_logistic_classifier_train(LeLogisticClassifier *self, LeTensor *x_train, LeTe
         
         printf("Train Set Error: %f\n", train_set_error);
     }
-    
-    le_tensor_free(xt);
 }
 
 void
