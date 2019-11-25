@@ -69,5 +69,23 @@ main()
             le_tensor_free(a);
         }
     }
+
+    a = le_matrix_new_zeros(10, 5);
+    b = le_matrix_new_zeros(10, 5);
+    LeTensor *at = le_matrix_new_transpose(a);
+    c = le_matrix_new_product(at, b);
+    LeTensor *d = le_matrix_new_product_full(a, true, b, false);
+    assert(le_tensor_equal(c, d));
+    le_tensor_free(d);
+    le_tensor_free(c);
+    le_tensor_free(at);
+    LeTensor *bt = le_matrix_new_transpose(b);
+    c = le_matrix_new_product(a, bt);
+    d = le_matrix_new_product_full(a, false, b, true);
+    assert(le_tensor_equal(c, d));
+    le_tensor_free(bt);
+    le_tensor_free(b);
+    le_tensor_free(a);
+    
     return EXIT_SUCCESS;
 }
