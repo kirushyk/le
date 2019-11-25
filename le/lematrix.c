@@ -280,10 +280,10 @@ le_matrix_new_product(LeTensor *a, LeTensor *b)
 }
 
 LeTensor *
-le_matrix_new_product_full(LeTensor *a, bool a_transposed, LeTensor *b, bool b_transposed)
+le_matrix_new_product_full(LeTensor *a, bool transpose_a, LeTensor *b, bool transpose_b)
 {
-#ifdef __APPLE__
-    return le_accelerate_matrix_new_product(a, a_transposed, b, b_transposed);
+#ifdef __QAPPLE__
+    return le_accelerate_matrix_new_product(a, transpose_a, b, transpose_b);
 #else
     assert(a->shape->num_dimensions == 2);
     assert(b->shape->num_dimensions == 2);
@@ -294,29 +294,36 @@ le_matrix_new_product_full(LeTensor *a, bool a_transposed, LeTensor *b, bool b_t
     
     LeTensor *self;
     
-    assert(!(a_transposed || b_transposed));
-    /*
-    if (a->shape->sizes[1] != b->shape->sizes[0])
-        return le_tensor_new();
-    */
-        
-    if (a->element_type != b->element_type)
-        return le_tensor_new();
+    assert(a->element_type == b->element_type);
     
+    unsigned a_width = transpose_a ? a->shape->sizes[0] : a->shape->sizes[1];
+    unsigned a_height = transpose_a ? a->shape->sizes[1] : a->shape->sizes[0];
+    unsigned b_width = transpose_b ? b->shape->sizes[0] : b->shape->sizes[1];
+    unsigned b_height = transpose_b ? b->shape->sizes[1] : b->shape->sizes[0];
+    
+    assert(a_width == b_height);
+            
     self = malloc(sizeof(struct LeTensor));
     self->element_type = a->element_type;
-    self->shape = le_shape_new(2, a->shape->sizes[0], b->shape->sizes[1]);
+    self->shape = le_shape_new(2, a_height, b_width);
     self->owns_data = true;
     self->data = malloc(le_shape_get_elements_count(self->shape) * sizeof(float));
     
-    for (y = 0; y < self->shape->sizes[0]; y++)
+    for (y = 0; y < a_height; y++)
     {
-        for (x = 0; x < self->shape->sizes[1]; x++)
+        for (x = 0; x < b_width; x++)
         {
-            ((float *)self->data)[y * self->shape->sizes[1] + x] = 0.0f;
-            for (i = 0; i < a->shape->sizes[1]; i++)
+            size_t index = y * b_width + x;
+            ((float *)self->data)[index] = 0.0f;
+            for (i = 0; i < a_width; i++)
             {
-                ((float *)self->data)[y * self->shape->sizes[1] + x] += ((float *)a->data)[y * a->shape->sizes[1] + i] * ((float *)b->data)[i * b->shape->sizes[1] + x];
+                /// @note: Check indices
+                size_t a_index = transpose_a ? i * a_height + y : y * a_width + i;
+                float a_element = ((float *)a->data)[a_index];
+                size_t b_index = transpose_b ? x * b_height + i : i * b_width + x;
+                float b_element = ((float *)b->data)[b_index];
+                float prod = a_element * b_element;
+                ((float *)self->data)[index] += prod;
             }
         }
     }
