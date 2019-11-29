@@ -275,6 +275,20 @@ le_rbf(LeTensor *a, LeTensor *b, float sigma)
 }
 
 void
+le_tensor_add(LeTensor *a, LeTensor *b)
+{
+    assert(le_shape_equal(a->shape, b->shape));
+    
+    unsigned i;
+    unsigned elements_count = le_shape_get_elements_count(a->shape);
+    
+    for (i = 0; i < elements_count; i++)
+    {
+        ((float *)a->data)[i] += ((float *)b->data)[i];
+    }
+}
+
+void
 le_tensor_subtract(LeTensor *a, LeTensor *b)
 {
     assert(le_shape_equal(a->shape, b->shape));
@@ -341,11 +355,13 @@ le_tensor_sum(LeTensor *self)
     return sum;
 }
 
+#ifndef __APPLE__
 static float
 le_sigmoid(const float a)
 {
     return 1.0 / (1.0 + exp(-a));
 }
+#endif
 
 void
 le_tensor_apply_sigmoid(LeTensor *self)

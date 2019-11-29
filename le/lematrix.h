@@ -16,6 +16,7 @@ float      le_matrix_at                   (LeTensor     *matrix,
                                            unsigned      y,
                                            unsigned      x);
 
+/// @note: Unlike le_tensor_add, supports horizontal broadcasting
 void       le_matrix_add                  (LeTensor     *matrix,
                                            LeTensor     *another);
 

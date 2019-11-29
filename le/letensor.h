@@ -48,6 +48,9 @@ void       le_tensor_f32_set              (LeTensor     *tensor,
                                            uint32_t      index,
                                            float         value);
 
+void       le_tensor_add                  (LeTensor     *matrix,
+                                           LeTensor     *another);
+
 void       le_tensor_subtract             (LeTensor     *a,
                                            LeTensor     *b);
 
