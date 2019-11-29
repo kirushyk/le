@@ -35,3 +35,17 @@ le_accelerate_matrix_new_product(LeTensor *a, bool transpose_a, LeTensor *b, boo
     
     return c;
 }
+
+void
+le_accelerate_tensor_apply_sigmoid(LeTensor *tensor)
+{
+    assert(tensor);
+    assert(tensor->element_type == LE_TYPE_FLOAT32);
+        
+    int n = le_shape_get_elements_count(tensor->shape);
+    vDSP_vneg(tensor->data, 1, tensor->data, 1, n);
+    vvexpf(tensor->data, tensor->data, &n);
+    float one = 1.0f;
+    vDSP_vsadd(tensor->data, 1, &one, tensor->data, 1, n);
+    vDSP_svdiv(&one, tensor->data, 1, tensor->data, 1, n);
+}

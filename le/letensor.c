@@ -8,6 +8,9 @@
 #include <string.h>
 #include <stdarg.h>
 #include <math.h>
+#ifdef __APPLE__
+#include "../platform/accelerate/leaccelerate.h"
+#endif
 
 LeTensor *
 le_tensor_new(void)
@@ -347,6 +350,9 @@ le_sigmoid(const float a)
 void
 le_tensor_apply_sigmoid(LeTensor *self)
 {
+#ifdef __APPLE__
+    return le_accelerate_tensor_apply_sigmoid(self);
+#else
     unsigned i;
     unsigned elements_count = le_shape_get_elements_count(self->shape);
     
@@ -354,6 +360,7 @@ le_tensor_apply_sigmoid(LeTensor *self)
     {
         ((float *)self->data)[i] = le_sigmoid(((float *)self->data)[i]);
     }
+#endif
 }
 
 void
