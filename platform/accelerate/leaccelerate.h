@@ -11,7 +11,10 @@ LeTensor * le_accelerate_matrix_new_product   (LeTensor *a,
                                                LeTensor *b,
                                                bool      transpose_b);
 
-void       le_accelerate_tensor_apply_sigmoid (LeTensor     *tensor);
+void       le_accelerate_tensor_apply_sigmoid (LeTensor *tensor);
 
+float      le_accelerate_rbf                  (LeTensor *a,
+                                               LeTensor *b,
+                                               float     sigma);
 
 #endif

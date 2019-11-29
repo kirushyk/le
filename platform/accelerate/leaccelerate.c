@@ -49,3 +49,18 @@ le_accelerate_tensor_apply_sigmoid(LeTensor *tensor)
     vDSP_vsadd(tensor->data, 1, &one, tensor->data, 1, n);
     vDSP_svdiv(&one, tensor->data, 1, tensor->data, 1, n);
 }
+
+float
+le_accelerate_rbf(LeTensor *a, LeTensor *b, float sigma)
+{
+    assert(a->shape->num_dimensions == 2);
+    assert(b->shape->num_dimensions == 2);
+    /** @todo: Test results against transposed a multiplied by b */
+    assert(a->shape->sizes[0] == b->shape->sizes[0]);
+    assert(a->shape->sizes[1] == 1);
+    assert(b->shape->sizes[1] == 1);
+
+    float result = cblas_sdot(a->shape->sizes[0], a->data, 1, b->data, 1);
+    
+    return expf(-result / (2.0f * sigma * sigma));
+}

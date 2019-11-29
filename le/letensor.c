@@ -256,6 +256,9 @@ le_dot_product(LeTensor *a, LeTensor *b)
 float
 le_rbf(LeTensor *a, LeTensor *b, float sigma)
 {
+#ifdef __APPLE__
+    return le_accelerate_rbf(a, b, sigma);
+#else
     assert(a->shape->num_dimensions == 2);
     assert(b->shape->num_dimensions == 2);
 
@@ -272,6 +275,7 @@ le_rbf(LeTensor *a, LeTensor *b, float sigma)
     }
     
     return expf(-result / (2.0f * sigma * sigma));
+#endif
 }
 
 void
