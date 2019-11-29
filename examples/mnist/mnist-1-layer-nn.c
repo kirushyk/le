@@ -31,21 +31,30 @@ main()
     le_1_layer_nn_init(neural_network, 28 * 28, 10);
     LeBGD *optimizer = le_bgd_new(le_model_get_parameters(LE_MODEL(neural_network)),
                                   0.03f);
-    for (unsigned i = 0; i < 25; i++)
+    for (unsigned i = 0; i <= 2500; i++)
     {
         LeList *gradients = le_model_get_gradients(LE_MODEL(neural_network),
                                                    train_input_f32, train_output);
         LE_OPTIMIZER(optimizer)->gradients = gradients;
         le_optimizer_step(LE_OPTIMIZER(optimizer));
         le_list_foreach(gradients, (LeFunction)le_tensor_free);
-    }
-    //le_1_layer_nn_train(neural_network, train_input_f32, train_output, options);
-    LeTensor *test_prediction = le_model_predict(LE_MODEL(neural_network), test_input_f32);
-    float test_set_error = le_cross_entropy(test_prediction, test_output);
-    printf("Test Set Error: %f\n", test_set_error);
+        
+        if (i % 100 == 0) {
+            printf("Iteration %d.\n", i);
+            
+            LeTensor *train_prediction = le_model_predict(LE_MODEL(neural_network), train_input_f32);
+            float train_set_error = le_cross_entropy(train_prediction, train_output);
+            printf("Train Set Error: %f\n", train_set_error);
+            le_tensor_free(train_prediction);
 
+            LeTensor *test_prediction = le_model_predict(LE_MODEL(neural_network), test_input_f32);
+            float test_set_error = le_cross_entropy(test_prediction, test_output);
+            printf("Test Set Error: %f\n", test_set_error);
+            le_tensor_free(test_prediction);
+        }
+    }
+    
     le_1_layer_nn_free(neural_network);
-    le_tensor_free(test_prediction);
     le_tensor_free(test_output);
     le_tensor_free(test_input_f32);
     le_tensor_free(test_input);
