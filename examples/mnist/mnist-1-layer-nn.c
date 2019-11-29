@@ -43,12 +43,12 @@ main()
             printf("Iteration %d.\n", i);
             
             LeTensor *train_prediction = le_model_predict(LE_MODEL(neural_network), train_input_f32);
-            float train_set_error = le_cross_entropy(train_prediction, train_output);
+            float train_set_error = le_one_hot_misclassification(train_prediction, train_output);
             printf("Train Set Error: %f\n", train_set_error);
             le_tensor_free(train_prediction);
 
             LeTensor *test_prediction = le_model_predict(LE_MODEL(neural_network), test_input_f32);
-            float test_set_error = le_cross_entropy(test_prediction, test_output);
+            float test_set_error = le_one_hot_misclassification(test_prediction, test_output);
             printf("Test Set Error: %f\n", test_set_error);
             le_tensor_free(test_prediction);
         }
