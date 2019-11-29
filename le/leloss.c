@@ -4,6 +4,7 @@
 #include "leloss.h"
 #include <assert.h>
 #include <math.h>
+#include <stdbool.h>
 #include "letensor-imp.h"
 
 float
@@ -25,4 +26,47 @@ le_cross_entropy(LeTensor *h, LeTensor *y)
     }
     
     return result / elements_count;
+}
+
+float
+le_one_hot_misclassification(LeTensor *h, LeTensor *y)
+{
+    assert(h->shape->num_dimensions == 2);
+    assert(y->shape->num_dimensions == 2);
+    assert(h->shape->sizes[1] == y->shape->sizes[1]);
+    
+    unsigned i, j;
+    
+    unsigned classes_count = y->shape->sizes[0];
+    unsigned examples_count = y->shape->sizes[1];
+    unsigned misclassified_count = 0;
+    
+    for (i = 0; i < examples_count; i++)
+    {
+        int predicted_class = -2;
+        float predicted_class_probability = 0.0f;
+        int labeled_class = -1;
+        float labeled_class_probability = 0.0f;
+        for (j = 0; j < classes_count; j++)
+        {
+            float predicted_probability = le_matrix_at(h, j, i);
+            if (predicted_probability > predicted_class_probability)
+            {
+                predicted_class_probability = predicted_probability;
+                predicted_class = j;
+            }
+            float labeled_probability = le_matrix_at(y, j, i);
+            if (labeled_probability > labeled_class_probability)
+            {
+                labeled_class_probability = labeled_probability;
+                labeled_class = j;
+            }
+        }
+        if (predicted_class != labeled_class)
+        {
+            misclassified_count++;
+        }
+    }
+    
+    return ((float)misclassified_count) / ((float)examples_count);
 }

@@ -6,7 +6,10 @@
 
 #include "lematrix.h"
 
-float le_cross_entropy (LeTensor *predictions,
-                        LeTensor *labels);
+float le_cross_entropy             (LeTensor *predictions,
+                                    LeTensor *labels);
+
+float le_one_hot_misclassification (LeTensor *predictions,
+                                    LeTensor *labels);
 
 #endif
