@@ -10,6 +10,7 @@
 LeTensor *
 le_accelerate_matrix_new_product(LeTensor *a, bool transpose_a, LeTensor *b, bool transpose_b)
 {
+    /// @todo: Take stride into account
     assert(a->element_type == LE_TYPE_FLOAT32);
     assert(b->element_type == LE_TYPE_FLOAT32);
     assert(a->shape->num_dimensions == 2);
@@ -40,6 +41,7 @@ le_accelerate_matrix_new_product(LeTensor *a, bool transpose_a, LeTensor *b, boo
 void
 le_accelerate_tensor_apply_sigmoid(LeTensor *tensor)
 {
+    /// @todo: Take stride into account
     assert(tensor);
     assert(tensor->element_type == LE_TYPE_FLOAT32);
         
@@ -54,6 +56,7 @@ le_accelerate_tensor_apply_sigmoid(LeTensor *tensor)
 float
 le_accelerate_rbf(LeTensor *a, LeTensor *b, float sigma)
 {
+    /// @todo: Take stride into account
     assert(a->element_type == LE_TYPE_FLOAT32);
     assert(b->element_type == LE_TYPE_FLOAT32);
     assert(a->shape->num_dimensions == 2);
