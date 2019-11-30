@@ -10,10 +10,12 @@
 
 struct LeTensor
 {
-    LeType   element_type;
-    LeShape *shape;
-    bool     owns_data;
-    void    *data;
+    LeType    element_type;
+    LeShape  *shape;
+    bool      owns_data;
+    /// @note: In dimension of lowest order
+    uint32_t  stride;
+    void     *data;
 };
 
 #endif

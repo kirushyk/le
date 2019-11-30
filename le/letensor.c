@@ -18,6 +18,7 @@ le_tensor_new(void)
     LeTensor *self = malloc(sizeof(struct LeTensor));
     self->element_type = LE_TYPE_VOID;
     self->shape = NULL;
+    self->stride = 0;
     self->owns_data = false;
     self->data = NULL;
     return self;
@@ -29,6 +30,7 @@ le_scalar_new_f32(float scalar)
     LeTensor *self = malloc(sizeof(struct LeTensor));
     self->element_type = LE_TYPE_FLOAT32;
     self->shape = le_shape_new(0);
+    self->stride = 0;
     self->owns_data = true;
     self->data = malloc(sizeof(float));
     *((float *)self->data) = scalar;
@@ -41,6 +43,7 @@ le_tensor_new_from_data(LeType element_type, LeShape *shape, void *data)
     LeTensor *self = malloc(sizeof(struct LeTensor));
     self->element_type = element_type;
     self->shape = shape;
+    self->stride = le_shape_get_last_size(self->shape);
     self->owns_data = true;
     self->data = data;
     return self;
@@ -52,6 +55,7 @@ le_tensor_new_copy(LeTensor *another)
     LeTensor *self = malloc(sizeof(struct LeTensor));
     self->element_type = another->element_type;
     self->shape = le_shape_copy(another->shape);
+    self->stride = another->stride;
     self->owns_data = true;
     size_t data_size = le_shape_get_elements_count(another->shape) * le_type_size(another->element_type);
     self->data = malloc(data_size);
@@ -67,6 +71,7 @@ le_tensor_new_cast_f32(LeTensor *another)
     LeTensor *self = malloc(sizeof(struct LeTensor));
     self->element_type = LE_TYPE_FLOAT32;
     self->shape = le_shape_copy(another->shape);
+    self->stride = another->stride;
     self->owns_data = true;
     unsigned elements_count = le_shape_get_elements_count(self->shape);
     size_t data_size = elements_count * le_type_size(self->element_type);
@@ -89,6 +94,7 @@ le_tensor_new_f32_equal_u8(LeTensor *another, uint8_t scalar)
     LeTensor *self = malloc(sizeof(struct LeTensor));
     self->element_type = LE_TYPE_FLOAT32;
     self->shape = le_shape_copy(another->shape);
+    self->stride = another->stride;
     self->owns_data = true;
     unsigned elements_count = le_shape_get_elements_count(self->shape);
     size_t data_size = elements_count * le_type_size(self->element_type);
@@ -167,6 +173,7 @@ le_tensor_pick(LeTensor *another, uint32_t index)
     LeTensor *self = malloc(sizeof(struct LeTensor));
     self->element_type = another->element_type;
     self->shape = le_shape_lower_dimension(another->shape);
+    self->stride = le_shape_get_last_size(self->shape);
 
     size_t data_size = le_shape_get_elements_count(self->shape) * le_type_size(self->element_type);
     self->owns_data = false;
@@ -184,6 +191,7 @@ le_tensor_pick_copy(LeTensor *another, uint32_t index)
     LeTensor *self = malloc(sizeof(struct LeTensor));
     self->element_type = another->element_type;
     self->shape = le_shape_lower_dimension(another->shape);
+    self->stride = le_shape_get_last_size(self->shape);
     
     size_t data_size = le_shape_get_elements_count(self->shape) * le_type_size(self->element_type);
     self->owns_data = true;

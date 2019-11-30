@@ -62,6 +62,16 @@ le_shape_lower_dimension(LeShape *another)
     return self;
 }
 
+uint32_t
+le_shape_get_last_size(LeShape *shape)
+{
+    assert(shape);
+    assert(shape->sizes);
+    assert(shape->num_dimensions >= 1);
+    
+    return shape->sizes[shape->num_dimensions - 1];
+}
+
 void
 le_shape_free(LeShape *self)
 {

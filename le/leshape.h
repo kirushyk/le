@@ -23,6 +23,9 @@ LeShape * le_shape_copy               (LeShape  *shape);
 
 LeShape * le_shape_lower_dimension    (LeShape  *shape);
 
+/// @note: Retrieves size in lowest order dimension
+uint32_t  le_shape_get_last_size      (LeShape  *shape);
+
 void      le_shape_free               (LeShape  *shape);
 
 uint32_t  le_shape_get_elements_count (LeShape  *shape);

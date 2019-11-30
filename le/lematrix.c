@@ -77,6 +77,7 @@ le_matrix_new_from_data(unsigned height, unsigned width, const float *data)
     self = malloc(sizeof(struct LeTensor));
     self->element_type = LE_TYPE_FLOAT32;
     self->shape = le_shape_new(2, height, width);
+    self->stride = width;
     self->owns_data = true;
     self->data = malloc(data_size);
     memcpy(self->data, data, data_size);
@@ -94,6 +95,7 @@ le_matrix_new_identity(unsigned size)
     self = malloc(sizeof(struct LeTensor));
     self->element_type = LE_TYPE_FLOAT32;
     self->shape = le_shape_new(2, size, size);
+    self->stride = size;
     self->owns_data = true;
     self->data = malloc(size * size * sizeof(float));
     
@@ -116,6 +118,7 @@ le_matrix_new_uninitialized(unsigned height, unsigned width)
     self = malloc(sizeof(struct LeTensor));
     self->element_type = LE_TYPE_FLOAT32;
     self->shape = le_shape_new(2, height, width);
+    self->stride = width;
     self->owns_data = true;
     self->data = malloc(height * width * sizeof(float));
     
@@ -132,6 +135,7 @@ le_matrix_new_zeros(unsigned height, unsigned width)
     self = malloc(sizeof(struct LeTensor));
     self->shape = le_shape_new(2, height, width);
     self->element_type = LE_TYPE_FLOAT32;
+    self->stride = width;
     self->owns_data = true;
     self->data = malloc(height * width * sizeof(float));
     elements_count = height * width;
@@ -155,6 +159,7 @@ le_matrix_new_rand(unsigned height, unsigned width)
     self = malloc(sizeof(struct LeTensor));
     self->element_type = LE_TYPE_FLOAT32;
     self->shape = le_shape_new(2, height, width);
+    self->stride = width;
     self->owns_data = true;
     self->data = malloc(height * width * sizeof(float));
     elements_count = height * width;
@@ -187,6 +192,7 @@ le_matrix_new_transpose(LeTensor *a)
     self = malloc(sizeof(struct LeTensor));
     self->element_type = a->element_type;
     self->shape = le_shape_new(2, a->shape->sizes[1], a->shape->sizes[0]);
+    self->stride = le_shape_get_last_size(self->shape);
     self->owns_data = true;
     self->data = malloc(le_shape_get_elements_count(self->shape) * le_type_size(self->element_type));
     
@@ -230,6 +236,7 @@ le_matrix_new_sum(LeTensor *a, unsigned dimension)
     self = malloc(sizeof(struct LeTensor));
     self->element_type = LE_TYPE_FLOAT32;
     self->shape = le_shape_new(2, a->shape->sizes[0], 1/*a->shape->sizes[1]*/);
+    self->stride = le_shape_get_last_size(self->shape);
     self->owns_data = true;
     self->data = malloc(le_shape_get_elements_count(self->shape) * le_type_size(self->element_type));
     
@@ -258,6 +265,7 @@ le_matrix_new_one_hot(LeTensor *a, unsigned num_classes)
     self = malloc(sizeof(struct LeTensor));
     self->element_type = LE_TYPE_FLOAT32;
     self->shape = le_shape_new(2, num_classes, a->shape->sizes[1]);
+    self->stride = le_shape_get_last_size(self->shape);
     self->owns_data = true;
     self->data = malloc(le_shape_get_elements_count(self->shape) * le_type_size(self->element_type));
     
@@ -306,6 +314,7 @@ le_matrix_new_product_full(LeTensor *a, bool transpose_a, LeTensor *b, bool tran
     self = malloc(sizeof(struct LeTensor));
     self->element_type = a->element_type;
     self->shape = le_shape_new(2, a_height, b_width);
+    self->stride = le_shape_get_last_size(self->shape);
     self->owns_data = true;
     self->data = malloc(le_shape_get_elements_count(self->shape) * sizeof(float));
     
