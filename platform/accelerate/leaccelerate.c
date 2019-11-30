@@ -56,7 +56,6 @@ le_accelerate_tensor_apply_sigmoid(LeTensor *tensor)
 float
 le_accelerate_rbf(LeTensor *a, LeTensor *b, float sigma)
 {
-    /// @todo: Take stride into account
     assert(a->element_type == LE_TYPE_FLOAT32);
     assert(b->element_type == LE_TYPE_FLOAT32);
     assert(a->shape->num_dimensions == 2);
@@ -69,7 +68,7 @@ le_accelerate_rbf(LeTensor *a, LeTensor *b, float sigma)
     float *c = malloc(sizeof(float) * a->shape->sizes[0]);
     
     float result;
-    vDSP_vsub(a->data, 1, b->data, 1, c, 1, a->shape->sizes[0]);
+    vDSP_vsub(a->data, a->stride, b->data, b->stride, c, 1, a->shape->sizes[0]);
     vDSP_svesq(c, 1, &result, a->shape->sizes[0]);
 
     free(c);
