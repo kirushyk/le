@@ -256,7 +256,9 @@ le_dot_product(LeTensor *a, LeTensor *b)
         /** @note: This addressing is correct as we
             ensured that widths of both matrices
             (supposed to be column vectors) is 1 */
-        result += ((float *)a->data)[y] * ((float *)b->data)[y];
+        // result += ((float *)a->data)[y] * ((float *)b->data)[y];
+        /** @note: Stride (separate from width) added */
+        result += ((float *)a->data)[y * a->stride] * ((float *)b->data)[y * b->stride];
     }
     
     return result;
