@@ -282,7 +282,7 @@ le_rbf(LeTensor *a, LeTensor *b, float sigma)
     
     for (unsigned y = 0; y < a->shape->sizes[0]; y++)
     {
-        float sub = ((float *)a->data)[y] - ((float *)b->data)[y];
+        float sub = ((float *)a->data)[y * a->stride] - ((float *)b->data)[y * b->stride];
         result += sub * sub;
     }
     
