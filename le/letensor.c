@@ -247,8 +247,9 @@ le_dot_product(LeTensor *a, LeTensor *b)
     float result = 0;
 
     /** @todo: Test results against transposed a multiplied by b */
-    if (a->shape->sizes[0] != b->shape->sizes[0] || a->shape->sizes[1] != 1 || b->shape->sizes[1] != 1)
-        return nanf("");
+    assert(a->shape->sizes[0] == b->shape->sizes[0]);
+    assert(a->shape->sizes[1] == 1);
+    assert(b->shape->sizes[1] == 1);
     
     for (y = 0; y < a->shape->sizes[0]; y++)
     {
