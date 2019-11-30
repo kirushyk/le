@@ -56,6 +56,9 @@ LeTensor * le_matrix_new_product_full     (LeTensor     *a,
                                            LeTensor     *b,
                                            bool          transpose_b);
 
+LeTensor * le_matrix_get_column           (LeTensor     *matrix,
+                                           unsigned      x);
+
 LeTensor * le_matrix_get_column_copy      (LeTensor     *matrix,
                                            unsigned      x);
 

@@ -340,6 +340,22 @@ le_matrix_new_product_full(LeTensor *a, bool transpose_a, LeTensor *b, bool tran
     return self;
 #endif
 }
+
+LeTensor *
+le_matrix_get_column(LeTensor *matrix, unsigned x)
+{
+    assert(matrix->shape->num_dimensions == 2);
+    
+    LeTensor *self = malloc(sizeof(struct LeTensor));
+    self->element_type = matrix->element_type;
+    self->shape = le_shape_new(2, matrix->shape->sizes[0], 1);
+    self->stride = matrix->stride;
+
+    self->owns_data = false;
+    self->data = matrix->data + x * le_type_size(self->element_type);
+    
+    return self;
+}
                   
 LeTensor *
 le_matrix_get_column_copy(LeTensor *self, unsigned x)
