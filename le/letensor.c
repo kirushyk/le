@@ -112,6 +112,7 @@ le_tensor_new_f32_equal_u8(LeTensor *another, uint8_t scalar)
 bool
 le_tensor_equal(LeTensor *a, LeTensor *b)
 {
+    /// @todo: Take stride into account
     if (a == b)
         return true;
     
@@ -133,6 +134,7 @@ le_tensor_equal(LeTensor *a, LeTensor *b)
 bool     
 le_tensor_reshape(LeTensor *self, unsigned num_dimensions, ...)
 {
+    /// @todo: Take stride into account
     /// @todo: Add more assertions
 
     uint32_t *sizes = malloc(num_dimensions * sizeof(uint32_t));
@@ -167,6 +169,7 @@ le_tensor_reshape(LeTensor *self, unsigned num_dimensions, ...)
 LeTensor *
 le_tensor_pick(LeTensor *another, uint32_t index)
 {
+    /// @todo: Take stride into account
     if (!another)
         return NULL;
     
@@ -185,6 +188,7 @@ le_tensor_pick(LeTensor *another, uint32_t index)
 LeTensor *
 le_tensor_pick_copy(LeTensor *another, uint32_t index)
 {
+    /// @todo: Take stride into account
     if (!another)
         return NULL;
     
@@ -205,6 +209,7 @@ le_tensor_pick_copy(LeTensor *another, uint32_t index)
 uint8_t
 le_tensor_u8_at(LeTensor *tensor, uint32_t index)
 {
+    /// @todo: Take stride into account
     assert(tensor->element_type == LE_TYPE_UINT8);
 
     return ((uint8_t *)tensor->data)[index];
@@ -213,6 +218,7 @@ le_tensor_u8_at(LeTensor *tensor, uint32_t index)
 float
 le_tensor_f32_at(LeTensor *tensor, uint32_t index)
 {
+    /// @todo: Take stride into account
     assert(tensor->element_type == LE_TYPE_FLOAT32);
     
     return ((float *)tensor->data)[index];
@@ -221,6 +227,7 @@ le_tensor_f32_at(LeTensor *tensor, uint32_t index)
 void
 le_tensor_f32_set(LeTensor *tensor, uint32_t index, float value)
 {
+    /// @todo: Take stride into account
     assert(tensor->element_type == LE_TYPE_FLOAT32);
     
     ((float *)tensor->data)[index] = value;
@@ -293,6 +300,7 @@ le_rbf(LeTensor *a, LeTensor *b, float sigma)
 void
 le_tensor_add(LeTensor *a, LeTensor *b)
 {
+    /// @todo: Take stride into account
     assert(le_shape_equal(a->shape, b->shape));
     
     unsigned i;
@@ -307,6 +315,7 @@ le_tensor_add(LeTensor *a, LeTensor *b)
 void
 le_tensor_subtract(LeTensor *a, LeTensor *b)
 {
+    /// @todo: Take stride into account
     assert(le_shape_equal(a->shape, b->shape));
     
     unsigned i;
@@ -321,6 +330,7 @@ le_tensor_subtract(LeTensor *a, LeTensor *b)
 void
 le_tensor_subtract_scaled(LeTensor *a, float scale, LeTensor *b)
 {
+    /// @todo: Take stride into account
     assert(le_shape_equal(a->shape, b->shape));
     
     unsigned i;
@@ -335,6 +345,7 @@ le_tensor_subtract_scaled(LeTensor *a, float scale, LeTensor *b)
 void
 le_tensor_multiply_by_scalar(LeTensor *self, float b)
 {
+    /// @todo: Take stride into account
     unsigned i;
     unsigned elements_count = le_shape_get_elements_count(self->shape);
     
@@ -347,6 +358,7 @@ le_tensor_multiply_by_scalar(LeTensor *self, float b)
 void
 le_tensor_add_scalar(LeTensor *self, float b)
 {
+    /// @todo: Take stride into account
     unsigned i;
     unsigned elements_count = le_shape_get_elements_count(self->shape);
     
@@ -359,6 +371,7 @@ le_tensor_add_scalar(LeTensor *self, float b)
 float
 le_tensor_sum(LeTensor *self)
 {
+    /// @todo: Take stride into account
     float sum = 0.0;
     unsigned i;
     unsigned elements_count = le_shape_get_elements_count(self->shape);
@@ -382,6 +395,7 @@ le_sigmoid(const float a)
 void
 le_tensor_apply_sigmoid(LeTensor *self)
 {
+    /// @todo: Take stride into account
 #ifdef __APPLE__
     return le_accelerate_tensor_apply_sigmoid(self);
 #else
@@ -398,6 +412,7 @@ le_tensor_apply_sigmoid(LeTensor *self)
 void
 le_tensor_apply_greater_than(LeTensor *self, float scalar)
 {
+    /// @todo: Take stride into account
     unsigned i;
     unsigned elements_count = le_shape_get_elements_count(self->shape);
     
@@ -410,6 +425,7 @@ le_tensor_apply_greater_than(LeTensor *self, float scalar)
 void
 le_tensor_apply_svm_prediction(LeTensor *self)
 {
+    /// @todo: Take stride into account
     unsigned i;
     unsigned elements_count = le_shape_get_elements_count(self->shape);
     
@@ -423,6 +439,7 @@ le_tensor_apply_svm_prediction(LeTensor *self)
 void
 le_tensor_print(LeTensor *self, FILE *stream)
 {
+    /// @todo: Take stride into account
     if (self->shape->num_dimensions != 2)
     {
         fprintf(stream, "<%dD tensor>\n", self->shape->num_dimensions);
