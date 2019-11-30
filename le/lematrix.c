@@ -183,6 +183,7 @@ le_matrix_new_rand(unsigned height, unsigned width)
 LeTensor *
 le_matrix_new_transpose(LeTensor *a)
 {
+    /// @todo: Take stride into account
     assert(a->shape->num_dimensions == 2);
 
     unsigned x;
@@ -227,6 +228,7 @@ le_matrix_new_transpose(LeTensor *a)
 LeTensor *
 le_matrix_new_sum(LeTensor *a, unsigned dimension)
 {
+    /// @todo: Take stride into account
     unsigned x, y;
     
     assert(a->shape->num_dimensions == 2);
@@ -256,6 +258,7 @@ le_matrix_new_sum(LeTensor *a, unsigned dimension)
 LeTensor *
 le_matrix_new_one_hot(LeTensor *a, unsigned num_classes)
 {
+    /// @todo: Take stride into account
     assert(a->shape->num_dimensions == 2);
     assert(a->shape->sizes[0] == 1);
     
@@ -290,6 +293,7 @@ le_matrix_new_product(LeTensor *a, LeTensor *b)
 LeTensor *
 le_matrix_new_product_full(LeTensor *a, bool transpose_a, LeTensor *b, bool transpose_b)
 {
+    /// @todo: Take stride into account
 #ifdef __APPLE__
     return le_accelerate_matrix_new_product(a, transpose_a, b, transpose_b);
 #else
@@ -344,6 +348,7 @@ le_matrix_new_product_full(LeTensor *a, bool transpose_a, LeTensor *b, bool tran
 LeTensor *
 le_matrix_get_column(LeTensor *matrix, unsigned x)
 {
+    /// @todo: Take stride into account
     assert(matrix->shape->num_dimensions == 2);
     
     LeTensor *self = malloc(sizeof(struct LeTensor));
@@ -360,6 +365,7 @@ le_matrix_get_column(LeTensor *matrix, unsigned x)
 LeTensor *
 le_matrix_get_column_copy(LeTensor *self, unsigned x)
 {
+    /// @todo: Take stride into account
     assert(self->shape->num_dimensions == 2);
     /// @todo: Add dimension checks
     
