@@ -122,6 +122,8 @@ le_tensor_equal(LeTensor *a, LeTensor *b)
     if (a->element_type != b->element_type)
         return false;
     
+    /// @note: Stride may not be equal
+    
     if (!le_shape_equal(a->shape, b->shape))
         return false;
     
