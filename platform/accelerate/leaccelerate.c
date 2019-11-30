@@ -10,12 +10,13 @@
 LeTensor *
 le_accelerate_matrix_new_product(LeTensor *a, bool transpose_a, LeTensor *b, bool transpose_b)
 {
+    assert(a->element_type == LE_TYPE_FLOAT32);
+    assert(b->element_type == LE_TYPE_FLOAT32);
     assert(a->shape->num_dimensions == 2);
     assert(b->shape->num_dimensions == 2);
     
     unsigned size_a = transpose_a ? a->shape->sizes[0] : a->shape->sizes[1];
     unsigned size_b = transpose_b ? b->shape->sizes[1] : b->shape->sizes[0];
-    
     assert(size_a == size_b);
     
     unsigned c_height = transpose_a ? a->shape->sizes[1] : a->shape->sizes[0];
@@ -53,14 +54,22 @@ le_accelerate_tensor_apply_sigmoid(LeTensor *tensor)
 float
 le_accelerate_rbf(LeTensor *a, LeTensor *b, float sigma)
 {
+    assert(a->element_type == LE_TYPE_FLOAT32);
+    assert(b->element_type == LE_TYPE_FLOAT32);
     assert(a->shape->num_dimensions == 2);
     assert(b->shape->num_dimensions == 2);
     /** @todo: Test results against transposed a multiplied by b */
     assert(a->shape->sizes[0] == b->shape->sizes[0]);
     assert(a->shape->sizes[1] == 1);
     assert(b->shape->sizes[1] == 1);
+    
+    float *c = malloc(sizeof(float) * a->shape->sizes[0]);
+    
+    float result;
+    vDSP_vsub(a->data, 1, b->data, 1, c, 1, a->shape->sizes[0]);
+    vDSP_svesq(c, 1, &result, a->shape->sizes[0]);
 
-    float result = cblas_sdot(a->shape->sizes[0], a->data, 1, b->data, 1);
+    free(c);
     
     return expf(-result / (2.0f * sigma * sigma));
 }
