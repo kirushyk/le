@@ -342,7 +342,7 @@ le_matrix_new_product_full(LeTensor *a, bool transpose_a, LeTensor *b, bool tran
 }
                   
 LeTensor *
-le_matrix_get_column(LeTensor *self, unsigned x)
+le_matrix_get_column_copy(LeTensor *self, unsigned x)
 {
     assert(self->shape->num_dimensions == 2);
     /// @todo: Add dimension checks
