@@ -103,14 +103,14 @@ le_svm_margins(LeSVM *self, LeTensor *x)
         LeTensor *margins = le_matrix_new_uninitialized(1, test_examples_count);
         for (unsigned i = 0; i < test_examples_count; i++)
         {
-            LeTensor *example = le_matrix_get_column_copy(x, i);
+            LeTensor *example = le_matrix_get_column(x, i);
             
             unsigned j;
             float margin = 0;
             unsigned training_examples_count = le_matrix_get_width(self->x);
             for (j = 0; j < training_examples_count; j++)
             {
-                LeTensor *x_train_j = le_matrix_get_column_copy(self->x, j);
+                LeTensor *x_train_j = le_matrix_get_column(self->x, j);
                 margin += le_matrix_at(self->alphas, 0, j) * le_matrix_at(self->y, 0, j) * kernel_function(x_train_j, example, self->kernel);
                 le_tensor_free(x_train_j);
             }
@@ -158,7 +158,7 @@ le_svm_train(LeSVM *self, LeTensor *x_train, LeTensor *y_train, LeSVMTrainingOpt
         for (int i = 0; i < examples_count; i++)
         {
             /// @todo: Implement immutable matrix columns
-            LeTensor *x_train_i = le_matrix_get_column_copy(x_train, i);
+            LeTensor *x_train_i = le_matrix_get_column(x_train, i);
             /// @note: We will have 1x1 matrix here
             LeTensor *shallow_margin_matrix = le_svm_margins(self, x_train_i);
             float margin = le_matrix_at(shallow_margin_matrix, 0, 0);
@@ -171,7 +171,7 @@ le_svm_train(LeSVM *self, LeTensor *x_train, LeTensor *y_train, LeSVMTrainingOpt
                 while (j == i)
                     j = rand() % examples_count;
                 /// @todo: Implement immutable matrix columns
-                LeTensor *x_train_j = le_matrix_get_column_copy(x_train, j);
+                LeTensor *x_train_j = le_matrix_get_column(x_train, j);
                 /// @note: We will have 1x1 matrix here
                 LeTensor *shallow_margin_matrix = le_svm_margins(self, x_train_j);
                 float margin = le_matrix_at(shallow_margin_matrix, 0, 0);
