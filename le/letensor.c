@@ -248,6 +248,9 @@ le_matrix_empty(LeTensor *self)
 float
 le_dot_product(LeTensor *a, LeTensor *b)
 {
+#ifdef __APPLE__
+    return le_accelerate_dot_product(a, b);
+#else
     assert(a->shape->num_dimensions == 2);
     assert(b->shape->num_dimensions == 2);
     
@@ -271,6 +274,7 @@ le_dot_product(LeTensor *a, LeTensor *b)
     }
     
     return result;
+#endif
 }
 
 float

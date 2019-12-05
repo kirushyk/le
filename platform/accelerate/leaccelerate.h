@@ -17,4 +17,7 @@ float      le_accelerate_rbf                  (LeTensor *a,
                                                LeTensor *b,
                                                float     sigma);
 
+float      le_accelerate_dot_product          (LeTensor *a,
+                                               LeTensor *b);
+
 #endif

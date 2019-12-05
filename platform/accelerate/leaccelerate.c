@@ -75,3 +75,18 @@ le_accelerate_rbf(LeTensor *a, LeTensor *b, float sigma)
     
     return expf(-result / (2.0f * sigma * sigma));
 }
+
+float
+le_accelerate_dot_product(LeTensor *a, LeTensor *b)
+{
+    assert(a->element_type == LE_TYPE_FLOAT32);
+    assert(b->element_type == LE_TYPE_FLOAT32);
+    assert(a->shape->num_dimensions == 2);
+    assert(b->shape->num_dimensions == 2);
+    /** @todo: Test results against transposed a multiplied by b */
+    assert(a->shape->sizes[0] == b->shape->sizes[0]);
+    assert(a->shape->sizes[1] == 1);
+    assert(b->shape->sizes[1] == 1);
+    
+    return cblas_sdot(a->shape->sizes[0], a->data, a->stride, b->data, b->stride);
+}
