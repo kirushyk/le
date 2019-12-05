@@ -111,7 +111,11 @@ le_svm_margins(LeSVM *self, LeTensor *x)
             for (j = 0; j < training_examples_count; j++)
             {
                 LeTensor *x_train_j = le_matrix_get_column(self->x, j);
-                margin += le_matrix_at(self->alphas, 0, j) * le_matrix_at(self->y, 0, j) * kernel_function(x_train_j, example, self->kernel);
+                float alphaj = le_matrix_at(self->alphas, 0, j);
+                if (alphaj > 1e-4f || alphaj < -1e-4f)
+                {
+                    margin += alphaj * le_matrix_at(self->y, 0, j) * kernel_function(x_train_j, example, self->kernel);
+                }
                 le_tensor_free(x_train_j);
             }
             margin += self->bias;
