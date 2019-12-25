@@ -4,7 +4,7 @@
 #ifndef __LE1LAYERNN_H__
 #define __LE1LAYERNN_H__
 
-#include "letensor.h"
+#include "../letensor.h"
 
 typedef struct Le1LayerNN Le1LayerNN;
 

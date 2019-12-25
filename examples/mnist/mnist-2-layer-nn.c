@@ -28,7 +28,7 @@ main()
     LeTensor *test_output = le_matrix_new_one_hot(test_labels, 10);
     
     LeSequential *neural_network = le_sequential_new();
-    le_sequential_add(neural_network, );
+    // le_sequential_add(neural_network, );
     // le_1_layer_nn_init(neural_network, 28 * 28, 10);
     LeBGD *optimizer = le_bgd_new(le_model_get_parameters(LE_MODEL(neural_network)),
                                   0.03f);

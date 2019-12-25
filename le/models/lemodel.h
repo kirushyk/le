@@ -4,9 +4,9 @@
 #ifndef __LE_MODEL_H__
 #define __LE_MODEL_H__
 
-#include "leobject.h"
-#include "letensor.h"
-#include "lelist.h"
+#include "../leobject.h"
+#include "../letensor.h"
+#include "../lelist.h"
 
 typedef struct LeModel
 {
