@@ -78,7 +78,7 @@ le_matrix_new_from_data(unsigned height, unsigned width, const float *data)
     self->element_type = LE_TYPE_FLOAT32;
     self->shape = le_shape_new(2, height, width);
     self->stride = width;
-    self->owns_data = true;
+    self->owns_data = false;
     self->data = malloc(data_size);
     memcpy(self->data, data, data_size);
     
