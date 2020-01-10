@@ -63,7 +63,7 @@ le_bgd_new(LeList *parameters, float learning_rate)
     le_bgd_construct(self);
     if (parameters == NULL)
     {
-        fprintf(stderr, "[bgd] WARNING: Empty list of parameters to optimize");
+        fprintf(stderr, "[bgd] WARNING: Empty list of parameters to optimize\n");
     }
     LE_OPTIMIZER(self)->parameters = parameters;
     self->learning_rate = learning_rate;
