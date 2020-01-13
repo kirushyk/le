@@ -10,7 +10,7 @@ LeTensor *
 le_layer_forward_prop(LeLayer *layer, LeTensor *input)
 {
     assert(layer);
-    LeLayerClass *klass = (LeLayerClass *)LE_OBJECT_CLASS(layer);
+    LeLayerClass *klass = (LeLayerClass *)LE_OBJECT_GET_CLASS(layer);
     assert(klass);
     assert(klass->forward_prop);
 
@@ -62,7 +62,7 @@ le_dense_layer_new(unsigned inputs, unsigned units)
 {
     LeDenseLayer *self = malloc(sizeof(LeDenseLayer));
     le_dense_layer_class_ensure_init();
-    LE_OBJECT_CLASS(self) = LE_CLASS(&le_dense_layer_class);
+    LE_OBJECT_GET_CLASS(self) = LE_CLASS(&le_dense_layer_class);
     self->w = le_matrix_new_rand(units, inputs);
     self->b = le_matrix_new_rand(units, 1);
     return self;
@@ -124,7 +124,7 @@ le_activation_layer_new(LeActivation activation)
 {
     LeActivationLayer *self = malloc(sizeof(LeActivationLayer));
     le_activation_layer_class_ensure_init();
-    LE_OBJECT_CLASS(self) = LE_CLASS(&le_activation_layer_class);
+    LE_OBJECT_GET_CLASS(self) = LE_CLASS(&le_activation_layer_class);
     self->activation = activation;
     return self;
 }
