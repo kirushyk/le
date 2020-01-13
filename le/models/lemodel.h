@@ -25,6 +25,7 @@ typedef struct LeModelClass
 } LeModelClass;
 
 #define LE_MODEL_CLASS(klass) ((LeModelClass *)(klass))
+#define LE_MODEL_GET_CLASS(obj) (LE_MODEL_CLASS(LE_OBJECT_GET_CLASS(obj)))
 
 void       le_model_construct       (LeModel  *model);
 

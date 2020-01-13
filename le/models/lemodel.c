@@ -21,9 +21,9 @@ le_model_predict(LeModel *self, LeTensor *x)
 {
     assert(self);
     assert(LE_OBJECT_GET_CLASS(self));
-    assert(LE_MODEL_CLASS(LE_OBJECT_GET_CLASS(self))->predict);
+    assert(LE_MODEL_GET_CLASS(self)->predict);
     
-    return LE_MODEL_CLASS(LE_OBJECT_GET_CLASS(self))->predict(self, x);
+    return LE_MODEL_GET_CLASS(self)->predict(self, x);
 }
 
 LeList *
@@ -32,19 +32,19 @@ le_model_get_gradients(LeModel *self, LeTensor *x, LeTensor *y)
     assert(self);
     assert(LE_OBJECT_GET_CLASS(self));
     
-    if ((LE_MODEL_CLASS(LE_OBJECT_GET_CLASS(self)))->get_gradients == NULL)
+    if (LE_MODEL_GET_CLASS(self)->get_gradients == NULL)
     {
         LE_WARNING("`get_gradients` virtual function is not set in subclass");
         return NULL;
     };
     
-    return LE_MODEL_CLASS(LE_OBJECT_GET_CLASS(self))->get_gradients(self, x, y);
+    return LE_MODEL_GET_CLASS(self)->get_gradients(self, x, y);
 }
 
 float
 le_model_train_iteration(LeModel *self)
 {
-    return LE_MODEL_CLASS(LE_OBJECT_GET_CLASS(self))->train_iteration(self);
+    return LE_MODEL_GET_CLASS(self)->train_iteration(self);
 }
 
 LeList *
