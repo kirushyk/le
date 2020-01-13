@@ -3,8 +3,11 @@
 
 #include "lebgd.h"
 #include <le/letensor.h>
+#include <le/lelog.h>
 #include <stdlib.h>
 #include <stdio.h>
+
+#define DEFAULT_LOG_CATEGORY "bgd"
 
 struct LeBGD
 {
@@ -63,7 +66,7 @@ le_bgd_new(LeList *parameters, float learning_rate)
     le_bgd_construct(self);
     if (parameters == NULL)
     {
-        fprintf(stderr, "[bgd] WARNING: Empty list of parameters to optimize\n");
+        LE_WARNING("Empty list of parameters to optimize passed");
     }
     LE_OPTIMIZER(self)->parameters = parameters;
     self->learning_rate = learning_rate;
