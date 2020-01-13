@@ -32,7 +32,20 @@ main(int argc, const char *argv[])
     le_sequential_add(neural_network, LE_LAYER(le_activation_layer_new(LE_ACTIVATION_TANH)));
     le_sequential_add(neural_network, LE_LAYER(le_dense_layer_new(4, 1)));
     le_sequential_add(neural_network, LE_LAYER(le_activation_layer_new(LE_ACTIVATION_SOFTMAX)));
-
+    
+    LeBGD *optimizer = le_bgd_new(le_model_get_parameters(LE_MODEL(neural_network)),
+                                  0.03f);
+    for (unsigned i = 0; i <= 100; i++)
+    {
+        LeList *gradients = le_model_get_gradients(LE_MODEL(neural_network),
+                                                   x, y);
+        LE_OPTIMIZER(optimizer)->gradients = gradients;
+        le_optimizer_step(LE_OPTIMIZER(optimizer));
+        le_list_foreach(gradients, (LeFunction)le_tensor_free);
+    }
+    
+    le_bgd_free(optimizer);
+    
     LeTensor *h = le_model_predict((LeModel *)neural_network, x);
     printf("Predicted value =\n");
     le_tensor_print(h, stdout);
