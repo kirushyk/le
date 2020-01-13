@@ -18,9 +18,9 @@ le_model_construct(LeModel *self)
 }
 
 void
-le_model_append_parameter(LeModel *model, LeTensor *parameter)
+le_model_append_parameter(LeModel *self, LeTensor *parameter)
 {
-    model->parameters = le_list_append(model->parameters, parameter);
+    self->parameters = le_list_append(self->parameters, parameter);
 }
 
 LeTensor *
