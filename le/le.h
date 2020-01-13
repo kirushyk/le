@@ -14,6 +14,8 @@
 #include "models/lesvm.h"
 #include "models/lesequential.h"
 #include "models/layers/lelayer.h"
+#include "models/layers/ledenselayer.h"
+#include "models/layers/leactivationlayer.h"
 #include "lelist.h"
 #include "optimization/lebgd.h"
 #include "leloss.h"
