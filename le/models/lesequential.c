@@ -56,6 +56,13 @@ void
 le_sequential_add(LeSequential *self, LeLayer *layer)
 {
     self->layers = le_list_append(self->layers, layer);
+    LeList *parameters = le_layer_get_parameters(layer);
+    
+    for (LeList *current = parameters; current != NULL; current = current->next)
+    {
+        LeTensor *parameter = (LeTensor *)current->data;
+        le_model_append_parameter(LE_MODEL(self), parameter);
+    }
 }
 
 LeTensor *
@@ -68,6 +75,8 @@ le_sequential_predict(LeSequential *self, LeTensor *x)
     for (LeList *current = self->layers; current != NULL; current = current->next)
     {
         LeLayer *current_layer = (LeLayer *)current->data;
+        printf("signal =\n");
+        le_tensor_print(signal, stdout);
         LeTensor *output = le_layer_forward_prop(current_layer, signal);
         le_tensor_free(signal);
         signal = output;
