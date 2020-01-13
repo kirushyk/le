@@ -31,7 +31,7 @@ main(int argc, const char *argv[])
     le_sequential_add(neural_network, LE_LAYER(le_dense_layer_new(2, 4)));
     le_sequential_add(neural_network, LE_LAYER(le_activation_layer_new(LE_ACTIVATION_TANH)));
     le_sequential_add(neural_network, LE_LAYER(le_dense_layer_new(4, 1)));
-    le_sequential_add(neural_network, LE_LAYER(le_activation_layer_new(LE_ACTIVATION_TANH)));
+    le_sequential_add(neural_network, LE_LAYER(le_activation_layer_new(LE_ACTIVATION_SOFTMAX)));
 
     LeTensor *h = le_model_predict((LeModel *)neural_network, x);
     printf("Predicted value =\n");
