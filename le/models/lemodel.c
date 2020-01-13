@@ -10,10 +10,17 @@
 
 LeModelClass le_model_class;
 
-void le_model_construct(LeModel *self)
+void
+le_model_construct(LeModel *self)
 {
     LE_OBJECT_GET_CLASS(self) = (LeClass *)&le_model_class;
     self->parameters = NULL;
+}
+
+void
+le_model_append_parameter(LeModel *model, LeTensor *parameter)
+{
+    model->parameters = le_list_append(model->parameters, parameter);
 }
 
 LeTensor *

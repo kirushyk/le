@@ -27,19 +27,24 @@ typedef struct LeModelClass
 #define LE_MODEL_CLASS(klass) ((LeModelClass *)(klass))
 #define LE_MODEL_GET_CLASS(obj) (LE_MODEL_CLASS(LE_OBJECT_GET_CLASS(obj)))
 
-void       le_model_construct       (LeModel  *model);
+void       le_model_construct        (LeModel  *model);
 
-LeTensor * le_model_predict         (LeModel  *model,
-                                     LeTensor *x);
+/** @note: This function is to be used by instances of subclasses of LeModel
+    to list its trainable parameters */
+void       le_model_append_parameter (LeModel  *model,
+                                      LeTensor *parameter);
 
-LeList *   le_model_get_gradients   (LeModel  *model,
-                                     LeTensor *x,
-                                     LeTensor *y);
+LeTensor * le_model_predict          (LeModel  *model,
+                                      LeTensor *x);
 
-float      le_model_train_iteration (LeModel  *model);
+LeList *   le_model_get_gradients    (LeModel  *model,
+                                      LeTensor *x,
+                                      LeTensor *y);
 
-LeList *   le_model_get_parameters  (LeModel  *model);
+float      le_model_train_iteration  (LeModel  *model);
 
-void       le_model_free            (LeModel  *model);
+LeList *   le_model_get_parameters   (LeModel  *model);
+
+void       le_model_free             (LeModel  *model);
 
 #endif
