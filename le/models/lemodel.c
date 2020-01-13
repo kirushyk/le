@@ -4,6 +4,9 @@
 #include "lemodel.h"
 #include <assert.h>
 #include <stdlib.h>
+#include "lelog.h"
+
+#define DEFAULT_LOG_CATEGORY "model"
 
 LeModelClass le_model_class;
 
@@ -31,6 +34,7 @@ le_model_get_gradients(LeModel *self, LeTensor *x, LeTensor *y)
     
     if (((LeModelClass *)LE_OBJECT_CLASS(self))->get_gradients == NULL)
     {
+        LE_WARNING("`get_gradients` virtual function is not set in subclass");
         return NULL;
     };
     
