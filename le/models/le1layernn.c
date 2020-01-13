@@ -26,9 +26,11 @@ typedef struct Le1LayerNNClass
 
 Le1LayerNNClass le_1_layer_nn_class;
 
-LeTensor * le_1_layer_nn_predict(Le1LayerNN *self, LeTensor *x);
+LeTensor *
+le_1_layer_nn_predict(Le1LayerNN *self, LeTensor *x);
 
-LeList * le_1_layer_nn_get_gradients(Le1LayerNN *self, LeTensor *x, LeTensor *y);
+LeList *
+le_1_layer_nn_get_gradients(Le1LayerNN *self, LeTensor *x, LeTensor *y);
 
 void
 le_1_layer_nn_class_ensure_init(void)
