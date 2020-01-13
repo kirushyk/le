@@ -4,9 +4,9 @@
 #ifndef __LE_LAYER_H__
 #define __LE_LAYER_H__
 
-#include "../leobject.h"
-#include "../letensor.h"
-#include "../lelist.h"
+#include <le/leobject.h>
+#include <le/letensor.h>
+#include <le/lelist.h>
 
 /** @note: Abstract Layer class */
 

@@ -4,7 +4,7 @@
 #include "lelayer.h"
 #include <assert.h>
 #include <stdlib.h>
-#include "../lematrix.h"
+#include <le/lematrix.h>
 
 void
 le_layer_construct(LeLayer *layer)

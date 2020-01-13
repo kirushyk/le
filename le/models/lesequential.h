@@ -6,7 +6,7 @@
 
 #include "../letensor.h"
 #include "lemodel.h"
-#include "lelayer.h"
+#include "layers/lelayer.h"
 
 typedef struct LeSequential LeSequential;
 
