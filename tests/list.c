@@ -32,5 +32,13 @@ main()
     assert(c == a->next);
     assert(c->data == (void *)0x87654321);
     
+    LeList *d = le_list_append(a, (void *)0x00000000);
+    
+    assert(d);
+    assert(d == a);
+    assert(d->next != NULL);
+    assert(d->prev == NULL);
+    assert(d->data != (void *)0x00000000);
+
     return EXIT_SUCCESS;
 }
