@@ -6,6 +6,14 @@
 #include <stdlib.h>
 #include "../lematrix.h"
 
+void
+le_layer_construct(LeLayer *layer)
+{
+    assert(layer);
+    
+    layer->parameters = NULL;
+}
+
 LeTensor *
 le_layer_forward_prop(LeLayer *layer, LeTensor *input)
 {
@@ -16,6 +24,24 @@ le_layer_forward_prop(LeLayer *layer, LeTensor *input)
 
     return klass->forward_prop(layer, input);
 }
+
+LeList *
+le_layer_get_parameters(LeLayer *self)
+{
+    assert(self);
+    
+    return self->parameters;
+}
+
+void
+le_layer_append_parameter(LeLayer *self, LeTensor *parameter)
+{
+    assert(self);
+    assert(parameter);
+    
+    self->parameters = le_list_append(self->parameters, parameter);
+}
+
 
 typedef struct LeDenseLayerClass
 {
@@ -61,10 +87,13 @@ LeDenseLayer *
 le_dense_layer_new(unsigned inputs, unsigned units)
 {
     LeDenseLayer *self = malloc(sizeof(LeDenseLayer));
+    le_layer_construct(LE_LAYER(self));
     le_dense_layer_class_ensure_init();
     LE_OBJECT_GET_CLASS(self) = LE_CLASS(&le_dense_layer_class);
     self->w = le_matrix_new_rand(units, inputs);
     self->b = le_matrix_new_rand(units, 1);
+    le_layer_append_parameter(LE_LAYER(self), self->w);
+    le_layer_append_parameter(LE_LAYER(self), self->b);
     return self;
 }
 
@@ -123,6 +152,7 @@ LeActivationLayer *
 le_activation_layer_new(LeActivation activation)
 {
     LeActivationLayer *self = malloc(sizeof(LeActivationLayer));
+    le_layer_construct(LE_LAYER(self));
     le_activation_layer_class_ensure_init();
     LE_OBJECT_GET_CLASS(self) = LE_CLASS(&le_activation_layer_class);
     self->activation = activation;

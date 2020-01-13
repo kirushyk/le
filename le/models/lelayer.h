@@ -6,12 +6,15 @@
 
 #include "../leobject.h"
 #include "../letensor.h"
+#include "../lelist.h"
 
 /** @note: Abstract Layer class */
 
 typedef struct LeLayer
 {
     LeObject parent;
+    
+    LeList *parameters;
 } LeLayer;
 
 #define LE_LAYER(a) ((LeLayer *)(a))
@@ -25,8 +28,15 @@ typedef struct LeLayerClass
 
 #define LE_LAYER_CLASS(a) ((LeLayerClass *)(a))
 
-LeTensor * le_layer_forward_prop (LeLayer  *layer,
-                                  LeTensor *input);
+void       le_layer_construct        (LeLayer  *layer);
+
+LeTensor * le_layer_forward_prop     (LeLayer  *layer,
+                                      LeTensor *input);
+
+LeList *   le_layer_get_parameters   (LeLayer  *layer);
+
+void       le_layer_append_parameter (LeLayer  *layer,
+                                      LeTensor *parameter);
 
 /** @note: Densely-connected (fully-connected) layer */
 
