@@ -7,10 +7,14 @@ Le is Machine Learning framework written in Pure C. It provides library for:
 * Tensor Manipulation.
 * Linear Algebra.
 
-Learning algorithms supported at this moment:
+Models present:
 * Polynomial Regression.
 * Support Vector Machines (SVM).
 * 1-Layer Neural Network.
+
+Optimization algorithms supported:
+* Batch Gradient Descent.
+* Sequential Minimal Optimization.
 
 ## Playground
 
