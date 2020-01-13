@@ -10,14 +10,14 @@ main(int argc, const char *argv[])
 {
     const float x_data[] =
     {
-        1.0f, 2.0f, 3.0f, 4.0f,
-        4.0f, 3.0f, 2.0f, 1.0f
+        1.0f, 2.0f, 1.0f, 2.0f,
+        2.0f, 2.0f, 1.0f, 1.0f
     };
     LeTensor *x = le_matrix_new_from_data(2, 4, x_data);
     
     const float y_data[] =
     {
-        -1.0f, -1.0f, 1.0f, 1.0f
+        -1.0f, 1.0f, 1.0f, -1.0f
     };
     LeTensor *y = le_matrix_new_from_data(1, 4, y_data);
     
@@ -28,7 +28,11 @@ main(int argc, const char *argv[])
     le_tensor_print(y, stdout);
 
     LeSequential *neural_network = le_sequential_new();
-    
+    le_sequential_add(neural_network, LE_LAYER(le_dense_layer_new(2, 4)));
+    le_sequential_add(neural_network, LE_LAYER(le_activation_layer_new(LE_ACTIVATION_TANH)));
+    le_sequential_add(neural_network, LE_LAYER(le_dense_layer_new(2, 1)));
+    le_sequential_add(neural_network, LE_LAYER(le_activation_layer_new(LE_ACTIVATION_TANH)));
+
     LeTensor *h = le_model_predict((LeModel *)neural_network, x);
     printf("Predicted value =\n");
     le_tensor_print(h, stdout);
