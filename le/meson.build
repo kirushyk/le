@@ -16,6 +16,8 @@ le_sources = [
     'models/lemodel.c',
     'models/lesvm.c',
     'models/layers/lelayer.c',
+    'models/layers/ledenselayer.c',
+    'models/layers/leactivationlayer.c',
     'models/lesequential.c',
     'optimization/leoptimizer.c',
     'optimization/lebgd.c',
