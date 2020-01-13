@@ -13,6 +13,7 @@
 #include "models/le1layernn.h"
 #include "models/lesvm.h"
 #include "models/lesequential.h"
+#include "models/lelayer.h"
 #include "lelist.h"
 #include "optimization/lebgd.h"
 #include "leloss.h"

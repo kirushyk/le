@@ -2,6 +2,7 @@
    Released under the MIT license. See LICENSE file in the project root for full license information. */
 
 #include "lesequential.h"
+#include <assert.h>
 #include <stdlib.h>
 #include "lelist.h"
 #include "lelayer.h"
@@ -51,16 +52,25 @@ le_sequential_new(void)
     return self;
 }
 
+void
+le_sequential_add(LeSequential *self, LeLayer *layer)
+{
+    self->layers = le_list_append(self->layers, layer);
+}
+
 LeTensor *
 le_sequential_predict(LeSequential *self, LeTensor *x)
 {
+    assert(self);
+    assert(x);
+    
     LeTensor *signal = le_tensor_new_copy(x);
     for (LeList *current = self->layers; current != NULL; current = current->next)
     {
         LeLayer *current_layer = (LeLayer *)current->data;
-        LeTensor *wx;
-        wx = le_matrix_new_product(current_layer->weights, signal);
-        le_tensor_apply_sigmoid(wx);
+        LeTensor *output = le_layer_forward_prop(current_layer, signal);
+        le_tensor_free(signal);
+        signal = output;
     }
     return signal;
 }

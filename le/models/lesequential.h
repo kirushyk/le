@@ -6,10 +6,14 @@
 
 #include "../letensor.h"
 #include "lemodel.h"
+#include "lelayer.h"
 
 typedef struct LeSequential LeSequential;
 
 LeSequential * le_sequential_new     (void);
+
+void           le_sequential_add     (LeSequential *model,
+                                      LeLayer      *layer);
 
 LeTensor *     le_sequential_predict (LeSequential *model,
                                       LeTensor     *x);

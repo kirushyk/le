@@ -15,6 +15,7 @@ typedef struct LeObject
 } LeObject;
 
 #define LE_OBJECT(obj) ((LeObject *)(obj))
+#define LE_CLASS(klass) ((LeClass *)(klass))
 #define LE_OBJECT_CLASS(obj) (LE_OBJECT(obj)->klass)
 
 LeObject * le_object_alloc (void);

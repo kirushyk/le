@@ -52,6 +52,8 @@ le_tensor_new_from_data(LeType element_type, LeShape *shape, void *data)
 LeTensor *
 le_tensor_new_copy(LeTensor *another)
 {
+    assert(another);
+    
     LeTensor *self = malloc(sizeof(struct LeTensor));
     self->element_type = another->element_type;
     self->shape = le_shape_copy(another->shape);
@@ -413,6 +415,18 @@ le_tensor_apply_sigmoid(LeTensor *self)
         ((float *)self->data)[i] = le_sigmoid(((float *)self->data)[i]);
     }
 #endif
+}
+
+void
+le_tensor_apply_tanh(LeTensor *self)
+{
+    unsigned i;
+    unsigned elements_count = le_shape_get_elements_count(self->shape);
+    
+    for (i = 0; i < elements_count; i++)
+    {
+        ((float *)self->data)[i] = tanhf(((float *)self->data)[i]);
+    }
 }
 
 void
