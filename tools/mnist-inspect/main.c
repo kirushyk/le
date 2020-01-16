@@ -1,7 +1,6 @@
 /* Copyright (c) Kyrylo Polezhaiev and contributors. All rights reserved.
    Released under the MIT license. See LICENSE file in the project root for full license information. */
 
-#include <stdlib.h>
 #include <gtk/gtk.h>
 #include <le/le.h>
 #include "mi-menus.h"
@@ -40,12 +39,6 @@ main(int argc, char *argv[])
 {
     GtkApplication *app;
     int status;
-    
-#if __APPLE__
-    sranddev();
-#else
-    srand(time(NULL));
-#endif
     
     g_set_prgname("le-mnist-inspect");
     g_set_application_name("Le MNIST Inspect");
