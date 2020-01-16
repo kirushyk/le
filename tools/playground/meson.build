@@ -17,7 +17,7 @@ gtk = dependency('gtk+-3.0',
 
 if gtk.found()
     executable('le-playground', le_playground_sources,
-        dependencies: le_playground_deps,
+        dependencies: gtk,
         include_directories: incdir,
         link_with: le,
         install: true
