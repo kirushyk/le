@@ -18,6 +18,8 @@ main()
 
     LeTensor *train_images = le_data_set_get_input(mnist->train);
 
+    /// @note: In case MNIST dataset is not installed with
+    /// `ninja install`, this test will fail here:
     assert(train_images);
     assert(train_images->element_type == LE_TYPE_UINT8);
     assert(train_images->shape);
