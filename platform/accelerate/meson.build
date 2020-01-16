@@ -7,15 +7,16 @@ le_accelerate_sources = [
     'leaccelerate.c'
 ]
 
-accelerate = dependency('appleframeworks', modules : 'accelerate')
-
-le_accelerate_deps = [
-    accelerate
-]
+accelerate = dependency('appleframeworks', 
+    modules: 'accelerate',
+    required: false
+)
 
 if accelerate.found()
     le_accelerate = static_library('le_accelerate', le_accelerate_sources,
-        dependencies: le_accelerate_deps,
+        dependencies: [
+            accelerate
+        ],
         include_directories: incdir,
     )
 endif
