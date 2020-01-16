@@ -38,4 +38,6 @@ LeList *   le_layer_get_parameters   (LeLayer  *layer);
 void       le_layer_append_parameter (LeLayer  *layer,
                                       LeTensor *parameter);
 
+LeList *   le_layer_get_gradients    (LeLayer  *layer);
+
 #endif

@@ -11,7 +11,12 @@ typedef struct LeList
     struct LeList *prev;
 } LeList;
 
+LeList * le_list_first    (LeList     *list);
+
 LeList * le_list_last     (LeList     *list);
+
+LeList * le_list_prepend  (LeList     *list,
+                           void       *data);
 
 LeList * le_list_append   (LeList     *list,
                            void       *data);

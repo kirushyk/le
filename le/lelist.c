@@ -5,6 +5,20 @@
 #include "lelist.h"
 
 LeList *
+le_list_first(LeList *list)
+{
+    if (list)
+    {
+        while (list->prev)
+        {
+            list = list->prev;
+        }
+    }
+    
+    return list;
+}
+
+LeList *
 le_list_last(LeList *list)
 {
     if (list)
@@ -16,6 +30,27 @@ le_list_last(LeList *list)
     }
     
     return list;
+}
+
+LeList *
+le_list_prepend(LeList *list, void *data)
+{
+    LeList *new_element = malloc(sizeof(struct LeList));
+    new_element->data = data;
+    new_element->prev = NULL;
+    
+    if (list)
+    {
+        LeList *first = le_list_first(list);
+        first->prev = new_element;
+        new_element->next = first;
+    }
+    else
+    {
+        new_element->prev = NULL;
+    }
+    
+    return new_element;
 }
 
 LeList *

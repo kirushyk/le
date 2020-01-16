@@ -41,3 +41,11 @@ le_layer_append_parameter(LeLayer *self, LeTensor *parameter)
     
     self->parameters = le_list_append(self->parameters, parameter);
 }
+
+LeList *
+le_layer_get_gradients(LeLayer *self)
+{
+    assert(self);
+    
+    return NULL;
+}

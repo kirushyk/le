@@ -20,6 +20,12 @@ typedef struct LeSequentialClass
 
 LeSequentialClass le_sequential_class;
 
+LeTensor *
+le_sequential_predict(LeSequential *self, LeTensor *x);
+
+LeList *
+le_sequential_get_gradients(LeSequential *self, LeTensor *x, LeTensor *y);
+
 static void
 le_sequential_class_ensure_init()
 {
@@ -29,6 +35,8 @@ le_sequential_class_ensure_init()
     {
         le_sequential_class.parent.predict =
         (LeTensor *(*)(LeModel *, LeTensor *))le_sequential_predict;
+        le_sequential_class.parent.get_gradients =
+            (LeList *(*)(LeModel *, LeTensor *, LeTensor *))le_sequential_get_gradients;
         le_sequential_class_initialized = 1;
     }
 }
@@ -81,6 +89,63 @@ le_sequential_predict(LeSequential *self, LeTensor *x)
         signal = output;
     }
     return signal;
+}
+
+LeList *
+le_sequential_get_gradients(LeSequential *self, LeTensor *x, LeTensor *y)
+{
+    assert(self);
+    assert(x);
+    assert(y);
+    
+//    unsigned examples_count = le_matrix_get_width(y);
+    
+    /// @note: We cache output of each layer in list of tensors
+    /// to ease computation of gradients during backpropagation
+    LeList *outputs = NULL;
+    
+    LeTensor *signal = le_tensor_new_copy(x);
+    
+    LeList *current;
+    
+    for (current = self->layers; current != NULL; current = current->next)
+    {
+        LeLayer *current_layer = (LeLayer *)current->data;
+        printf("signal =\n");
+        le_tensor_print(signal, stdout);
+        LeTensor *output = le_layer_forward_prop(current_layer, signal);
+        le_tensor_free(signal);
+        signal = output;
+        
+        outputs = le_list_append(outputs, le_tensor_new_copy(output));
+    }
+    le_tensor_free(signal);
+    
+
+//    LeTensor *h = le_sequential_predict(self, x);
+//    le_tensor_subtract(h, y);
+//    le_tensor_multiply_by_scalar(h, 1.0 / examples_count);
+//    LeTensor *dw = le_matrix_new_product_full(h, false, x, true);
+//    LeTensor *db = le_matrix_new_sum(h, 1);
+//    le_tensor_free(h);
+
+    LeList *gradients = NULL;
+    for (;
+         current != NULL;
+         current = current->prev)
+    {
+//        LeLayer *layer = LE_LAYER(current_layer->data);
+//        LeList *layer_gradients = le_layer_get_gradients(layer);
+//        for (LeList *current_gradient = layer_gradients;
+//             current_gradient != NULL;
+//             current_gradient = current_gradient->next)
+//        {
+//            LeTensor *gradient = LE_TENSOR(current_gradient->data);
+//            gradients = le_list_append(gradients, gradient);
+//        }
+    }
+
+    return gradients;
 }
 
 void
