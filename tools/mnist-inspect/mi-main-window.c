@@ -1,14 +1,12 @@
 /* Copyright (c) Kyrylo Polezhaiev and contributors. All rights reserved.
    Released under the MIT license. See LICENSE file in the project root for full license information. */
 
-#include "pg-main-window.h"
+#include "mi-main-window.h"
 #include <stdlib.h>
 #include <le/le.h>
 #include <le/letensor-imp.h>
 #include <ext/mnist/lemnist.h>
 #include <math.h>
-#include "pg-generate-data.h"
-#include "pg-color.h"
 
 #define LE_TYPE_MAIN_WINDOW le_main_window_get_type()
 G_DECLARE_FINAL_TYPE(LEMainWindow, le_main_window, LE, MAIN_WINDOW, GtkApplicationWindow);
