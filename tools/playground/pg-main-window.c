@@ -8,6 +8,10 @@
 #include "pg-generate-data.h"
 #include "pg-color.h"
 
+#ifndef M_PI
+#   define M_PI (3.14159265358979323846)
+#endif
+
 #define LE_TYPE_MAIN_WINDOW le_main_window_get_type()
 G_DECLARE_FINAL_TYPE(LEMainWindow, le_main_window, LE, MAIN_WINDOW, GtkApplicationWindow);
 
