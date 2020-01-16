@@ -2,6 +2,7 @@
    Released under the MIT license. See LICENSE file in the project root for full license information. */
 
 #include "mi-main-window.h"
+#include <assert.h>
 #include <stdlib.h>
 #include <le/le.h>
 #include <le/letensor-imp.h>
@@ -206,5 +207,6 @@ GtkWidget *
 le_main_window_new(GtkApplication *application)
 {
     LEMainWindow *window = g_object_new(LE_TYPE_MAIN_WINDOW, "application", application, NULL);
+    assert(LE_IS_MAIN_WINDOW(window));
     return GTK_WIDGET(window);
 }
