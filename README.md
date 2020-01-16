@@ -1,7 +1,7 @@
 # Le - Machine Learning Framework.
 
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
-![License](https://img.shields.io/badge/platform-osx%20%7C%20linux-lightgrey.svg)
+![License](https://img.shields.io/badge/platform-macos%20%7C%20linux-lightgrey.svg)
 
 Le is Machine Learning framework written in Pure C. It provides library for:
 * Tensor Manipulation.
