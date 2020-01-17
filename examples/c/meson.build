@@ -3,7 +3,7 @@
 
 incdir = include_directories('../../')
 
-executable('support-vector-machines', 'support-vector-machines.c',
+executable('support-vector-machine', 'support-vector-machine.c',
     include_directories: incdir,
     link_with: le,
     install: false
