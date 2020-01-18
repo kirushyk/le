@@ -18,7 +18,7 @@ Optimization algorithms supported:
 * Batch Gradient Descent (BGD).
 * Sequential Minimal Optimization (SMO).
 
-## Compiling Application
+## Installation
 
 
 [The Meson Build system](https://mesonbuild.com) is used to automate building of Application. To create build directory, type:
