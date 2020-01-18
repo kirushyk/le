@@ -15,16 +15,38 @@ At this moment following ML models are implemented:
 * Sequential Multiple Layer Neural Network.
 
 Optimization algorithms supported:
-* Batch Gradient Descent.
-* Sequential Minimal Optimization.
+* Batch Gradient Descent (BGD).
+* Sequential Minimal Optimization (SMO).
 
-## Playground
+## Compiling Application
 
+
+[The Meson Build system](https://mesonbuild.com) is used to automate building of Application. To create build directory, type:
+
+    meson {source_directory_name} {build_directory_name}
+
+You can put your build directory inside of source directory:
+
+    cd {source_directory_name}
+    meson {build_directory_name}
+
+Then use [`ninja`](https://ninja-build.org) command from your build directory to compile binaries:
+
+    cd {build_directory_name}
+    ninja
+
+To install compiled binaries locally, type:
+
+    sudo ninja install
+    
+## Tools
+
+### Playground
 Small utility to play with binary classifier models:
 
 ![Le Playground](http://kirushyk.github.io/projects/le.png)
 
-## MNIST Inspector
+### MNIST Inspector
 
 Visual tool to navigate MNIST dataset:
 
