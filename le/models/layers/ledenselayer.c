@@ -47,15 +47,15 @@ le_dense_layer_backward_prop(LeLayer *layer, LeTensor *cached_input, LeTensor *o
     if (parameters_gradient)
     {
         assert(cached_input);
-        
+
         LeTensor *h = le_tensor_new_copy(output_gradient);
         unsigned examples_count = le_matrix_get_width(h);
         le_tensor_multiply_by_scalar(h, 1.0f / examples_count);
         LeTensor *dw = le_matrix_new_product_full(h, false, cached_input, true);
         LeTensor *db = le_matrix_new_sum(h, 1);
         le_tensor_free(h);
-        *parameters_gradient = le_list_append(*parameters_gradient, dw);
         *parameters_gradient = le_list_append(*parameters_gradient, db);
+        *parameters_gradient = le_list_append(*parameters_gradient, dw);
     }
 
     return input_gradient;

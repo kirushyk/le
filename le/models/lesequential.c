@@ -152,7 +152,7 @@ le_sequential_get_gradients(LeSequential *self, LeTensor *x, LeTensor *y)
              current_gradient = current_gradient->next)
         {
             LeTensor *gradient = LE_TENSOR(current_gradient->data);
-            gradients = le_list_append(gradients, gradient);
+            gradients = le_list_prepend(gradients, gradient);
         }
     }
     
