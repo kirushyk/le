@@ -21,5 +21,11 @@ executable('polynomia', 'polynomia.c',
     install: false
 )
 
+executable('shallow-neural-network', 'shallow-neural-network.c',
+    include_directories: incdir,
+    link_with: le,
+    install: false
+)
+
 subdir('mnist')
 subdir('optimization')
