@@ -24,6 +24,7 @@ le_activation_layer_forward_prop(LeLayer *layer, LeTensor *input)
     LeTensor *output = le_tensor_new_copy(input);
     switch (self->activation) {
     case LE_ACTIVATION_TANH:
+        /// @note: Hyperbolic tangent activation function: g(x) = tanh(x)
         le_tensor_apply_tanh(output);
         break;
         
@@ -38,9 +39,38 @@ le_activation_layer_forward_prop(LeLayer *layer, LeTensor *input)
         
     case LE_ACTIVATION_LINEAR:
     default:
+        /// @note: Linear activation function: g(x) = x
         break;
     }
     return output;
+}
+
+LeTensor *
+le_activation_layer_backward_prop(LeLayer *layer, LeTensor *output_gradient, LeList **parameters_gradient)
+{
+    assert(layer);
+    assert(output_gradient);
+    
+    LeActivationLayer *self = LE_ACTIVATION_LAYER(layer);
+    
+    LeTensor *input_gradient = le_tensor_new_copy(output_gradient);
+    switch (self->activation) {
+    case LE_ACTIVATION_TANH:
+        /// @note: Derivative of hyperbolic tangent activation function: g'(x) = 1 - g(x)^2
+        le_tensor_apply_tanh(input_gradient);
+        le_tensor_apply_sqr(input_gradient);
+        le_tensor_apply_1_minus(input_gradient);
+        break;
+        
+    case LE_ACTIVATION_SOFTMAX:
+        break;
+        
+    case LE_ACTIVATION_LINEAR:
+    default:
+        /// @note: Derivative of linear activation function: g'(x) = 1
+        break;
+    }
+    return input_gradient;
 }
 
 static LeActivationLayerClass le_activation_layer_class;
