@@ -29,6 +29,7 @@ typedef struct LeLayerClass
 } LeLayerClass;
 
 #define LE_LAYER_CLASS(a) ((LeLayerClass *)(a))
+#define LE_LAYER_GET_CLASS(a) LE_LAYER_CLASS(LE_OBJECT_GET_CLASS(a))
 
 void       le_layer_construct        (LeLayer     *layer,
                                       const char  *name);

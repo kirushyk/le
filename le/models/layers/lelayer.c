@@ -20,7 +20,7 @@ LeTensor *
 le_layer_forward_prop(LeLayer *self, LeTensor *input)
 {
     assert(self);
-    LeLayerClass *klass = (LeLayerClass *)LE_OBJECT_GET_CLASS(self);
+    LeLayerClass *klass = LE_LAYER_GET_CLASS(self);
     assert(klass);
     assert(klass->forward_prop);
 
@@ -48,7 +48,7 @@ LeTensor *
 le_layer_backward_prop(LeLayer *self, LeTensor *output_gradient, LeList **parameters_gradient)
 {
     assert(self);
-    LeLayerClass *klass = (LeLayerClass *)LE_OBJECT_GET_CLASS(self);
+    LeLayerClass *klass = LE_LAYER_GET_CLASS(self);
     assert(klass);
     assert(klass->backward_prop);
     assert(output_gradient);
