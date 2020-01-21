@@ -47,7 +47,7 @@ le_list_prepend(LeList *list, void *data)
     }
     else
     {
-        new_element->prev = NULL;
+        new_element->next = NULL;
     }
     
     return new_element;
