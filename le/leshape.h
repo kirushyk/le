@@ -13,24 +13,26 @@ typedef struct LeShape
     uint32_t *sizes;
 } LeShape;
 
-LeShape * le_shape_new                (unsigned  num_dimensions,
-                                       ...);
+LeShape *    le_shape_new                (unsigned  num_dimensions,
+                                          ...);
 
-LeShape * le_shape_new_from_data      (unsigned  num_dimensions,
-                                       uint32_t *sizes);
+LeShape *    le_shape_new_from_data      (unsigned  num_dimensions,
+                                          uint32_t *sizes);
 
-LeShape * le_shape_copy               (LeShape  *shape);
+LeShape *    le_shape_copy               (LeShape  *shape);
 
-LeShape * le_shape_lower_dimension    (LeShape  *shape);
+LeShape *    le_shape_lower_dimension    (LeShape  *shape);
 
 /// @note: Retrieves size in lowest order dimension
-uint32_t  le_shape_get_last_size      (LeShape  *shape);
+uint32_t     le_shape_get_last_size      (LeShape  *shape);
 
-void      le_shape_free               (LeShape  *shape);
+void         le_shape_free               (LeShape  *shape);
 
-uint32_t  le_shape_get_elements_count (LeShape  *shape);
+const char * le_shape_to_cstr            (LeShape  *shape);
 
-bool      le_shape_equal              (LeShape  *a,
-                                       LeShape  *b);
+uint32_t     le_shape_get_elements_count (LeShape  *shape);
+
+bool         le_shape_equal              (LeShape  *a,
+                                          LeShape  *b);
 
 #endif

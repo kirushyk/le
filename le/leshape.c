@@ -7,6 +7,7 @@
 #include <string.h>
 #include <stdarg.h>
 #include <assert.h>
+#include <stdio.h>
 
 LeShape *
 le_shape_new(unsigned num_dimensions, ...)
@@ -80,6 +81,34 @@ le_shape_free(LeShape *self)
         free(self->sizes);
         free(self);
     }
+}
+
+const char *
+le_shape_to_cstr(LeShape *shape)
+{
+    static char buffer[1024];
+
+    if (shape)
+    {
+        char *ptr = buffer;
+        ptr[0] = '(';
+        /// @todo: Add overflow check
+        ptr++;
+        for (unsigned i = 0; i < shape->num_dimensions; i++)
+        {
+            int written = 0;
+            sprintf(ptr, "%d%s%n", shape->sizes[i],
+                    i == (shape->num_dimensions - 1) ? ")" : ", ",
+                    &written);
+            ptr += written;
+        }
+    }
+    else
+    {
+        sprintf(buffer, "(null)");
+    }
+
+    return buffer;
 }
 
 uint32_t
