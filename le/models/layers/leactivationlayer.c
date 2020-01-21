@@ -83,6 +83,7 @@ le_activation_layer_class_ensure_init()
     if (!le_activation_layer_class_initialized)
     {
         le_activation_layer_class.parent.forward_prop = le_activation_layer_forward_prop;
+        le_activation_layer_class.parent.backward_prop = le_activation_layer_backward_prop;
         le_activation_layer_class_initialized = true;
     }
 }
