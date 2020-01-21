@@ -113,7 +113,9 @@ le_sequential_get_gradients(LeSequential *self, LeTensor *x, LeTensor *y)
 
     LE_INFO("Forward Propagation");
     
-    for (current = self->layers; current != NULL; current = current->next)
+    for (current = self->layers;
+         current != NULL; 
+         current = current->next)
     {
         LeLayer *current_layer = (LeLayer *)current->data;
         LE_INFO("signal =");
@@ -140,15 +142,15 @@ le_sequential_get_gradients(LeSequential *self, LeTensor *x, LeTensor *y)
 
     LeList *gradients = NULL;
     for (current = le_list_last(self->layers), outputs = le_list_last(outputs);
-         (current != NULL) && (outputs != NULL);
+         current && outputs;
          current = current->prev, outputs = outputs->prev)
     {
         LeLayer *current_layer = LE_LAYER(current->data);
         LE_INFO("Layer: %s", current_layer->name);
         LeList *layer_gradients = le_layer_get_gradients(current_layer);
         for (LeList *current_gradient = layer_gradients;
-        current_gradient != NULL;
-        current_gradient = current_gradient->next)
+             current_gradient != NULL;
+             current_gradient = current_gradient->next)
         {
             LeTensor *gradient = LE_TENSOR(current_gradient->data);
             gradients = le_list_append(gradients, gradient);
