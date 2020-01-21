@@ -12,7 +12,7 @@ At this moment following ML models are implemented:
 * Polynomial Regression.
 * Support Vector Machines (SVM).
 * 1-Layer Neural Network.
-* Sequential Multiple Layer Neural Network.
+* Sequential Feed-forward Neural Network (Multiple Layer Perceptron, MLP).
 
 Optimization algorithms supported:
 * Batch Gradient Descent (BGD).
@@ -20,8 +20,7 @@ Optimization algorithms supported:
 
 ## Installation
 
-
-[The Meson Build system](https://mesonbuild.com) is used to automate building of Application. To create build directory, type:
+[Meson Build system](https://mesonbuild.com) is used to automate building and installation. To create build directory, type:
 
     meson {source_directory_name} {build_directory_name}
 
