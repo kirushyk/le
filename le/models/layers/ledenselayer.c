@@ -44,6 +44,17 @@ le_dense_layer_backward_prop(LeLayer *layer, LeTensor *output_gradient, LeList *
 
     LeTensor *input_gradient = le_matrix_new_product_full(self->w, true, output_gradient, false);
 
+    if (parameters_gradient)
+    {
+
+    }
+//    LeTensor *h = le_sequential_predict(self, x);
+//    le_tensor_subtract(h, y);
+//    le_tensor_multiply_by_scalar(h, 1.0 / examples_count);
+//    LeTensor *dw = le_matrix_new_product_full(h, false, x, true);
+//    LeTensor *db = le_matrix_new_sum(h, 1);
+//    le_tensor_free(h);
+
     return input_gradient;
 }
 
