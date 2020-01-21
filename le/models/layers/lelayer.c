@@ -45,7 +45,7 @@ le_layer_append_parameter(LeLayer *self, LeTensor *parameter)
 }
 
 LeTensor * 
-le_layer_backward_prop(LeLayer *self, LeTensor *output_gradient, LeList **parameters_gradient)
+le_layer_backward_prop(LeLayer *self, LeTensor *cached_input, LeTensor *output_gradient, LeList **parameters_gradient)
 {
     assert(self);
     LeLayerClass *klass = LE_LAYER_GET_CLASS(self);
@@ -53,5 +53,5 @@ le_layer_backward_prop(LeLayer *self, LeTensor *output_gradient, LeList **parame
     assert(klass->backward_prop);
     assert(output_gradient);
     
-    return klass->backward_prop(self, output_gradient, parameters_gradient);
+    return klass->backward_prop(self, cached_input, output_gradient, parameters_gradient);
 }

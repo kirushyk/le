@@ -33,7 +33,7 @@ le_dense_layer_forward_prop(LeLayer *layer, LeTensor *input)
 }
 
 LeTensor *
-le_dense_layer_backward_prop(LeLayer *layer, LeTensor *output_gradient, LeList **parameters_gradient)
+le_dense_layer_backward_prop(LeLayer *layer, LeTensor *cached_input, LeTensor *output_gradient, LeList **parameters_gradient)
 {
     assert(layer);
     assert(output_gradient);
@@ -46,14 +46,17 @@ le_dense_layer_backward_prop(LeLayer *layer, LeTensor *output_gradient, LeList *
 
     if (parameters_gradient)
     {
-
+        assert(cached_input);
+        
+        LeTensor *h = le_tensor_new_copy(output_gradient);
+        unsigned examples_count = le_matrix_get_width(h);
+        le_tensor_multiply_by_scalar(h, 1.0f / examples_count);
+        LeTensor *dw = le_matrix_new_product_full(h, false, cached_input, true);
+        LeTensor *db = le_matrix_new_sum(h, 1);
+        le_tensor_free(h);
+        *parameters_gradient = le_list_append(*parameters_gradient, dw);
+        *parameters_gradient = le_list_append(*parameters_gradient, db);
     }
-//    LeTensor *h = le_sequential_predict(self, x);
-//    le_tensor_subtract(h, y);
-//    le_tensor_multiply_by_scalar(h, 1.0 / examples_count);
-//    LeTensor *dw = le_matrix_new_product_full(h, false, x, true);
-//    LeTensor *db = le_matrix_new_sum(h, 1);
-//    le_tensor_free(h);
 
     return input_gradient;
 }
