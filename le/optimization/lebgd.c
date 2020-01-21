@@ -1,13 +1,13 @@
 /* Copyright (c) Kyrylo Polezhaiev and contributors. All rights reserved.
    Released under the MIT license. See LICENSE file in the project root for full license information. */
 
+#define DEFAULT_LOG_CATEGORY "bgd"
+
 #include "lebgd.h"
 #include <le/letensor.h>
 #include <le/lelog.h>
 #include <stdlib.h>
 #include <stdio.h>
-
-#define DEFAULT_LOG_CATEGORY "bgd"
 
 struct LeBGD
 {
@@ -28,13 +28,26 @@ le_bgd_step(LeOptimizer *optimizer)
     LeBGD *self = (LeBGD *)optimizer;
     LeList *parameters_iterator;
     LeList *gradients_iterator;
+
+    LE_INFO("Step");
+
     for (parameters_iterator = optimizer->parameters, gradients_iterator = optimizer->gradients;
-         (parameters_iterator != NULL) && (gradients_iterator != NULL);
+         parameters_iterator && gradients_iterator;
          parameters_iterator = parameters_iterator->next, gradients_iterator = gradients_iterator->next)
     {
         LeTensor *parameter = (LeTensor *)parameters_iterator->data;
         LeTensor *gradients = (LeTensor *)gradients_iterator->data;
         le_tensor_subtract_scaled(parameter, self->learning_rate, gradients);
+    }
+
+    if (parameters_iterator)
+    {
+        LE_WARNING("Some gradients missing");
+    }
+
+    if (gradients_iterator)
+    {
+        LE_WARNING("Extra gradients passed");
     }
 }
 
