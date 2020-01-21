@@ -44,10 +44,14 @@ le_layer_append_parameter(LeLayer *self, LeTensor *parameter)
     self->parameters = le_list_append(self->parameters, parameter);
 }
 
-LeList *
-le_layer_get_gradients(LeLayer *self)
+LeTensor * 
+le_layer_backward_prop(LeLayer *self, LeTensor *output_gradient, LeList **parameters_gradient)
 {
     assert(self);
+    LeLayerClass *klass = (LeLayerClass *)LE_OBJECT_GET_CLASS(self);
+    assert(klass);
+    assert(klass->backward_prop);
+    assert(output_gradient);
     
-    return NULL;
+    return klass->backward_prop(self, output_gradient, parameters_gradient);
 }

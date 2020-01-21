@@ -147,8 +147,11 @@ le_sequential_get_gradients(LeSequential *self, LeTensor *x, LeTensor *y)
     {
         LeLayer *current_layer = LE_LAYER(current->data);
         LE_INFO("Layer: %s", current_layer->name);
-        LeList *layer_gradients = le_layer_get_gradients(current_layer);
-        for (LeList *current_gradient = layer_gradients;
+        LeList *current_layer_param_gradients = NULL;
+        LeTensor *input_gradient = le_layer_backward_prop(current_layer, signal, &current_layer_param_gradients); 
+        le_tensor_free(signal);
+        signal = input_gradient;
+        for (LeList *current_gradient = current_layer_param_gradients;
              current_gradient != NULL;
              current_gradient = current_gradient->next)
         {
