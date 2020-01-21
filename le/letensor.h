@@ -72,6 +72,10 @@ void       le_tensor_apply_sigmoid        (LeTensor     *tensor);
 
 void       le_tensor_apply_tanh           (LeTensor     *tensor);
 
+void       le_tensor_apply_sqr            (LeTensor     *tensor);
+
+void       le_tensor_apply_1_minus        (LeTensor     *tensor);
+
 void       le_tensor_apply_greater_than   (LeTensor     *tensor,
                                            float         scalar);
 
