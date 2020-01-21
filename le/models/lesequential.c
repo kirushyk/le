@@ -65,6 +65,8 @@ le_sequential_new(void)
 void
 le_sequential_add(LeSequential *self, LeLayer *layer)
 {
+    LE_INFO("Adding New Layer: %s", layer->name);
+
     self->layers = le_list_append(self->layers, layer);
     LeList *parameters = le_layer_get_parameters(layer);
     
