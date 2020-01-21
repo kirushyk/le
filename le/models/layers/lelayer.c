@@ -17,14 +17,14 @@ le_layer_construct(LeLayer *layer, const char *name)
 }
 
 LeTensor *
-le_layer_forward_prop(LeLayer *layer, LeTensor *input)
+le_layer_forward_prop(LeLayer *self, LeTensor *input)
 {
-    assert(layer);
-    LeLayerClass *klass = (LeLayerClass *)LE_OBJECT_GET_CLASS(layer);
+    assert(self);
+    LeLayerClass *klass = (LeLayerClass *)LE_OBJECT_GET_CLASS(self);
     assert(klass);
     assert(klass->forward_prop);
 
-    return klass->forward_prop(layer, input);
+    return klass->forward_prop(self, input);
 }
 
 LeList *

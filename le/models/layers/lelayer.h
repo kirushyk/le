@@ -24,8 +24,8 @@ typedef struct LeLayerClass
 {
     LeClass parent;
     
-    LeTensor * (*forward_prop)(LeLayer *model, LeTensor *x);
-    LeTensor * (*backward_prop)(LeLayer *model, LeTensor *dJ_dy, LeList **dJ_dw);
+    LeTensor * (*forward_prop)(LeLayer *self, LeTensor *x);
+    LeTensor * (*backward_prop)(LeLayer *self, LeTensor *dJ_dy, LeList **dJ_dw);
 } LeLayerClass;
 
 #define LE_LAYER_CLASS(a) ((LeLayerClass *)(a))
