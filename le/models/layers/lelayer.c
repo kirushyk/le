@@ -8,12 +8,12 @@
 #include <le/lematrix.h>
 
 void
-le_layer_construct(LeLayer *layer, const char *name)
+le_layer_construct(LeLayer *self, const char *name)
 {
-    assert(layer);
+    assert(self);
     
-    layer->parameters = NULL;
-    layer->name = strdup(name);
+    self->parameters = NULL;
+    self->name = strdup(name);
 }
 
 LeTensor *
