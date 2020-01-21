@@ -139,14 +139,13 @@ le_sequential_get_gradients(LeSequential *self, LeTensor *x, LeTensor *y)
 //    le_tensor_free(h);
 
     LeList *gradients = NULL;
-    for (current = le_list_last(self->layers);
+    for (current = le_list_last(self->layers), outputs = le_list_last(outputs);
          (current != NULL) && (outputs != NULL);
          current = current->prev, outputs = outputs->prev)
-    {
+    {        
         LeLayer *current_layer = (LeLayer *)current->data;
         LE_INFO("Layer: %s", current_layer->name);
 
-        assert((current != NULL) != (outputs != NULL));
 //        LeLayer *layer = LE_LAYER(current_layer->data);
 //        LeList *layer_gradients = le_layer_get_gradients(layer);
 //        for (LeList *current_gradient = layer_gradients;
@@ -157,6 +156,8 @@ le_sequential_get_gradients(LeSequential *self, LeTensor *x, LeTensor *y)
 //            gradients = le_list_append(gradients, gradient);
 //        }
     }
+    
+    assert((current != NULL) != (outputs != NULL));
 
     le_tensor_free(signal);
 
