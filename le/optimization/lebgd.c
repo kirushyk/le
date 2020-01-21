@@ -81,6 +81,10 @@ le_bgd_new(LeList *parameters, float learning_rate)
     {
         LE_WARNING("Empty list of parameters to optimize passed");
     }
+    if (learning_rate <= 0.0f)
+    {
+        LE_WARNING("Learning rate = %f", learning_rate);
+    }
     LE_OPTIMIZER(self)->parameters = parameters;
     self->learning_rate = learning_rate;
     return self;
