@@ -14,7 +14,7 @@ le_mnist_load(const char *path)
 {
     if (!path)
     {
-        path = MNIST_DATASET_PATH;
+        path = MNIST_DATASET_INSTALL_PATH;
     }
 
     MNIST *mnist = malloc(sizeof(MNIST));

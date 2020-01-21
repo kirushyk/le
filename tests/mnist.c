@@ -6,11 +6,12 @@
 #include <le/le.h>
 #include <le/letensor-imp.h>
 #include <ext/mnist/lemnist.h>
+#include <ext/mnist/mnist-config.h>
 
 int
 main()
 {
-    MNIST *mnist = le_mnist_load(NULL);
+    MNIST *mnist = le_mnist_load(MNIST_DATASET_SOURCE_PATH);
 
     assert(mnist);
     assert(mnist->train);
