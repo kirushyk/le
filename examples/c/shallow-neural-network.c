@@ -28,10 +28,10 @@ main(int argc, const char *argv[])
     le_tensor_print(y, stdout);
 
     LeSequential *neural_network = le_sequential_new();
-    le_sequential_add(neural_network, LE_LAYER(le_dense_layer_new(2, 4)));
-    le_sequential_add(neural_network, LE_LAYER(le_activation_layer_new(LE_ACTIVATION_TANH)));
-    le_sequential_add(neural_network, LE_LAYER(le_dense_layer_new(4, 1)));
-    le_sequential_add(neural_network, LE_LAYER(le_activation_layer_new(LE_ACTIVATION_SOFTMAX)));
+    le_sequential_add(neural_network, LE_LAYER(le_dense_layer_new("D1", 2, 4)));
+    le_sequential_add(neural_network, LE_LAYER(le_activation_layer_new("A1", LE_ACTIVATION_TANH)));
+    le_sequential_add(neural_network, LE_LAYER(le_dense_layer_new("D2", 4, 1)));
+    le_sequential_add(neural_network, LE_LAYER(le_activation_layer_new("A2", LE_ACTIVATION_SOFTMAX)));
     
     LeBGD *optimizer = le_bgd_new(le_model_get_parameters(LE_MODEL(neural_network)),
                                   0.03f);
