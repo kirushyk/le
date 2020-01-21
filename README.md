@@ -20,6 +20,8 @@ Optimization algorithms supported:
 
 ## Installation
 
+### From Source
+
 [Meson Build system](https://mesonbuild.com) is used to automate building and installation. To create build directory, type:
 
     meson {source_directory_name} {build_directory_name}
