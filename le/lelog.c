@@ -13,7 +13,17 @@ static const char *le_level_name[(size_t)LE_LOG_LEVEL_LAST] =
 };
 
 void
-le_log(const char *category, LeLogLevel level, const char *message)
+le_log(const char *category, LeLogLevel level, const char *message, ...)
 {
-    fprintf(stderr, "[%s] %s: %s\n", category, le_level_name[(size_t)level], message);
+    FILE *out = (level == LE_LOG_LEVEL_ERROR) ? stderr : stdout;
+    fprintf(out, "[%s] %s: ", category, le_level_name[(size_t)level]);
+    va_list args;
+    va_start(args, message);
+    vfprintf(out, message, args);
+    va_end(args);
+    fputc('\n', out);
+    if (level == LE_LOG_LEVEL_ERROR)
+    {
+        exit(EXIT_FAILURE);
+    }
 }
