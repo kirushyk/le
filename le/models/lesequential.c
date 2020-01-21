@@ -142,22 +142,21 @@ le_sequential_get_gradients(LeSequential *self, LeTensor *x, LeTensor *y)
     for (current = le_list_last(self->layers), outputs = le_list_last(outputs);
          (current != NULL) && (outputs != NULL);
          current = current->prev, outputs = outputs->prev)
-    {        
-        LeLayer *current_layer = (LeLayer *)current->data;
+    {
+        LeLayer *current_layer = LE_LAYER(current->data);
         LE_INFO("Layer: %s", current_layer->name);
-
-//        LeLayer *layer = LE_LAYER(current_layer->data);
-//        LeList *layer_gradients = le_layer_get_gradients(layer);
-//        for (LeList *current_gradient = layer_gradients;
-//             current_gradient != NULL;
-//             current_gradient = current_gradient->next)
-//        {
-//            LeTensor *gradient = LE_TENSOR(current_gradient->data);
-//            gradients = le_list_append(gradients, gradient);
-//        }
+        LeList *layer_gradients = le_layer_get_gradients(current_layer);
+        for (LeList *current_gradient = layer_gradients;
+        current_gradient != NULL;
+        current_gradient = current_gradient->next)
+        {
+            LeTensor *gradient = LE_TENSOR(current_gradient->data);
+            gradients = le_list_append(gradients, gradient);
+        }
     }
     
-    assert((current != NULL) != (outputs != NULL));
+    assert(current == NULL);
+    assert(outputs == NULL);
 
     le_tensor_free(signal);
 
