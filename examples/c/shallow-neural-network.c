@@ -1,6 +1,8 @@
 /* Copyright (c) Kyrylo Polezhaiev and contributors. All rights reserved.
    Released under the MIT license. See LICENSE file in the project root for full license information. */
 
+#define DEFAULT_LOG_CATEGORY "snn"
+
 #include <stdio.h>
 #include <math.h>
 #include <le/le.h>
@@ -27,16 +29,21 @@ main(int argc, const char *argv[])
     printf("y =\n");
     le_tensor_print(y, stdout);
 
+    LE_INFO("Creating Neural Network Structure");
+
     LeSequential *neural_network = le_sequential_new();
     le_sequential_add(neural_network, LE_LAYER(le_dense_layer_new("D1", 2, 4)));
     le_sequential_add(neural_network, LE_LAYER(le_activation_layer_new("A1", LE_ACTIVATION_TANH)));
     le_sequential_add(neural_network, LE_LAYER(le_dense_layer_new("D2", 4, 1)));
     le_sequential_add(neural_network, LE_LAYER(le_activation_layer_new("A2", LE_ACTIVATION_SOFTMAX)));
     
+    LE_INFO("Training Neural Network");
     LeBGD *optimizer = le_bgd_new(le_model_get_parameters(LE_MODEL(neural_network)),
                                   0.03f);
     for (unsigned i = 0; i <= 100; i++)
     {
+        LE_INFO("Iteration %u", i);
+
         LeList *gradients = le_model_get_gradients(LE_MODEL(neural_network),
                                                    x, y);
         LE_OPTIMIZER(optimizer)->gradients = gradients;
