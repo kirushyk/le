@@ -18,7 +18,8 @@ typedef struct LeDenseLayer
 
 #define LE_DENSE_LAYER(a) ((LeDenseLayer *)(a))
 
-LeDenseLayer * le_dense_layer_new (unsigned inputs,
-                                   unsigned units);
+LeDenseLayer * le_dense_layer_new (const char *name,
+                                   unsigned    inputs,
+                                   unsigned    units);
 
 #endif

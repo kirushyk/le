@@ -4,14 +4,16 @@
 #include "lelayer.h"
 #include <assert.h>
 #include <stdlib.h>
+#include <string.h>
 #include <le/lematrix.h>
 
 void
-le_layer_construct(LeLayer *layer)
+le_layer_construct(LeLayer *layer, const char *name)
 {
     assert(layer);
     
     layer->parameters = NULL;
+    layer->name = strdup(name);
 }
 
 LeTensor *

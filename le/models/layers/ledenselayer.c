@@ -47,10 +47,10 @@ le_dense_layer_class_ensure_init()
 }
 
 LeDenseLayer *
-le_dense_layer_new(unsigned inputs, unsigned units)
+le_dense_layer_new(const char *name, unsigned inputs, unsigned units)
 {
     LeDenseLayer *self = malloc(sizeof(LeDenseLayer));
-    le_layer_construct(LE_LAYER(self));
+    le_layer_construct(LE_LAYER(self), name);
     le_dense_layer_class_ensure_init();
     LE_OBJECT_GET_CLASS(self) = LE_CLASS(&le_dense_layer_class);
     self->w = le_matrix_new_rand(units, inputs);

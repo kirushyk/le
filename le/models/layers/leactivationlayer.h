@@ -22,6 +22,7 @@ typedef struct LeActivationLayer
 
 #define LE_ACTIVATION_LAYER(a) ((LeActivationLayer *)(a))
 
-LeActivationLayer * le_activation_layer_new (LeActivation activation);
+LeActivationLayer * le_activation_layer_new (const char   *name,
+                                             LeActivation  activation);
 
 #endif
