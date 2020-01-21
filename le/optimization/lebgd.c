@@ -5,6 +5,7 @@
 
 #include "lebgd.h"
 #include <le/letensor.h>
+#include <le/letensor-imp.h>
 #include <le/lelog.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -36,7 +37,9 @@ le_bgd_step(LeOptimizer *optimizer)
          parameters_iterator = parameters_iterator->next, gradients_iterator = gradients_iterator->next)
     {
         LeTensor *parameter = (LeTensor *)parameters_iterator->data;
+        LE_INFO("Parameter shape: %s", le_shape_to_cstr(parameter->shape));
         LeTensor *gradients = (LeTensor *)gradients_iterator->data;
+        LE_INFO("Gradient shape: %s", le_shape_to_cstr(gradients->shape));
         le_tensor_subtract_scaled(parameter, self->learning_rate, gradients);
     }
 
