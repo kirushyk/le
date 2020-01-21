@@ -32,6 +32,21 @@ le_dense_layer_forward_prop(LeLayer *layer, LeTensor *input)
     return output;
 }
 
+LeTensor *
+le_dense_layer_backward_prop(LeLayer *layer, LeTensor *output_gradient, LeList **parameters_gradient)
+{
+    assert(layer);
+    assert(output_gradient);
+    
+    LeDenseLayer *self = LE_DENSE_LAYER(layer);
+
+    assert(self->w);
+
+    LeTensor *input_gradient = le_matrix_new_product_full(self->w, true, output_gradient, false);
+
+    return input_gradient;
+}
+
 static LeDenseLayerClass le_dense_layer_class;
 
 static void
@@ -42,6 +57,7 @@ le_dense_layer_class_ensure_init()
     if (!le_dense_layer_class_initialized)
     {
         le_dense_layer_class.parent.forward_prop = le_dense_layer_forward_prop;
+        le_dense_layer_class.parent.backward_prop = le_dense_layer_backward_prop;
         le_dense_layer_class_initialized = true;
     }
 }
