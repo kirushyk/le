@@ -1,7 +1,10 @@
 /* Copyright (c) Kyrylo Polezhaiev and contributors. All rights reserved.
    Released under the MIT license. See LICENSE file in the project root for full license information. */
 
+#define DEFAULT_LOG_CATEGORY "sequential"
+
 #include "lesequential.h"
+#include <le/lelog.h>
 #include <assert.h>
 #include <stdlib.h>
 #include "lelist.h"
@@ -107,20 +110,27 @@ le_sequential_get_gradients(LeSequential *self, LeTensor *x, LeTensor *y)
     LeTensor *signal = le_tensor_new_copy(x);
     
     LeList *current;
+
+    LE_INFO("Forward Propagation");
     
     for (current = self->layers; current != NULL; current = current->next)
     {
         LeLayer *current_layer = (LeLayer *)current->data;
-        printf("signal =\n");
+        LE_INFO("signal =\n");
         le_tensor_print(signal, stdout);
+        LE_INFO("Layer:");
+        printf("%s", current_layer->name);
         LeTensor *output = le_layer_forward_prop(current_layer, signal);
         le_tensor_free(signal);
         signal = output;
         
         outputs = le_list_append(outputs, le_tensor_new_copy(output));
     }
-    le_tensor_free(signal);
+
+    LE_INFO("Back Propagation");
     
+    /// @note: Derivative of assumed cost function
+    le_tensor_subtract(signal, y);
 
 //    LeTensor *h = le_sequential_predict(self, x);
 //    le_tensor_subtract(h, y);
@@ -130,10 +140,15 @@ le_sequential_get_gradients(LeSequential *self, LeTensor *x, LeTensor *y)
 //    le_tensor_free(h);
 
     LeList *gradients = NULL;
-    for (;
-         current != NULL;
-         current = current->prev)
+    for (current = le_list_last(self->layers);
+         (current != NULL) && (outputs != NULL);
+         current = current->prev, outputs = outputs->prev)
     {
+        assert((current != NULL) != (outputs != NULL));
+
+        LeLayer *current_layer = (LeLayer *)current->data;
+        LE_INFO("Layer:");
+        printf("%s", current_layer->name);
 //        LeLayer *layer = LE_LAYER(current_layer->data);
 //        LeList *layer_gradients = le_layer_get_gradients(layer);
 //        for (LeList *current_gradient = layer_gradients;
@@ -144,6 +159,8 @@ le_sequential_get_gradients(LeSequential *self, LeTensor *x, LeTensor *y)
 //            gradients = le_list_append(gradients, gradient);
 //        }
     }
+
+    le_tensor_free(signal);
 
     return gradients;
 }
