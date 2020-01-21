@@ -19,6 +19,5 @@
 #include "lelist.h"
 #include "optimization/lebgd.h"
 #include "leloss.h"
-#include "lelog.h"
 
 #endif
