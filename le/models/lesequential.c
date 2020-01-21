@@ -100,9 +100,7 @@ le_sequential_get_gradients(LeSequential *self, LeTensor *x, LeTensor *y)
     assert(self);
     assert(x);
     assert(y);
-    
-//    unsigned examples_count = le_matrix_get_width(y);
-    
+        
     /// @note: We cache output of each layer in list of tensors
     /// to ease computation of gradients during backpropagation
     LeList *outputs = NULL;
@@ -128,17 +126,13 @@ le_sequential_get_gradients(LeSequential *self, LeTensor *x, LeTensor *y)
         outputs = le_list_append(outputs, le_tensor_new_copy(output));
     }
 
+    LE_INFO("output =");
+    le_tensor_print(signal, stdout);
+    
     LE_INFO("Back Propagation");
     
     /// @note: Derivative of assumed cost function
     le_tensor_subtract(signal, y);
-
-//    LeTensor *h = le_sequential_predict(self, x);
-//    le_tensor_subtract(h, y);
-//    le_tensor_multiply_by_scalar(h, 1.0 / examples_count);
-//    LeTensor *dw = le_matrix_new_product_full(h, false, x, true);
-//    LeTensor *db = le_matrix_new_sum(h, 1);
-//    le_tensor_free(h);
 
     LeList *gradients = NULL;
     for (current = le_list_last(self->layers), outputs = le_list_last(outputs);
