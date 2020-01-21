@@ -101,9 +101,9 @@ le_sequential_get_gradients(LeSequential *self, LeTensor *x, LeTensor *y)
     assert(x);
     assert(y);
         
-    /// @note: We cache output of each layer in list of tensors
+    /// @note: We cache input of each layer in list of tensors
     /// to ease computation of gradients during backpropagation
-    LeList *outputs = NULL;
+    LeList *inputs = NULL;
     
     LeTensor *signal = le_tensor_new_copy(x);
     
@@ -116,14 +116,13 @@ le_sequential_get_gradients(LeSequential *self, LeTensor *x, LeTensor *y)
          current = current->next)
     {
         LeLayer *current_layer = (LeLayer *)current->data;
+        inputs = le_list_append(inputs, le_tensor_new_copy(signal));
         LE_INFO("signal =");
         le_tensor_print(signal, stdout);
         LE_INFO("Layer: %s", current_layer->name);
         LeTensor *output = le_layer_forward_prop(current_layer, signal);
         le_tensor_free(signal);
         signal = output;
-        
-        outputs = le_list_append(outputs, le_tensor_new_copy(output));
     }
 
     LE_INFO("output =");
@@ -135,14 +134,15 @@ le_sequential_get_gradients(LeSequential *self, LeTensor *x, LeTensor *y)
     le_tensor_subtract(signal, y);
 
     LeList *gradients = NULL;
-    for (current = le_list_last(self->layers), outputs = le_list_last(outputs);
-         current && outputs;
-         current = current->prev, outputs = outputs->prev)
+    for (current = le_list_last(self->layers), inputs = le_list_last(inputs);
+         current && inputs;
+         current = current->prev, inputs = inputs->prev)
     {
         LeLayer *current_layer = LE_LAYER(current->data);
         LE_INFO("Layer: %s", current_layer->name);
         LeList *current_layer_param_gradients = NULL;
-        LeTensor *input_gradient = le_layer_backward_prop(current_layer, signal, &current_layer_param_gradients); 
+        LeTensor *cached_input = LE_TENSOR(inputs->data);
+        LeTensor *input_gradient = le_layer_backward_prop(current_layer, cached_input, signal, &current_layer_param_gradients); 
         le_tensor_free(signal);
         signal = input_gradient;
         LE_INFO("signal =");
@@ -157,7 +157,7 @@ le_sequential_get_gradients(LeSequential *self, LeTensor *x, LeTensor *y)
     }
     
     assert(current == NULL);
-    assert(outputs == NULL);
+    assert(inputs == NULL);
 
     le_tensor_free(signal);
 
