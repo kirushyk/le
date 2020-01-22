@@ -479,6 +479,41 @@ le_tensor_apply_svm_prediction(LeTensor *self)
     }
 }
 
+const char *
+le_tensor_to_cstr(LeTensor *self)
+{
+    /// @todo: Fix buffer overflow
+    static char buffer[1024];
+
+    if (self->shape->num_dimensions != 2)
+    {
+        sprintf(buffer, "<%dD tensor>\n", self->shape->num_dimensions);
+        return buffer;
+    }
+    
+    unsigned x;
+    unsigned y;
+    sprintf(buffer, "[");
+    for (y = 0; y < self->shape->sizes[0]; y++)
+    {
+        for (x = 0; x < self->shape->sizes[1]; x++)
+        {
+            sprintf(buffer, "%1.3f", ((float *)self->data)[y * self->shape->sizes[1] + x]);
+            if (x < self->shape->sizes[1] - 1)
+            {
+                sprintf(buffer, " ");
+            }
+        }
+        if (y < self->shape->sizes[0] - 1)
+        {
+            sprintf(buffer, ";\n ");
+        }
+    }
+    sprintf(buffer, "]\n");
+
+    return buffer;
+}
+
 /** @note: Temporary */
 void
 le_tensor_print(LeTensor *self, FILE *stream)
