@@ -10,6 +10,8 @@
 
 typedef struct LeSequential LeSequential;
 
+#define LE_SEQUENTIAL(a) ((LeSequential *)(a))
+
 LeSequential * le_sequential_new     (void);
 
 void           le_sequential_add     (LeSequential *model,
