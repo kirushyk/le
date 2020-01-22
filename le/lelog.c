@@ -4,6 +4,7 @@
 #include "lelog.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 static const char *le_level_name[(size_t)LE_LOG_LEVEL_LAST] =
 {
@@ -15,6 +16,14 @@ static const char *le_level_name[(size_t)LE_LOG_LEVEL_LAST] =
 void
 le_log(const char *category, LeLogLevel level, const char *message, ...)
 {
+    if (level == LE_LOG_LEVEL_INFO)
+    {
+        const char *le_debug = getenv("LE_DEBUG");
+        if ((le_debug == NULL) || strcasecmp(le_debug, category))
+        {
+            return;
+        }
+    }
     FILE *out = (level == LE_LOG_LEVEL_ERROR) ? stderr : stdout;
     fprintf(out, "[%s] %s: ", category, le_level_name[(size_t)level]);
     va_list args;
