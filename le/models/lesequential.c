@@ -150,7 +150,7 @@ le_sequential_get_gradients(LeSequential *self, LeTensor *x, LeTensor *y)
         LE_INFO("signal =");
         le_tensor_print(signal, stdout);
         for (LeList *current_gradient = current_layer_param_gradients;
-             current_gradient != NULL;
+             current_gradient;
              current_gradient = current_gradient->next)
         {
             LeTensor *gradient = LE_TENSOR(current_gradient->data);
