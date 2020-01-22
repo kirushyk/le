@@ -40,7 +40,7 @@ main(int argc, const char *argv[])
     LE_INFO("Training Neural Network");
     LeBGD *optimizer = le_bgd_new(le_model_get_parameters(LE_MODEL(neural_network)),
                                   0.03f);
-    for (unsigned i = 0; i <= 100; i++)
+    for (unsigned i = 0; i <= 1000; i++)
     {
         LE_INFO("Iteration %u", i);
 
@@ -49,6 +49,10 @@ main(int argc, const char *argv[])
         LE_OPTIMIZER(optimizer)->gradients = gradients;
         le_optimizer_step(LE_OPTIMIZER(optimizer));
         le_list_foreach(gradients, (LeFunction)le_tensor_free);
+
+        LeTensor *h = le_model_predict((LeModel *)neural_network, x);
+        LE_INFO("Training Error = %f", le_cross_entropy(h, y));
+        le_tensor_free(h);
     }
     
     le_bgd_free(optimizer);
