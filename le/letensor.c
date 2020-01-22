@@ -493,23 +493,32 @@ le_tensor_to_cstr(LeTensor *self)
     
     unsigned x;
     unsigned y;
-    sprintf(buffer, "[");
+
+    char *ptr = buffer;
+    ptr[0] = '[';
+    ptr++;
+
     for (y = 0; y < self->shape->sizes[0]; y++)
     {
         for (x = 0; x < self->shape->sizes[1]; x++)
         {
-            sprintf(buffer, "%1.3f", ((float *)self->data)[y * self->shape->sizes[1] + x]);
+            int written = 0;
+            sprintf(ptr, "%1.3f%n", ((float *)self->data)[y * self->shape->sizes[1] + x], &written);
+            ptr += written;
             if (x < self->shape->sizes[1] - 1)
             {
-                sprintf(buffer, " ");
+                *ptr = ' ';
+                ptr++;
             }
         }
         if (y < self->shape->sizes[0] - 1)
         {
-            sprintf(buffer, ";\n ");
+            int written = 0;
+            sprintf(ptr, ";\n %n", &written);
+            ptr += written;
         }
     }
-    sprintf(buffer, "]\n");
+    sprintf(ptr, "]");
 
     return buffer;
 }
