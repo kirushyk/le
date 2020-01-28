@@ -84,6 +84,9 @@ le_dense_layer_new(const char *name, unsigned inputs, unsigned units)
     le_dense_layer_class_ensure_init();
     LE_OBJECT_GET_CLASS(self) = LE_CLASS(&le_dense_layer_class);
     self->w = le_matrix_new_rand(units, inputs);
+    /// @todo: Optimize
+    le_tensor_multiply_by_scalar(self->w, 2.0f);
+    le_tensor_subtract_scalar(self->w, 1.0f);
     self->b = le_matrix_new_zeros(units, 1);
     le_layer_append_parameter(LE_LAYER(self), self->w);
     le_layer_append_parameter(LE_LAYER(self), self->b);
