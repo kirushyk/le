@@ -70,6 +70,8 @@ float        le_tensor_sum                  (LeTensor     *tensor);
 
 void         le_tensor_apply_sigmoid        (LeTensor     *tensor);
 
+void         le_tensor_apply_sigmoid_prime  (LeTensor     *tensor);
+
 void         le_tensor_apply_tanh           (LeTensor     *tensor);
 
 void         le_tensor_apply_sqr            (LeTensor     *tensor);

@@ -392,7 +392,7 @@ le_tensor_sum(LeTensor *self)
     return sum;
 }
 
-#ifndef __APPLE__
+#ifndef NOT__APPLE__
 static float
 le_sigmoid(const float a)
 {
@@ -415,6 +415,19 @@ le_tensor_apply_sigmoid(LeTensor *self)
         ((float *)self->data)[i] = le_sigmoid(((float *)self->data)[i]);
     }
 #endif
+}
+
+void
+le_tensor_apply_sigmoid_prime(LeTensor *self)
+{
+    unsigned i;
+    unsigned elements_count = le_shape_get_elements_count(self->shape);
+    
+    for (i = 0; i < elements_count; i++)
+    {
+        float sigmoid = le_sigmoid(((float *)self->data)[i]);
+        ((float *)self->data)[i] = sigmoid * (1.0f - sigmoid);
+    }
 }
 
 void
