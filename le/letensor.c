@@ -498,9 +498,9 @@ le_tensor_to_cstr(LeTensor *self)
     ptr[0] = '[';
     ptr++;
 
-    for (y = 0; y < self->shape->sizes[0]; y++)
+    for (y = 0; (y < self->shape->sizes[0]) && (y <= 5); y++)
     {
-        for (x = 0; x < self->shape->sizes[1]; x++)
+        for (x = 0; (x < self->shape->sizes[1]) && (x <= 5); x++)
         {
             int written = 0;
             sprintf(ptr, "%1.3f%n", ((float *)self->data)[y * self->shape->sizes[1] + x], &written);
@@ -511,12 +511,24 @@ le_tensor_to_cstr(LeTensor *self)
                 ptr++;
             }
         }
+        if (x < self->shape->sizes[1])
+        {
+            int written = 0;
+            sprintf(ptr, "...%n", &written);
+            ptr += written;
+        }
         if (y < self->shape->sizes[0] - 1)
         {
             int written = 0;
             sprintf(ptr, ";\n %n", &written);
             ptr += written;
         }
+    }
+    if (y < self->shape->sizes[0])
+    {
+        int written = 0;
+        sprintf(ptr, " ...\n%n", &written);
+        ptr += written;
     }
     sprintf(ptr, "]");
 
