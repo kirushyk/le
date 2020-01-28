@@ -66,6 +66,9 @@ void         le_tensor_multiply_by_scalar   (LeTensor     *a,
 void         le_tensor_add_scalar           (LeTensor     *a,
                                              float         b);
 
+void         le_tensor_subtract_scalar      (LeTensor     *a,
+                                             float         b);
+
 float        le_tensor_sum                  (LeTensor     *tensor);
 
 void         le_tensor_apply_sigmoid        (LeTensor     *tensor);

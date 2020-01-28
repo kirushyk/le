@@ -376,6 +376,19 @@ le_tensor_add_scalar(LeTensor *self, float b)
     }
 }
 
+void
+le_tensor_subtract_scalar(LeTensor *self, float b)
+{
+    /// @todo: Take stride into account
+    unsigned i;
+    unsigned elements_count = le_shape_get_elements_count(self->shape);
+    
+    for (i = 0; i < elements_count; i++)
+    {
+        ((float *)self->data)[i] -= b;
+    }
+}
+
 float
 le_tensor_sum(LeTensor *self)
 {
