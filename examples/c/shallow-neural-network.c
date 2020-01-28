@@ -19,7 +19,7 @@ main(int argc, const char *argv[])
     
     const float y_data[] =
     {
-        -1.0f, -1.0f, 1.0f, 1.0f
+        0.0f, 0.0f, 1.0f, 1.0f
     };
     LeTensor *y = le_matrix_new_from_data(1, 4, y_data);
     
@@ -35,7 +35,7 @@ main(int argc, const char *argv[])
     le_sequential_add(neural_network,
                       LE_LAYER(le_dense_layer_new("D1", 2, 1)));
     le_sequential_add(neural_network,
-                      LE_LAYER(le_activation_layer_new("A1", LE_ACTIVATION_TANH)));
+                      LE_LAYER(le_activation_layer_new("A1", LE_ACTIVATION_SIGMOID)));
     // le_sequential_add(neural_network,
     //                   LE_LAYER(le_dense_layer_new("D2", 4, 1)));
     // le_sequential_add(neural_network,
@@ -44,7 +44,7 @@ main(int argc, const char *argv[])
     LE_INFO("Training Neural Network");
     LeBGD *optimizer = le_bgd_new(le_model_get_parameters(LE_MODEL(neural_network)),
                                   0.001f);
-    for (unsigned i = 0; i <= 10; i++)
+    for (unsigned i = 0; i <= 10000; i++)
     {
         LE_INFO("Iteration %u", i);
 
