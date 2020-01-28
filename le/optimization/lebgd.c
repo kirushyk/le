@@ -37,9 +37,9 @@ le_bgd_step(LeOptimizer *optimizer)
          parameters_iterator = parameters_iterator->next, gradients_iterator = gradients_iterator->next)
     {
         LeTensor *parameter = (LeTensor *)parameters_iterator->data;
-        LE_INFO("Parameter shape: %s", le_shape_to_cstr(parameter->shape));
+        LE_INFO("Parameter %s:\n%s", le_shape_to_cstr(parameter->shape), le_tensor_to_cstr(parameter));
         LeTensor *gradients = (LeTensor *)gradients_iterator->data;
-        LE_INFO("Gradient shape: %s", le_shape_to_cstr(gradients->shape));
+        LE_INFO("Gradient %s:\n%s", le_shape_to_cstr(gradients->shape), le_tensor_to_cstr(gradients));
         le_tensor_subtract_scaled(parameter, self->learning_rate, gradients);
     }
 
