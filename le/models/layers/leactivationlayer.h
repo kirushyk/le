@@ -9,6 +9,7 @@
 typedef enum LeActivation
 {
     LE_ACTIVATION_LINEAR,
+    LE_ACTIVATION_SIGMOID,
     LE_ACTIVATION_TANH,
     LE_ACTIVATION_SOFTMAX
 } LeActivation;

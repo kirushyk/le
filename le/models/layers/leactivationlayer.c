@@ -23,6 +23,11 @@ le_activation_layer_forward_prop(LeLayer *layer, LeTensor *input)
     
     LeTensor *output = le_tensor_new_copy(input);
     switch (self->activation) {
+    case LE_ACTIVATION_SIGMOID:
+        /// @note: Sigmoid activation function: g'(x) = 1 / (1 + exp(-x))
+        le_tensor_apply_sigmoid(output);
+        break;
+
     case LE_ACTIVATION_TANH:
         /// @note: Hyperbolic tangent activation function: g(x) = tanh(x)
         le_tensor_apply_tanh(output);
@@ -55,6 +60,11 @@ le_activation_layer_backward_prop(LeLayer *layer, LeTensor *cached_input, LeTens
     
     LeTensor *input_gradient = le_tensor_new_copy(output_gradient);
     switch (self->activation) {
+    case LE_ACTIVATION_SIGMOID:
+        /// @note: Derivative of sigmoid activation function: g'(x) = g(x)(1 - g(x))
+        le_tensor_apply_sigmoid_prime(input_gradient);
+        break;
+
     case LE_ACTIVATION_TANH:
         /// @note: Derivative of hyperbolic tangent activation function: g'(x) = 1 - g(x)^2
         le_tensor_apply_tanh(input_gradient);
