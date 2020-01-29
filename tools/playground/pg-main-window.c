@@ -213,13 +213,13 @@ create_model_and_train(LEMainWindow *self)
             le_tensor_apply_svm_prediction(labels);
 
             le_sequential_add(LE_SEQUENTIAL(self->model),
-                              LE_LAYER(le_dense_layer_new("D1", 2, 1)));
+                              LE_LAYER(le_dense_layer_new("D1", 2, 4)));
             le_sequential_add(LE_SEQUENTIAL(self->model),
                               LE_LAYER(le_activation_layer_new("A1", LE_ACTIVATION_SIGMOID)));
-            // le_sequential_add(LE_SEQUENTIAL(self->model),
-            //                   LE_LAYER(le_dense_layer_new("D2", 4, 1)));
-            // le_sequential_add(LE_SEQUENTIAL(self->model),
-            //                   LE_LAYER(le_activation_layer_new("A2", LE_ACTIVATION_TANH)));
+            le_sequential_add(LE_SEQUENTIAL(self->model),
+                              LE_LAYER(le_dense_layer_new("D2", 4, 1)));
+            le_sequential_add(LE_SEQUENTIAL(self->model),
+                              LE_LAYER(le_activation_layer_new("A2", LE_ACTIVATION_SIGMOID)));
             
             LeBGD *optimizer = le_bgd_new(le_model_get_parameters(self->model), 0.1f);
             for (unsigned i = 0; i <= 400; i++)
@@ -454,11 +454,11 @@ le_main_window_init(LEMainWindow *self)
     GtkWidget *data_vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 2);
     GtkWidget *label = gtk_label_new("<b>DATA</b>");
     gtk_label_set_use_markup(GTK_LABEL(label), TRUE);
-    self->rand_rb = gtk_radio_button_new_with_label(NULL, "Random");
-    self->linsep_rb = gtk_radio_button_new_with_label_from_widget(GTK_RADIO_BUTTON(self->rand_rb), "Linearly Separable");
-    self->nested_rb = gtk_radio_button_new_with_label_from_widget(GTK_RADIO_BUTTON(self->rand_rb), "Nested Circles");
-    self->svb_rb = gtk_radio_button_new_with_label_from_widget(GTK_RADIO_BUTTON(self->rand_rb), "SV Border");
-    self->spiral_rb = gtk_radio_button_new_with_label_from_widget(GTK_RADIO_BUTTON(self->rand_rb), "Spiral");
+    self->svb_rb = gtk_radio_button_new_with_label(NULL, "Support Vectors");
+    self->linsep_rb = gtk_radio_button_new_with_label_from_widget(GTK_RADIO_BUTTON(self->svb_rb), "Linearly Separable");
+    self->nested_rb = gtk_radio_button_new_with_label_from_widget(GTK_RADIO_BUTTON(self->svb_rb), "Nested Circles");
+    self->spiral_rb = gtk_radio_button_new_with_label_from_widget(GTK_RADIO_BUTTON(self->svb_rb), "Spiral");
+    self->rand_rb = gtk_radio_button_new_with_label_from_widget(GTK_RADIO_BUTTON(self->svb_rb), "Random");
     
     self->train_set_combo = gtk_combo_box_text_new();
     gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(self->train_set_combo), "256");
@@ -479,11 +479,11 @@ le_main_window_init(LEMainWindow *self)
     GtkWidget *generate = gtk_button_new_with_label("Generate");
     g_signal_connect(G_OBJECT(generate), "clicked", G_CALLBACK(generate_button_clicked), self);
     gtk_box_pack_start(GTK_BOX(data_vbox), label, FALSE, FALSE, 2);
-    gtk_box_pack_start(GTK_BOX(data_vbox), self->rand_rb, FALSE, FALSE, 2);
+    gtk_box_pack_start(GTK_BOX(data_vbox), self->svb_rb, FALSE, FALSE, 2);
     gtk_box_pack_start(GTK_BOX(data_vbox), self->linsep_rb, FALSE, FALSE, 2);
     gtk_box_pack_start(GTK_BOX(data_vbox), self->nested_rb, FALSE, FALSE, 2);
-    gtk_box_pack_start(GTK_BOX(data_vbox), self->svb_rb, FALSE, FALSE, 2);
     gtk_box_pack_start(GTK_BOX(data_vbox), self->spiral_rb, FALSE, FALSE, 2);
+    gtk_box_pack_start(GTK_BOX(data_vbox), self->rand_rb, FALSE, FALSE, 2);
     gtk_box_pack_start(GTK_BOX(data_vbox), gtk_label_new("Train Set Size"), FALSE, FALSE, 2);
     gtk_box_pack_start(GTK_BOX(data_vbox), self->train_set_combo, FALSE, FALSE, 2);
     gtk_box_pack_start(GTK_BOX(data_vbox), gtk_label_new("Test Set Size"), FALSE, FALSE, 2);
