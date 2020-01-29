@@ -210,16 +210,15 @@ create_model_and_train(LEMainWindow *self)
         self->model = (LeModel *)le_sequential_new();
         {
             LeTensor *labels = le_tensor_new_copy(le_data_set_get_output(self->train_data));
-            le_tensor_apply_svm_prediction(labels);
 
             le_sequential_add(LE_SEQUENTIAL(self->model),
-                              LE_LAYER(le_dense_layer_new("D1", 2, 4)));
+                              LE_LAYER(le_dense_layer_new("D1", 2, 1)));
             le_sequential_add(LE_SEQUENTIAL(self->model),
                               LE_LAYER(le_activation_layer_new("A1", LE_ACTIVATION_SIGMOID)));
-            le_sequential_add(LE_SEQUENTIAL(self->model),
-                              LE_LAYER(le_dense_layer_new("D2", 4, 1)));
-            le_sequential_add(LE_SEQUENTIAL(self->model),
-                              LE_LAYER(le_activation_layer_new("A2", LE_ACTIVATION_SIGMOID)));
+            // le_sequential_add(LE_SEQUENTIAL(self->model),
+            //                   LE_LAYER(le_dense_layer_new("D2", 4, 1)));
+            // le_sequential_add(LE_SEQUENTIAL(self->model),
+            //                   LE_LAYER(le_activation_layer_new("A2", LE_ACTIVATION_SIGMOID)));
             
             LeBGD *optimizer = le_bgd_new(le_model_get_parameters(self->model), 0.1f);
             for (unsigned i = 0; i <= 400; i++)
