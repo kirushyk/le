@@ -363,6 +363,23 @@ le_tensor_multiply_by_scalar(LeTensor *self, float b)
     }
 }
 
+void        
+le_tensor_multiply_elementwise(LeTensor *self, LeTensor *b)
+{
+    assert(self->element_type == LE_TYPE_FLOAT32);
+    assert(b->element_type == LE_TYPE_FLOAT32);
+    assert(le_shape_equal(self->shape, b->shape));
+
+    /// @todo: Take stride into account
+    unsigned i;
+    unsigned elements_count = le_shape_get_elements_count(self->shape);
+    
+    for (i = 0; i < elements_count; i++)
+    {
+        ((float *)self->data)[i] *= ((float *)b->data)[i];
+    }
+}
+
 void
 le_tensor_add_scalar(LeTensor *self, float b)
 {

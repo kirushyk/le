@@ -60,8 +60,13 @@ void         le_tensor_subtract_scaled      (LeTensor     *a,
                                              float         scale,
                                              LeTensor     *b);
 
+/// @note: a = a * b
 void         le_tensor_multiply_by_scalar   (LeTensor     *a,
                                              float         b);
+
+/// @note: a = a * b
+void         le_tensor_multiply_elementwise (LeTensor     *a,
+                                             LeTensor     *b);
 
 void         le_tensor_add_scalar           (LeTensor     *a,
                                              float         b);
