@@ -213,16 +213,16 @@ create_model_and_train(LEMainWindow *self)
             le_tensor_apply_svm_prediction(labels);
 
             le_sequential_add(LE_SEQUENTIAL(self->model),
-                              LE_LAYER(le_dense_layer_new("D1", 2, 4)));
+                              LE_LAYER(le_dense_layer_new("D1", 2, 1)));
             le_sequential_add(LE_SEQUENTIAL(self->model),
-                              LE_LAYER(le_activation_layer_new("A1", LE_ACTIVATION_TANH)));
-            le_sequential_add(LE_SEQUENTIAL(self->model),
-                              LE_LAYER(le_dense_layer_new("D2", 4, 1)));
-            le_sequential_add(LE_SEQUENTIAL(self->model),
-                              LE_LAYER(le_activation_layer_new("A2", LE_ACTIVATION_TANH)));
+                              LE_LAYER(le_activation_layer_new("A1", LE_ACTIVATION_SIGMOID)));
+            // le_sequential_add(LE_SEQUENTIAL(self->model),
+            //                   LE_LAYER(le_dense_layer_new("D2", 4, 1)));
+            // le_sequential_add(LE_SEQUENTIAL(self->model),
+            //                   LE_LAYER(le_activation_layer_new("A2", LE_ACTIVATION_TANH)));
             
-            LeBGD *optimizer = le_bgd_new(le_model_get_parameters(self->model), 0.03f);
-            for (unsigned i = 0; i <= 10; i++)
+            LeBGD *optimizer = le_bgd_new(le_model_get_parameters(self->model), 0.1f);
+            for (unsigned i = 0; i <= 400; i++)
             {
                 LeList *gradients = le_model_get_gradients(self->model,
                                                            le_data_set_get_input(self->train_data),
