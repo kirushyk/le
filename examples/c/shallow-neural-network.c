@@ -43,8 +43,8 @@ main(int argc, const char *argv[])
     
     LE_INFO("Training Neural Network");
     LeBGD *optimizer = le_bgd_new(le_model_get_parameters(LE_MODEL(neural_network)),
-                                  0.001f);
-    for (unsigned i = 0; i <= 10000; i++)
+                                  1.f);
+    for (unsigned i = 0; i <= 100; i++)
     {
         LE_INFO("Iteration %u", i);
 
