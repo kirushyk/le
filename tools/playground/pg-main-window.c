@@ -38,6 +38,7 @@ struct _LEMainWindow
     GtkWidget *train_set_combo;
     GtkWidget *test_set_combo;
     
+    GtkWidget *gd_vbox;
     GtkWidget *pr_vbox;
     GtkWidget *svm_vbox;
     GtkWidget *svm_kernel_combo;
@@ -212,15 +213,20 @@ create_model_and_train(LEMainWindow *self)
             LeTensor *labels = le_tensor_new_copy(le_data_set_get_output(self->train_data));
 
             le_sequential_add(LE_SEQUENTIAL(self->model),
-                              LE_LAYER(le_dense_layer_new("D1", 2, 1)));
+                              LE_LAYER(le_dense_layer_new("D1", 2, 4)));
             le_sequential_add(LE_SEQUENTIAL(self->model),
-                              LE_LAYER(le_activation_layer_new("A1", LE_ACTIVATION_SIGMOID)));
-            // le_sequential_add(LE_SEQUENTIAL(self->model),
-            //                   LE_LAYER(le_dense_layer_new("D2", 4, 1)));
-            // le_sequential_add(LE_SEQUENTIAL(self->model),
-            //                   LE_LAYER(le_activation_layer_new("A2", LE_ACTIVATION_SIGMOID)));
+                              LE_LAYER(le_activation_layer_new("A1", LE_ACTIVATION_RELU)));
+            le_sequential_add(LE_SEQUENTIAL(self->model),
+                              LE_LAYER(le_dense_layer_new("D2", 4, 8)));
+            le_sequential_add(LE_SEQUENTIAL(self->model),
+                              LE_LAYER(le_activation_layer_new("A2", LE_ACTIVATION_RELU)));
+            le_sequential_add(LE_SEQUENTIAL(self->model),
+                              LE_LAYER(le_dense_layer_new("D3", 8, 1)));
+            le_sequential_add(LE_SEQUENTIAL(self->model),
+                              LE_LAYER(le_activation_layer_new("A3", LE_ACTIVATION_SIGMOID)));
             
-            LeBGD *optimizer = le_bgd_new(le_model_get_parameters(self->model), 0.1f);
+            LeBGD *optimizer = le_bgd_new(le_model_get_parameters(self->model), 
+                atof(gtk_combo_box_text_get_active_text(GTK_COMBO_BOX_TEXT(self->alpha_combo))));
             for (unsigned i = 0; i <= 400; i++)
             {
                 LeList *gradients = le_model_get_gradients(self->model,
@@ -366,17 +372,20 @@ le_main_window_set_preffered_model(GtkWidget *window, PreferredModelType model_t
     case 1:
         gtk_widget_show_all(self->svm_vbox);
         gtk_widget_hide(self->pr_vbox);
+        gtk_widget_hide(self->gd_vbox);
         break;
         
     case 2:
         gtk_widget_hide(self->svm_vbox);
         gtk_widget_hide(self->pr_vbox);
+        gtk_widget_show_all(self->gd_vbox);
         break;
         
     case 0:
     default:
         gtk_widget_hide(self->svm_vbox);
         gtk_widget_show_all(self->pr_vbox);
+        gtk_widget_show_all(self->gd_vbox);
         break;
     }
 }
@@ -508,15 +517,8 @@ le_main_window_init(LEMainWindow *self)
     gtk_label_set_use_markup(GTK_LABEL(label), TRUE);
     gtk_box_pack_start(GTK_BOX(model_vbox), label, FALSE, FALSE, 2);
     
-    self->pr_vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
-    gtk_box_pack_start(GTK_BOX(self->pr_vbox), gtk_label_new("Polynomia Degree"), FALSE, FALSE, 2);
-    self->polynomia_degree_combo = gtk_combo_box_text_new();
-    gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(self->polynomia_degree_combo), "0");
-    gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(self->polynomia_degree_combo), "1");
-    gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(self->polynomia_degree_combo), "2");
-    gtk_combo_box_set_active(GTK_COMBO_BOX(self->polynomia_degree_combo), 1);
-    gtk_box_pack_start(GTK_BOX(self->pr_vbox), self->polynomia_degree_combo, FALSE, FALSE, 2);
-    gtk_box_pack_start(GTK_BOX(self->pr_vbox), gtk_label_new("Learning Rate α"), FALSE, FALSE, 2);
+    self->gd_vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
+    gtk_box_pack_start(GTK_BOX(self->gd_vbox), gtk_label_new("Learning Rate α"), FALSE, FALSE, 2);
     self->alpha_combo = gtk_combo_box_text_new();
     gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(self->alpha_combo), "0.01");
     gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(self->alpha_combo), "0.03");
@@ -525,7 +527,17 @@ le_main_window_init(LEMainWindow *self)
     gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(self->alpha_combo), "1");
     gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(self->alpha_combo), "3");
     gtk_combo_box_set_active(GTK_COMBO_BOX(self->alpha_combo), 4);
-    gtk_box_pack_start(GTK_BOX(self->pr_vbox), self->alpha_combo, FALSE, FALSE, 2);
+    gtk_box_pack_start(GTK_BOX(self->gd_vbox), self->alpha_combo, FALSE, FALSE, 2);
+    gtk_box_pack_start(GTK_BOX(model_vbox), self->gd_vbox, FALSE, FALSE, 2);
+
+    self->pr_vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
+    gtk_box_pack_start(GTK_BOX(self->pr_vbox), gtk_label_new("Polynomia Degree"), FALSE, FALSE, 2);
+    self->polynomia_degree_combo = gtk_combo_box_text_new();
+    gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(self->polynomia_degree_combo), "0");
+    gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(self->polynomia_degree_combo), "1");
+    gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(self->polynomia_degree_combo), "2");
+    gtk_combo_box_set_active(GTK_COMBO_BOX(self->polynomia_degree_combo), 1);
+    gtk_box_pack_start(GTK_BOX(self->pr_vbox), self->polynomia_degree_combo, FALSE, FALSE, 2);
     gtk_box_pack_start(GTK_BOX(self->pr_vbox), gtk_label_new("Regularization"), FALSE, FALSE, 2);
     self->regularization_combo = gtk_combo_box_text_new();
     gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(self->regularization_combo), "None");
