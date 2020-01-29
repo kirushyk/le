@@ -5,6 +5,7 @@
 
 #include "lesequential.h"
 #include <le/lelog.h>
+#include <le/leloss.h>
 #include <assert.h>
 #include <stdlib.h>
 #include "lelist.h"
@@ -129,7 +130,7 @@ le_sequential_get_gradients(LeSequential *self, LeTensor *x, LeTensor *y)
     LE_INFO("Back Propagation");
     
     /// @note: Derivative of assumed cost function
-    le_tensor_subtract(signal, y);
+    le_apply_loss_derivative(signal, y);
     LE_INFO("signal =\n%s", le_tensor_to_cstr(signal));
 
     LeList *gradients = NULL;
