@@ -12,4 +12,9 @@ float le_cross_entropy             (LeTensor *predictions,
 float le_one_hot_misclassification (LeTensor *predictions,
                                     LeTensor *labels);
 
+/// @note: Partial derivative with respect to predictions
+/// predictions = ∂J(predictions, labels) / ∂predictions
+void  le_apply_loss_derivative     (LeTensor *predictions,
+                                    LeTensor *labels);
+
 #endif

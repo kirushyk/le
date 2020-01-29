@@ -70,3 +70,22 @@ le_one_hot_misclassification(LeTensor *h, LeTensor *y)
     
     return ((float)misclassified_count) / ((float)examples_count);
 }
+
+void
+le_apply_loss_derivative(LeTensor *h, LeTensor *y)
+{
+    assert(h->shape->num_dimensions == 2);
+    assert(y->shape->num_dimensions == 2);
+    assert(le_shape_equal(h->shape, y->shape));
+
+    unsigned i;
+    
+    unsigned elements_count = le_shape_get_elements_count(h->shape);
+    for (i = 0; i < elements_count; i++)
+    {
+        float yi = le_tensor_f32_at(y, i);
+        float hi = le_tensor_f32_at(h, i);
+        float dJ_dh = (hi - yi) / (hi * (1 - hi));
+        le_tensor_f32_set(h, i, dJ_dh);
+    }
+}
