@@ -91,6 +91,8 @@ void         le_tensor_apply_greater_than   (LeTensor     *tensor,
 
 void         le_tensor_apply_svm_prediction (LeTensor     *tensor);
 
+void         le_tensor_apply_relu           (LeTensor     *tensor);
+
 void         le_tensor_free                 (LeTensor     *tensor);
 
 /** @note: Temporary */

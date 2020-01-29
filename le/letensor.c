@@ -522,6 +522,20 @@ le_tensor_apply_svm_prediction(LeTensor *self)
     }
 }
 
+void
+le_tensor_apply_relu(LeTensor *self)
+{
+    /// @todo: Take stride into account
+    unsigned i;
+    unsigned elements_count = le_shape_get_elements_count(self->shape);
+    
+    for (i = 0; i < elements_count; i++)
+    {
+        float value = ((float *)self->data)[i];
+        ((float *)self->data)[i] = value > 0.0f ? value : 0.0f;
+    }
+}
+
 const char *
 le_tensor_to_cstr(LeTensor *self)
 {
