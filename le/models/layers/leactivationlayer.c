@@ -32,6 +32,10 @@ le_activation_layer_forward_prop(LeLayer *layer, LeTensor *input)
         /// @note: Hyperbolic tangent activation function: g(x) = tanh(x)
         le_tensor_apply_tanh(output);
         break;
+
+    case LE_ACTIVATION_RELU:
+        le_tensor_apply_relu(output);
+        break;
         
     case LE_ACTIVATION_SOFTMAX:
         {
@@ -70,6 +74,10 @@ le_activation_layer_backward_prop(LeLayer *layer, LeTensor *cached_input, LeTens
         le_tensor_apply_tanh(input_copy);
         le_tensor_apply_sqr(input_copy);
         le_tensor_apply_1_minus(input_copy);
+        break;
+
+    case LE_ACTIVATION_RELU:
+        le_tensor_apply_greater_than(input_copy, 0.0f);
         break;
         
     case LE_ACTIVATION_SOFTMAX:
