@@ -93,18 +93,18 @@ le_activation_layer_backward_prop(LeLayer *layer, LeTensor *cached_input, LeTens
     return input_gradient;
 }
 
-static LeActivationLayerClass le_activation_layer_class;
+static LeActivationLayerClass klass;
 
 static void
 le_activation_layer_class_ensure_init()
 {
-    static bool le_activation_layer_class_initialized = false;
+    static bool initialized = false;
     
-    if (!le_activation_layer_class_initialized)
+    if (!initialized)
     {
-        le_activation_layer_class.parent.forward_prop = le_activation_layer_forward_prop;
-        le_activation_layer_class.parent.backward_prop = le_activation_layer_backward_prop;
-        le_activation_layer_class_initialized = true;
+        klass.parent.forward_prop = le_activation_layer_forward_prop;
+        klass.parent.backward_prop = le_activation_layer_backward_prop;
+        initialized = true;
     }
 }
 
@@ -114,7 +114,7 @@ le_activation_layer_new(const char *name, LeActivation activation)
     LeActivationLayer *self = malloc(sizeof(LeActivationLayer));
     le_layer_construct(LE_LAYER(self), name);
     le_activation_layer_class_ensure_init();
-    LE_OBJECT_GET_CLASS(self) = LE_CLASS(&le_activation_layer_class);
+    LE_OBJECT_GET_CLASS(self) = LE_CLASS(&klass);
     self->activation = activation;
     return self;
 }

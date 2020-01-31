@@ -5,12 +5,12 @@
 #include <stdlib.h>
 #include <assert.h>
 
-LeOptimizerClass le_optimizer_class;
+LeOptimizerClass klass;
 
 void
 le_optimizer_construct(LeOptimizer *self)
 {
-    ((LeObject *)self)->klass = (LeClass *)&le_optimizer_class;
+    ((LeObject *)self)->klass = (LeClass *)&klass;
 }
 
 void

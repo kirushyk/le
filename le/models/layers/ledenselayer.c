@@ -61,18 +61,18 @@ le_dense_layer_backward_prop(LeLayer *layer, LeTensor *cached_input, LeTensor *o
     return input_gradient;
 }
 
-static LeDenseLayerClass le_dense_layer_class;
+static LeDenseLayerClass klass;
 
 static void
 le_dense_layer_class_ensure_init()
 {
-    static bool le_dense_layer_class_initialized = false;
+    static bool initialized = false;
     
-    if (!le_dense_layer_class_initialized)
+    if (!initialized)
     {
-        le_dense_layer_class.parent.forward_prop = le_dense_layer_forward_prop;
-        le_dense_layer_class.parent.backward_prop = le_dense_layer_backward_prop;
-        le_dense_layer_class_initialized = true;
+        klass.parent.forward_prop = le_dense_layer_forward_prop;
+        klass.parent.backward_prop = le_dense_layer_backward_prop;
+        initialized = true;
     }
 }
 
@@ -82,7 +82,7 @@ le_dense_layer_new(const char *name, unsigned inputs, unsigned units)
     LeDenseLayer *self = malloc(sizeof(LeDenseLayer));
     le_layer_construct(LE_LAYER(self), name);
     le_dense_layer_class_ensure_init();
-    LE_OBJECT_GET_CLASS(self) = LE_CLASS(&le_dense_layer_class);
+    LE_OBJECT_GET_CLASS(self) = LE_CLASS(&klass);
     self->w = le_matrix_new_rand(units, inputs);
     /// @todo: Optimize
     le_tensor_multiply_by_scalar(self->w, 2.0f);

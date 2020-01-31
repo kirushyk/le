@@ -8,12 +8,12 @@
 
 #define DEFAULT_LOG_CATEGORY "model"
 
-LeModelClass le_model_class;
+LeModelClass klass;
 
 void
 le_model_construct(LeModel *self)
 {
-    LE_OBJECT_GET_CLASS(self) = (LeClass *)&le_model_class;
+    LE_OBJECT_GET_CLASS(self) = (LeClass *)&klass;
     self->parameters = NULL;
 }
 
