@@ -19,7 +19,7 @@ le_shape_new(unsigned num_dimensions, ...)
     va_list args;
     va_start(args, num_dimensions);
     
-    for (uint8_t i = 0; i < num_dimensions; i++)
+    for (unsigned i = 0; i < num_dimensions; i++)
     {
         int size = va_arg(args, int);
         self->sizes[i] = size;

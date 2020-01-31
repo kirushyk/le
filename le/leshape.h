@@ -16,6 +16,7 @@ typedef struct LeShape
 LeShape *    le_shape_new                (unsigned  num_dimensions,
                                           ...);
 
+/// @note: Takes ownership of sizes array
 LeShape *    le_shape_new_from_data      (unsigned  num_dimensions,
                                           uint32_t *sizes);
 
