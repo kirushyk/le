@@ -5,7 +5,8 @@ le_tests = [
     ['objects/objects.c', 'objects/base.c', 'objects/a.c', 'objects/b.c'],
     ['mnist.c'],
     ['list.c'],
-    ['matrices.c']
+    ['matrices.c'],
+    ['sobel.c']
 ]
 
 foreach filenames : le_tests
