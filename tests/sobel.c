@@ -18,7 +18,7 @@ main()
         0.0, 0.0, 0.0, 1.0, 1.0, 1.0
     );
 
-    LE_INFO("input_image = %s", le_tensor_to_cstr(input_image));
+    LE_INFO("input_image =\n%s", le_tensor_to_cstr(input_image));
 
     LeTensor *sobel_filter = le_tensor_new(LE_TYPE_FLOAT32, 2, 3, 3,   
         1.0, 0.0, -1.0,
@@ -26,11 +26,11 @@ main()
         1.0, 0.0, -1.0
     );
 
-    LE_INFO("sobel_filter = %s", le_tensor_to_cstr(sobel_filter));
+    LE_INFO("sobel_filter =\n%s", le_tensor_to_cstr(sobel_filter));
 
     LeTensor *output_image = le_matrix_new_conv2d(input_image, sobel_filter);
 
-    LE_INFO("output_image = %s", le_tensor_to_cstr(output_image));
+    LE_INFO("output_image =\n%s", le_tensor_to_cstr(output_image));
 
     le_tensor_free(output_image);
     le_tensor_free(sobel_filter);
