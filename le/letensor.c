@@ -13,14 +13,32 @@
 #endif
 
 LeTensor *
-le_tensor_new(void)
+le_tensor_new(LeType element_type, unsigned num_dimensions, ...)
 {
     LeTensor *self = malloc(sizeof(struct LeTensor));
-    self->element_type = LE_TYPE_VOID;
-    self->shape = NULL;
-    self->stride = 0;
-    self->owns_data = false;
-    self->data = NULL;
+    self->element_type = element_type;
+        
+    va_list args;
+    va_start(args, num_dimensions);
+    uint32_t *sizes = malloc(num_dimensions * sizeof(uint32_t));
+    for (unsigned i = 0; i < num_dimensions; i++)
+    {
+        int size = va_arg(args, int);
+        sizes[i] = size;
+    }
+    self->shape = le_shape_new_from_data(num_dimensions, sizes);
+    self->stride = le_shape_get_last_size(self->shape);
+    
+    self->owns_data = true;
+    unsigned elements_count = le_shape_get_elements_count(self->shape);
+    self->data = malloc(elements_count * le_type_size(self->element_type));
+    for (unsigned i = 0; i < elements_count; i++)
+    {
+        float value = (float)va_arg(args, double);
+        ((float *)self->data)[i] = value;
+    }
+    va_end(args);
+
     return self;
 }
 

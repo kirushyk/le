@@ -12,7 +12,9 @@ typedef struct LeTensor LeTensor;
 
 #define LE_TENSOR(tensor) ((LeTensor *)(tensor))
 
-LeTensor *   le_tensor_new                  (void);
+LeTensor *   le_tensor_new                  (LeType        element_type,
+                                             unsigned      num_dimensions,
+                                             ...);
 
 LeTensor *   le_scalar_new_f32              (float         scalar);
 
