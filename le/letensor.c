@@ -38,6 +38,29 @@ le_scalar_new_f32(float scalar)
 }
 
 LeTensor *
+le_tensor_new_rand_f32(LeShape *shape)
+{
+    unsigned i;
+    unsigned elements_count;
+    LeTensor *self;
+    
+    self = malloc(sizeof(struct LeTensor));
+    self->element_type = LE_TYPE_FLOAT32;
+    self->shape = shape;
+    self->stride = le_shape_get_last_size(self->shape);
+    self->owns_data = true;
+    elements_count = le_shape_get_elements_count(shape);
+    self->data = malloc(elements_count * sizeof(float));
+    
+    for (i = 0; i < elements_count; i++)
+    {
+        ((float *)self->data)[i] = rand() / (float)RAND_MAX;
+    }
+    
+    return self;
+}
+
+LeTensor *
 le_tensor_new_from_data(LeType element_type, LeShape *shape, void *data)
 {
     LeTensor *self = malloc(sizeof(struct LeTensor));

@@ -16,6 +16,9 @@ LeTensor *   le_tensor_new                  (void);
 
 LeTensor *   le_scalar_new_f32              (float         scalar);
 
+/// @note: Takes ownership of shape
+LeTensor *   le_tensor_new_rand_f32         (LeShape      *shape);
+
 LeTensor *   le_tensor_new_from_data        (LeType        element_type,
                                              LeShape      *shape,
                                              void         *data);
