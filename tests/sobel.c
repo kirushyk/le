@@ -13,6 +13,16 @@ main()
         1.0, 0.0, -1.0
     );
 
+    LeTensor *image = le_tensor_new(LE_TYPE_FLOAT32, 2, 6, 6,
+        0.0, 0.0, 0.0, 1.0, 1.0, 1.0,
+        0.0, 0.0, 0.0, 1.0, 1.0, 1.0,
+        0.0, 0.0, 0.0, 1.0, 1.0, 1.0,
+        0.0, 0.0, 0.0, 1.0, 1.0, 1.0,
+        0.0, 0.0, 0.0, 1.0, 1.0, 1.0,
+        0.0, 0.0, 0.0, 1.0, 1.0, 1.0
+    );
+
+    le_tensor_free(image);
     le_tensor_free(sobel_filter);
 
     return EXIT_SUCCESS;
