@@ -21,7 +21,7 @@ typedef struct LeBGDClass
     LeOptimizerClass parent;
 } LeBGDClass;
 
-LeBGDClass le_bgd_class;
+LeBGDClass klass;
 
 static void
 le_bgd_step(LeOptimizer *optimizer)
@@ -57,13 +57,13 @@ le_bgd_step(LeOptimizer *optimizer)
 void
 le_bgd_class_ensure_init(void)
 {
-    static int le_bgd_class_initialized = 0;
+    static bool initialized = false;
 
-    if (!le_bgd_class_initialized)
+    if (!initialized)
     {
-        le_bgd_class.parent.step =
+        klass.parent.step =
             (void (*)(LeOptimizer *))le_bgd_step;
-        le_bgd_class_initialized = 1;
+        initialized = 1;
     }
 }
 
@@ -72,7 +72,7 @@ le_bgd_construct(LeBGD *self)
 {
     le_optimizer_construct((LeOptimizer *)self);
     le_bgd_class_ensure_init();
-    ((LeObject *)self)->klass = (LeClass *)&le_bgd_class;
+    ((LeObject *)self)->klass = (LeClass *)&klass;
 }
 
 LeBGD *

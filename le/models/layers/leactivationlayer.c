@@ -12,7 +12,6 @@ typedef struct LeActivationLayerClass
     
 } LeActivationLayerClass;
 
-
 LeTensor *
 le_activation_layer_forward_prop(LeLayer *layer, LeTensor *input)
 {

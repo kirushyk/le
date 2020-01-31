@@ -24,20 +24,20 @@ typedef struct LeLogisticClassifierClass
     LeModelClass parent;
 } LeLogisticClassifierClass;
 
-LeLogisticClassifierClass le_logistic_classifier_class;
+LeLogisticClassifierClass klass;
 
 LeTensor * le_logistic_classifier_predict(LeLogisticClassifier *self, LeTensor *x);
 
 void
 le_logistic_classifier_class_ensure_init(void)
 {
-    static int le_logistic_classifier_class_initialized = 0;
+    static bool initialized = false;
 
-    if (!le_logistic_classifier_class_initialized)
+    if (!initialized)
     {
-        le_logistic_classifier_class.parent.predict =
+        klass.parent.predict =
             (LeTensor *(*)(LeModel *, LeTensor *))le_logistic_classifier_predict;
-        le_logistic_classifier_class_initialized = 1;
+        initialized = 1;
     }
 }
 
@@ -46,7 +46,7 @@ le_logistic_classifier_construct(LeLogisticClassifier *self)
 {
     le_model_construct((LeModel *)self);
     le_logistic_classifier_class_ensure_init();
-    ((LeObject *)self)->klass = (LeClass *)&le_logistic_classifier_class;
+    ((LeObject *)self)->klass = (LeClass *)&klass;
     self->weights = NULL;
     self->bias = 0;
     self->polynomia_degree = 0;
