@@ -346,6 +346,50 @@ le_matrix_new_product_full(LeTensor *a, bool transpose_a, LeTensor *b, bool tran
 }
 
 LeTensor *
+le_matrix_new_conv2d(LeTensor *image, LeTensor *filter)
+{
+    assert(image->shape->num_dimensions == 2);
+    assert(filter->shape->num_dimensions == 2);
+    
+    assert(image->element_type == LE_TYPE_FLOAT32);
+    assert(filter->element_type == LE_TYPE_FLOAT32);
+
+    int32_t fh = le_matrix_get_height(filter);
+    int32_t height = le_matrix_get_height(image) - fh + 1;
+    int32_t fw = le_matrix_get_width(filter);
+    int32_t width = le_matrix_get_width(image) - le_matrix_get_width(filter) + 1;
+
+    assert(height > 1);
+    assert(width > 1);
+
+    LeTensor *self = malloc(sizeof(struct LeTensor));
+    self->element_type = image->element_type;
+    self->shape = le_shape_new(2, height, width);
+    self->stride = le_shape_get_last_size(self->shape);
+    self->owns_data = true;
+    self->data = malloc(le_shape_get_elements_count(self->shape) * sizeof(float));
+
+    for (int32_t oy = 0; oy < height; oy++)
+    {
+        for (int32_t ox = 0; ox < width; ox++)
+        {
+            float value = 0.0f;
+            for (int32_t fy = 0; fy < fh; fy++)
+            {
+                for (int32_t fx = 0; fx < fw; fx++)
+                {
+                    value += le_matrix_at(image, oy + fy, ox + fx) * le_matrix_at(filter, fy, fx);
+                }
+            }
+            le_matrix_set_element(self, oy, ox, value);
+        }
+    }
+    
+    return self;
+}
+
+
+LeTensor *
 le_matrix_get_column(LeTensor *matrix, unsigned x)
 {
     /// @todo: Take stride into account
