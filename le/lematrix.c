@@ -161,8 +161,8 @@ le_matrix_new_rand(unsigned height, unsigned width)
     self->shape = le_shape_new(2, height, width);
     self->stride = width;
     self->owns_data = true;
-    self->data = malloc(height * width * sizeof(float));
     elements_count = height * width;
+    self->data = malloc(elements_count * sizeof(float));
     
     for (i = 0; i < elements_count; i++)
     {
