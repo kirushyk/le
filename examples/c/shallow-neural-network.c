@@ -33,30 +33,33 @@ main(int argc, const char *argv[])
 
     LeSequential *neural_network = le_sequential_new();
     le_sequential_add(neural_network,
-                      LE_LAYER(le_dense_layer_new("D1", 2, 1)));
+                      LE_LAYER(le_dense_layer_new("D1", 2, 2)));
     le_sequential_add(neural_network,
                       LE_LAYER(le_activation_layer_new("A1", LE_ACTIVATION_SIGMOID)));
-    // le_sequential_add(neural_network,
-    //                   LE_LAYER(le_dense_layer_new("D2", 4, 1)));
-    // le_sequential_add(neural_network,
-    //                   LE_LAYER(le_activation_layer_new("A2", LE_ACTIVATION_TANH)));
+    le_sequential_add(neural_network,
+                      LE_LAYER(le_dense_layer_new("D2", 2, 1)));
+    le_sequential_add(neural_network,
+                      LE_LAYER(le_activation_layer_new("A2", LE_ACTIVATION_SIGMOID)));
     
     LE_INFO("Training Neural Network");
     LeBGD *optimizer = le_bgd_new(le_model_get_parameters(LE_MODEL(neural_network)),
-                                  1.f);
-    for (unsigned i = 0; i <= 100; i++)
+                                  3.f);
+    for (unsigned i = 0; i <= 1000; i++)
     {
-        LE_INFO("Iteration %u", i);
 
         LeList *gradients = le_model_get_gradients(LE_MODEL(neural_network),
                                                    x, y);
         LE_OPTIMIZER(optimizer)->gradients = gradients;
         le_optimizer_step(LE_OPTIMIZER(optimizer));
 
-        LeTensor *h = le_model_predict(LE_MODEL(neural_network), x);
-        LE_INFO("Training Error = %f", le_cross_entropy(h, y));
-        le_tensor_free(h);
-        
+        if ((i % 100) == 0)
+        {
+            LE_INFO("Iteration %u", i);
+            LeTensor *h = le_model_predict(LE_MODEL(neural_network), x);
+            LE_INFO("Training Error = %f", le_cross_entropy(h, y));
+            le_tensor_free(h);
+        }
+
         le_list_foreach(gradients, (LeFunction)le_tensor_free);
     }
     
