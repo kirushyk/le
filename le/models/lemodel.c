@@ -8,7 +8,7 @@
 
 #define DEFAULT_LOG_CATEGORY "model"
 
-LeModelClass klass;
+static LeModelClass klass;
 
 void
 le_model_construct(LeModel *self)

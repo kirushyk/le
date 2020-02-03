@@ -28,7 +28,7 @@ typedef struct LeSVMClass
     LeModelClass parent;
 } LeSVMClass;
 
-LeSVMClass klass;
+static LeSVMClass klass;
 
 LeTensor * le_svm_predict(LeSVM *self, LeTensor *x);
 

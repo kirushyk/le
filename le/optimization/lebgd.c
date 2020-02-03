@@ -21,7 +21,7 @@ typedef struct LeBGDClass
     LeOptimizerClass parent;
 } LeBGDClass;
 
-LeBGDClass klass;
+static LeBGDClass klass;
 
 static void
 le_bgd_step(LeOptimizer *optimizer)

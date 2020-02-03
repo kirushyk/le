@@ -5,7 +5,7 @@
 #include <stdlib.h>
 #include <assert.h>
 
-LeOptimizerClass klass;
+static LeOptimizerClass klass;
 
 void
 le_optimizer_construct(LeOptimizer *self)

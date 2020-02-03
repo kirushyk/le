@@ -22,7 +22,7 @@ typedef struct LeSequentialClass
     LeModelClass parent;
 } LeSequentialClass;
 
-LeSequentialClass klass;
+static LeSequentialClass klass;
 
 LeTensor *
 le_sequential_predict(LeSequential *self, LeTensor *x);

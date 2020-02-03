@@ -24,7 +24,7 @@ typedef struct LeLogisticClassifierClass
     LeModelClass parent;
 } LeLogisticClassifierClass;
 
-LeLogisticClassifierClass klass;
+static LeLogisticClassifierClass klass;
 
 LeTensor * le_logistic_classifier_predict(LeLogisticClassifier *self, LeTensor *x);
 
