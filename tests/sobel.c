@@ -4,37 +4,122 @@
 #define DEFAULT_LOG_CATEGORY "sobel"
 
 #include <stdlib.h>
+#include <assert.h>
 #include <le/le.h>
 
 int
 main()
 {
-    LeTensor *input_image = le_tensor_new(LE_TYPE_FLOAT32, 2, 6, 6,
-        0.0, 0.0, 0.0, 1.0, 1.0, 1.0,
-        0.0, 0.0, 0.0, 1.0, 1.0, 1.0,
-        0.0, 0.0, 0.0, 1.0, 1.0, 1.0,
-        0.0, 0.0, 0.0, 1.0, 1.0, 1.0,
-        0.0, 0.0, 0.0, 1.0, 1.0, 1.0,
-        0.0, 0.0, 0.0, 1.0, 1.0, 1.0
+    LeTensor *output_image;
+    LeTensor *expected_output;
+    LeTensor *zeros = le_matrix_new_zeros(4, 4);
+
+    LeTensor *sobel_gx_filter = le_tensor_new(LE_TYPE_FLOAT32, 2, 3, 3,   
+        1.0, 2.0, 1.0,
+        0.0, 0.0, 0.0,
+        -1.0, -2.0, -1.0
     );
+    LE_INFO("Horizontal Sobel Filter:\n%s", le_tensor_to_cstr(sobel_gx_filter));
 
-    LE_INFO("input_image =\n%s", le_tensor_to_cstr(input_image));
-
-    LeTensor *sobel_filter = le_tensor_new(LE_TYPE_FLOAT32, 2, 3, 3,   
+    LeTensor *sobel_gy_filter = le_tensor_new(LE_TYPE_FLOAT32, 2, 3, 3,   
         1.0, 0.0, -1.0,
         2.0, 0.0, -2.0,
         1.0, 0.0, -1.0
     );
+    LE_INFO("Vertical Sobel Filter:\n%s", le_tensor_to_cstr(sobel_gy_filter));
 
-    LE_INFO("sobel_filter =\n%s", le_tensor_to_cstr(sobel_filter));
-
-    LeTensor *output_image = le_matrix_new_conv2d(input_image, sobel_filter);
-
-    LE_INFO("output_image =\n%s", le_tensor_to_cstr(output_image));
-
+    LeTensor *vertical_edge_pattern = le_tensor_new(LE_TYPE_FLOAT32, 2, 6, 6,
+        1.0, 1.0, 1.0, 0.0, 0.0, 0.0,
+        1.0, 1.0, 1.0, 0.0, 0.0, 0.0,
+        1.0, 1.0, 1.0, 0.0, 0.0, 0.0,
+        1.0, 1.0, 1.0, 0.0, 0.0, 0.0,
+        1.0, 1.0, 1.0, 0.0, 0.0, 0.0,
+        1.0, 1.0, 1.0, 0.0, 0.0, 0.0
+    );
+    LE_INFO("Vertical Edge Pattern");
+    LE_INFO("Input Image:\n%s", le_tensor_to_cstr(vertical_edge_pattern));
+    output_image = le_matrix_new_conv2d(vertical_edge_pattern, sobel_gx_filter);
+    LE_INFO("Cross-correlation with Horizontal Sobel Filter:\n%s", le_tensor_to_cstr(output_image));
+    assert(le_tensor_equal(output_image, zeros));
     le_tensor_free(output_image);
-    le_tensor_free(sobel_filter);
-    le_tensor_free(input_image);
+    output_image = le_matrix_new_conv2d(vertical_edge_pattern, sobel_gy_filter);
+    LE_INFO("Cross-correlation with Vertical Sobel Filter:\n%s", le_tensor_to_cstr(output_image));
+    expected_output = le_tensor_new(LE_TYPE_FLOAT32, 2, 4, 4,
+        0.0, 4.0, 4.0, 0.0,
+        0.0, 4.0, 4.0, 0.0,
+        0.0, 4.0, 4.0, 0.0,
+        0.0, 4.0, 4.0, 0.0
+    );
+    assert(le_tensor_equal(output_image, expected_output));
+    le_tensor_free(expected_output);
+    le_tensor_free(output_image);
+    le_tensor_free(vertical_edge_pattern);
+
+    LeTensor *horizontal_edge_pattern = le_tensor_new(LE_TYPE_FLOAT32, 2, 6, 6,
+        1.0, 1.0, 1.0, 1.0, 1.0, 1.0,
+        1.0, 1.0, 1.0, 1.0, 1.0, 1.0,
+        1.0, 1.0, 1.0, 1.0, 1.0, 1.0,
+        0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
+        0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
+        0.0, 0.0, 0.0, 0.0, 0.0, 0.0
+    );
+    LE_INFO("Horizontal Edge Pattern");
+    LE_INFO("Input Image:\n%s", le_tensor_to_cstr(horizontal_edge_pattern));
+    output_image = le_matrix_new_conv2d(horizontal_edge_pattern, sobel_gx_filter);
+    LE_INFO("Cross-correlation with Horizontal Sobel Filter:\n%s", le_tensor_to_cstr(output_image));
+    expected_output = le_tensor_new(LE_TYPE_FLOAT32, 2, 4, 4,
+        0.0, 0.0, 0.0, 0.0,
+        4.0, 4.0, 4.0, 4.0,
+        4.0, 4.0, 4.0, 4.0,
+        0.0, 0.0, 0.0, 0.0
+    );
+    assert(le_tensor_equal(output_image, expected_output));
+    le_tensor_free(expected_output);
+    le_tensor_free(output_image);
+    output_image = le_matrix_new_conv2d(horizontal_edge_pattern, sobel_gy_filter);
+    LE_INFO("Cross-correlation with Vertical Sobel Filter:\n%s", le_tensor_to_cstr(output_image));
+    assert(le_tensor_equal(output_image, zeros));
+    le_tensor_free(output_image);
+    le_tensor_free(horizontal_edge_pattern);
+
+    LeTensor *checkers_pattern = le_tensor_new(LE_TYPE_FLOAT32, 2, 6, 6,
+        1.0, 1.0, 1.0, 0.0, 0.0, 0.0,
+        1.0, 1.0, 1.0, 0.0, 0.0, 0.0,
+        1.0, 1.0, 1.0, 0.0, 0.0, 0.0,
+        0.0, 0.0, 0.0, 1.0, 1.0, 1.0,
+        0.0, 0.0, 0.0, 1.0, 1.0, 1.0,
+        0.0, 0.0, 0.0, 1.0, 1.0, 1.0
+    );
+    LE_INFO("Checkers Pattern");
+    LE_INFO("Input Image:\n%s", le_tensor_to_cstr(checkers_pattern));
+    output_image = le_matrix_new_conv2d(checkers_pattern, sobel_gx_filter);
+    LE_INFO("Cross-correlation with Horizontal Sobel Filter:\n%s", le_tensor_to_cstr(output_image));
+    expected_output = le_tensor_new(LE_TYPE_FLOAT32, 2, 4, 4,
+        0.0, 0.0, 0.0, 0.0,
+        4.0, 2.0, -2.0, -4.0,
+        4.0, 2.0, -2.0, -4.0,
+        0.0, 0.0, 0.0, 0.0
+    );
+    assert(le_tensor_equal(output_image, expected_output));
+    le_tensor_free(expected_output);
+    le_tensor_free(output_image);
+    output_image = le_matrix_new_conv2d(checkers_pattern, sobel_gy_filter);
+    LE_INFO("Cross-correlation with Vertical Sobel Filter:\n%s", le_tensor_to_cstr(output_image));
+    expected_output = le_tensor_new(LE_TYPE_FLOAT32, 2, 4, 4,
+        0.0, 4.0, 4.0, 0.0,
+        0.0, 2.0, 2.0, 0.0,
+        0.0, -2.0, -2.0, 0.0,
+        0.0, -4.0, -4.0, 0.0
+    );
+    assert(le_tensor_equal(output_image, expected_output));
+    le_tensor_free(expected_output);
+    le_tensor_free(output_image);
+    le_tensor_free(checkers_pattern);
+
+    le_tensor_free(sobel_gy_filter);
+    le_tensor_free(sobel_gx_filter);
+
+    le_tensor_free(zeros);
 
     return EXIT_SUCCESS;
 }
