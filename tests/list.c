@@ -39,6 +39,8 @@ main()
     assert(d->next != NULL);
     assert(d->prev == NULL);
     assert(d->data != (void *)0x00000000);
+    
+    /// @todo: Check prepend operation
 
     return EXIT_SUCCESS;
 }
