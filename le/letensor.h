@@ -12,6 +12,7 @@ typedef struct LeTensor LeTensor;
 
 #define LE_TENSOR(tensor) ((LeTensor *)(tensor))
 
+/// @note: Make sure to pass correct number of parameters
 LeTensor *   le_tensor_new                  (LeType        element_type,
                                              unsigned      num_dimensions,
                                              ...);
