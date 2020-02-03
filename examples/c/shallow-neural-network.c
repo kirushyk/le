@@ -19,7 +19,7 @@ main(int argc, const char *argv[])
     
     const float y_data[] =
     {
-        0.0f, 0.0f, 1.0f, 1.0f
+        0.0f, 1.0f, 1.0f, 0.0f
     };
     LeTensor *y = le_matrix_new_from_data(1, 4, y_data);
     
@@ -52,11 +52,12 @@ main(int argc, const char *argv[])
                                                    x, y);
         LE_OPTIMIZER(optimizer)->gradients = gradients;
         le_optimizer_step(LE_OPTIMIZER(optimizer));
-        le_list_foreach(gradients, (LeFunction)le_tensor_free);
 
         LeTensor *h = le_model_predict(LE_MODEL(neural_network), x);
         LE_INFO("Training Error = %f", le_cross_entropy(h, y));
         le_tensor_free(h);
+        
+        le_list_foreach(gradients, (LeFunction)le_tensor_free);
     }
     
     le_bgd_free(optimizer);
