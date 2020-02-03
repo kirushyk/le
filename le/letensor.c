@@ -283,7 +283,7 @@ le_matrix_empty(LeTensor *self)
 {
     free(self->data);
     self->data = NULL;
-    free(self->shape);
+    le_shape_free(self->shape);
     self->shape = NULL;
     self->element_type = LE_TYPE_VOID;
 }
@@ -672,6 +672,6 @@ le_tensor_free(LeTensor *self)
     {
         free(self->data);
     }
-    free(self->shape);
+    le_shape_free(self->shape);
     free(self);
 }
