@@ -17,6 +17,7 @@ main(int argc, const char *argv[])
     };
     LeTensor *x = le_matrix_new_from_data(2, 4, x_data);
     
+    /// @note: Non-linearly-separable / XOR-like labels
     const float y_data[] =
     {
         0.0f, 1.0f, 1.0f, 0.0f
@@ -36,6 +37,7 @@ main(int argc, const char *argv[])
                       LE_LAYER(le_dense_layer_new("D1", 2, 2)));
     le_sequential_add(neural_network,
                       LE_LAYER(le_activation_layer_new("A1", LE_ACTIVATION_SIGMOID)));
+    /// @note: Single Layer Perceptron is unable to solve XOR problem / non-linearly-separable
     le_sequential_add(neural_network,
                       LE_LAYER(le_dense_layer_new("D2", 2, 1)));
     le_sequential_add(neural_network,
