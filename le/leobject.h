@@ -4,15 +4,17 @@
 #ifndef __LE_OBJECT_H__
 #define __LE_OBJECT_H__
 
+typedef struct LeObject LeObject;
+
 typedef struct LeClass
 {
-    
+    void (*destructor)(LeObject *model);
 } LeClass;
 
-typedef struct LeObject
+struct LeObject
 {
     struct LeClass *klass;
-} LeObject;
+};
 
 #define LE_OBJECT(obj) ((LeObject *)(obj))
 #define LE_CLASS(klass) ((LeClass *)(klass))
