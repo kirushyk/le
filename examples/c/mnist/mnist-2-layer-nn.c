@@ -28,8 +28,14 @@ main()
     LeTensor *test_output = le_matrix_new_one_hot(test_labels, 10);
     
     LeSequential *neural_network = le_sequential_new();
-    // le_sequential_add(neural_network, );
-    // le_1_layer_nn_init(neural_network, 28 * 28, 10);
+    le_sequential_add(neural_network,
+                      LE_LAYER(le_dense_new("FC_1", 28 * 28, 300)));
+    le_sequential_add(neural_network,
+                      LE_LAYER(le_activation_new("ReLU", LE_ACTIVATION_RELU)));
+    le_sequential_add(neural_network,
+                      LE_LAYER(le_dense_new("FC_2", 300, 10)));
+    le_sequential_add(neural_network,
+                      LE_LAYER(le_activation_new("Softmax", LE_ACTIVATION_SOFTMAX)));
     LeBGD *optimizer = le_bgd_new(le_model_get_parameters(LE_MODEL(neural_network)),
                                   0.03f);
     for (unsigned i = 0; i <= 2500; i++)
