@@ -36,9 +36,35 @@ if accelerate.found()
     le_libs += le_accelerate
 endif
 
+install_headers('lepolynomia.h', subdir : 'le')
+install_headers('leloss.h', subdir : 'le')
+install_headers('ledataset.h', subdir : 'le')
+install_headers('letensor.h', subdir : 'le')
+install_headers('optimization/leoptimizer.h', subdir : 'le')
+install_headers('optimization/lebgd.h', subdir : 'le')
+install_headers('lelist.h', subdir : 'le')
+install_headers('leobject.h', subdir : 'le')
+install_headers('models/lesequential.h', subdir : 'le')
+install_headers('models/lesvm.h', subdir : 'le')
+install_headers('models/layers/leconv2d.h', subdir : 'le')
+install_headers('models/layers/ledenselayer.h', subdir : 'le')
+install_headers('models/layers/leactivationlayer.h', subdir : 'le')
+install_headers('models/layers/lelayer.h', subdir : 'le')
+install_headers('models/lemodel.h', subdir : 'le')
+install_headers('models/le1layernn.h', subdir : 'le')
+install_headers('models/lelogistic.h', subdir : 'le')
+install_headers('le.h', subdir : 'le')
+install_headers('lemem.h', subdir : 'le')
+install_headers('lematrix.h', subdir : 'le')
+install_headers('letensor-imp.h', subdir : 'le')
+install_headers('letype.h', subdir : 'le')
+install_headers('lelog.h', subdir : 'le')
+install_headers('leshape.h', subdir : 'le')
+
 le = static_library('le', le_sources,
     include_directories: incdir,
     link_with: le_libs,
-    dependencies: le_deps
+    dependencies: le_deps,
+    install: true
 )
 
