@@ -68,3 +68,15 @@ le = static_library('le', le_sources,
     install: true
 )
 
+pkg = import('pkgconfig')
+
+pkg.generate(
+    libraries: le,
+    subdirs: [
+        '.'
+    ],
+    version: '0.0.1',
+    name: 'lible',
+    filebase: 'le',
+    description: 'Machine Learning library.'
+)
