@@ -13,6 +13,8 @@
 
 typedef struct LeBGD LeBGD;
 
+#define LE_BGD(o) ((LeBGD *)(o))
+
 LeBGD * le_bgd_new  (LeList *parameters,
                      float   learning_rate);
 
