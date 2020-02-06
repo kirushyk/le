@@ -5,14 +5,16 @@
 #include <math.h>
 #include <le/le.h>
 
+/** @note: Dummy cost function from single weight argument w */
 float
 J(float w)
 {
     return 1 + (w - 3) * (w - 3);
 }
 
+/** @note: Derivative of that cost function with respect to its argument w */
 float
-dJdw(float w)
+dJ_dw(float w)
 {
     return 2 * (w - 3);
 }
@@ -26,21 +28,21 @@ main(int argc, const char *argv[])
     LeTensor *dw = le_scalar_new_f32(0.0f);
     LeList *gradients = le_list_append(NULL, dw);
     
-    LeBGD *optimizer = le_bgd_new(parameters, 0.2f);
-    ((LeOptimizer *)optimizer)->gradients = gradients;
+    LeOptimizer *optimizer = LE_OPTIMIZER(le_bgd_new(parameters, 0.2f));
+    optimizer->gradients = gradients;
     
     unsigned i;
     for (i = 0; i < 20; i++)
     {
         printf("Iteration %u. ", i);
-        le_optimizer_step((LeOptimizer *)optimizer);
+        le_optimizer_step(optimizer);
         float w_ = le_tensor_f32_at(w, 0);
-        le_tensor_f32_set(dw, 0, dJdw(w_));
+        le_tensor_f32_set(dw, 0, dJ_dw(w_));
         float grad_ = le_tensor_f32_at(dw, 0);
         printf("J(%0.2f) = %0.2f. Gradient = %0.2f\n", w_, J(w_), grad_);
     }
     
-    
+    le_bgd_free(LE_BGD(optimizer));
     
     return EXIT_SUCCESS;
 }
