@@ -78,5 +78,6 @@ pkg.generate(
     version: '0.0.1',
     name: 'lible',
     filebase: 'le',
-    description: 'Machine Learning library.'
+    description: 'Machine Learning library.',
+    url: 'https://github.com/kirushyk/le'
 )
