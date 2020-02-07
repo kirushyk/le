@@ -70,8 +70,16 @@ le = static_library('le', le_sources,
 
 pkg = import('pkgconfig')
 
+le_pkg_libs = [
+    le
+]
+
+if accelerate.found()
+    le_pkg_libs += accelerate
+endif
+
 pkg.generate(
-    libraries: le,
+    libraries: le_pkg_libs,
     subdirs: [
         '.'
     ],
