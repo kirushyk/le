@@ -29,6 +29,32 @@ le_logistic_loss(LeTensor *h, LeTensor *y)
 }
 
 float
+le_cross_entropy_loss(LeTensor *h, LeTensor *y)
+{
+    assert(h->shape->num_dimensions == 2);
+    assert(y->shape->num_dimensions == 2);
+    assert(h->shape->sizes[1] == y->shape->sizes[1]);
+    
+    unsigned num_classes = y->shape->sizes[0];
+    unsigned num_examples = y->shape->sizes[1];
+    
+    float cost = 0.0f;
+    for (unsigned i = 0; i < num_examples; i++)
+    {
+        float loss = 0.0f;
+        for (unsigned j = 0; j < num_classes; j++)
+        {
+            float y_ji = le_matrix_at(y, j, i);
+            float y_hji = le_matrix_at(h, j, i);
+            loss -= y_ji * logf(y_hji);
+        }
+        cost += loss;
+    }
+    
+    return cost / num_examples;
+}
+
+float
 le_one_hot_misclassification(LeTensor *h, LeTensor *y)
 {
     assert(h->shape->num_dimensions == 2);

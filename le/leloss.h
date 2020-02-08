@@ -9,6 +9,9 @@
 float le_logistic_loss             (LeTensor *predictions,
                                     LeTensor *labels);
 
+float le_cross_entropy_loss        (LeTensor *predictions,
+                                    LeTensor *label);
+
 float le_one_hot_misclassification (LeTensor *predictions,
                                     LeTensor *labels);
 
