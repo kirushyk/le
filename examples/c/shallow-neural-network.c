@@ -58,7 +58,7 @@ main(int argc, const char *argv[])
         {
             LE_INFO("Iteration %u", i);
             LeTensor *h = le_model_predict(LE_MODEL(neural_network), x);
-            LE_INFO("Training Error = %f", le_logistic_loss(h, y));
+            LE_INFO("Training Error = %f", le_cross_entropy_loss(h, y));
             le_tensor_free(h);
         }
 
