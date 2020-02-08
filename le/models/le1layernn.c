@@ -135,7 +135,7 @@ le_1_layer_nn_train(Le1LayerNN *self, LeTensor *x_train, LeTensor *y_train, Le1L
 
         LeTensor *h = le_1_layer_nn_predict(self, x_train);
 
-        float train_set_error = le_cross_entropy(h, y_train);
+        float train_set_error = le_logistic_loss(h, y_train);
 
         le_tensor_subtract(h, y_train);
         le_tensor_multiply_by_scalar(h, 1.0 / examples_count);

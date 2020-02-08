@@ -37,7 +37,7 @@ main()
     le_sequential_add(neural_network,
                       LE_LAYER(le_activation_layer_new("Softmax", LE_ACTIVATION_SOFTMAX)));
     LeBGD *optimizer = le_bgd_new(le_model_get_parameters(LE_MODEL(neural_network)),
-                                  0.003f);
+                                  0.3f);
     for (unsigned i = 0; i <= 2500; i++)
     {
         LeList *gradients = le_model_get_gradients(LE_MODEL(neural_network),
@@ -46,7 +46,7 @@ main()
         le_optimizer_step(LE_OPTIMIZER(optimizer));
         le_list_foreach(gradients, (LeFunction)le_tensor_free);
         
-        if (i % 100 == 0) {
+        if (i % 10 == 0) {
             printf("Iteration %d.\n", i);
             
             LeTensor *train_prediction = le_model_predict(LE_MODEL(neural_network), train_input_f32);

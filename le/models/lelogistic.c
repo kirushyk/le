@@ -128,7 +128,7 @@ le_logistic_classifier_train(LeLogisticClassifier *self, LeTensor *x_train, LeTe
         
         LeTensor *h = le_logistic_classifier_predict(self, x_train);
         
-        float train_set_error = le_cross_entropy(h, y_train);
+        float train_set_error = le_logistic_loss(h, y_train);
         
         le_tensor_subtract(h, y_train);
         le_tensor_multiply_by_scalar(h, 1.0 / examples_count);

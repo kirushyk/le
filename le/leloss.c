@@ -8,7 +8,7 @@
 #include "letensor-imp.h"
 
 float
-le_cross_entropy(LeTensor *h, LeTensor *y)
+le_logistic_loss(LeTensor *h, LeTensor *y)
 {
     assert(h->shape->num_dimensions == 2);
     assert(y->shape->num_dimensions == 2);
