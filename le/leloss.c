@@ -22,7 +22,7 @@ le_logistic_loss(LeTensor *h, LeTensor *y)
     {
         float yi = le_tensor_f32_at(y, i);
         float hi = le_tensor_f32_at(h, i);
-        result -= yi * log(hi) + (1.0f - yi) * log(1.0f - hi);
+        result -= yi * logf(hi) + (1.0f - yi) * logf(1.0f - hi);
     }
     
     return result / elements_count;
@@ -98,7 +98,7 @@ le_one_hot_misclassification(LeTensor *h, LeTensor *y)
 }
 
 void
-le_apply_loss_derivative(LeTensor *h, LeTensor *y)
+le_apply_cross_entropy_loss_derivative(LeTensor *h, LeTensor *y)
 {
     assert(h->shape->num_dimensions == 2);
     assert(y->shape->num_dimensions == 2);
