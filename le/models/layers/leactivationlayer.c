@@ -80,6 +80,7 @@ le_activation_layer_backward_prop(LeLayer *layer, LeTensor *cached_input, LeTens
         break;
         
     case LE_ACTIVATION_SOFTMAX:
+        le_tensor_apply_sigmoid_prime(input_copy);
         break;
         
     case LE_ACTIVATION_LINEAR:
