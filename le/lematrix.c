@@ -5,6 +5,7 @@
 #include <assert.h>
 #include <stdlib.h>
 #include <string.h>
+#include <math.h>
 #include "letensor-imp.h"
 #ifdef __APPLE__
 #include "../platform/accelerate/leaccelerate.h"
@@ -423,4 +424,41 @@ le_matrix_get_column_copy(LeTensor *self, unsigned x)
     }
     
     return column;
+}
+
+void
+le_matrix_apply_softmax(LeTensor *self)
+{
+    assert(self->shape->num_dimensions == 2);
+
+    /// @todo: Take stride into account
+    unsigned example, klass;
+    unsigned num_classes = self->shape->sizes[0];
+    unsigned num_examples = self->shape->sizes[1];
+
+    for (example = 0; example < num_examples; example++)
+    {
+        float max = 0;
+        for (klass = 0; klass < num_classes; klass++)
+        {
+            float value = le_matrix_at(self, klass, example);
+            if (value > max)
+            {
+                max = value;
+            }
+        }
+        float sum = 0;
+        for (klass = 0; klass < num_classes; klass++)
+        {
+            float activation = expf(le_matrix_at(self, klass, example) - max);
+            sum += activation;
+            le_matrix_set_element(self, klass, example, activation);
+        }
+        for (klass = 0; klass < num_classes; klass++)
+        {
+            float activation = le_matrix_at(self, klass, example);
+            activation /= sum;
+            le_matrix_set_element(self, klass, example, activation);
+        }
+    }
 }

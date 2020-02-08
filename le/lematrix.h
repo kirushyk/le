@@ -66,4 +66,6 @@ LeTensor * le_matrix_get_column           (LeTensor     *matrix,
 LeTensor * le_matrix_get_column_copy      (LeTensor     *matrix,
                                            unsigned      x);
 
+void       le_matrix_apply_softmax        (LeTensor     *self);
+
 #endif
