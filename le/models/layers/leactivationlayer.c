@@ -37,12 +37,7 @@ le_activation_layer_forward_prop(LeLayer *layer, LeTensor *input)
         break;
         
     case LE_ACTIVATION_SOFTMAX:
-        {
-            /// @todo: Optimize
-            float scalar = 1.0f / le_matrix_get_height(output);
-            le_tensor_apply_sigmoid(output);
-            le_tensor_multiply_by_scalar(output, scalar);
-        }
+        le_matrix_apply_softmax(output);
         break;
         
     case LE_ACTIVATION_LINEAR:
