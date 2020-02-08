@@ -155,6 +155,7 @@ le_sequential_get_gradients(LeSequential *self, LeTensor *x, LeTensor *y)
         }
     }
     
+    /// @note: Make sure number of cached inputs equal to number of layers
     assert(current == NULL);
     assert(inputs == NULL);
 
