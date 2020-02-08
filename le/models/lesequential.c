@@ -78,22 +78,41 @@ le_sequential_add(LeSequential *self, LeLayer *layer)
     }
 }
 
-LeTensor *
-le_sequential_predict(LeSequential *self, LeTensor *x)
+/** @note: Used in both _predict and _get_gradients method, 
+ * @param inputs if not null is used to cache input of each layer.
+ */
+static LeTensor *
+forward_propagation(LeSequential *self, LeTensor *x, LeList **inputs)
 {
     assert(self);
     assert(x);
-    
+
+    LE_INFO("Forward Propagation");
     LeTensor *signal = le_tensor_new_copy(x);
-    for (LeList *current = self->layers; current != NULL; current = current->next)
+    
+    for (LeList *current = self->layers;
+         current != NULL; 
+         current = current->next)
     {
         LeLayer *current_layer = (LeLayer *)current->data;
+        if (inputs)
+        {
+            *inputs = le_list_append(*inputs, le_tensor_new_copy(signal));
+        }
         LE_INFO("signal =\n%s", le_tensor_to_cstr(signal));
+        LE_INFO("Layer: %s", current_layer->name);
         LeTensor *output = le_layer_forward_prop(current_layer, signal);
         le_tensor_free(signal);
         signal = output;
     }
+
     return signal;
+}
+
+LeTensor *
+le_sequential_predict(LeSequential *self, LeTensor *x)
+{
+    return forward_propagation(self, x, NULL);
 }
 
 LeList *
@@ -106,33 +125,15 @@ le_sequential_get_gradients(LeSequential *self, LeTensor *x, LeTensor *y)
     /// @note: We cache input of each layer in list of tensors
     /// to ease computation of gradients during backpropagation
     LeList *inputs = NULL;
-    
-    LeTensor *signal = le_tensor_new_copy(x);
-    
-    LeList *current;
-
-    LE_INFO("Forward Propagation");
-    
-    for (current = self->layers;
-         current != NULL; 
-         current = current->next)
-    {
-        LeLayer *current_layer = (LeLayer *)current->data;
-        inputs = le_list_append(inputs, le_tensor_new_copy(signal));
-        LE_INFO("signal =\n%s", le_tensor_to_cstr(signal));
-        LE_INFO("Layer: %s", current_layer->name);
-        LeTensor *output = le_layer_forward_prop(current_layer, signal);
-        le_tensor_free(signal);
-        signal = output;
-    }
-
+    LeTensor *signal = forward_propagation(self, x, &inputs);
     LE_INFO("output =\n%s", le_tensor_to_cstr(signal));
+
     LE_INFO("Back Propagation");
-    
     /// @note: Derivative of assumed cost function
     le_apply_cross_entropy_loss_derivative(signal, y);
     LE_INFO("signal =\n%s", le_tensor_to_cstr(signal));
 
+    LeList *current = NULL;
     LeList *gradients = NULL;
     for (current = le_list_last(self->layers), inputs = le_list_last(inputs);
          current && inputs;
