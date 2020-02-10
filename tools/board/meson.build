@@ -4,6 +4,7 @@
 incdir = include_directories('../../')
 
 le_board_sources = [
+    'file.c',
     'main.c'
 ]
 

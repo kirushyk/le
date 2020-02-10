@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <glib.h>
 #include <libsoup/soup.h>
+#include "file.h"
 
 int main(int argc, char *argv[])
 {
@@ -12,9 +13,11 @@ int main(int argc, char *argv[])
     g_set_prgname("le-board");
     g_set_application_name("Le Board");
     SoupServer *server = soup_server_new(SOUP_SERVER_SERVER_HEADER, "le-board ", NULL);
+    soup_server_add_handler(server, "/ui", file_callback, NULL, NULL);
     const int port = 6006;
     if (soup_server_listen_all(server, port, 0, &error))
     {
+        g_print("http://localhost:%d/ui\n", port);
         g_main_loop_run(main_loop);
         soup_server_disconnect(server);
     }
