@@ -1,6 +1,7 @@
 /* Copyright (c) Kyrylo Polezhaiev and contributors. All rights reserved.
    Released under the MIT license. See LICENSE file in the project root for full license information. */
 
+#include "board-config.h"
 #include "file.h"
 #include <errno.h>
 #include <stdio.h>
@@ -198,7 +199,7 @@ file_callback(SoupServer *server, SoupMessage *msg, const char *path, GHashTable
     char *file_path;
 
     char *relative_path = g_strreplace(path, "/efe", NULL);
-    file_path = g_strdup_printf("%s%s", ".", relative_path);
+    file_path = g_strdup_printf("%s%s", BOARD_UI_INSTALL_PATH, relative_path);
     g_free(relative_path);
 
     if (msg->method == SOUP_METHOD_GET || msg->method == SOUP_METHOD_HEAD)
