@@ -1,7 +1,6 @@
 # Le Tools
 
 Tools shipped with Le Framework:
-* [Le Debug](/debug);
-* [Le Board](/board);
-* [Le Playground](/playground);
-* [Le MNIST Inspect](/mnist-inspect).
+* [Le Board](/tools/board);
+* [Le Playground](/tools/playground);
+* [Le MNIST Inspect](/tools/mnist-inspect).
