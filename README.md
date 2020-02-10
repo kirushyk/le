@@ -42,17 +42,6 @@ To install compiled binaries locally, type:
     
 ## Tools
 
-### Playground
-Small utility to play with binary classifier models:
-
-![Le Playground](http://kirushyk.github.io/projects/le.png)
-
-### MNIST Inspector
-
-Visual tool to navigate MNIST dataset:
-
-![Le Playground](http://kirushyk.github.io/projects/le-mnist.png)
-
 ## License
 
 Copyright &copy; 2017 Kyrylo Polezhaiev and contributors. All rights reserved.
