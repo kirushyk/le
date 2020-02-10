@@ -42,6 +42,8 @@ To install compiled binaries locally, type:
     
 ## Tools
 
+Le Framework comes with some usefull [tools](/tools).
+
 ## License
 
 Copyright &copy; 2017 Kyrylo Polezhaiev and contributors. All rights reserved.
