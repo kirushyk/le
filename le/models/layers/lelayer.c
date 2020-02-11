@@ -66,3 +66,14 @@ le_layer_get_output_shape(LeLayer *self)
 
     return klass->get_output_shape(self);
 }
+
+const char *
+le_layer_get_description(LeLayer *self)
+{
+    assert(self);
+    LeLayerClass *klass = LE_LAYER_GET_CLASS(self);
+    assert(klass);
+    assert(klass->get_description);
+
+    return klass->get_description(self);
+}

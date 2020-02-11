@@ -65,8 +65,15 @@ LeShape *
 le_dense_layer_get_output_shape(LeLayer *layer)
 {
     LeDenseLayer *self = LE_DENSE_LAYER(layer);
-    
+
     return le_shape_new(2, le_matrix_get_height(self->b), 0);
+}
+
+const char *
+le_dense_layer_get_description(LeLayer *self)
+{
+    static const char *description = "Fully Connected Layer";
+    return description;
 }
 
 static LeDenseLayerClass klass;
@@ -81,6 +88,7 @@ le_dense_layer_class_ensure_init()
         klass.parent.forward_prop = le_dense_layer_forward_prop;
         klass.parent.backward_prop = le_dense_layer_backward_prop;
         klass.parent.get_output_shape = le_dense_layer_get_output_shape;
+        klass.parent.get_description = le_dense_layer_get_description;
         initialized = true;
     }
 }

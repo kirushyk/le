@@ -28,6 +28,13 @@ le_conv2d_backward_prop(LeLayer *layer, LeTensor *cached_input,
     return NULL;
 }
 
+const char *
+le_conv2d_get_description(LeLayer *self)
+{
+    static const char *description = "2D Convolutional Layer";
+    return description;
+}
+
 static void
 le_conv2d_class_ensure_init()
 {
@@ -38,6 +45,7 @@ le_conv2d_class_ensure_init()
         klass.parent.forward_prop = le_conv2d_forward_prop;
         klass.parent.backward_prop = le_conv2d_backward_prop;
         klass.parent.get_output_shape = NULL;
+        klass.parent.get_description = le_conv2d_get_description;
         initialized = true;
     }
 }

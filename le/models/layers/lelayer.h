@@ -27,27 +27,30 @@ typedef struct LeLayerClass
     LeTensor * (*forward_prop)(LeLayer *self, LeTensor *x);
     LeTensor * (*backward_prop)(LeLayer *self, LeTensor *x, LeTensor *dJ_dy, LeList **dJ_dw);
     LeShape * (*get_output_shape)(LeLayer *self);
+    const char * (*get_description)(LeLayer *self);
 } LeLayerClass;
 
 #define LE_LAYER_CLASS(a) ((LeLayerClass *)(a))
 #define LE_LAYER_GET_CLASS(a) LE_LAYER_CLASS(LE_OBJECT_GET_CLASS(a))
 
-void       le_layer_construct        (LeLayer     *layer,
-                                      const char  *name);
+void         le_layer_construct        (LeLayer     *layer,
+                                        const char  *name);
 
-LeTensor * le_layer_forward_prop     (LeLayer     *layer,
-                                      LeTensor    *input);
+LeTensor *   le_layer_forward_prop     (LeLayer     *layer,
+                                        LeTensor    *input);
 
-LeList *   le_layer_get_parameters   (LeLayer     *layer);
+LeList *     le_layer_get_parameters   (LeLayer     *layer);
 
-void       le_layer_append_parameter (LeLayer     *layer,
-                                      LeTensor    *parameter);
+void         le_layer_append_parameter (LeLayer     *layer,
+                                        LeTensor    *parameter);
 
-LeTensor * le_layer_backward_prop    (LeLayer     *layer,
-                                      LeTensor    *cached_input,
-                                      LeTensor    *output_gradient,
-                                      LeList     **parameters_gradient);
+LeTensor *   le_layer_backward_prop    (LeLayer     *layer,
+                                        LeTensor    *cached_input,
+                                        LeTensor    *output_gradient,
+                                        LeList     **parameters_gradient);
 
-LeShape *  le_layer_get_output_shape (LeLayer     *layer);
+LeShape *    le_layer_get_output_shape (LeLayer     *layer);
+
+const char * le_layer_get_description  (LeLayer     *layer);
 
 #endif

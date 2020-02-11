@@ -96,6 +96,45 @@ le_activation_layer_get_output_shape(LeLayer *layer)
     return le_shape_new(2, 0, 0);
 }
 
+const char *
+le_activation_layer_get_description(LeLayer *layer)
+{
+    assert(layer);
+    
+    LeActivationLayer *self = LE_ACTIVATION_LAYER(layer);
+
+    static const char *sigmoid_description = "Sigmoid Activation";
+    static const char *tanh_description = "Hyperbolic Tangent Activation";
+    static const char *relu_description = "ReLU";
+    static const char *softmax_description = "Softmax Activation";
+    static const char *linear_description = "Identity";
+    
+    switch (self->activation) {
+    case LE_ACTIVATION_SIGMOID:
+        return sigmoid_description;
+        break;
+
+    case LE_ACTIVATION_TANH:
+        return tanh_description;
+        break;
+
+    case LE_ACTIVATION_RELU:
+        return relu_description;
+        break;
+        
+    case LE_ACTIVATION_SOFTMAX:
+        return softmax_description;
+        break;
+        
+    case LE_ACTIVATION_LINEAR:
+    default:
+        return linear_description;
+        break;
+    }
+        
+    return linear_description;
+}
+
 static LeActivationLayerClass klass;
 
 static void
@@ -108,6 +147,7 @@ le_activation_layer_class_ensure_init()
         klass.parent.forward_prop = le_activation_layer_forward_prop;
         klass.parent.backward_prop = le_activation_layer_backward_prop;
         klass.parent.get_output_shape = le_activation_layer_get_output_shape;
+        klass.parent.get_description = le_activation_layer_get_description;
         initialized = true;
     }
 }
