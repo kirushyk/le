@@ -174,7 +174,7 @@ le_sequential_to_dot(LeSequential *self, const char *filename)
         return;
 
     fprintf(fout, "digraph graphname {\n");
-    fprintf(fout, "__cost [shape=box label=\"Cross-entropy cost\"];\n");
+    fprintf(fout, "__cost [shape=record label=\"{J|Cross-entropy cost}\"];\n");
 
     for (LeList *current = self->layers;
          current != NULL; 
@@ -182,7 +182,9 @@ le_sequential_to_dot(LeSequential *self, const char *filename)
     {
         LeLayer *current_layer = LE_LAYER(current->data);
         assert(current_layer);
-        fprintf(fout, "%s [shape=box label=\"%s\"];\n", current_layer->name, current_layer->name);
+        fprintf(fout, "%s [shape=record label=\"{%s|%s}\"];\n",
+            current_layer->name, current_layer->name,
+            le_layer_get_description(current_layer));
         const char *next_node = "__cost";
         if (current->next)
         {
