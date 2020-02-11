@@ -20,6 +20,9 @@ void           le_sequential_add     (LeSequential *model,
 LeTensor *     le_sequential_predict (LeSequential *model,
                                       LeTensor     *x);
 
+void           le_sequential_to_dot  (LeSequential *model,
+                                      const char   *filename);
+
 void           le_sequential_free    (LeSequential *model);
 
 #endif

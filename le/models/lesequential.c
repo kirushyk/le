@@ -166,6 +166,41 @@ le_sequential_get_gradients(LeSequential *self, LeTensor *x, LeTensor *y)
 }
 
 void
+le_sequential_to_dot(LeSequential *self, const char *filename)
+{
+    FILE *fout = fopen(filename, "wt");
+    
+    if (!fout)
+        return;
+
+    fprintf(fout, "digraph graphname {\n");
+
+    for (LeList *current = self->layers;
+         current != NULL; 
+         current = current->next)
+    {
+        LeLayer *current_layer = LE_LAYER(current->data);
+        assert(current_layer);
+        fprintf(fout, "%s [shape=box label=\"%s\"];\n", current_layer->name, current_layer->name);
+        if (current->next)
+        {
+            LeLayer *next_layer = LE_LAYER(current->next->data);
+            assert(next_layer);
+            fprintf(fout, "%s -> %s;\n", current_layer->name, next_layer->name);
+        }
+        else
+        {
+            fprintf(fout, "__loss [shape=box label=\"Cross-entropy cost\"];\n");
+            fprintf(fout, "%s -> __loss;\n", current_layer->name);
+        }
+    }
+
+    fprintf(fout, "}\n");
+    
+    fclose(fout);
+}
+
+void
 le_sequential_free(LeSequential *self)
 {
     free(self);
