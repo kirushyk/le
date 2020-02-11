@@ -97,7 +97,18 @@ le_shape_to_cstr(LeShape *shape)
         for (unsigned i = 0; i < shape->num_dimensions; i++)
         {
             int written = 0;
-            sprintf(ptr, "%d%s%n", shape->sizes[i],
+            if (shape->sizes[i])
+            {
+                sprintf(ptr, "%d%n", shape->sizes[i], &written);
+            }
+            else
+            {
+                sprintf(ptr, "?");
+                written = 1;
+            }
+            ptr += written;
+            
+            sprintf(ptr, "%s%n",
                     i == (shape->num_dimensions - 1) ? ")" : ", ",
                     &written);
             ptr += written;
