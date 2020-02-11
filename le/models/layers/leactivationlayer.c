@@ -105,10 +105,10 @@ le_activation_layer_get_description(LeLayer *layer)
 
     static const char *sigmoid_description = "Sigmoid Activation";
     static const char *tanh_description = "Hyperbolic Tangent Activation";
-    static const char *relu_description = "ReLU";
+    static const char *relu_description = "Rectified Linear Unit";
     static const char *softmax_description = "Softmax Activation";
     static const char *linear_description = "Identity";
-    
+
     switch (self->activation) {
     case LE_ACTIVATION_SIGMOID:
         return sigmoid_description;
