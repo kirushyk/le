@@ -61,6 +61,14 @@ le_dense_layer_backward_prop(LeLayer *layer, LeTensor *cached_input, LeTensor *o
     return input_gradient;
 }
 
+LeShape *
+le_dense_layer_get_output_shape(LeLayer *layer)
+{
+    LeDenseLayer *self = LE_DENSE_LAYER(layer);
+    
+    return le_shape_new(2, le_matrix_get_height(self->b), 0);
+}
+
 static LeDenseLayerClass klass;
 
 static void
@@ -72,6 +80,7 @@ le_dense_layer_class_ensure_init()
     {
         klass.parent.forward_prop = le_dense_layer_forward_prop;
         klass.parent.backward_prop = le_dense_layer_backward_prop;
+        klass.parent.get_output_shape = le_dense_layer_get_output_shape;
         initialized = true;
     }
 }

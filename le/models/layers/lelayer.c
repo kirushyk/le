@@ -55,3 +55,14 @@ le_layer_backward_prop(LeLayer *self, LeTensor *cached_input, LeTensor *output_g
     
     return klass->backward_prop(self, cached_input, output_gradient, parameters_gradient);
 }
+
+LeShape *
+le_layer_get_output_shape(LeLayer *self)
+{
+    assert(self);
+    LeLayerClass *klass = LE_LAYER_GET_CLASS(self);
+    assert(klass);
+    assert(klass->get_output_shape);
+
+    return klass->get_output_shape(self);
+}

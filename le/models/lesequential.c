@@ -186,7 +186,11 @@ le_sequential_to_dot(LeSequential *self, const char *filename)
         {
             LeLayer *next_layer = LE_LAYER(current->next->data);
             assert(next_layer);
-            fprintf(fout, "%s -> %s;\n", current_layer->name, next_layer->name);
+            LeShape *current_laye_output_shape = le_layer_get_output_shape(current_layer);
+            fprintf(fout, "%s -> %s [label=\"%s\"];\n", 
+                current_layer->name, next_layer->name,
+                le_shape_to_cstr(current_laye_output_shape));
+            le_shape_free(current_laye_output_shape);
         }
         else
         {

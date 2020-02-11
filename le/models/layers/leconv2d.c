@@ -37,6 +37,7 @@ le_conv2d_class_ensure_init()
     {
         klass.parent.forward_prop = le_conv2d_forward_prop;
         klass.parent.backward_prop = le_conv2d_backward_prop;
+        klass.parent.get_output_shape = NULL;
         initialized = true;
     }
 }

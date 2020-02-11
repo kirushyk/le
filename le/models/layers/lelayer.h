@@ -26,6 +26,7 @@ typedef struct LeLayerClass
     
     LeTensor * (*forward_prop)(LeLayer *self, LeTensor *x);
     LeTensor * (*backward_prop)(LeLayer *self, LeTensor *x, LeTensor *dJ_dy, LeList **dJ_dw);
+    LeShape * (*get_output_shape)(LeLayer *self);
 } LeLayerClass;
 
 #define LE_LAYER_CLASS(a) ((LeLayerClass *)(a))
@@ -46,5 +47,7 @@ LeTensor * le_layer_backward_prop    (LeLayer     *layer,
                                       LeTensor    *cached_input,
                                       LeTensor    *output_gradient,
                                       LeList     **parameters_gradient);
+
+LeShape *  le_layer_get_output_shape (LeLayer     *layer);
 
 #endif

@@ -89,6 +89,13 @@ le_activation_layer_backward_prop(LeLayer *layer, LeTensor *cached_input, LeTens
     return input_gradient;
 }
 
+LeShape *
+le_activation_layer_get_output_shape(LeLayer *layer)
+{
+    /// @note: Check output of previous layer
+    return le_shape_new(2, 0, 0);
+}
+
 static LeActivationLayerClass klass;
 
 static void
@@ -100,6 +107,7 @@ le_activation_layer_class_ensure_init()
     {
         klass.parent.forward_prop = le_activation_layer_forward_prop;
         klass.parent.backward_prop = le_activation_layer_backward_prop;
+        klass.parent.get_output_shape = le_activation_layer_get_output_shape;
         initialized = true;
     }
 }
