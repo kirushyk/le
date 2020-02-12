@@ -91,7 +91,7 @@ forward_propagation(LeSequential *self, LeTensor *x, LeList **inputs)
     LeTensor *signal = le_tensor_new_copy(x);
     
     for (LeList *current = self->layers;
-         current != NULL; 
+         current != NULL;
          current = current->next)
     {
         LeLayer *current_layer = (LeLayer *)current->data;
