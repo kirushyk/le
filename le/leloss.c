@@ -110,11 +110,29 @@ le_apply_cross_entropy_loss_derivative(LeTensor *h, LeTensor *y)
     for (i = 0; i < elements_count; i++)
     {
         float yi = le_tensor_f32_at(y, i);
+        float hi = le_tensor_f32_at(h, i); /// @note: hi ∈ (0, 1)
+        if (hi < 0.001f)
+            hi = 0.001f;
+        float dJ_dh = -yi / denom;
+        le_tensor_f32_set(h, i, dJ_dh);
+    }
+}
+
+void
+le_apply_mse_loss_derivative(LeTensor *h, LeTensor *y)
+{
+    assert(h->shape->num_dimensions == 2);
+    assert(y->shape->num_dimensions == 2);
+    assert(le_shape_equal(h->shape, y->shape));
+
+    unsigned i;
+    
+    unsigned elements_count = le_shape_get_elements_count(h->shape);
+    for (i = 0; i < elements_count; i++)
+    {
+        float yi = le_tensor_f32_at(y, i);
         float hi = le_tensor_f32_at(h, i);
-        float denom = (hi * (1 - hi));
-        if (denom < 0.001f)
-            denom = 0.001f;
-        float dJ_dh = (hi - yi) / denom;
+        float dJ_dh = hi - yi;
         le_tensor_f32_set(h, i, dJ_dh);
     }
 }
