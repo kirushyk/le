@@ -56,38 +56,47 @@ le_activation_layer_backward_prop(LeLayer *layer, LeTensor *cached_input, LeTens
     
     LeActivationLayer *self = LE_ACTIVATION_LAYER(layer);
     
-    LeTensor *jacobian = le_tensor_new_copy(cached_input);
+    LeTensor *jacobian = NULL;
 
     switch (self->activation) {
     case LE_ACTIVATION_SIGMOID:
         /// @note: Derivative of sigmoid activation function: g'(x) = g(x)(1 - g(x))
+        jacobian = le_tensor_new_copy(cached_input);
         le_tensor_apply_sigmoid_prime(jacobian);
         break;
 
     case LE_ACTIVATION_TANH:
         /// @note: Derivative of hyperbolic tangent activation function: g'(x) = 1 - g(x)^2
+        jacobian = le_tensor_new_copy(cached_input);
         le_tensor_apply_tanh(jacobian);
         le_tensor_apply_sqr(jacobian);
         le_tensor_apply_1_minus(jacobian);
         break;
 
     case LE_ACTIVATION_RELU:
+        jacobian = le_tensor_new_copy(cached_input);
         le_tensor_apply_greater_than(jacobian, 0.0f);
         break;
         
     case LE_ACTIVATION_SOFTMAX:
+        jacobian = le_tensor_new_copy(cached_input);
         le_tensor_apply_sigmoid_prime(jacobian);
         break;
         
     case LE_ACTIVATION_LINEAR:
-    default:
         /// @note: Derivative of linear activation function: g'(x) = 1
+    default:
+        /// @note: NULL jacobian will be treated like all-ones array
+        jacobian = NULL;
         break;
     }
 
     LeTensor *input_gradient = le_tensor_new_copy(output_gradient);
-    le_tensor_multiply_elementwise(input_gradient, jacobian);
-    le_tensor_free(jacobian);
+    if (jacobian)
+    {
+        le_tensor_multiply_elementwise(input_gradient, jacobian);
+        le_tensor_free(jacobian);
+    }
     return input_gradient;
 }
 
