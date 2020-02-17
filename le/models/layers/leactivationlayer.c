@@ -80,7 +80,8 @@ le_activation_layer_backward_prop(LeLayer *layer, LeTensor *cached_input, LeTens
         
     case LE_ACTIVATION_SOFTMAX:
         jacobian = le_tensor_new_copy(cached_input);
-        le_tensor_apply_sigmoid_prime(jacobian);
+        /// @todo: Speed-up by using cached output
+        le_matrix_apply_softmax_prime(jacobian);
         break;
         
     case LE_ACTIVATION_LINEAR:
