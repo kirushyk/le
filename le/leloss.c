@@ -12,7 +12,8 @@ le_logistic_loss(LeTensor *h, LeTensor *y)
 {
     assert(h->shape->num_dimensions == 2);
     assert(y->shape->num_dimensions == 2);
-    assert(h->shape->sizes[1] == y->shape->sizes[1]);
+    assert(le_shape_equal(h->shape, y->shape));
+    assert(h->shape->sizes[0] == 1);
     
     float result = 0.0f;
     unsigned i;
@@ -33,7 +34,8 @@ le_cross_entropy_loss(LeTensor *h, LeTensor *y)
 {
     assert(h->shape->num_dimensions == 2);
     assert(y->shape->num_dimensions == 2);
-    assert(h->shape->sizes[1] == y->shape->sizes[1]);
+    assert(le_shape_equal(h->shape, y->shape));
+    assert(h->shape->sizes[0] >= 2);
     
     unsigned num_classes = y->shape->sizes[0];
     unsigned num_examples = y->shape->sizes[1];
@@ -133,6 +135,28 @@ le_apply_mse_loss_derivative(LeTensor *h, LeTensor *y)
         float yi = le_tensor_f32_at(y, i);
         float hi = le_tensor_f32_at(h, i);
         float dJ_dh = hi - yi;
+        le_tensor_f32_set(h, i, dJ_dh);
+    }
+}
+
+void
+le_apply_logistic_loss_derivative(LeTensor *h, LeTensor *y)
+{
+    assert(h->shape->num_dimensions == 2);
+    assert(y->shape->num_dimensions == 2);
+    assert(le_shape_equal(h->shape, y->shape));
+
+    unsigned i;
+    
+    unsigned elements_count = le_shape_get_elements_count(h->shape);
+    for (i = 0; i < elements_count; i++)
+    {
+        float yi = le_tensor_f32_at(y, i);
+        float hi = le_tensor_f32_at(h, i); /// @note: hi ∈ (0, 1)
+        float denom = hi * (1.0f - hi);
+        if (denom < 0.001f)
+            denom = 0.001f;
+        float dJ_dh = (hi - yi) / denom;
         le_tensor_f32_set(h, i, dJ_dh);
     }
 }

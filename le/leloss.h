@@ -25,4 +25,9 @@ void  le_apply_cross_entropy_loss_derivative (LeTensor *predictions,
 void  le_apply_mse_loss_derivative           (LeTensor *predictions,
                                               LeTensor *labels);
 
+/// @note: Partial derivative with respect to predictions
+/// predictions <- ∂J(predictions, labels) / ∂predictions
+void  le_apply_logistic_loss_derivative      (LeTensor *predictions,
+                                              LeTensor *labels);
+
 #endif
