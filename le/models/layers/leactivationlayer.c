@@ -56,47 +56,48 @@ le_activation_layer_backward_prop(LeLayer *layer, LeTensor *cached_input, LeTens
     
     LeActivationLayer *self = LE_ACTIVATION_LAYER(layer);
     
-    LeTensor *jacobian = NULL;
+    /// @note: Diagonal of Jacobian of activation function at cached_input 
+    LeTensor *activation_primes = NULL;
 
     switch (self->activation) {
     case LE_ACTIVATION_SIGMOID:
         /// @note: Derivative of sigmoid activation function: g'(x) = g(x)(1 - g(x))
-        jacobian = le_tensor_new_copy(cached_input);
-        le_tensor_apply_sigmoid_prime(jacobian);
+        activation_primes = le_tensor_new_copy(cached_input);
+        le_tensor_apply_sigmoid_prime(activation_primes);
         break;
 
     case LE_ACTIVATION_TANH:
         /// @note: Derivative of hyperbolic tangent activation function: g'(x) = 1 - g(x)^2
-        jacobian = le_tensor_new_copy(cached_input);
-        le_tensor_apply_tanh(jacobian);
-        le_tensor_apply_sqr(jacobian);
-        le_tensor_apply_1_minus(jacobian);
+        activation_primes = le_tensor_new_copy(cached_input);
+        le_tensor_apply_tanh(activation_primes);
+        le_tensor_apply_sqr(activation_primes);
+        le_tensor_apply_1_minus(activation_primes);
         break;
 
     case LE_ACTIVATION_RELU:
-        jacobian = le_tensor_new_copy(cached_input);
-        le_tensor_apply_greater_than(jacobian, 0.0f);
+        activation_primes = le_tensor_new_copy(cached_input);
+        le_tensor_apply_greater_than(activation_primes, 0.0f);
         break;
         
     case LE_ACTIVATION_SOFTMAX:
-        jacobian = le_tensor_new_copy(cached_input);
+        activation_primes = le_tensor_new_copy(cached_input);
         /// @todo: Speed-up by using cached output
-        le_matrix_apply_softmax_prime(jacobian);
+        le_matrix_apply_softmax_prime(activation_primes);
         break;
         
     case LE_ACTIVATION_LINEAR:
         /// @note: Derivative of linear activation function: g'(x) = 1
     default:
-        /// @note: NULL jacobian will be treated like all-ones array
-        jacobian = NULL;
+        /// @note: NULL activation_primes will be treated like all-ones array
+        activation_primes = NULL;
         break;
     }
 
     LeTensor *input_gradient = le_tensor_new_copy(output_gradient);
-    if (jacobian)
+    if (activation_primes)
     {
-        le_tensor_multiply_elementwise(input_gradient, jacobian);
-        le_tensor_free(jacobian);
+        le_tensor_multiply_elementwise(input_gradient, activation_primes);
+        le_tensor_free(activation_primes);
     }
     return input_gradient;
 }
