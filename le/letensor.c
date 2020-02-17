@@ -467,7 +467,7 @@ le_tensor_sum(LeTensor *self)
 static float
 le_sigmoid(const float a)
 {
-    return 1.0 / (1.0 + exp(-a));
+    return 1.0 / (1.0 + expf(-a));
 }
 #endif
 
