@@ -156,6 +156,7 @@ le_sequential_get_gradients(LeSequential *self, LeTensor *x, LeTensor *y)
         {
             cached_output = LE_TENSOR(inputs->next->data);
         }
+        /// @todo: Use cached output of last layer to speed-up backprop.
         LeTensor *input_gradient = le_layer_backward_prop(current_layer, cached_input, cached_output, signal, &current_layer_param_gradients); 
         le_tensor_free(signal);
         signal = input_gradient;
