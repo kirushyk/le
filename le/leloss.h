@@ -30,4 +30,18 @@ void  le_apply_mse_loss_derivative           (LeTensor *predictions,
 void  le_apply_logistic_loss_derivative      (LeTensor *predictions,
                                               LeTensor *labels);
 
+typedef enum LeLoss {
+   LE_LOSS_MSE,
+   LE_LOSS_LOGISTIC,
+   LE_LOSS_CROSS_ENTROPY
+} LeLoss;
+
+float le_loss                                (LeLoss    loss,
+                                              LeTensor *predictions,
+                                              LeTensor *labels);
+
+void le_apply_loss_derivative                (LeLoss    loss,
+                                              LeTensor *predictions,
+                                              LeTensor *labels);
+
 #endif

@@ -160,3 +160,37 @@ le_apply_logistic_loss_derivative(LeTensor *h, LeTensor *y)
         le_tensor_f32_set(h, i, dJ_dh);
     }
 }
+
+float 
+le_loss(LeLoss loss, LeTensor *predictions, LeTensor *labels)
+{
+    switch (loss) 
+    {
+    case LE_LOSS_LOGISTIC:
+        return le_logistic_loss(predictions, labels);
+    case LE_LOSS_CROSS_ENTROPY:
+        return le_cross_entropy_loss(predictions, labels);
+    case LE_LOSS_MSE:
+    default:
+        return 0.0f;
+    }
+}
+
+void
+le_apply_loss_derivative(LeLoss loss, LeTensor *predictions, LeTensor *labels)
+{
+    switch (loss) 
+    {
+    case LE_LOSS_LOGISTIC:
+        le_apply_logistic_loss_derivative(predictions, labels);
+        break;
+    case LE_LOSS_CROSS_ENTROPY:
+        le_apply_cross_entropy_loss_derivative(predictions, labels);
+        break;
+    case LE_LOSS_MSE:
+        le_apply_mse_loss_derivative(predictions, labels);
+        break;
+    default:
+        break;
+    }
+}
