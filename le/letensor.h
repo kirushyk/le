@@ -93,6 +93,8 @@ void         le_tensor_apply_sqr            (LeTensor     *tensor);
 
 void         le_tensor_apply_1_minus        (LeTensor     *tensor);
 
+void         le_tensor_apply_x_minus_sqr_x  (LeTensor     *tensor);
+
 void         le_tensor_apply_greater_than   (LeTensor     *tensor,
                                              float         scalar);
 

@@ -543,6 +543,19 @@ le_tensor_apply_1_minus(LeTensor *self)
 }
 
 void
+le_tensor_apply_x_minus_sqr_x(LeTensor *self)
+{
+    unsigned i;
+    unsigned elements_count = le_shape_get_elements_count(self->shape);
+    
+    for (i = 0; i < elements_count; i++)
+    {
+        float x = ((float *)self->data)[i];
+        ((float *)self->data)[i] = x * (1 - x);
+    }
+}
+
+void
 le_tensor_apply_greater_than(LeTensor *self, float scalar)
 {
     /// @todo: Take stride into account
