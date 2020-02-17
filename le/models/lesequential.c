@@ -15,6 +15,7 @@ struct LeSequential
 {
     LeModel parent;
     LeList *layers;
+    LeLoss loss;
 };
 
 typedef struct LeSequentialClass
@@ -53,6 +54,7 @@ le_sequential_construct(LeSequential *self)
     ((LeObject *)self)->klass = (LeClass *)&klass;
     
     self->layers = NULL;
+    self->loss = LE_LOSS_MSE;
 }
 
 LeSequential *
@@ -76,6 +78,12 @@ le_sequential_add(LeSequential *self, LeLayer *layer)
         LeTensor *parameter = (LeTensor *)current->data;
         le_model_append_parameter(LE_MODEL(self), parameter);
     }
+}
+
+void
+le_sequential_set(LeSequential *self, LeLoss loss)
+{
+    self->loss = loss;
 }
 
 /** @note: Used in both _predict and _get_gradients method, 

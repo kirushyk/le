@@ -5,6 +5,7 @@
 #define __LE_SEQUENTIAL_H__
 
 #include "../letensor.h"
+#include "../leloss.h"
 #include "lemodel.h"
 #include "layers/lelayer.h"
 
@@ -16,6 +17,9 @@ LeSequential * le_sequential_new     (void);
 
 void           le_sequential_add     (LeSequential *model,
                                       LeLayer      *layer);
+
+void           le_sequential_set     (LeSequential *model,
+                                      LeLoss        loss);
 
 LeTensor *     le_sequential_predict (LeSequential *model,
                                       LeTensor     *x);
