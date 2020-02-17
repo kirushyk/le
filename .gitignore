@@ -4,3 +4,5 @@ build/
 *.xcodeproj/
 *.xcconfig
 mnist-config.h
+*.dot
+
