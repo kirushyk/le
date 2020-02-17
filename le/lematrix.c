@@ -462,3 +462,20 @@ le_matrix_apply_softmax(LeTensor *self)
         }
     }
 }
+
+void
+le_matrix_apply_softmax_prime(LeTensor *self)
+{
+    assert(self->shape->num_dimensions == 2);
+    assert(self->shape->num_dimensions == 2);
+
+    le_matrix_apply_softmax(self);
+
+    unsigned elements_count = le_shape_get_elements_count(self->shape);
+    
+    for (unsigned i = 0; i < elements_count; i++)
+    {
+        float s = ((float *)self->data)[i];
+        ((float *)self->data)[i] = s * (1.0f - s);
+    }
+}
