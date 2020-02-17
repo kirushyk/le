@@ -225,6 +225,8 @@ create_model_and_train(LEMainWindow *self)
             le_sequential_add(LE_SEQUENTIAL(self->model),
                               LE_LAYER(le_activation_layer_new("A3", LE_ACTIVATION_SIGMOID)));
             
+            le_sequential_set_loss(LE_SEQUENTIAL(self->model), LE_LOSS_LOGISTIC);
+
             LeBGD *optimizer = le_bgd_new(le_model_get_parameters(self->model), 
                 atof(gtk_combo_box_text_get_active_text(GTK_COMBO_BOX_TEXT(self->alpha_combo))));
             for (unsigned i = 0; i <= 400; i++)
