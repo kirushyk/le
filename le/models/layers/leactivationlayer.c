@@ -49,7 +49,7 @@ le_activation_layer_forward_prop(LeLayer *layer, LeTensor *input)
 }
 
 LeTensor *
-le_activation_layer_backward_prop(LeLayer *layer, LeTensor *cached_input, LeTensor *output_gradient, LeList **parameters_gradient)
+le_activation_layer_backward_prop(LeLayer *layer, LeTensor *cached_input, LeTensor *cached_output, LeTensor *output_gradient, LeList **parameters_gradient)
 {
     assert(layer);
     assert(output_gradient);

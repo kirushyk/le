@@ -22,7 +22,7 @@ le_conv2d_forward_prop(LeLayer *layer, LeTensor *input)
 }
 
 LeTensor *
-le_conv2d_backward_prop(LeLayer *layer, LeTensor *cached_input, 
+le_conv2d_backward_prop(LeLayer *layer, LeTensor *cached_input, LeTensor *cached_output,
                         LeTensor *output_gradient, LeList **parameters_gradient)
 {
     return NULL;

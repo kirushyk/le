@@ -25,7 +25,7 @@ typedef struct LeLayerClass
     LeClass parent;
     
     LeTensor * (*forward_prop)(LeLayer *self, LeTensor *x);
-    LeTensor * (*backward_prop)(LeLayer *self, LeTensor *x, LeTensor *dJ_dy, LeList **dJ_dw);
+    LeTensor * (*backward_prop)(LeLayer *self, LeTensor *x, LeTensor *y, LeTensor *dJ_dy, LeList **dJ_dw);
     LeShape * (*get_output_shape)(LeLayer *self);
     const char * (*get_description)(LeLayer *self);
 } LeLayerClass;
@@ -46,6 +46,7 @@ void         le_layer_append_parameter (LeLayer     *layer,
 
 LeTensor *   le_layer_backward_prop    (LeLayer     *layer,
                                         LeTensor    *cached_input,
+                                        LeTensor    *cached_output,
                                         LeTensor    *output_gradient,
                                         LeList     **parameters_gradient);
 
