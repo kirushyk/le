@@ -39,6 +39,8 @@ main(int argc, const char *argv[])
     le_sequential_add(neural_network,
                       LE_LAYER(le_activation_layer_new("A2", LE_ACTIVATION_SIGMOID)));
 
+    le_sequential_set_loss(neural_network, LE_LOSS_LOGISTIC);
+
     le_sequential_to_dot(neural_network, "snn.dot");
     
     LE_INFO("Training Neural Network");
