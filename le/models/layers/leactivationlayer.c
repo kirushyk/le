@@ -88,6 +88,9 @@ le_activation_layer_backward_prop(LeLayer *layer, LeTensor *cached_input, LeTens
         break;
         
     case LE_ACTIVATION_SOFTMAX:
+        /// @note: Diagonal of Jacobian of softmax function.
+        /// Non-diagonal partial derivatives will be discarded.
+        /// Hadamard product will be used for chain rule.
         if (cached_output)
         {
             activation_primes = le_tensor_new_copy(cached_output);
