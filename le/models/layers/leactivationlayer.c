@@ -62,8 +62,16 @@ le_activation_layer_backward_prop(LeLayer *layer, LeTensor *cached_input, LeTens
     switch (self->activation) {
     case LE_ACTIVATION_SIGMOID:
         /// @note: Derivative of sigmoid activation function: g'(x) = g(x)(1 - g(x))
-        activation_primes = le_tensor_new_copy(cached_input);
-        le_tensor_apply_sigmoid_prime(activation_primes);
+        if (cached_output)
+        {
+            activation_primes = le_tensor_new_copy(cached_output);
+            le_tensor_apply_x_minus_sqr_x(activation_primes);
+        }
+        else
+        {
+            activation_primes = le_tensor_new_copy(cached_input);
+            le_tensor_apply_sigmoid_prime(activation_primes);
+        }
         break;
 
     case LE_ACTIVATION_TANH:
@@ -80,9 +88,16 @@ le_activation_layer_backward_prop(LeLayer *layer, LeTensor *cached_input, LeTens
         break;
         
     case LE_ACTIVATION_SOFTMAX:
-        activation_primes = le_tensor_new_copy(cached_input);
-        /// @todo: Speed-up by using cached output
-        le_matrix_apply_softmax_prime(activation_primes);
+        if (cached_output)
+        {
+            activation_primes = le_tensor_new_copy(cached_output);
+            le_tensor_apply_x_minus_sqr_x(activation_primes);
+        }
+        else
+        {
+            activation_primes = le_tensor_new_copy(cached_input);
+            le_matrix_apply_softmax_prime(activation_primes);
+        }
         break;
         
     case LE_ACTIVATION_LINEAR:
