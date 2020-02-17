@@ -130,7 +130,7 @@ le_sequential_get_gradients(LeSequential *self, LeTensor *x, LeTensor *y)
 
     LE_INFO("Back Propagation");
     /// @note: Derivative of assumed cost function
-    le_apply_cross_entropy_loss_derivative(signal, y);
+    le_apply_logistic_loss_derivative(signal, y);
     LE_INFO("signal =\n%s", le_tensor_to_cstr(signal));
 
     LeList *current = NULL;
