@@ -151,7 +151,12 @@ le_sequential_get_gradients(LeSequential *self, LeTensor *x, LeTensor *y)
         LE_INFO("Layer: %s", current_layer->name);
         LeList *current_layer_param_gradients = NULL;
         LeTensor *cached_input = LE_TENSOR(inputs->data);
-        LeTensor *input_gradient = le_layer_backward_prop(current_layer, cached_input, NULL, signal, &current_layer_param_gradients); 
+        LeTensor *cached_output = NULL;
+        if (inputs->next)
+        {
+            cached_output = LE_TENSOR(inputs->next->data);
+        }
+        LeTensor *input_gradient = le_layer_backward_prop(current_layer, cached_input, cached_output, signal, &current_layer_param_gradients); 
         le_tensor_free(signal);
         signal = input_gradient;
         LE_INFO("signal =\n%s", le_tensor_to_cstr(signal));
