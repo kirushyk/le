@@ -76,10 +76,19 @@ le_activation_layer_backward_prop(LeLayer *layer, LeTensor *cached_input, LeTens
 
     case LE_ACTIVATION_TANH:
         /// @note: Derivative of hyperbolic tangent activation function: g'(x) = 1 - g(x)^2
-        activation_primes = le_tensor_new_copy(cached_input);
-        le_tensor_apply_tanh(activation_primes);
-        le_tensor_apply_sqr(activation_primes);
-        le_tensor_apply_1_minus(activation_primes);
+        if (cached_output)
+        {
+            activation_primes = le_tensor_new_copy(cached_output);
+            le_tensor_apply_sqr(activation_primes);
+            le_tensor_apply_1_minus(activation_primes);
+        }
+        else
+        {
+            activation_primes = le_tensor_new_copy(cached_input);
+            le_tensor_apply_tanh(activation_primes);
+            le_tensor_apply_sqr(activation_primes);
+            le_tensor_apply_1_minus(activation_primes);
+        }
         break;
 
     case LE_ACTIVATION_RELU:
