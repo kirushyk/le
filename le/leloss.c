@@ -7,6 +7,8 @@
 #include <stdbool.h>
 #include "letensor-imp.h"
 
+#define EPSILON 1e-5
+
 float
 le_logistic_loss(LeTensor *h, LeTensor *y)
 {
@@ -113,8 +115,8 @@ le_apply_cross_entropy_loss_derivative(LeTensor *h, LeTensor *y)
     {
         float yi = le_tensor_f32_at(y, i);
         float hi = le_tensor_f32_at(h, i); /// @note: hi ∈ (0, 1)
-        if (hi < 0.001f)
-            hi = 0.001f;
+        if (hi < EPSILON)
+            hi = EPSILON;
         float dJ_dh = -yi / hi;
         le_tensor_f32_set(h, i, dJ_dh);
     }
@@ -154,8 +156,8 @@ le_apply_logistic_loss_derivative(LeTensor *h, LeTensor *y)
         float yi = le_tensor_f32_at(y, i);
         float hi = le_tensor_f32_at(h, i); /// @note: hi ∈ (0, 1)
         float denom = hi * (1.0f - hi);
-        if (denom < 0.001f)
-            denom = 0.001f;
+        if (denom < EPSILON)
+            denom = EPSILON;
         float dJ_dh = (hi - yi) / denom;
         le_tensor_f32_set(h, i, dJ_dh);
     }
