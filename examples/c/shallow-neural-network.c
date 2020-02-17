@@ -10,19 +10,15 @@
 int
 main(int argc, const char *argv[])
 {
-    const float x_data[] =
-    {
-        1.0f, 2.0f, 1.0f, 2.0f,
-        2.0f, 2.0f, 1.0f, 1.0f
-    };
-    LeTensor *x = le_matrix_new_from_data(2, 4, x_data);
+    LeTensor *x = le_tensor_new(LE_TYPE_FLOAT32, 2, 2, 4,
+        1.0, 2.0, 1.0, 2.0,
+        2.0, 2.0, 1.0, 1.0
+    );
     
     /// @note: Non-linearly-separable / XOR-like labels
-    const float y_data[] =
-    {
-        0.0f, 1.0f, 1.0f, 0.0f
-    };
-    LeTensor *y = le_matrix_new_from_data(1, 4, y_data);
+    LeTensor *y = le_tensor_new(LE_TYPE_FLOAT32, 2, 1, 4, 
+        0.0, 1.0, 1.0, 0.0
+    );
     
     printf("Train set:\n");
     printf("x =\n");
@@ -42,6 +38,8 @@ main(int argc, const char *argv[])
                       LE_LAYER(le_dense_layer_new("D2", 2, 1)));
     le_sequential_add(neural_network,
                       LE_LAYER(le_activation_layer_new("A2", LE_ACTIVATION_SIGMOID)));
+
+    le_sequential_to_dot(neural_network, "snn.dot");
     
     LE_INFO("Training Neural Network");
     LeBGD *optimizer = le_bgd_new(le_model_get_parameters(LE_MODEL(neural_network)),
@@ -58,7 +56,7 @@ main(int argc, const char *argv[])
         {
             LE_INFO("Iteration %u", i);
             LeTensor *h = le_model_predict(LE_MODEL(neural_network), x);
-            LE_INFO("Training Error = %f", le_cross_entropy_loss(h, y));
+            LE_INFO("Training Error = %f", le_logistic_loss(h, y));
             le_tensor_free(h);
         }
 

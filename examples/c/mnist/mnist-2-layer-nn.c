@@ -36,9 +36,12 @@ main()
                       LE_LAYER(le_dense_layer_new("FC_2", 300, 10)));
     le_sequential_add(neural_network,
                       LE_LAYER(le_activation_layer_new("Softmax", LE_ACTIVATION_SOFTMAX)));
+
+    le_sequential_to_dot(neural_network, "2nn.dot");
+
     LeBGD *optimizer = le_bgd_new(le_model_get_parameters(LE_MODEL(neural_network)),
                                   0.3f);
-    for (unsigned i = 0; i <= 2500; i++)
+    for (unsigned i = 0; i <= 25; i++)
     {
         LeList *gradients = le_model_get_gradients(LE_MODEL(neural_network),
                                                    train_input_f32, train_output);
