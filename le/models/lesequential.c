@@ -81,7 +81,7 @@ le_sequential_add(LeSequential *self, LeLayer *layer)
 }
 
 void
-le_sequential_set(LeSequential *self, LeLoss loss)
+le_sequential_set_loss(LeSequential *self, LeLoss loss)
 {
     self->loss = loss;
 }
@@ -138,7 +138,7 @@ le_sequential_get_gradients(LeSequential *self, LeTensor *x, LeTensor *y)
 
     LE_INFO("Back Propagation");
     /// @note: Derivative of assumed cost function
-    le_apply_logistic_loss_derivative(signal, y);
+    le_apply_loss_derivative(self->loss, signal, y);
     LE_INFO("signal =\n%s", le_tensor_to_cstr(signal));
 
     LeList *current = NULL;

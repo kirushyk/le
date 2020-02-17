@@ -13,20 +13,20 @@ typedef struct LeSequential LeSequential;
 
 #define LE_SEQUENTIAL(a) ((LeSequential *)(a))
 
-LeSequential * le_sequential_new     (void);
+LeSequential * le_sequential_new      (void);
 
-void           le_sequential_add     (LeSequential *model,
-                                      LeLayer      *layer);
+void           le_sequential_add      (LeSequential *model,
+                                       LeLayer      *layer);
 
-void           le_sequential_set     (LeSequential *model,
-                                      LeLoss        loss);
+void           le_sequential_set_loss (LeSequential *model,
+                                       LeLoss        loss);
 
-LeTensor *     le_sequential_predict (LeSequential *model,
-                                      LeTensor     *x);
+LeTensor *     le_sequential_predict  (LeSequential *model,
+                                       LeTensor     *x);
 
-void           le_sequential_to_dot  (LeSequential *model,
-                                      const char   *filename);
+void           le_sequential_to_dot   (LeSequential *model,
+                                       const char   *filename);
 
-void           le_sequential_free    (LeSequential *model);
+void           le_sequential_free     (LeSequential *model);
 
 #endif
