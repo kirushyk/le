@@ -43,7 +43,7 @@ main()
 
     LeBGD *optimizer = le_bgd_new(le_model_get_parameters(LE_MODEL(neural_network)),
                                   0.3f);
-    for (unsigned i = 0; i <= 25; i++)
+    for (unsigned i = 0; i <= 2500; i++)
     {
         LeList *gradients = le_model_get_gradients(LE_MODEL(neural_network),
                                                    train_input_f32, train_output);
