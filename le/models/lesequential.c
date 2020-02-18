@@ -188,7 +188,7 @@ le_sequential_to_dot(LeSequential *self, const char *filename)
         return;
 
     fprintf(fout, "digraph graphname {\n");
-    fprintf(fout, "__cost [shape=record label=\"{J|Cross-entropy cost}\"];\n");
+    fprintf(fout, "__cost [shape=record label=\"{J|%s}\"];\n", le_loss_get_desc(self->loss));
 
     for (LeList *current = self->layers;
          current != NULL; 
