@@ -196,9 +196,10 @@ le_sequential_to_dot(LeSequential *self, const char *filename)
     {
         LeLayer *current_layer = LE_LAYER(current->data);
         assert(current_layer);
-        fprintf(fout, "%s [shape=record label=\"{%s|%s}\"];\n",
+        fprintf(fout, "%s [shape=record label=\"{%s|%s|%d Parameters}\"];\n",
             current_layer->name, current_layer->name,
-            le_layer_get_description(current_layer));
+            le_layer_get_description(current_layer),
+            le_layer_get_parameters_count(current_layer));
         const char *next_node = "__cost";
         if (current->next)
         {

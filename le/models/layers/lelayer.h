@@ -33,25 +33,27 @@ typedef struct LeLayerClass
 #define LE_LAYER_CLASS(a) ((LeLayerClass *)(a))
 #define LE_LAYER_GET_CLASS(a) LE_LAYER_CLASS(LE_OBJECT_GET_CLASS(a))
 
-void         le_layer_construct        (LeLayer     *layer,
-                                        const char  *name);
+void         le_layer_construct            (LeLayer     *layer,
+                                            const char  *name);
 
-LeTensor *   le_layer_forward_prop     (LeLayer     *layer,
-                                        LeTensor    *input);
+LeTensor *   le_layer_forward_prop         (LeLayer     *layer,
+                                            LeTensor    *input);
 
-LeList *     le_layer_get_parameters   (LeLayer     *layer);
+LeList *     le_layer_get_parameters       (LeLayer     *layer);
 
-void         le_layer_append_parameter (LeLayer     *layer,
-                                        LeTensor    *parameter);
+unsigned     le_layer_get_parameters_count (LeLayer     *layer);
 
-LeTensor *   le_layer_backward_prop    (LeLayer     *layer,
-                                        LeTensor    *cached_input,
-                                        LeTensor    *cached_output,
-                                        LeTensor    *output_gradient,
-                                        LeList     **parameters_gradient);
+void         le_layer_append_parameter     (LeLayer     *layer,
+                                            LeTensor    *parameter);
 
-LeShape *    le_layer_get_output_shape (LeLayer     *layer);
+LeTensor *   le_layer_backward_prop        (LeLayer     *layer,
+                                            LeTensor    *cached_input,
+                                            LeTensor    *cached_output,
+                                            LeTensor    *output_gradient,
+                                            LeList     **parameters_gradient);
 
-const char * le_layer_get_description  (LeLayer     *layer);
+LeShape *    le_layer_get_output_shape     (LeLayer     *layer);
+
+const char * le_layer_get_description      (LeLayer     *layer);
 
 #endif

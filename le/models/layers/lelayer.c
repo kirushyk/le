@@ -6,6 +6,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <le/lematrix.h>
+#include <le/letensor-imp.h>
 
 void
 le_layer_construct(LeLayer *self, const char *name)
@@ -33,6 +34,17 @@ le_layer_get_parameters(LeLayer *self)
     assert(self);
     
     return self->parameters;
+}
+
+unsigned     
+le_layer_get_parameters_count(LeLayer *layer)
+{
+    unsigned count = 0;
+    for (LeList *current = layer->parameters; current != NULL; current = current->next)
+    {
+        count += le_shape_get_elements_count(LE_TENSOR(current->data)->shape);
+    }
+    return count;
 }
 
 void
