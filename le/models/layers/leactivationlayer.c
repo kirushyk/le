@@ -136,18 +136,18 @@ le_activation_layer_get_output_shape(LeLayer *layer)
     return le_shape_new(2, 0, 0);
 }
 
+static const char *sigmoid_description = "Sigmoid Activation";
+static const char *tanh_description = "Hyperbolic Tangent Activation";
+static const char *relu_description = "Rectified Linear Unit";
+static const char *softmax_description = "Softmax Activation";
+static const char *linear_description = "Identity";
+
 const char *
 le_activation_layer_get_description(LeLayer *layer)
 {
     assert(layer);
     
     LeActivationLayer *self = LE_ACTIVATION_LAYER(layer);
-
-    static const char *sigmoid_description = "Sigmoid Activation";
-    static const char *tanh_description = "Hyperbolic Tangent Activation";
-    static const char *relu_description = "Rectified Linear Unit";
-    static const char *softmax_description = "Softmax Activation";
-    static const char *linear_description = "Identity";
 
     switch (self->activation) {
     case LE_ACTIVATION_SIGMOID:
