@@ -36,12 +36,14 @@ typedef enum LeLoss {
    LE_LOSS_CROSS_ENTROPY
 } LeLoss;
 
-float le_loss                                (LeLoss    loss,
-                                              LeTensor *predictions,
-                                              LeTensor *labels);
+float        le_loss                  (LeLoss    loss,
+                                       LeTensor *predictions,
+                                       LeTensor *labels);
 
-void le_apply_loss_derivative                (LeLoss    loss,
-                                              LeTensor *predictions,
-                                              LeTensor *labels);
+void         le_apply_loss_derivative (LeLoss    loss,
+                                       LeTensor *predictions,
+                                       LeTensor *labels);
+
+const char * le_loss_get_desc         (LeLoss    loss);     
 
 #endif

@@ -196,3 +196,26 @@ le_apply_loss_derivative(LeLoss loss, LeTensor *predictions, LeTensor *labels)
         break;
     }
 }
+
+static const char * logistic_loss_name = "Logistic Loss";
+
+static const char * xent_loss_name = "Cross-Entropy Loss";
+
+static const char * mse_loss_name = "Mean Squared Error Loss";
+
+const char *
+le_loss_get_desc(LeLoss loss)
+{
+    switch (loss) 
+    {
+    case LE_LOSS_LOGISTIC:
+        return logistic_loss_name;
+    case LE_LOSS_CROSS_ENTROPY:
+        return xent_loss_name;
+    case LE_LOSS_MSE:
+        return mse_loss_name;
+    default:
+        break;
+    }
+    return NULL;
+}
