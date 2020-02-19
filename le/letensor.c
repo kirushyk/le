@@ -619,7 +619,31 @@ le_tensor_to_cstr(LeTensor *self)
         for (x = 0; (x < self->shape->sizes[1]) && (x <= 5); x++)
         {
             int written = 0;
-            sprintf(ptr, "%1.3f%n", ((float *)self->data)[y * self->shape->sizes[1] + x], &written);
+            switch (self->element_type)
+            {
+                case LE_TYPE_UINT8:
+                    sprintf(ptr, "%u%n", (unsigned)((uint8_t *)self->data)[y * self->shape->sizes[1] + x], &written);
+                    break;
+                case LE_TYPE_INT8:
+                    sprintf(ptr, "%d%n", (int)((int8_t *)self->data)[y * self->shape->sizes[1] + x], &written);
+                    break;
+                case LE_TYPE_INT16:
+                    sprintf(ptr, "%d%n", (int)((int16_t *)self->data)[y * self->shape->sizes[1] + x], &written);
+                    break;
+                case LE_TYPE_INT32:
+                    sprintf(ptr, "%d%n", (int)((int32_t *)self->data)[y * self->shape->sizes[1] + x], &written);
+                    break;
+                case LE_TYPE_FLOAT32:
+                    sprintf(ptr, "%1.3f%n", ((float *)self->data)[y * self->shape->sizes[1] + x], &written);
+                    break;
+                case LE_TYPE_FLOAT64:
+                    sprintf(ptr, "%1.3lf%n", ((float *)self->data)[y * self->shape->sizes[1] + x], &written);
+                    break;
+                case LE_TYPE_VOID:
+                default:
+                    sprintf(ptr, "?%n", &written);
+                    break;
+            }
             ptr += written;
             if (x < self->shape->sizes[1] - 1)
             {
