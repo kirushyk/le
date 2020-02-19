@@ -1,6 +1,8 @@
 /* Copyright (c) Kyrylo Polezhaiev and contributors. All rights reserved.
    Released under the MIT license. See LICENSE file in the project root for full license information. */
 
+#define DEFAULT_LOG_CATEGORY "tests/tensorlist"
+
 #include "test-config.h"
 #include <stdlib.h>
 #include <assert.h>
@@ -29,8 +31,10 @@ main()
         9, 8, 7, 6, 5
     ));
     
+    LE_INFO("Saving list of tensors to " TENSORLIST_FILENAME);
     le_tensorlist_save(tensorlist, TENSORLIST_FILENAME);
 
+    LE_INFO("Loading list of tensors from " TENSORLIST_FILENAME);
     LeList *loaded_tensorlist = le_tensorlist_load(TENSORLIST_FILENAME);
 
     LeList *i = NULL, *j = NULL;
@@ -40,11 +44,16 @@ main()
     {
         LeTensor *original = LE_TENSOR(i->data);
         LeTensor *loaded = LE_TENSOR(j->data);
+        LE_INFO("Comparing original Tensor\n%s", le_tensor_to_cstr(original));
+        LE_INFO("with saved and loaded Tensor\n%s", le_tensor_to_cstr(loaded));
         assert(le_tensor_equal(original, loaded));
     }
 
     assert(i == NULL);
     assert(j == NULL);
+    
+    le_list_foreach(loaded_tensorlist, (LeFunction)le_tensor_free);
+    le_list_foreach(tensorlist, (LeFunction)le_tensor_free);
 
     return EXIT_SUCCESS;
 }
