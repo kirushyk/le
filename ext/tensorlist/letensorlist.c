@@ -7,6 +7,7 @@
 #include <stdio.h>
 #include <stdint.h>
 #include <assert.h>
+#include <stdlib.h>
 #include <le/letensor-imp.h>
 
 static void
@@ -42,6 +43,28 @@ le_tensorlist_save(LeList *tensors, const char *filename)
     }
 }
 
+static LeTensor *
+le_tensor_deserialize(FILE *fin)
+{
+    assert(fin);
+
+    LeTensor *self = malloc(sizeof(struct LeTensor));
+    fread((uint8_t *)&self->element_type, sizeof(uint8_t), 1, fin);
+
+    self->shape = malloc(sizeof(LeShape));
+    fread((uint8_t *)&self->shape->num_dimensions, sizeof(uint8_t), 1, fin);
+    self->shape->sizes = malloc(self->shape->num_dimensions * sizeof(uint32_t));
+    fread(self->shape->sizes, sizeof(uint32_t), self->shape->num_dimensions, fin);
+
+    self->stride = le_shape_get_last_size(self->shape);
+    self->owns_data = true;
+    unsigned elements_count = le_shape_get_elements_count(self->shape);
+    self->data = malloc(elements_count * le_type_size(self->element_type));
+    fread(self->data, le_type_size(self->element_type), elements_count, fin);
+    
+    return self;
+}
+
 LeList *
 le_tensorlist_load(const char *filename)
 {
@@ -57,7 +80,8 @@ le_tensorlist_load(const char *filename)
             fread(&num_tensors, sizeof(num_tensors), 1, fin);
             for (uint16_t i = 0; i < num_tensors; i++)
             {
-
+                LeTensor *tensor = le_tensor_deserialize(fin);
+                list = le_list_append(list, tensor);
             }
         }
         else
