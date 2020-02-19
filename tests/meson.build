@@ -6,7 +6,8 @@ le_tests = [
     ['mnist.c'],
     ['list.c'],
     ['matrices.c'],
-    ['sobel.c']
+    ['sobel.c'],
+    ['tensorlist.c']
 ]
 
 foreach filenames : le_tests
