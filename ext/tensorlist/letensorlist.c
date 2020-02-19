@@ -16,10 +16,11 @@ le_tensor_serialize(LeTensor *tensor, FILE *fout)
     assert(tensor);
     assert(fout);
 
-    fwrite((uint8_t*)&tensor->element_type, sizeof(uint8_t), 1, fout);
-    fwrite((uint8_t*)&tensor->shape->num_dimensions, sizeof(uint8_t), 1, fout);
+    fwrite((uint8_t *)&tensor->element_type, sizeof(uint8_t), 1, fout);
+    fwrite((uint8_t *)&tensor->shape->num_dimensions, sizeof(uint8_t), 1, fout);
     fwrite(tensor->shape->sizes, sizeof(uint32_t), tensor->shape->num_dimensions, fout);
-    fwrite(tensor->data, le_type_size(tensor->element_type), 1, fout);
+    unsigned elements_count = le_shape_get_elements_count(tensor->shape);
+    fwrite(tensor->data, le_type_size(tensor->element_type), elements_count, fout);
 }
 
 void
@@ -56,7 +57,10 @@ le_tensor_deserialize(FILE *fin)
     self->shape->sizes = malloc(self->shape->num_dimensions * sizeof(uint32_t));
     fread(self->shape->sizes, sizeof(uint32_t), self->shape->num_dimensions, fin);
 
-    self->stride = le_shape_get_last_size(self->shape);
+    if (self->shape->num_dimensions > 0)
+        self->stride = le_shape_get_last_size(self->shape);
+    else
+        self->stride = 0;
     self->owns_data = true;
     unsigned elements_count = le_shape_get_elements_count(self->shape);
     self->data = malloc(elements_count * le_type_size(self->element_type));
