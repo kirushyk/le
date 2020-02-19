@@ -16,6 +16,18 @@ main()
         1, 2,
         3, 4
     ));
+    tensorlist = le_list_append(tensorlist, le_tensor_new(LE_TYPE_FLOAT32, 2, 3, 3,
+        1.0, 2.0, 3.0,
+        4.0, 5.0, 6.0,
+        7.0, 8.0, 9.0
+    ));
+    tensorlist = le_list_append(tensorlist, le_tensor_new(LE_TYPE_INT16, 2, 5, 5,
+        5, 4, 3, 2, 1,
+        6, 5, 4, 3, 2,
+        7, 6, 5, 4, 3,
+        8, 7, 6, 5, 4,
+        9, 8, 7, 6, 5
+    ));
     
     le_tensorlist_save(tensorlist, TENSORLIST_FILENAME);
 
