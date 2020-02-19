@@ -6,7 +6,7 @@ void
 le_tensorlist_save(LeList *tensors, const char *filename)
 {
     FILE *fout = fopen(filename, "wb");
-    uint8_t version = 0;
+    uint8_t version = 1;
     fwrite(&version, 1, 1, fout);
     fclose(fout);
 }
