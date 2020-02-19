@@ -3,7 +3,7 @@
 
 #include "lemnist.h"
 #include <stdlib.h>
-#include "leidx.h"
+#include <ext/idx/leidx.h>
 #include <mnist-config.h>
 
 #define IMAGE_WIDTH 28

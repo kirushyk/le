@@ -4,19 +4,20 @@
 incdir = include_directories('../../')
 
 mnist_sources = [
-    'leidx.c',
     'lemnist.c'
 ]
 
 mnist_deps = [
-    cc.find_library('m'),
-    cc.find_library('z'),
+    cc.find_library('m')
 ]
 
 mnist = static_library('le_mnist', mnist_sources,
     dependencies: mnist_deps,
     include_directories: incdir,
-    link_with: le,
+    link_with: [
+        le,
+        idx
+    ]
 )
 
 mnist_path = get_option('datadir') / 'le' / 'ext' / 'mnist'
