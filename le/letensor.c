@@ -34,8 +34,48 @@ le_tensor_new(LeType element_type, unsigned num_dimensions, ...)
     self->data = malloc(elements_count * le_type_size(self->element_type));
     for (unsigned i = 0; i < elements_count; i++)
     {
-        float value = (float)va_arg(args, double);
-        ((float *)self->data)[i] = value;
+        switch (self->element_type)
+        {
+        case LE_TYPE_UINT8:
+            {
+                uint8_t value = (uint8_t)va_arg(args, int);
+                ((uint8_t *)self->data)[i] = value;
+            }
+            break;
+        case LE_TYPE_INT8:
+            {
+                int8_t value = (int8_t)va_arg(args, int);
+                ((int8_t *)self->data)[i] = value;
+            }
+            break;
+        case LE_TYPE_INT16:
+            {
+                int16_t value = (int16_t)va_arg(args, int);
+                ((int16_t *)self->data)[i] = value;
+            }
+            break;
+        case LE_TYPE_INT32:
+            {
+                int32_t value = (int32_t)va_arg(args, int);
+                ((int32_t *)self->data)[i] = value;
+            }
+            break;
+        case LE_TYPE_FLOAT32:
+            {
+                float value = (float)va_arg(args, double);
+                ((float *)self->data)[i] = value;
+            }
+            break;
+        case LE_TYPE_FLOAT64:
+            {
+                double value = (double)va_arg(args, double);
+                ((double *)self->data)[i] = value;
+            }
+            break;
+        case LE_TYPE_VOID:
+        default:
+            break;
+        }
     }
     va_end(args);
 
