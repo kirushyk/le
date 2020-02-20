@@ -41,7 +41,7 @@ main()
 
     le_sequential_to_dot(neural_network, "2nn.dot");
 
-    LeBGD *optimizer = le_bgd_new(le_model_get_parameters(LE_MODEL(neural_network)),
+    LeSGD *optimizer = le_sgd_new(le_model_get_parameters(LE_MODEL(neural_network)),
                                   0.3f);
     for (unsigned i = 0; i <= 2500; i++)
     {
