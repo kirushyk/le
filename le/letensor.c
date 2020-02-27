@@ -757,3 +757,42 @@ le_tensor_free(LeTensor *self)
     le_shape_free(self->shape);
     free(self);
 }
+
+LeTensorStats
+le_tensor_get_stats(LeTensor *self)
+{
+    LeTensorStats stats;
+    stats.deviation = 0.0f;
+    stats.mean = 0.0f;
+    stats.max = 0.0f;
+    stats.min = 0.0f;
+
+    /// @todo: Take stride into account
+    unsigned elements_count = le_shape_get_elements_count(self->shape);
+
+    if (elements_count >= 1)
+    {
+        float value = ((float *)self->data)[0];
+        stats.max = value;
+        stats.min = value;
+        stats.mean = value;
+        for (unsigned i = 1; i < elements_count; i++)
+        {
+            float value = ((float *)self->data)[i];
+            if (value > stats.max)
+                stats.max = value;
+            if (value < stats.min)
+                stats.min = value; 
+            stats.mean += value;
+        }
+        stats.mean /= elements_count;
+        for (unsigned i = 1; i < elements_count; i++)
+        {
+            float value = ((float *)self->data)[i];
+            stats.deviation += fabs(value - stats.mean);
+        }
+        stats.deviation /= elements_count;
+    }
+
+    return stats;
+}

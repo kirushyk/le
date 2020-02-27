@@ -120,4 +120,14 @@ float        le_rbf                         (LeTensor     *a,
                                              LeTensor     *b,
                                              float         sigma);
 
+typedef struct LeTensorStats
+{
+   float min;
+   float max;
+   float mean;
+   float deviation;
+} LeTensorStats;
+
+LeTensorStats le_tensor_get_stats (LeTensor *tensor);
+
 #endif
