@@ -20,11 +20,12 @@ le_tensor_new_softmax_jacobians_stacked(LeTensor *softmax_output)
     self->element_type = LE_TYPE_FLOAT32;
     unsigned num_classes = le_matrix_get_height(softmax_output);
     unsigned num_examples = le_matrix_get_width(softmax_output);
-    self->shape = le_shape_new(3, num_classes, num_classes, num_examples);
+    self->shape = le_shape_new(3, num_examples, num_classes, num_classes);
     self->stride = le_shape_get_last_size(self->shape);
     self->owns_data = true;
     self->data = malloc(le_shape_get_elements_count(self->shape) * sizeof(float));
     
+    unsigned num_classes_squared = num_classes * num_classes;
     for (unsigned example = 0; example < num_examples; example++)
     {
         for (unsigned i = 0; i < num_classes; i++)
@@ -34,7 +35,7 @@ le_tensor_new_softmax_jacobians_stacked(LeTensor *softmax_output)
             {
                 float sj = le_matrix_at(softmax_output, j, example);
                 float dJ_daij = (i == j) ? si * (1.0f - si) : -si * sj;
-                ((float *)self->data)[i * num_examples * num_classes + j * num_examples + example] = dJ_daij;
+                ((float *)self->data)[example * num_classes_squared + i * num_classes + j] = dJ_daij;
             }
         }
     }
