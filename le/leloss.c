@@ -113,12 +113,12 @@ le_apply_cross_entropy_loss_derivative(LeTensor *h, LeTensor *y)
     unsigned elements_count = le_shape_get_elements_count(h->shape);
     for (i = 0; i < elements_count; i++)
     {
-        float yi = le_tensor_f32_at(y, i);
-        float hi = le_tensor_f32_at(h, i); /// @note: hi ∈ (0, 1)
+        float yi = le_tensor_f32_at(y, i * y->stride);
+        float hi = le_tensor_f32_at(h, i * h->stride); /// @note: hi ∈ (0, 1)
         if (hi < EPSILON)
             hi = EPSILON;
         float dJ_dh = -yi / hi;
-        le_tensor_f32_set(h, i, dJ_dh);
+        le_tensor_f32_set(h, i * h->stride, dJ_dh);
     }
 }
 
