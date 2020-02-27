@@ -5,6 +5,7 @@
 #include <assert.h>
 #include <stdlib.h>
 #include <le/lematrix.h>
+#include <le/letensor-imp.h>
 
 typedef struct LeActivationLayerClass
 {
@@ -62,6 +63,8 @@ le_activation_layer_backward_prop(LeLayer *layer, LeTensor *cached_input, LeTens
     /// @note: Jacobians of activation function at cached_input, stacked. Rank 3 Tensor.
     /// For activations where a0 may depend from z0, z1 and other inputs.
     LeTensor *activation_jacobians = NULL;
+    /// @note: If both activation_primes and activation_jacobians is NULL, output gradient
+    /// will propagade backward unchanged. This is the case for linear activation function.
 
     switch (self->activation) {
     case LE_ACTIVATION_SIGMOID:
@@ -114,33 +117,56 @@ le_activation_layer_backward_prop(LeLayer *layer, LeTensor *cached_input, LeTens
         break;
         
     case LE_ACTIVATION_LINEAR:
-        /// @note: Derivative of linear activation function: g'(x) = 1
     default:
-        /// @note: NULL activation_primes will be treated like all-ones array.
-        activation_primes = NULL;
-        /// @note: NULL activation_jacobians will be treated like stack of identity matrices.
-        activation_jacobians = NULL;
+        /// @note: Derivative of linear activation function: g'(x) = 1
         break;
     }
 
-    LeTensor *input_gradient = le_tensor_new_copy(output_gradient);
+    LeTensor *input_gradient = NULL;
     if (activation_primes)
     {
+        assert(activation_jacobians == NULL);
         /// @note: Diagonal of Jacobian of activation function.
         /// Non-diagonal partial derivatives will be discarded.
         /// Hadamard is used for chain rule.
-        
-        assert(activation_jacobians == NULL);
-        
+        input_gradient = le_tensor_new_copy(output_gradient);
         le_tensor_multiply_elementwise(input_gradient, activation_primes);
         le_tensor_free(activation_primes);
-    }
-    if (activation_jacobians)
+    } 
+    else if (activation_jacobians)
     {
-        assert(activation_primes == NULL);
-        
+        assert(activation_jacobians->shape->num_dimensions == 3);
 
+        unsigned examples_count = activation_jacobians->shape->sizes[2];
+        /// @todo: Optimize, just allocate, do not copy.
+        input_gradient = le_tensor_new_copy(output_gradient);
+        for (unsigned example = 0; example < examples_count; example++)
+        {
+            LeTensor *jacobian = le_tensor_pick(activation_jacobians, example);
+            unsigned classes_count = le_matrix_get_height(jacobian);
+            for (unsigned input = 0; input < classes_count; input++)
+            {
+                float dJ_dz = 0.0f;
+                for (unsigned output = 0; output < classes_count; output++)
+                {
+                    float dJ_da = le_matrix_at(output_gradient, output, example);
+                    float da_dz = le_matrix_at(jacobian, output, input);
+                    dJ_dz += dJ_da * da_dz;
+                }
+                le_matrix_set_element(input_gradient, input, example, dJ_dz);
+            }
+            le_tensor_free(jacobian);
+        }
+        le_tensor_free(activation_jacobians);
     }
+    else
+    {
+        /// @note: Both activation_primes and activation_jacobians is NULL.
+        /// It means we have identity activation function with derivative equal to 1.
+        /// We will just pass output gradient backward.
+        input_gradient = le_tensor_new_copy(output_gradient);
+    }
+    
     return input_gradient;
 }
 
