@@ -56,7 +56,7 @@ le_activation_layer_backward_prop(LeLayer *layer, LeTensor *cached_input, LeTens
     
     LeActivationLayer *self = LE_ACTIVATION_LAYER(layer);
     
-    /// @note: Diagonal of Jacobian of activation function at cached_input 
+    /// @note: Diagonals of Jacobians of activation function at cached_input, stacked
     LeTensor *activation_primes = NULL;
 
     switch (self->activation) {
