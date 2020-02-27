@@ -56,8 +56,12 @@ le_activation_layer_backward_prop(LeLayer *layer, LeTensor *cached_input, LeTens
     
     LeActivationLayer *self = LE_ACTIVATION_LAYER(layer);
     
-    /// @note: Diagonals of Jacobians of activation function at cached_input, stacked
+    /// @note: Diagonals of Jacobians of activation function at cached_input, stacked.
+    /// Rank 2 Tensor. For element-wise activations where a0 depends only from z0.
     LeTensor *activation_primes = NULL;
+    /// @note: Jacobians of activation function at cached_input, stacked. Rank 3 Tensor.
+    /// For activations where a0 may depend from z0, z1 and other inputs.
+    LeTensor *activation_jacobians = NULL;
 
     switch (self->activation) {
     case LE_ACTIVATION_SIGMOID:
@@ -97,9 +101,6 @@ le_activation_layer_backward_prop(LeLayer *layer, LeTensor *cached_input, LeTens
         break;
         
     case LE_ACTIVATION_SOFTMAX:
-        /// @note: Diagonal of Jacobian of softmax function.
-        /// Non-diagonal partial derivatives will be discarded.
-        /// Hadamard product will be used for chain rule.
         if (cached_output)
         {
             activation_primes = le_tensor_new_copy(cached_output);
@@ -115,16 +116,30 @@ le_activation_layer_backward_prop(LeLayer *layer, LeTensor *cached_input, LeTens
     case LE_ACTIVATION_LINEAR:
         /// @note: Derivative of linear activation function: g'(x) = 1
     default:
-        /// @note: NULL activation_primes will be treated like all-ones array
+        /// @note: NULL activation_primes will be treated like all-ones array.
         activation_primes = NULL;
+        /// @note: NULL activation_jacobians will be treated like stack of identity matrices.
+        activation_jacobians = NULL;
         break;
     }
 
     LeTensor *input_gradient = le_tensor_new_copy(output_gradient);
     if (activation_primes)
     {
+        /// @note: Diagonal of Jacobian of activation function.
+        /// Non-diagonal partial derivatives will be discarded.
+        /// Hadamard is used for chain rule.
+        
+        assert(activation_jacobians == NULL);
+        
         le_tensor_multiply_elementwise(input_gradient, activation_primes);
         le_tensor_free(activation_primes);
+    }
+    if (activation_jacobians)
+    {
+        assert(activation_primes == NULL);
+        
+
     }
     return input_gradient;
 }
