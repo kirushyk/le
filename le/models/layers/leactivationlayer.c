@@ -13,6 +13,35 @@ typedef struct LeActivationLayerClass
     
 } LeActivationLayerClass;
 
+static LeTensor *
+le_tensor_new_softmax_jacobians_stacked(LeTensor *softmax_output)
+{  
+    LeTensor *self = malloc(sizeof(struct LeTensor));
+    self->element_type = LE_TYPE_FLOAT32;
+    unsigned num_classes = le_matrix_get_height(softmax_output);
+    unsigned num_examples = le_matrix_get_width(softmax_output);
+    self->shape = le_shape_new(3, num_classes, num_classes, num_examples);
+    self->stride = le_shape_get_last_size(self->shape);
+    self->owns_data = true;
+    self->data = malloc(le_shape_get_elements_count(self->shape) * sizeof(float));
+    
+    for (unsigned example = 0; example < num_examples; example++)
+    {
+        for (unsigned i = 0; i < num_classes; i++)
+        {
+            float si = le_matrix_at(softmax_output, i, example);
+            for (unsigned j = 0; j < num_classes; j++)
+            {
+                float sj = le_matrix_at(softmax_output, j, example);
+                float dJ_daij = (i == j) ? si * (1.0f - si) : -si * sj;
+                ((float *)self->data)[i * num_examples * num_classes + j * num_examples + example] = dJ_daij;
+            }
+        }
+    }
+    
+    return self;
+}
+
 LeTensor *
 le_activation_layer_forward_prop(LeLayer *layer, LeTensor *input)
 {
@@ -106,13 +135,14 @@ le_activation_layer_backward_prop(LeLayer *layer, LeTensor *cached_input, LeTens
     case LE_ACTIVATION_SOFTMAX:
         if (cached_output)
         {
-            activation_primes = le_tensor_new_copy(cached_output);
-            le_tensor_apply_x_minus_sqr_x(activation_primes);
+            activation_jacobians = le_tensor_new_softmax_jacobians_stacked(cached_output);
         }
         else
         {
-            activation_primes = le_tensor_new_copy(cached_input);
-            le_matrix_apply_softmax_prime(activation_primes);
+            LeTensor *computed_output = le_tensor_new_copy(cached_input);
+            le_matrix_apply_softmax(computed_output);
+            activation_jacobians = le_tensor_new_softmax_jacobians_stacked(computed_output);
+            le_tensor_free(computed_output);
         }
         break;
         
