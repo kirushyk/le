@@ -135,11 +135,15 @@ le_sequential_get_gradients(LeSequential *self, LeTensor *x, LeTensor *y)
     LeList *inputs = NULL;
     LeTensor *signal = forward_propagation(self, x, &inputs);
     LE_INFO("output =\n%s", le_tensor_to_cstr(signal));
+    LeTensorStats signal_stats = le_tensor_get_stats(signal);
+    LE_INFO("Output stats:\n\tmin: %f\n\tmax: %f\n\tmean: %f\n\tdeviation: %f", signal_stats.min, signal_stats.max, signal_stats.mean, signal_stats.deviation);
 
     LE_INFO("Back Propagation");
     /// @note: Derivative of assumed cost function
     le_apply_loss_derivative(self->loss, signal, y);
     LE_INFO("signal =\n%s", le_tensor_to_cstr(signal));
+    signal_stats = le_tensor_get_stats(signal);
+    LE_INFO("Loss derivative stats:\n\tmin: %f\n\tmax: %f\n\tmean: %f\n\tdeviation: %f", signal_stats.min, signal_stats.max, signal_stats.mean, signal_stats.deviation);
 
     LeList *current = NULL;
     LeList *gradients = NULL;
@@ -161,6 +165,8 @@ le_sequential_get_gradients(LeSequential *self, LeTensor *x, LeTensor *y)
         le_tensor_free(signal);
         signal = input_gradient;
         LE_INFO("signal =\n%s", le_tensor_to_cstr(signal));
+        LeTensorStats signal_stats = le_tensor_get_stats(signal);
+        LE_INFO("Signal stats:\n\tmin: %f\n\tmax: %f\n\tmean: %f\n\tdeviation: %f", signal_stats.min, signal_stats.max, signal_stats.mean, signal_stats.deviation);
         for (LeList *current_gradient = current_layer_param_gradients;
              current_gradient;
              current_gradient = current_gradient->next)
