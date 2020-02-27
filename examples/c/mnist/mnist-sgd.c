@@ -37,21 +37,16 @@ main()
     le_sequential_add(neural_network,
                       LE_LAYER(le_activation_layer_new("Softmax", LE_ACTIVATION_SOFTMAX)));
 
-    le_sequential_set_loss(neural_network, LE_LOSS_CROSS_ENTROPY);
+    le_sequential_set_loss(neural_network, LE_LOSS_LOGISTIC);
 
     le_sequential_to_dot(neural_network, "2nn.dot");
 
-    LeSGD *optimizer = le_sgd_new(le_model_get_parameters(LE_MODEL(neural_network)),
-                                  0.3f);
+    LeSGD *optimizer = le_sgd_new(LE_MODEL(neural_network), train_input_f32, train_output, 0.3f);
     for (unsigned i = 0; i <= 2500; i++)
     {
-        LeList *gradients = le_model_get_gradients(LE_MODEL(neural_network),
-                                                   train_input_f32, train_output);
-        LE_OPTIMIZER(optimizer)->gradients = gradients;
         le_optimizer_step(LE_OPTIMIZER(optimizer));
-        le_list_foreach(gradients, (LeFunction)le_tensor_free);
         
-        if (i % 10 == 0) {
+        if (i % 100 == 0) {
             printf("Iteration %d.\n", i);
             
             LeTensor *train_prediction = le_model_predict(LE_MODEL(neural_network), train_input_f32);
