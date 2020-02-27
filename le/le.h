@@ -18,6 +18,7 @@
 #include "models/layers/leactivationlayer.h"
 #include "lelist.h"
 #include "optimization/lebgd.h"
+#include "optimization/lesgd.h"
 #include "leloss.h"
 #include "lelog.h"
 

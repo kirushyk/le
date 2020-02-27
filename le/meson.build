@@ -22,6 +22,7 @@ le_sources = [
     'models/lesequential.c',
     'optimization/leoptimizer.c',
     'optimization/lebgd.c',
+    'optimization/lesgd.c',
     'leloss.c',
     'lelog.c'
 ]
@@ -42,6 +43,7 @@ install_headers('ledataset.h', subdir : 'le')
 install_headers('letensor.h', subdir : 'le')
 install_headers('optimization/leoptimizer.h', subdir : 'le/optimization')
 install_headers('optimization/lebgd.h', subdir : 'le/optimization')
+install_headers('optimization/lesgd.h', subdir : 'le/optimization')
 install_headers('lelist.h', subdir : 'le')
 install_headers('leobject.h', subdir : 'le')
 install_headers('models/lesequential.h', subdir : 'le/models')
