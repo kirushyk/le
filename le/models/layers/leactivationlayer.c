@@ -168,7 +168,7 @@ le_activation_layer_backward_prop(LeLayer *layer, LeTensor *cached_input, LeTens
     {
         assert(activation_jacobians->shape->num_dimensions == 3);
 
-        unsigned examples_count = activation_jacobians->shape->sizes[2];
+        unsigned examples_count = activation_jacobians->shape->sizes[0];
         /// @todo: Optimize, just allocate, do not copy.
         input_gradient = le_tensor_new_copy(output_gradient);
         for (unsigned example = 0; example < examples_count; example++)
