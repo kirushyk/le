@@ -438,7 +438,7 @@ le_matrix_apply_softmax(LeTensor *self)
 
     for (example = 0; example < num_examples; example++)
     {
-        float max = 0;
+        float max = -INFINITY;
         for (klass = 0; klass < num_classes; klass++)
         {
             float value = le_matrix_at(self, klass, example);
