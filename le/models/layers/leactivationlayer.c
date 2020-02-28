@@ -13,6 +13,8 @@ typedef struct LeActivationLayerClass
     
 } LeActivationLayerClass;
 
+#define EPSILON 1e-5f
+
 static LeTensor *
 le_tensor_new_softmax_jacobians_stacked(LeTensor *softmax_output)
 {  
@@ -35,6 +37,8 @@ le_tensor_new_softmax_jacobians_stacked(LeTensor *softmax_output)
             {
                 float sj = le_matrix_at(softmax_output, j, example);
                 float dJ_daij = (i == j) ? si * (1.0f - si) : -si * sj;
+                if (dJ_daij < EPSILON)
+                    dJ_daij = EPSILON;
                 ((float *)self->data)[example * num_classes_squared + i * num_classes + j] = dJ_daij;
             }
         }
