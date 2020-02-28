@@ -195,15 +195,14 @@ le_activation_layer_backward_prop(LeLayer *layer, LeTensor *cached_input, LeTens
             for (unsigned input = 0; input < classes_count; input++)
             {
                 float dJ_dz = 0.0f;
-                float dJ_da = le_matrix_at(output_gradient, input, example);
-                if (dJ_da != 0.0f)
+                
+                for (unsigned output = 0; output < classes_count; output++)
                 {
-                    for (unsigned output = 0; output < classes_count; output++)
-                    {
-                        float da_dz = le_matrix_at(jacobian, output, input);
-                        dJ_dz += dJ_da * da_dz;
-                    }
+                    float dJ_da = le_matrix_at(output_gradient, output, example);
+                    float da_dz = le_matrix_at(jacobian, output, input);
+                    dJ_dz += dJ_da * da_dz;
                 }
+            
                 le_matrix_set_element(input_gradient, input, example, dJ_dz);
             }
             le_tensor_free(jacobian);
