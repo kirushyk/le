@@ -117,7 +117,7 @@ le_apply_cross_entropy_loss_derivative(LeTensor *h, LeTensor *y)
         float hi = le_tensor_f32_at(h, i * h->stride); /// @note: hi ∈ (0, 1)
         if (hi < EPSILON)
             hi = EPSILON;
-        float dJ_dh = -yi / hi;
+        float dJ_dh = (yi == 0) ? 0 : (-yi / hi);
         le_tensor_f32_set(h, i * h->stride, dJ_dh);
     }
 }
