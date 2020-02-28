@@ -661,7 +661,7 @@ le_tensor_to_cstr(LeTensor *self)
     {
         for (x = 0; (x < self->shape->sizes[1]) && (x < TENSOR_PRINT_MAX_SIZE); x++)
         {
-            if (ptr > (BUFFER_SIZE - 256))
+            if (ptr > (buffer + BUFFER_SIZE - 256))
                 goto too_long;
 
             int written = 0;
