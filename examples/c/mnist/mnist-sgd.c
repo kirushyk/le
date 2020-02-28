@@ -37,7 +37,7 @@ main()
     le_sequential_add(neural_network,
                       LE_LAYER(le_activation_layer_new("Softmax", LE_ACTIVATION_SOFTMAX)));
 
-    le_sequential_set_loss(neural_network, LE_LOSS_LOGISTIC);
+    le_sequential_set_loss(neural_network, LE_LOSS_CROSS_ENTROPY);
 
     le_sequential_to_dot(neural_network, "2nn.dot");
 
