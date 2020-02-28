@@ -635,11 +635,14 @@ le_tensor_apply_relu(LeTensor *self)
     }
 }
 
+#define TENSOR_PRINT_MAX_SIZE 10
+#define BUFFER_SIZE 1024
+
 const char *
 le_tensor_to_cstr(LeTensor *self)
 {
     /// @todo: Fix buffer overflow
-    static char buffer[1024];
+    static char buffer[BUFFER_SIZE];
 
     if (self->shape->num_dimensions != 2)
     {
@@ -654,10 +657,13 @@ le_tensor_to_cstr(LeTensor *self)
     ptr[0] = '[';
     ptr++;
 
-    for (y = 0; (y < self->shape->sizes[0]) && (y <= 5); y++)
+    for (y = 0; (y < self->shape->sizes[0]) && (y < TENSOR_PRINT_MAX_SIZE); y++)
     {
-        for (x = 0; (x < self->shape->sizes[1]) && (x <= 5); x++)
+        for (x = 0; (x < self->shape->sizes[1]) && (x < TENSOR_PRINT_MAX_SIZE); x++)
         {
+            if (ptr > (BUFFER_SIZE - 256))
+                goto too_long;
+
             int written = 0;
             switch (self->element_type)
             {
@@ -704,6 +710,8 @@ le_tensor_to_cstr(LeTensor *self)
             ptr += written;
         }
     }
+    
+too_long:
     if (y < self->shape->sizes[0])
     {
         int written = 0;
