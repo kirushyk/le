@@ -2,6 +2,7 @@
    Released under the MIT license. See LICENSE file in the project root for full license information. */
 
 #include "leactivationlayer.h"
+#include <math.h>
 #include <assert.h>
 #include <stdlib.h>
 #include <le/lelog.h>
@@ -40,10 +41,16 @@ le_tensor_new_softmax_jacobians_stacked(LeTensor *softmax_output)
             {
                 float sj = le_matrix_at(softmax_output, j, example);
                 float dJ_daij = (i == j) ? si * (1.0f - si) : -si * sj;
-                if ((dJ_daij > 0) && (dJ_daij < EPSILON))
-                    dJ_daij = EPSILON;
-                if ((dJ_daij < 0) && (dJ_daij > -EPSILON))
-                    dJ_daij = -EPSILON;
+                if (signbit(dJ_daij))
+                {
+                    if (dJ_daij > -EPSILON)
+                        dJ_daij = -EPSILON;
+                }
+                else
+                {
+                    if (dJ_daij < EPSILON)
+                        dJ_daij = EPSILON;
+                }
                 ((float *)self->data)[example * num_classes_squared + i * num_classes + j] = dJ_daij;
             }
         }
@@ -183,7 +190,7 @@ le_activation_layer_backward_prop(LeLayer *layer, LeTensor *cached_input, LeTens
         for (unsigned example = 0; example < examples_count; example++)
         {
             LeTensor *jacobian = le_tensor_pick(activation_jacobians, example);
-            LE_INFO("jacobian = %s", le_tensor_to_cstr(jacobian));
+            LE_INFO("jacobian =\n%s", le_tensor_to_cstr(jacobian));
             unsigned classes_count = le_matrix_get_height(jacobian);
             for (unsigned input = 0; input < classes_count; input++)
             {
