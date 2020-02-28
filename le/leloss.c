@@ -7,7 +7,7 @@
 #include <stdbool.h>
 #include "letensor-imp.h"
 
-#define EPSILON 1e-5
+#define EPSILON 1e-3f
 
 float
 le_logistic_loss(LeTensor *h, LeTensor *y)
