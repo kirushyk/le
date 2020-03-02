@@ -2,6 +2,7 @@
    Released under the MIT license. See LICENSE file in the project root for full license information. */
 
 #include "ledenselayer.h"
+#include <math.h>
 #include <assert.h>
 #include <stdlib.h>
 #include <le/lematrix.h>
@@ -102,7 +103,7 @@ le_dense_layer_new(const char *name, unsigned inputs, unsigned units)
     LE_OBJECT_GET_CLASS(self) = LE_CLASS(&klass);
     self->w = le_matrix_new_rand(units, inputs);
     /// @todo: Optimize
-    float variance = 1.0f / inputs;
+    float variance = sqrtf(2.0f / (inputs + units));
     le_tensor_multiply_by_scalar(self->w, variance);
     le_tensor_subtract_scalar(self->w, variance * 0.5f);
     self->b = le_matrix_new_zeros(units, 1);
