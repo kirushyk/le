@@ -509,7 +509,7 @@ le_main_window_init(LEMainWindow *self)
     gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(model_combo), "Support Vector Machine");
     gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(model_combo), "Neural Network");
     /* gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(model_combo), "Neural Network"); */
-    gtk_combo_box_set_active(GTK_COMBO_BOX(model_combo), 0);
+    gtk_combo_box_set_active(GTK_COMBO_BOX(model_combo), 2);
     g_signal_connect(G_OBJECT(model_combo), "changed", G_CALLBACK(model_combo_changed), self);
     gtk_box_pack_start(GTK_BOX(model_vbox), model_combo, FALSE, FALSE, 2);
     
