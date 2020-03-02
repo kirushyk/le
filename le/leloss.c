@@ -158,7 +158,7 @@ le_apply_logistic_loss_derivative(LeTensor *h, LeTensor *y)
         float denom = hi * (1.0f - hi);
         if (denom < EPSILON)
             denom = EPSILON;
-        float dJ_dh = (hi - yi) / denom;
+        float dJ_dh = (hi == yi) ? 0 : ((hi - yi) / denom);
         le_tensor_f32_set(h, i, dJ_dh);
     }
 }
