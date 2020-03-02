@@ -217,11 +217,11 @@ create_model_and_train(LEMainWindow *self)
             le_sequential_add(LE_SEQUENTIAL(self->model),
                               LE_LAYER(le_activation_layer_new("A1", LE_ACTIVATION_RELU)));
             le_sequential_add(LE_SEQUENTIAL(self->model),
-                              LE_LAYER(le_dense_layer_new("D2", 50, 10)));
+                              LE_LAYER(le_dense_layer_new("D2", 50, 30)));
             le_sequential_add(LE_SEQUENTIAL(self->model),
                               LE_LAYER(le_activation_layer_new("A2", LE_ACTIVATION_RELU)));
             le_sequential_add(LE_SEQUENTIAL(self->model),
-                              LE_LAYER(le_dense_layer_new("D3", 10, 1)));
+                              LE_LAYER(le_dense_layer_new("D3", 30, 1)));
             le_sequential_add(LE_SEQUENTIAL(self->model),
                               LE_LAYER(le_activation_layer_new("A3", LE_ACTIVATION_SIGMOID)));
             
@@ -229,7 +229,7 @@ create_model_and_train(LEMainWindow *self)
 
             LeBGD *optimizer = le_bgd_new(le_model_get_parameters(self->model), 
                 atof(gtk_combo_box_text_get_active_text(GTK_COMBO_BOX_TEXT(self->alpha_combo))));
-            for (unsigned i = 0; i <= 1000; i++)
+            for (unsigned i = 0; i <= 400; i++)
             {
                 LeList *gradients = le_model_get_gradients(self->model,
                                                            le_data_set_get_input(self->train_data),
