@@ -137,6 +137,7 @@ le_bgd_new(LeModel *model, LeTensor *input, LeTensor *output, float learning_rat
         LE_WARNING("Learning rate = %f", learning_rate);
     }
     LE_OPTIMIZER(self)->parameters = le_model_get_parameters(model);
+    LE_OPTIMIZER(self)->gradients = NULL;
     self->learning_rate = learning_rate;
 
     self->iteration = 0;
