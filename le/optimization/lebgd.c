@@ -77,7 +77,7 @@ le_bgd_step(LeOptimizer *optimizer)
 
     if (own_gradients)
     {
-        le_list_foreach(optimizer->gradients, (LeFunction)le_tensor_free);
+        le_list_foreach(gradients, (LeFunction)le_tensor_free);
     }
 }
 
@@ -129,7 +129,7 @@ LeBGD *
 le_bgd_new(LeModel *model, LeTensor *input, LeTensor *output, float learning_rate)
 {
     assert(model);
-    
+
     LeBGD *self = malloc(sizeof(LeBGD));
     le_bgd_construct(self);
     if (learning_rate <= 0.0f)
