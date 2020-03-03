@@ -610,7 +610,7 @@ le_main_window_new (GtkApplication *application)
 {
     LEMainWindow *window = g_object_new(LE_TYPE_MAIN_WINDOW, "application", application, NULL);
     gtk_window_set_default_size(GTK_WINDOW(window), 256, 256);
-    le_main_window_set_preffered_model(window, PREFERRED_MODEL_TYPE_NEURAL_NETWORK);
+    le_main_window_set_preffered_model(GTK_WIDGET(window), PREFERRED_MODEL_TYPE_NEURAL_NETWORK);
     return GTK_WIDGET(window);
 }
 
