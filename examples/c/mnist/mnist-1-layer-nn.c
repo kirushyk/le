@@ -29,15 +29,10 @@ main()
     
     Le1LayerNN *neural_network = le_1_layer_nn_new();
     le_1_layer_nn_init(neural_network, 28 * 28, 10);
-    LeBGD *optimizer = le_bgd_new(le_model_get_parameters(LE_MODEL(neural_network)),
-                                  0.03f);
+    LeBGD *optimizer = le_bgd_new(LE_MODEL(neural_network), train_input_f32, train_output, 0.03f);
     for (unsigned i = 0; i <= 2500; i++)
     {
-        LeList *gradients = le_model_get_gradients(LE_MODEL(neural_network),
-                                                   train_input_f32, train_output);
-        LE_OPTIMIZER(optimizer)->gradients = gradients;
         le_optimizer_step(LE_OPTIMIZER(optimizer));
-        le_list_foreach(gradients, (LeFunction)le_tensor_free);
         
         if (i % 100 == 0) {
             printf("Iteration %d.\n", i);

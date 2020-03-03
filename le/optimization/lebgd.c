@@ -4,6 +4,7 @@
 #define DEFAULT_LOG_CATEGORY "bgd"
 
 #include "lebgd.h"
+#include <assert.h>
 #include <le/letensor.h>
 #include <le/letensor-imp.h>
 #include <le/lelog.h>
@@ -13,6 +14,11 @@
 struct LeBGD
 {
     LeOptimizer parent;
+    
+    unsigned iteration;
+    LeModel *model;
+    LeTensor *input;
+    LeTensor *output;
     float learning_rate;
 };
 
@@ -32,15 +38,31 @@ le_bgd_step(LeOptimizer *optimizer)
 
     LE_INFO("Step");
 
-    for (parameters_iterator = optimizer->parameters, gradients_iterator = optimizer->gradients;
+    LeList *gradients = NULL;
+    bool own_gradients = false;
+
+    if (self->model)
+    {
+        gradients = le_model_get_gradients(self->model, self->input, self->output);
+        own_gradients = true;
+    }
+    else if (optimizer->gradients)
+    {
+        gradients = optimizer->gradients;
+    }
+    
+
+    for (parameters_iterator = optimizer->parameters, gradients_iterator = gradients;
          parameters_iterator && gradients_iterator;
          parameters_iterator = parameters_iterator->next, gradients_iterator = gradients_iterator->next)
     {
         LeTensor *parameter = (LeTensor *)parameters_iterator->data;
         LE_INFO("Parameter %s:\n%s", le_shape_to_cstr(parameter->shape), le_tensor_to_cstr(parameter));
-        LeTensor *gradients = (LeTensor *)gradients_iterator->data;
-        LE_INFO("Gradient %s:\n%s", le_shape_to_cstr(gradients->shape), le_tensor_to_cstr(gradients));
-        le_tensor_subtract_scaled(parameter, self->learning_rate, gradients);
+        LeTensor *gradient = (LeTensor *)gradients_iterator->data;
+        LE_INFO("Gradient %s:\n%s", le_shape_to_cstr(gradient->shape), le_tensor_to_cstr(gradient));
+        le_tensor_subtract_scaled(parameter, self->learning_rate, gradient);
+        LeTensorStats gradient_stats = le_tensor_get_stats(gradient);
+        LE_INFO("Gradient stats:\n\tmin: %f\n\tmax: %f\n\tmean: %f\n\tdeviation: %f", gradient_stats.min, gradient_stats.max, gradient_stats.mean, gradient_stats.deviation);
     }
 
     if (parameters_iterator)
@@ -51,6 +73,11 @@ le_bgd_step(LeOptimizer *optimizer)
     if (gradients_iterator)
     {
         LE_WARNING("Extra gradients passed");
+    }
+
+    if (own_gradients)
+    {
+        le_list_foreach(optimizer->gradients, (LeFunction)le_tensor_free);
     }
 }
 
@@ -75,21 +102,47 @@ le_bgd_construct(LeBGD *self)
     ((LeObject *)self)->klass = (LeClass *)&klass;
 }
 
-LeBGD *
-le_bgd_new(LeList *parameters, float learning_rate)
+LeBGD * 
+le_bgd_new_simple(LeList *parameters, LeList *gradients, float learning_rate)
 {
+    assert(parameters);
+    assert(gradients);
+
     LeBGD *self = malloc(sizeof(LeBGD));
     le_bgd_construct(self);
-    if (parameters == NULL)
-    {
-        LE_WARNING("Empty list of parameters to optimize passed");
-    }
     if (learning_rate <= 0.0f)
     {
         LE_WARNING("Learning rate = %f", learning_rate);
     }
     LE_OPTIMIZER(self)->parameters = parameters;
+    LE_OPTIMIZER(self)->gradients = gradients;
     self->learning_rate = learning_rate;
+
+    self->iteration = 0;
+    self->model = NULL;
+    self->input = NULL;
+    self->output = NULL;
+    return self;
+}
+
+LeBGD *
+le_bgd_new(LeModel *model, LeTensor *input, LeTensor *output, float learning_rate)
+{
+    assert(model);
+    
+    LeBGD *self = malloc(sizeof(LeBGD));
+    le_bgd_construct(self);
+    if (learning_rate <= 0.0f)
+    {
+        LE_WARNING("Learning rate = %f", learning_rate);
+    }
+    LE_OPTIMIZER(self)->parameters = le_model_get_parameters(model);
+    self->learning_rate = learning_rate;
+
+    self->iteration = 0;
+    self->model = model;
+    self->input = input;
+    self->output = output;
     return self;
 }
 

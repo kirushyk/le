@@ -227,16 +227,11 @@ create_model_and_train(LEMainWindow *self)
             
             le_sequential_set_loss(LE_SEQUENTIAL(self->model), LE_LOSS_LOGISTIC);
 
-            LeBGD *optimizer = le_bgd_new(le_model_get_parameters(self->model), 
+            LeBGD *optimizer = le_bgd_new(self->model, le_data_set_get_input(self->train_data), labels,
                 atof(gtk_combo_box_text_get_active_text(GTK_COMBO_BOX_TEXT(self->alpha_combo))));
             for (unsigned i = 0; i <= 400; i++)
             {
-                LeList *gradients = le_model_get_gradients(self->model,
-                                                           le_data_set_get_input(self->train_data),
-                                                           labels);
-                LE_OPTIMIZER(optimizer)->gradients = gradients;
                 le_optimizer_step(LE_OPTIMIZER(optimizer));
-                le_list_foreach(gradients, (LeFunction)le_tensor_free);
             }
             le_bgd_free(optimizer);
             le_tensor_free(labels);

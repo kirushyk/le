@@ -44,14 +44,9 @@ main(int argc, const char *argv[])
     le_sequential_to_dot(neural_network, "snn.dot");
     
     LE_INFO("Training Neural Network");
-    LeBGD *optimizer = le_bgd_new(le_model_get_parameters(LE_MODEL(neural_network)),
-                                  3.f);
+    LeBGD *optimizer = le_bgd_new(LE_MODEL(neural_network), x, y, 3.f);
     for (unsigned i = 0; i <= 1000; i++)
     {
-
-        LeList *gradients = le_model_get_gradients(LE_MODEL(neural_network),
-                                                   x, y);
-        LE_OPTIMIZER(optimizer)->gradients = gradients;
         le_optimizer_step(LE_OPTIMIZER(optimizer));
 
         if ((i % 100) == 0)
@@ -61,8 +56,6 @@ main(int argc, const char *argv[])
             LE_INFO("Training Error = %f", le_logistic_loss(h, y));
             le_tensor_free(h);
         }
-
-        le_list_foreach(gradients, (LeFunction)le_tensor_free);
     }
     
     le_bgd_free(optimizer);

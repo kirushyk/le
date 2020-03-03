@@ -28,8 +28,7 @@ main(int argc, const char *argv[])
     LeTensor *dw = le_scalar_new_f32(0.0f);
     LeList *gradients = le_list_append(NULL, dw);
     
-    LeOptimizer *optimizer = LE_OPTIMIZER(le_bgd_new(parameters, 0.2f));
-    optimizer->gradients = gradients;
+    LeOptimizer *optimizer = LE_OPTIMIZER(le_bgd_new_simple(parameters, gradients, 0.2f));
     
     unsigned i;
     for (i = 0; i < 20; i++)
