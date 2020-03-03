@@ -502,9 +502,7 @@ le_main_window_init(LEMainWindow *self)
     GtkWidget *model_combo = gtk_combo_box_text_new();
     gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(model_combo), "Polynomial Regression");
     gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(model_combo), "Support Vector Machine");
-    gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(model_combo), "Neural Network");
-    /* gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(model_combo), "Neural Network"); */
-    gtk_combo_box_set_active(GTK_COMBO_BOX(model_combo), 2);
+    gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(model_combo), "Shallow Neural Network");
     g_signal_connect(G_OBJECT(model_combo), "changed", G_CALLBACK(model_combo_changed), self);
     gtk_box_pack_start(GTK_BOX(model_vbox), model_combo, FALSE, FALSE, 2);
     
@@ -612,6 +610,7 @@ le_main_window_new (GtkApplication *application)
 {
     LEMainWindow *window = g_object_new(LE_TYPE_MAIN_WINDOW, "application", application, NULL);
     gtk_window_set_default_size(GTK_WINDOW(window), 256, 256);
+    le_main_window_set_preffered_model(window, PREFERRED_MODEL_TYPE_NEURAL_NETWORK);
     return GTK_WIDGET(window);
 }
 
