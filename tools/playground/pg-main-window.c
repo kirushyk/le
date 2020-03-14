@@ -27,6 +27,7 @@ struct _LEMainWindow
     LeDataSet *train_data;
     LeDataSet *test_data;
     LeModel *model;
+    LeOptimizer *optimizer;
     
     cairo_surface_t *classifier_visualisation;
     
@@ -168,23 +169,23 @@ erase_model(LEMainWindow *self)
     if (self->model)
         le_model_free(self->model);
     self->model = NULL;
+    if (self->optimizer)
+        le_optimizer_free(self->optimizer);
+    self->optimizer = NULL;
     if (self->classifier_visualisation)
         cairo_surface_destroy(self->classifier_visualisation);
     self->classifier_visualisation = NULL;
 }
 
 void
-create_model_and_train(LEMainWindow *self)
+train_current_model(LEMainWindow *self)
 {
     if (self->train_data == NULL)
         return;
     
-    erase_model(self);
-    
     switch (self->preferred_model_type)
     {
     case PREFERRED_MODEL_TYPE_SUPPORT_VECTOR_MACHINE:
-        self->model = (LeModel *)le_svm_new();
         {
             LeSVMTrainingOptions options;
             switch (gtk_combo_box_get_active(GTK_COMBO_BOX(self->svm_kernel_combo))) {
@@ -208,24 +209,8 @@ create_model_and_train(LEMainWindow *self)
         break;
         
     case PREFERRED_MODEL_TYPE_NEURAL_NETWORK:
-        self->model = (LeModel *)le_sequential_new();
         {
             LeTensor *labels = le_tensor_new_copy(le_data_set_get_output(self->train_data));
-
-            le_sequential_add(LE_SEQUENTIAL(self->model),
-                              LE_LAYER(le_dense_layer_new("D1", 2, 50)));
-            le_sequential_add(LE_SEQUENTIAL(self->model),
-                              LE_LAYER(le_activation_layer_new("A1", LE_ACTIVATION_RELU)));
-            le_sequential_add(LE_SEQUENTIAL(self->model),
-                              LE_LAYER(le_dense_layer_new("D2", 50, 30)));
-            le_sequential_add(LE_SEQUENTIAL(self->model),
-                              LE_LAYER(le_activation_layer_new("A2", LE_ACTIVATION_RELU)));
-            le_sequential_add(LE_SEQUENTIAL(self->model),
-                              LE_LAYER(le_dense_layer_new("D3", 30, 1)));
-            le_sequential_add(LE_SEQUENTIAL(self->model),
-                              LE_LAYER(le_activation_layer_new("A3", LE_ACTIVATION_SIGMOID)));
-            
-            le_sequential_set_loss(LE_SEQUENTIAL(self->model), LE_LOSS_LOGISTIC);
 
             LeBGD *optimizer = le_bgd_new(self->model, le_data_set_get_input(self->train_data), labels,
                 atof(gtk_combo_box_text_get_active_text(GTK_COMBO_BOX_TEXT(self->alpha_combo))));
@@ -240,7 +225,6 @@ create_model_and_train(LEMainWindow *self)
         
     case PREFERRED_MODEL_TYPE_POLYNOMIAL_REGRESSION:
     default:
-        self->model = (LeModel *)le_logistic_classifier_new();
         {
             LeLogisticClassifierTrainingOptions options;
             options.max_iterations = 400;
@@ -272,6 +256,41 @@ create_model_and_train(LEMainWindow *self)
         gtk_widget_get_allocated_height(GTK_WIDGET(self->drawing_area)));
     
     gtk_widget_queue_draw(GTK_WIDGET(self));
+}
+
+void
+create_model(LEMainWindow *self)
+{
+    erase_model(self);
+    
+    switch (self->preferred_model_type)
+    {
+    case PREFERRED_MODEL_TYPE_SUPPORT_VECTOR_MACHINE:
+        self->model = (LeModel *)le_svm_new();
+        break;
+        
+    case PREFERRED_MODEL_TYPE_NEURAL_NETWORK:
+        self->model = (LeModel *)le_sequential_new();
+        le_sequential_add(LE_SEQUENTIAL(self->model),
+                            LE_LAYER(le_dense_layer_new("D1", 2, 50)));
+        le_sequential_add(LE_SEQUENTIAL(self->model),
+                            LE_LAYER(le_activation_layer_new("A1", LE_ACTIVATION_RELU)));
+        le_sequential_add(LE_SEQUENTIAL(self->model),
+                            LE_LAYER(le_dense_layer_new("D2", 50, 30)));
+        le_sequential_add(LE_SEQUENTIAL(self->model),
+                            LE_LAYER(le_activation_layer_new("A2", LE_ACTIVATION_RELU)));
+        le_sequential_add(LE_SEQUENTIAL(self->model),
+                            LE_LAYER(le_dense_layer_new("D3", 30, 1)));
+        le_sequential_add(LE_SEQUENTIAL(self->model),
+                            LE_LAYER(le_activation_layer_new("A3", LE_ACTIVATION_SIGMOID)));
+        le_sequential_set_loss(LE_SEQUENTIAL(self->model), LE_LOSS_LOGISTIC);
+        break;
+        
+    case PREFERRED_MODEL_TYPE_POLYNOMIAL_REGRESSION:
+    default:
+        self->model = (LeModel *)le_logistic_classifier_new();
+        break;
+    }
 }
 
 static void
@@ -423,7 +442,8 @@ start_button_clicked(GtkButton *button, gpointer user_data)
 {
     LEMainWindow *self = LE_MAIN_WINDOW(user_data);
 
-    create_model_and_train(self);
+    create_model(self);
+    train_current_model(self);
 }
 
 static void
@@ -433,6 +453,7 @@ le_main_window_init(LEMainWindow *self)
     self->train_data = NULL;
     self->test_data = NULL;
     self->model = NULL;
+    self->optimizer = NULL;
     self->classifier_visualisation = NULL;
     self->preferred_model_type = PREFERRED_MODEL_TYPE_POLYNOMIAL_REGRESSION;
     
