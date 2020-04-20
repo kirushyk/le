@@ -212,13 +212,13 @@ train_current_model(LEMainWindow *self)
         {
             LeTensor *labels = le_tensor_new_copy(le_data_set_get_output(self->train_data));
 
-            LeBGD *optimizer = le_bgd_new(self->model, le_data_set_get_input(self->train_data), labels,
+            self->optimizer = le_bgd_new(self->model, le_data_set_get_input(self->train_data), labels,
                 atof(gtk_combo_box_text_get_active_text(GTK_COMBO_BOX_TEXT(self->alpha_combo))));
             for (unsigned i = 0; i <= 400; i++)
             {
-                le_optimizer_step(LE_OPTIMIZER(optimizer));
+                le_optimizer_step(LE_OPTIMIZER(self->optimizer));
             }
-            le_bgd_free(optimizer);
+            le_bgd_free(self->optimizer);
             le_tensor_free(labels);
         }
         break;
