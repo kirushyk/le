@@ -8,7 +8,7 @@ le_tensor(PyObject *self, PyObject *args)
     return PyLong_FromLong(sts);
 }
 
-static PyMethodDef LeMethods[] =
+static PyMethodDef le_methods[] =
 {
     {"tensor", le_tensor, METH_VARARGS, "Create a Le Tensor."},
     {NULL, NULL, 0, NULL}
@@ -21,7 +21,7 @@ static struct PyModuleDef lemodule =
     NULL, /* module documentation, may be NULL */
     -1, /* size of per-interpreter state of the module,
            or -1 if the module keeps state in global variables. */
-    LeMethods
+    le_methods
 };
 
 PyMODINIT_FUNC
