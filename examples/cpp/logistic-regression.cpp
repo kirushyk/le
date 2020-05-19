@@ -25,5 +25,8 @@ int main(int argc, char *argv[])
     options.lambda = 0.0f;
     lc.train(x, y, options);
 
+    le::Tensor h = lc.predict(x);
+    std::cout << "Predicted value =" << std::endl << h << std::endl;
+
     return 0;
 }
