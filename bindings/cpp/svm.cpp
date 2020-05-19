@@ -12,7 +12,7 @@ LeSVMTrainingOptions c_training_options(le::SVM::TrainingOptions options)
 
 SVM::SVM()
 {
-    setCModel(LE_MODEL(le_logistic_classifier_new()));
+    setCModel(LE_MODEL(le_svm_new()));
 }
 
 void SVM::train(const Tensor &x_train, const Tensor &y_train, TrainingOptions options)
