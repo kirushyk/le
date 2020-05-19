@@ -75,7 +75,7 @@ std::ostream & le::operator << (std::ostream &output, const Tensor &tensor)
                 output << ((float *)c_tensor->data)[y * c_tensor->shape->sizes[1] + x];
                 break;
             case LE_TYPE_FLOAT64:
-                output << ((float *)c_tensor->data)[y * c_tensor->shape->sizes[1] + x];
+                output << ((double *)c_tensor->data)[y * c_tensor->shape->sizes[1] + x];
                 break;
             case LE_TYPE_VOID:
             default:
