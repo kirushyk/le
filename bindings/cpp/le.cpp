@@ -1,4 +1,4 @@
-#include "LeCpp.hpp"
+#include "le.hpp"
 #include <le/le.h>
 
 using namespace le;

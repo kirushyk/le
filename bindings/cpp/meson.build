@@ -1,5 +1,5 @@
 le_cpp_sources = [
-    'LeCpp.cpp'
+    'le.cpp'
 ]
 
 if add_languages('cpp', native: false, required: false)
