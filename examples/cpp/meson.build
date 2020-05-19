@@ -8,3 +8,9 @@ executable('logistic-regression-cpp', 'logistic-regression.cpp',
     link_with: le_cpp,
     install: false
 )
+
+executable('support-vector-machine-cpp', 'support-vector-machine.cpp',
+    include_directories: incdir,
+    link_with: le_cpp,
+    install: false
+)

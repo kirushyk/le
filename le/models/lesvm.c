@@ -128,7 +128,7 @@ le_svm_margins(LeSVM *self, LeTensor *x)
 }
 
 void
-le_svm_train(LeSVM *self, LeTensor *x_train, LeTensor *y_train, LeSVMTrainingOptions options)
+le_svm_train(LeSVM *self, const LeTensor *x_train, const LeTensor *y_train, LeSVMTrainingOptions options)
 {
     unsigned passes = 0;
     /// @todo: Expose this parameter

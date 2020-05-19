@@ -2,6 +2,7 @@ le_cpp_sources = [
     'tensor.cpp',
     'model.cpp',
     'logistic.cpp',
+    'svm.cpp',
     'le.cpp'
 ]
 

@@ -6,6 +6,10 @@
 
 #include "../letensor.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 typedef enum LeKernel
 {
     LE_KERNEL_LINEAR,
@@ -13,6 +17,8 @@ typedef enum LeKernel
 } LeKernel;
 
 typedef struct LeSVM LeSVM;
+
+#define LE_SVM(obj) ((LeSVM *)(obj))
 
 LeSVM *                le_svm_new                       (void);
 
@@ -23,10 +29,14 @@ typedef struct LeSVMTrainingOptions
 } LeSVMTrainingOptions;
 
 void                   le_svm_train                     (LeSVM                *svm,
-                                                         LeTensor             *x_train,
-                                                         LeTensor             *y_train,
+                                                         const LeTensor       *x_train,
+                                                         const LeTensor       *y_train,
                                                          LeSVMTrainingOptions  options);
 
 void                   le_svm_free                      (LeSVM                *svm);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif
