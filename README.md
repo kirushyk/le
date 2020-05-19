@@ -2,7 +2,7 @@
 
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 ![Platforms](https://img.shields.io/badge/platform-macos%20%7C%20linux-lightgrey.svg)
-![Interfaces](https://img.shields.io/badge/interface-c%20%7C%20rust%20%7C%20python-blue.svg)
+![Interfaces](https://img.shields.io/badge/interface-c%20%7C%20c%2B%2B%20%7C%20rust%20%7C%20python-blue.svg)
 
 Le is Machine Learning framework written in Pure C. It provides library for:
 * Tensor Manipulation.
