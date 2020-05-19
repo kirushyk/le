@@ -20,6 +20,12 @@ Tensor::Tensor(Type t, unsigned num_dimensions, ...):
     va_end(args);
 }
 
+Tensor::Tensor(LeTensor *c_tensor):
+    priv(std::make_shared<Private>())
+{
+    priv->tensor = c_tensor;
+}
+
 Tensor::~Tensor()
 {
     le_tensor_free(priv->tensor);
@@ -37,7 +43,7 @@ std::ostream & le::operator << (std::ostream &output, const Tensor &tensor)
     LeTensor *c_tensor = tensor.priv->tensor;
     if (c_tensor->shape->num_dimensions != 2)
     {
-        output << "<" << c_tensor->shape->num_dimensions << "dD tensor>" << std::endl;
+        output << "<" << c_tensor->shape->num_dimensions << "D tensor>" << std::endl;
     }
 
     output << '[';

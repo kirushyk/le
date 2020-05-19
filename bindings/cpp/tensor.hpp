@@ -10,6 +10,7 @@ class Tensor
 {
 public:
     Tensor(Type t, unsigned num_dimensions, ...);
+    Tensor(LeTensor *c_tensor);
     ~Tensor();
 
     const LeTensor *c_tensor() const;

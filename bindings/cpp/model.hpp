@@ -1,6 +1,7 @@
 #pragma once
 #include <memory>
 #include <le/le.h>
+#include "tensor.hpp"
 
 namespace le
 {
@@ -12,6 +13,8 @@ public:
     virtual ~Model();
 
     LeModel *c_model();
+
+    Tensor predict(Tensor input);
 
 protected:
     void setCModel(LeModel *c_model);
