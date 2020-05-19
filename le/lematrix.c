@@ -28,7 +28,7 @@ le_matrix_get_height(const LeTensor *self)
 }
 
 float
-le_matrix_at(LeTensor *self, unsigned y, unsigned x)
+le_matrix_at(const LeTensor *self, unsigned y, unsigned x)
 {
     assert(self->shape->num_dimensions == 2);
     

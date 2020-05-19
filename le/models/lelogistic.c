@@ -96,8 +96,8 @@ le_logistic_classifier_train(LeLogisticClassifier *self, const LeTensor *x_train
     
     assert(le_matrix_get_width(y_train) == examples_count);
     
-    LeTensor *x = x_train;
-    LeTensor *x_prev = x_train;
+    const LeTensor *x = x_train;
+    const LeTensor *x_prev = x_train;
     
     for (i = 0; i < options.polynomia_degree; i++)
     {

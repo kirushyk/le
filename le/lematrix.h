@@ -12,7 +12,7 @@ unsigned   le_matrix_get_width            (const LeTensor *matrix);
 
 unsigned   le_matrix_get_height           (const LeTensor *matrix);
 
-float      le_matrix_at                   (LeTensor     *matrix,
+float      le_matrix_at                   (const LeTensor *matrix,
                                            unsigned      y,
                                            unsigned      x);
 

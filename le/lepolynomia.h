@@ -8,6 +8,6 @@
 
 #include <stdio.h>
 
-LeTensor * le_matrix_new_polynomia        (LeTensor     *matrix);
+LeTensor * le_matrix_new_polynomia        (const LeTensor *matrix);
 
 #endif

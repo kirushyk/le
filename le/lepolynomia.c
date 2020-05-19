@@ -5,7 +5,7 @@
 #include "lematrix.h"
 
 LeTensor *
-le_matrix_new_polynomia(LeTensor *a)
+le_matrix_new_polynomia(const LeTensor *a)
 {
     int example;
     int feature, another_feature;
