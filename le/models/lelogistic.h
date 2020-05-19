@@ -6,7 +6,13 @@
 
 #include "../letensor.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 typedef struct LeLogisticClassifier LeLogisticClassifier;
+
+#define LE_LOGISTIC_CLASSIFIER(obj) ((LeLogisticClassifier *)(obj))
 
 LeLogisticClassifier * le_logistic_classifier_new     (void);
 
@@ -27,10 +33,14 @@ typedef struct LeLogisticClassifierTrainingOptions
 } LeLogisticClassifierTrainingOptions;
 
 void                   le_logistic_classifier_train   (LeLogisticClassifier                *classifier,
-                                                       LeTensor                            *x_train,
-                                                       LeTensor                            *y_train,
+                                                       const LeTensor                      *x_train,
+                                                       const LeTensor                      *y_train,
                                                        LeLogisticClassifierTrainingOptions  options);
 
 void                   le_logistic_classifier_free    (LeLogisticClassifier                *classifier);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

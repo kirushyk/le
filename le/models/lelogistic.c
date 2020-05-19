@@ -88,7 +88,7 @@ le_logistic_classifier_predict(LeLogisticClassifier *self, LeTensor *x)
 }
 
 void
-le_logistic_classifier_train(LeLogisticClassifier *self, LeTensor *x_train, LeTensor *y_train, LeLogisticClassifierTrainingOptions options)
+le_logistic_classifier_train(LeLogisticClassifier *self, const LeTensor *x_train, const LeTensor *y_train, LeLogisticClassifierTrainingOptions options)
 {
     unsigned examples_count = le_matrix_get_width(x_train);
     unsigned iterations_count = options.max_iterations;
