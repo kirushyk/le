@@ -8,7 +8,7 @@ struct Tensor::Private
     LeTensor *tensor;
 };
 
-Tensor::Tensor():
+Tensor::Tensor(Type t, unsigned num_dimensions, ...):
     priv(std::make_shared<Private>())
 {
     priv->tensor = le_tensor_new(LE_TYPE_VOID, 0, NULL);
