@@ -28,7 +28,7 @@ Tensor::Tensor(const Tensor &tensor)
 Tensor::Tensor(LeTensor *c_tensor):
     priv(std::make_shared<Private>())
 {
-    priv->tensor = le_tensor_new_copy(c_tensor);
+    priv->tensor = c_tensor;
 }
 
 Tensor::~Tensor()
