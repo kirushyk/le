@@ -20,7 +20,8 @@ Tensor::Tensor(Type t, unsigned num_dimensions, ...):
     va_end(args);
 }
 
-Tensor::Tensor(const Tensor &tensor)
+Tensor::Tensor(const Tensor &tensor):
+    priv(std::make_shared<Private>())
 {
     priv->tensor = le_tensor_new_copy(tensor.c_tensor());
 }
