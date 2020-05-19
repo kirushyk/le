@@ -1,5 +1,5 @@
 py_mod = import('python')
-py = py_mod.find_installation()
+py = py_mod.find_installation('python3')
 py_dep = py.dependency()
 
 pylib = py.extension_module('le',
@@ -9,7 +9,8 @@ pylib = py.extension_module('le',
     ],
     dependencies: [
         py_dep,
-    ]
+    ],
+    install: true
 )
 
 pypathdir = meson.current_build_dir()

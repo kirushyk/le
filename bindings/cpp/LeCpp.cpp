@@ -1,5 +1,5 @@
 #include "LeCpp.hpp"
-#include "le/le.h"
+#include <le/le.h>
 
 using namespace le;
 
