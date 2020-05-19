@@ -30,5 +30,6 @@ void Model::setCModel(LeModel *c_model)
 
 Tensor Model::predict(Tensor input)
 {
-    return le_model_predict(c_model(), input.c_tensor());;
+    LeTensor *h = le_model_predict(c_model(), input.c_tensor());
+    return Tensor(le_tensor_new_copy(h));
 }
