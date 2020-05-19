@@ -1,6 +1,7 @@
 /* Copyright (c) Kyrylo Polezhaiev and contributors. All rights reserved.
    Released under the MIT license. See LICENSE file in the project root for full license information. */
 
+#include <stdarg.h>
 #include <stdbool.h>
 #include "letype.h"
 #include "leshape.h"
@@ -20,6 +21,10 @@ typedef struct LeTensor LeTensor;
 LeTensor *   le_tensor_new                  (LeType        element_type,
                                              unsigned      num_dimensions,
                                              ...);
+
+LeTensor *   le_tensor_new_from_va_list     (LeType        element_type,
+                                             unsigned      num_dimensions,
+                                             va_list       dims_and_data);
 
 LeTensor *   le_scalar_new_f32              (float         scalar);
 

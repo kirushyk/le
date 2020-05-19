@@ -13,17 +13,15 @@
 #endif
 
 LeTensor *
-le_tensor_new(LeType element_type, unsigned num_dimensions, ...)
+le_tensor_new_from_va_list(LeType element_type, unsigned num_dimensions, va_list dims_and_data)
 {
     LeTensor *self = malloc(sizeof(struct LeTensor));
     self->element_type = element_type;
         
-    va_list args;
-    va_start(args, num_dimensions);
     uint32_t *sizes = malloc(num_dimensions * sizeof(uint32_t));
     for (unsigned i = 0; i < num_dimensions; i++)
     {
-        int size = va_arg(args, int);
+        int size = va_arg(dims_and_data, int);
         sizes[i] = size;
     }
     self->shape = le_shape_new_from_data(num_dimensions, sizes);
@@ -38,37 +36,37 @@ le_tensor_new(LeType element_type, unsigned num_dimensions, ...)
         {
         case LE_TYPE_UINT8:
             {
-                uint8_t value = (uint8_t)va_arg(args, int);
+                uint8_t value = (uint8_t)va_arg(dims_and_data, int);
                 ((uint8_t *)self->data)[i] = value;
             }
             break;
         case LE_TYPE_INT8:
             {
-                int8_t value = (int8_t)va_arg(args, int);
+                int8_t value = (int8_t)va_arg(dims_and_data, int);
                 ((int8_t *)self->data)[i] = value;
             }
             break;
         case LE_TYPE_INT16:
             {
-                int16_t value = (int16_t)va_arg(args, int);
+                int16_t value = (int16_t)va_arg(dims_and_data, int);
                 ((int16_t *)self->data)[i] = value;
             }
             break;
         case LE_TYPE_INT32:
             {
-                int32_t value = (int32_t)va_arg(args, int);
+                int32_t value = (int32_t)va_arg(dims_and_data, int);
                 ((int32_t *)self->data)[i] = value;
             }
             break;
         case LE_TYPE_FLOAT32:
             {
-                float value = (float)va_arg(args, double);
+                float value = (float)va_arg(dims_and_data, double);
                 ((float *)self->data)[i] = value;
             }
             break;
         case LE_TYPE_FLOAT64:
             {
-                double value = (double)va_arg(args, double);
+                double value = (double)va_arg(dims_and_data, double);
                 ((double *)self->data)[i] = value;
             }
             break;
@@ -77,6 +75,18 @@ le_tensor_new(LeType element_type, unsigned num_dimensions, ...)
             break;
         }
     }
+
+    return self;
+}
+
+LeTensor *
+le_tensor_new(LeType element_type, unsigned num_dimensions, ...)
+{
+    LeTensor *self = NULL;
+        
+    va_list args;
+    va_start(args, num_dimensions);
+    self = le_tensor_new_from_va_list(element_type, num_dimensions, args);
     va_end(args);
 
     return self;
