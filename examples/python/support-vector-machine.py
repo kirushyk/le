@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
- 
 import le
 
 x = le.tensor([[1.0, 2.0, 3.0, 4.0],
@@ -7,6 +6,6 @@ x = le.tensor([[1.0, 2.0, 3.0, 4.0],
 
 y = le.tensor([[-1.0, -1.0, 1.0, 1.0]])
 
-print(x)
-
-print(y)
+print("Train set: ")
+print("x =", x)
+print("y =", y)
