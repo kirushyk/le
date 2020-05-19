@@ -1,6 +1,7 @@
 #include "le.hpp"
 #include <cstdint>
 #include <cstdarg>
+#include <iomanip>
 #include <le/le.h>
 #include <le/letensor-imp.h>
 
@@ -73,10 +74,12 @@ std::ostream & le::operator << (std::ostream &output, const Tensor &tensor)
                 output << (int)((std::int32_t *)c_tensor->data)[y * c_tensor->shape->sizes[1] + x];
                 break;
             case LE_TYPE_FLOAT32:
-                output << ((float *)c_tensor->data)[y * c_tensor->shape->sizes[1] + x];
+                output << std::fixed << std::setprecision(3) << 
+                    ((float *)c_tensor->data)[y * c_tensor->shape->sizes[1] + x];
                 break;
             case LE_TYPE_FLOAT64:
-                output << ((double *)c_tensor->data)[y * c_tensor->shape->sizes[1] + x];
+                output << std::fixed << std::setprecision(3) <<
+                    ((double *)c_tensor->data)[y * c_tensor->shape->sizes[1] + x];
                 break;
             case LE_TYPE_VOID:
             default:
