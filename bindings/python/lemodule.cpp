@@ -3,13 +3,13 @@
 namespace py = pybind11;
 
 int
-le_tensor()
+tensor()
 {
     return 0;
 }
 
-PYBIND11_MODULE(example, m)
+PYBIND11_MODULE(le, m)
 {
     m.doc() = "Le Python Binding";
-    m.def("tensor", &le_tensor, "Create a Le Tensor");
+    m.def("tensor", &tensor, "Create a Le Tensor");
 }
