@@ -1,3 +1,4 @@
+#include <iostream>
 #include <le.hpp>
 
 int main(int argc, char *argv[])
@@ -10,6 +11,10 @@ int main(int argc, char *argv[])
     le::Tensor y(le::Type::FLOAT32, 2, 1, 4,
         0.0, 1.0, 1.0, 0.0
     );
+
+    std::cout << "Train set: " << std::endl;
+    std::cout << "x =" << std::endl << x; 
+    std::cout << "y =" << std::endl << y;
 
     return 0;
 }
