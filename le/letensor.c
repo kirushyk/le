@@ -82,7 +82,7 @@ le_tensor_new_from_va_list(LeType element_type, unsigned num_dimensions, va_list
 LeTensor *
 le_tensor_new(LeType element_type, unsigned num_dimensions, ...)
 {
-    LeTensor *self = NULL;
+    LeTensor *self;
         
     va_list args;
     va_start(args, num_dimensions);
