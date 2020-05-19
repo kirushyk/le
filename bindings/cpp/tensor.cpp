@@ -16,7 +16,7 @@ Tensor::Tensor(Type t, unsigned num_dimensions, ...):
 {
     std::va_list args;
     va_start(args, num_dimensions);
-    priv->tensor = le_tensor_new((LeType)t, num_dimensions, args);
+    priv->tensor = le_tensor_new_from_va_list((LeType)t, num_dimensions, args);
     va_end(args);
 }
 
