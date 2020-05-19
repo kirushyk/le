@@ -24,7 +24,7 @@ le_model_append_parameter(LeModel *self, LeTensor *parameter)
 }
 
 LeTensor *
-le_model_predict(LeModel *self, LeTensor *x)
+le_model_predict(LeModel *self, const LeTensor *x)
 {
     assert(self);
     assert(LE_OBJECT_GET_CLASS(self));

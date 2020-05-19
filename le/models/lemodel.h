@@ -8,6 +8,10 @@
 #include "../letensor.h"
 #include "../lelist.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 typedef struct LeModel
 {
     LeObject  parent;
@@ -27,24 +31,28 @@ typedef struct LeModelClass
 #define LE_MODEL_CLASS(klass) ((LeModelClass *)(klass))
 #define LE_MODEL_GET_CLASS(obj) (LE_MODEL_CLASS(LE_OBJECT_GET_CLASS(obj)))
 
-void       le_model_construct        (LeModel  *model);
+void       le_model_construct        (LeModel        *model);
 
 /** @note: This function is to be used by instances of subclasses of LeModel
     to list its trainable parameters */
-void       le_model_append_parameter (LeModel  *model,
-                                      LeTensor *parameter);
+void       le_model_append_parameter (LeModel        *model,
+                                      LeTensor       *parameter);
 
-LeTensor * le_model_predict          (LeModel  *model,
-                                      LeTensor *x);
+LeTensor * le_model_predict          (LeModel        *model,
+                                      const LeTensor *x);
 
-LeList *   le_model_get_gradients    (LeModel  *model,
-                                      LeTensor *x,
-                                      LeTensor *y);
+LeList *   le_model_get_gradients    (LeModel        *model,
+                                      LeTensor       *x,
+                                      LeTensor       *y);
 
-float      le_model_train_iteration  (LeModel  *model);
+float      le_model_train_iteration  (LeModel        *model);
 
-LeList *   le_model_get_parameters   (LeModel  *model);
+LeList *   le_model_get_parameters   (LeModel        *model);
 
-void       le_model_free             (LeModel  *model);
+void       le_model_free             (LeModel        *model);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif
