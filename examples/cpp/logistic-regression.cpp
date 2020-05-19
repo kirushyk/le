@@ -13,8 +13,17 @@ int main(int argc, char *argv[])
     );
 
     std::cout << "Train set: " << std::endl;
-    std::cout << "x =" << std::endl << x; 
-    std::cout << "y =" << std::endl << y;
+    std::cout << "x =" << std::endl << x << std::endl;
+    std::cout << "y =" << std::endl << y << std::endl;
+
+    le::LogisticClassifier lc;
+    le::LogisticClassifier::TrainingOptions options;
+    options.max_iterations = 100;
+    options.learning_rate = 1.0f;
+    options.polynomia_degree = 1;
+    options.regularization = le::Regularization::NONE;
+    options.lambda = 0.0f;
+    lc.train(x, y, options);
 
     return 0;
 }

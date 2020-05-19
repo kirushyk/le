@@ -35,6 +35,7 @@ std::ostream & le::operator << (std::ostream &output, const Tensor &tensor)
         output << "<" << c_tensor->shape->num_dimensions << "dD tensor>" << std::endl;
     }
 
+    output << '[';
     for (int y = 0; (y < c_tensor->shape->sizes[0]) && (y < TENSOR_PRINT_MAX_SIZE); y++)
     {
         int x;
@@ -43,42 +44,43 @@ std::ostream & le::operator << (std::ostream &output, const Tensor &tensor)
             switch (tensor.priv->tensor->element_type)
             {
                 case LE_TYPE_UINT8:
-                    std::cerr << (unsigned)((std::uint8_t *)c_tensor->data)[y * c_tensor->shape->sizes[1] + x];
+                    output << (unsigned)((std::uint8_t *)c_tensor->data)[y * c_tensor->shape->sizes[1] + x];
                     break;
                 case LE_TYPE_INT8:
-                    std::cerr << (int)((std::int8_t *)c_tensor->data)[y * c_tensor->shape->sizes[1] + x];
+                    output << (int)((std::int8_t *)c_tensor->data)[y * c_tensor->shape->sizes[1] + x];
                     break;
                 case LE_TYPE_INT16:
-                    std::cerr << (int)((std::int16_t *)c_tensor->data)[y * c_tensor->shape->sizes[1] + x];
+                    output << (int)((std::int16_t *)c_tensor->data)[y * c_tensor->shape->sizes[1] + x];
                     break;
                 case LE_TYPE_INT32:
-                    std::cerr << (int)((std::int32_t *)c_tensor->data)[y * c_tensor->shape->sizes[1] + x];
+                    output << (int)((std::int32_t *)c_tensor->data)[y * c_tensor->shape->sizes[1] + x];
                     break;
                 case LE_TYPE_FLOAT32:
-                    std::cerr << ((float *)c_tensor->data)[y * c_tensor->shape->sizes[1] + x];
+                    output << ((float *)c_tensor->data)[y * c_tensor->shape->sizes[1] + x];
                     break;
                 case LE_TYPE_FLOAT64:
-                    std::cerr << ((float *)c_tensor->data)[y * c_tensor->shape->sizes[1] + x];
+                    output << ((float *)c_tensor->data)[y * c_tensor->shape->sizes[1] + x];
                     break;
                 case LE_TYPE_VOID:
                 default:
-                    std::cerr << '?';
+                    output << '?';
                     break;
             }
             if (x < c_tensor->shape->sizes[1] - 1)
             {
-                std::cerr << ' ';
+                output << ' ';
             }
         }
         if (x < c_tensor->shape->sizes[1])
         {
-            std::cerr << "...";
+            output << "...";
         }
         if (y < c_tensor->shape->sizes[0] - 1)
         {
-            std::cerr << ';' << std::endl << ' ';
+            output << ';' << std::endl << ' ';
         }
     }
+    output << ']';
 
     return output;
 }
