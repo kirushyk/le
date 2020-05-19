@@ -24,6 +24,8 @@ public:
         unsigned         max_iterations;
     };
 
+    LogisticClassifier();
+    
     void train(const Tensor &x_train, const Tensor &y_train, TrainingOptions options);
 
 };

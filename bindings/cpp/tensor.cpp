@@ -25,6 +25,11 @@ Tensor::~Tensor()
     le_tensor_free(priv->tensor);
 }
 
+const LeTensor *Tensor::c_tensor() const
+{
+    return priv->tensor;
+}
+
 #define TENSOR_PRINT_MAX_SIZE 10
 
 std::ostream & le::operator << (std::ostream &output, const Tensor &tensor)

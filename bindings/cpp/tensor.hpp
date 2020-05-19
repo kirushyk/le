@@ -12,6 +12,8 @@ public:
     Tensor(Type t, unsigned num_dimensions, ...);
     ~Tensor();
 
+    const LeTensor *c_tensor() const;
+
     friend std::ostream & operator << (std::ostream &out, const Tensor &tensor);
 
 private:

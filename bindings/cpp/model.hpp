@@ -1,5 +1,6 @@
 #pragma once
 #include <memory>
+#include <le/le.h>
 
 namespace le
 {
@@ -7,6 +8,13 @@ namespace le
 class Model
 {
 public:
+    Model();
+    virtual ~Model();
+
+    LeModel *c_model();
+
+protected:
+    void setCModel(LeModel *c_model);
 
 private:
     struct Private;
