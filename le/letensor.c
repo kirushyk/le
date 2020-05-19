@@ -141,7 +141,7 @@ le_tensor_new_from_data(LeType element_type, LeShape *shape, void *data)
 }
 
 LeTensor *
-le_tensor_new_copy(LeTensor *another)
+le_tensor_new_copy(const LeTensor *another)
 {
     assert(another);
     
