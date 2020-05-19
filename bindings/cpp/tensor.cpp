@@ -23,7 +23,7 @@ Tensor::Tensor(Type t, unsigned num_dimensions, ...):
 Tensor::Tensor(LeTensor *c_tensor):
     priv(std::make_shared<Private>())
 {
-    priv->tensor = c_tensor;
+    priv->tensor = le_tensor_new_copy(c_tensor);
 }
 
 Tensor::~Tensor()
