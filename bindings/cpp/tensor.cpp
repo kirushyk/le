@@ -59,28 +59,28 @@ std::ostream & le::operator << (std::ostream &output, const Tensor &tensor)
         {
             switch (tensor.priv->tensor->element_type)
             {
-                case LE_TYPE_UINT8:
-                    output << (unsigned)((std::uint8_t *)c_tensor->data)[y * c_tensor->shape->sizes[1] + x];
-                    break;
-                case LE_TYPE_INT8:
-                    output << (int)((std::int8_t *)c_tensor->data)[y * c_tensor->shape->sizes[1] + x];
-                    break;
-                case LE_TYPE_INT16:
-                    output << (int)((std::int16_t *)c_tensor->data)[y * c_tensor->shape->sizes[1] + x];
-                    break;
-                case LE_TYPE_INT32:
-                    output << (int)((std::int32_t *)c_tensor->data)[y * c_tensor->shape->sizes[1] + x];
-                    break;
-                case LE_TYPE_FLOAT32:
-                    output << ((float *)c_tensor->data)[y * c_tensor->shape->sizes[1] + x];
-                    break;
-                case LE_TYPE_FLOAT64:
-                    output << ((float *)c_tensor->data)[y * c_tensor->shape->sizes[1] + x];
-                    break;
-                case LE_TYPE_VOID:
-                default:
-                    output << '?';
-                    break;
+            case LE_TYPE_UINT8:
+                output << (unsigned)((std::uint8_t *)c_tensor->data)[y * c_tensor->shape->sizes[1] + x];
+                break;
+            case LE_TYPE_INT8:
+                output << (int)((std::int8_t *)c_tensor->data)[y * c_tensor->shape->sizes[1] + x];
+                break;
+            case LE_TYPE_INT16:
+                output << (int)((std::int16_t *)c_tensor->data)[y * c_tensor->shape->sizes[1] + x];
+                break;
+            case LE_TYPE_INT32:
+                output << (int)((std::int32_t *)c_tensor->data)[y * c_tensor->shape->sizes[1] + x];
+                break;
+            case LE_TYPE_FLOAT32:
+                output << ((float *)c_tensor->data)[y * c_tensor->shape->sizes[1] + x];
+                break;
+            case LE_TYPE_FLOAT64:
+                output << ((float *)c_tensor->data)[y * c_tensor->shape->sizes[1] + x];
+                break;
+            case LE_TYPE_VOID:
+            default:
+                output << '?';
+                break;
             }
             if (x < c_tensor->shape->sizes[1] - 1)
             {
