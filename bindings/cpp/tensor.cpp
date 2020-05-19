@@ -20,6 +20,11 @@ Tensor::Tensor(Type t, unsigned num_dimensions, ...):
     va_end(args);
 }
 
+Tensor::Tensor(const Tensor &tensor)
+{
+    priv->tensor = le_tensor_new_copy(tensor.c_tensor());
+}
+
 Tensor::Tensor(LeTensor *c_tensor):
     priv(std::make_shared<Private>())
 {
