@@ -1,5 +1,6 @@
 #include "le.hpp"
 #include <cstdint>
+#include <cstdarg>
 #include <le/le.h>
 #include <le/letensor-imp.h>
 
@@ -13,7 +14,10 @@ struct Tensor::Private
 Tensor::Tensor(Type t, unsigned num_dimensions, ...):
     priv(std::make_shared<Private>())
 {
-    priv->tensor = le_tensor_new(LE_TYPE_VOID, 0, NULL);
+    std::va_list args;
+    va_start(args, num_dimensions);
+    priv->tensor = le_tensor_new((LeType)t, num_dimensions, args);
+    va_end(args);
 }
 
 Tensor::~Tensor()
@@ -36,7 +40,6 @@ std::ostream & le::operator << (std::ostream &output, const Tensor &tensor)
         int x;
         for (x = 0; (x < c_tensor->shape->sizes[1]) && (x < TENSOR_PRINT_MAX_SIZE); x++)
         {
-            int written = 0;
             switch (tensor.priv->tensor->element_type)
             {
                 case LE_TYPE_UINT8:
