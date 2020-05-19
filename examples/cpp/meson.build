@@ -1,16 +1,22 @@
 # Copyright (c) Kyrylo Polezhaiev and contributors. All rights reserved.
 # Released under the MIT license. See LICENSE file in the project root for full license information.
 
-incdir = include_directories('../../bindings/cpp')
+incdir = include_directories('../..', '../../bindings/cpp')
 
 executable('logistic-regression-cpp', 'logistic-regression.cpp',
     include_directories: incdir,
-    link_with: le_cpp,
+    link_with: [
+        le,
+        le_cpp
+    ],
     install: false
 )
 
 executable('support-vector-machine-cpp', 'support-vector-machine.cpp',
     include_directories: incdir,
-    link_with: le_cpp,
+    link_with: [
+        le,
+        le_cpp
+    ],
     install: false
 )
