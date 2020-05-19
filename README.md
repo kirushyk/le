@@ -50,7 +50,9 @@ To install compiled binaries locally, type:
 
 ## Tools
 
-Le Framework comes with some usefull [tools](/tools).
+* [Le Board](/tools/board);
+* [Le Playground](/tools/playground);
+* [Le MNIST Inspect](/tools/mnist-inspect).
 
 ## License
 
