@@ -4,10 +4,8 @@ py_dep = py.dependency()
 
 pylib = py.extension_module('le',
     'lemodule.cpp',
-    link_with: [
-        le_cpp
-    ],
     dependencies: [
+        le_cpp,
         py_dep,
     ]
 )

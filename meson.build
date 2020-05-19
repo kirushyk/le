@@ -3,9 +3,10 @@
 
 project('le', 'c',
     version: '0.0.1',
-    meson_version: '>= 0.49.0',
+    meson_version: '>= 0.54.0',
     default_options: [
         'c_std=c99',
+        'cpp_std=c++11',
         'warning_level=1',
         'buildtype=debug'
     ]
