@@ -1,4 +1,5 @@
 le_cpp_sources = [
+    'tensor.cpp',
     'le.cpp'
 ]
 
