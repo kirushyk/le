@@ -8,9 +8,9 @@
 #ifndef __LEMATRIX_H__
 #define __LEMATRIX_H__
 
-unsigned   le_matrix_get_width            (LeTensor     *matrix);
+unsigned   le_matrix_get_width            (const LeTensor *matrix);
 
-unsigned   le_matrix_get_height           (LeTensor     *matrix);
+unsigned   le_matrix_get_height           (const LeTensor *matrix);
 
 float      le_matrix_at                   (LeTensor     *matrix,
                                            unsigned      y,

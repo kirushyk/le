@@ -12,7 +12,7 @@
 #endif
 
 unsigned
-le_matrix_get_width(LeTensor *self)
+le_matrix_get_width(const LeTensor *self)
 {
     assert(self->shape->num_dimensions == 2);
     
@@ -20,7 +20,7 @@ le_matrix_get_width(LeTensor *self)
 }
 
 unsigned
-le_matrix_get_height(LeTensor *self)
+le_matrix_get_height(const LeTensor *self)
 {
     assert(self->shape->num_dimensions == 2);
     
