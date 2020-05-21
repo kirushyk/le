@@ -4,3 +4,4 @@
 #include "model.hpp"
 #include "logistic.hpp"
 #include "svm.hpp"
+#include "sequential.hpp"

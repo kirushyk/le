@@ -20,3 +20,12 @@ executable('support-vector-machine-cpp', 'support-vector-machine.cpp',
     ],
     install: false
 )
+
+executable('shallow-neural-network-cpp', 'shallow-neural-network.cpp',
+    include_directories: incdir,
+    link_with: [
+        le,
+        le_cpp
+    ],
+    install: false
+)

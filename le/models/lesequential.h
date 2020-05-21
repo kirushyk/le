@@ -4,10 +4,13 @@
 #ifndef __LE_SEQUENTIAL_H__
 #define __LE_SEQUENTIAL_H__
 
+#include "../lemacros.h"
 #include "../letensor.h"
 #include "../leloss.h"
 #include "lemodel.h"
 #include "layers/lelayer.h"
+
+LE_BEGIN_DECLS
 
 typedef struct LeSequential LeSequential;
 
@@ -28,5 +31,7 @@ void           le_sequential_to_dot   (LeSequential *model,
                                        const char   *filename);
 
 void           le_sequential_free     (LeSequential *model);
+
+LE_END_DECLS
 
 #endif

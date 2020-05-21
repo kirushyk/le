@@ -4,6 +4,7 @@ le_cpp_sources = [
     'logistic.cpp',
     'svm.cpp',
     'shape.cpp',
+    'sequential.cpp',
     'le.cpp'
 ]
 
