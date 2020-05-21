@@ -5,3 +5,5 @@
 #include "logistic.hpp"
 #include "svm.hpp"
 #include "sequential.hpp"
+#include "dense-layer.hpp"
+#include "activation-layer.hpp"
