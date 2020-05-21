@@ -3,6 +3,7 @@ le_cpp_sources = [
     'model.cpp',
     'logistic.cpp',
     'svm.cpp',
+    'shape.cpp',
     'le.cpp'
 ]
 

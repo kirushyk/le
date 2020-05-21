@@ -21,6 +21,12 @@ Tensor::Tensor(Type t, unsigned num_dimensions, ...):
     va_end(args);
 }
 
+Tensor::Tensor(Type t, Shape s, void *data):
+    priv(std::make_shared<Private>())
+{
+    priv->tensor = le_tensor_new_from_data((LeType)t, s.c_shape(), data);
+}
+
 Tensor::Tensor(const Tensor &tensor):
     priv(std::make_shared<Private>())
 {
