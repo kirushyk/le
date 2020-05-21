@@ -3,10 +3,13 @@
 
 /* Linear Algebra for two-dimensional Tensors */
 
-#include "letensor.h"
-
 #ifndef __LEMATRIX_H__
 #define __LEMATRIX_H__
+
+#include "lemacros.h"
+#include "letensor.h"
+
+LE_BEGIN_DECLS
 
 unsigned   le_matrix_get_width            (const LeTensor *matrix);
 
@@ -69,5 +72,7 @@ LeTensor * le_matrix_get_column_copy      (LeTensor     *matrix,
 void       le_matrix_apply_softmax        (LeTensor     *self);
 
 void       le_matrix_apply_softmax_prime  (LeTensor     *matrix);
+
+LE_END_DECLS
 
 #endif

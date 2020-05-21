@@ -9,9 +9,7 @@
 #ifndef __LETENSOR_H__
 #define __LETENSOR_H__
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+LE_BEGIN_DECLS
 
 typedef struct LeTensor LeTensor;
 
@@ -139,8 +137,6 @@ typedef struct LeTensorStats
 
 LeTensorStats le_tensor_get_stats (LeTensor *tensor);
 
-#ifdef __cplusplus
-}
-#endif
+LE_END_DECLS
 
 #endif

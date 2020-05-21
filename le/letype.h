@@ -1,10 +1,10 @@
 /* Copyright (c) Kyrylo Polezhaiev and contributors. All rights reserved.
    Released under the MIT license. See LICENSE file in the project root for full license information. */
 
-#include <stddef.h>
-
 #ifndef __LETYPE_H__
 #define __LETYPE_H__
+
+#include <stddef.h>
 
 typedef enum LeType
 {

@@ -4,13 +4,12 @@
 #ifndef __LE_MODEL_H__
 #define __LE_MODEL_H__
 
+#include "../lemacros.h"
 #include "../leobject.h"
 #include "../letensor.h"
 #include "../lelist.h"
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+LE_BEGIN_DECLS
 
 typedef struct LeModel
 {
@@ -51,8 +50,6 @@ LeList *   le_model_get_parameters   (LeModel        *model);
 
 void       le_model_free             (LeModel        *model);
 
-#ifdef __cplusplus
-}
-#endif
+LE_END_DECLS
 
 #endif

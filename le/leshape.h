@@ -1,12 +1,12 @@
 /* Copyright (c) Kyrylo Polezhaiev and contributors. All rights reserved.
    Released under the MIT license. See LICENSE file in the project root for full license information. */
 
+#ifndef __LESHAPE_H__
+#define __LESHAPE_H__
+
 #include <stdint.h>
 #include <stdbool.h>
 #include "lemacros.h"
-
-#ifndef __LESHAPE_H__
-#define __LESHAPE_H__
 
 LE_BEGIN_DECLS
 

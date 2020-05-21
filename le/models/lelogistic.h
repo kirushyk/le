@@ -4,11 +4,10 @@
 #ifndef __LELOGISTIC_H__
 #define __LELOGISTIC_H__
 
+#include "../lemacros.h"
 #include "../letensor.h"
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+LE_BEGIN_DECLS
 
 typedef struct LeLogisticClassifier LeLogisticClassifier;
 
@@ -39,8 +38,6 @@ void                   le_logistic_classifier_train   (LeLogisticClassifier     
 
 void                   le_logistic_classifier_free    (LeLogisticClassifier                *classifier);
 
-#ifdef __cplusplus
-}
-#endif
+LE_END_DECLS
 
 #endif
