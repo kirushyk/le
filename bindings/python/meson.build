@@ -15,10 +15,13 @@ if not py_platlib.endswith('site-packages')
 endif
 py_dep = py3.dependency()
 
+incdir = include_directories('../..', '../../bindings/cpp')
+
 pylib = py3.extension_module('le',
     'lemodule.cpp',
     link_with: le_cpp,
     dependencies: py_dep,
+    include_directories: incdir,
     install: true
 )
 
