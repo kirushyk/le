@@ -4,7 +4,10 @@
 #ifndef __LEACTIVATIONLAYER_H__
 #define __LEACTIVATIONLAYER_H__
 
+#include "../../lemacros.h"
 #include "lelayer.h"
+
+LE_BEGIN_DECLS
 
 typedef enum LeActivation
 {
@@ -26,5 +29,7 @@ typedef struct LeActivationLayer
 
 LeActivationLayer * le_activation_layer_new (const char   *name,
                                              LeActivation  activation);
+
+LE_END_DECLS
 
 #endif

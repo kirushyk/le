@@ -1,6 +1,5 @@
 #pragma once
 #include <string>
-#include <le/le.h>
 #include "layer.hpp"
 
 namespace le
