@@ -23,6 +23,18 @@ py::object tensor(py::array_t<float> elements)
     return py::cast(t);
 }
 
+class PySVM: public le::SVM
+{
+public: 
+    void pyTrain(const le::Tensor &x_train, const le::Tensor &y_train)
+    {
+        le::SVM::TrainingOptions options;
+        options.kernel = le::Kernel::LINEAR;
+        options.c = 1.0f;
+        train(x_train, y_train, options);
+    }
+};
+
 PYBIND11_MODULE(le, m)
 {
     py::class_<le::Tensor>(m, "Tensor")
@@ -30,6 +42,9 @@ PYBIND11_MODULE(le, m)
         {
             return le_tensor_to_cstr(tensor.c_tensor());
         });
+    py::class_<PySVM>(m, "SVM")
+        .def(py::init<>())
+        .def("train", &PySVM::pyTrain);
     m.doc() = "Le Python Binding";
     m.def("tensor", &tensor, "Create a Le Tensor");
 }

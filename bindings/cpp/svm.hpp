@@ -18,6 +18,7 @@ public:
     {
         Kernel kernel;
         float  c;
+        TrainingOptions(): kernel(Kernel::LINEAR), c(1.0f) {}
     };
 
     SVM();
