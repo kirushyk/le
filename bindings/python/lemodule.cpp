@@ -44,7 +44,8 @@ PYBIND11_MODULE(le, m)
         });
     py::class_<PySVM>(m, "SVM")
         .def(py::init<>())
-        .def("train", &PySVM::pyTrain);
+        .def("train", &PySVM::pyTrain)
+        .def("predict", &PySVM::predict);
     m.doc() = "Le Python Binding";
     m.def("tensor", &tensor, "Create a Le Tensor");
 }
