@@ -203,7 +203,7 @@ le_tensor_new_f32_equal_u8(LeTensor *another, uint8_t scalar)
 }
 
 bool
-le_tensor_equal(LeTensor *a, LeTensor *b)
+le_tensor_equal(const LeTensor *a, const LeTensor *b)
 {
     /// @todo: Take stride into account
     if (a == b)
@@ -281,7 +281,7 @@ le_tensor_pick(LeTensor *another, uint32_t index)
 }
 
 LeTensor *
-le_tensor_pick_copy(LeTensor *another, uint32_t index)
+le_tensor_pick_copy(const LeTensor *another, uint32_t index)
 {
     /// @todo: Take stride into account
     if (!another)
@@ -302,7 +302,7 @@ le_tensor_pick_copy(LeTensor *another, uint32_t index)
 }
 
 uint8_t
-le_tensor_u8_at(LeTensor *tensor, uint32_t index)
+le_tensor_u8_at(const LeTensor *tensor, uint32_t index)
 {
     /// @todo: Take stride into account
     assert(tensor->element_type == LE_TYPE_UINT8);
@@ -311,7 +311,7 @@ le_tensor_u8_at(LeTensor *tensor, uint32_t index)
 }
 
 float
-le_tensor_f32_at(LeTensor *tensor, uint32_t index)
+le_tensor_f32_at(const LeTensor *tensor, uint32_t index)
 {
     /// @todo: Take stride into account
     assert(tensor->element_type == LE_TYPE_FLOAT32);
@@ -339,7 +339,7 @@ le_matrix_empty(LeTensor *self)
 }
 
 float
-le_dot_product(LeTensor *a, LeTensor *b)
+le_dot_product(const LeTensor *a, const LeTensor *b)
 {
 #ifdef __APPLE__
     return le_accelerate_dot_product(a, b);
@@ -371,7 +371,7 @@ le_dot_product(LeTensor *a, LeTensor *b)
 }
 
 float
-le_rbf(LeTensor *a, LeTensor *b, float sigma)
+le_rbf(const LeTensor *a, const LeTensor *b, float sigma)
 {
 #ifdef __APPLE__
     return le_accelerate_rbf(a, b, sigma);
@@ -498,7 +498,7 @@ le_tensor_subtract_scalar(LeTensor *self, float b)
 }
 
 float
-le_tensor_sum(LeTensor *self)
+le_tensor_sum(const LeTensor *self)
 {
     /// @todo: Take stride into account
     float sum = 0.0;
@@ -735,7 +735,7 @@ too_long:
 
 /** @note: Temporary */
 void
-le_tensor_print(LeTensor *self, FILE *stream)
+le_tensor_print(const LeTensor *self, FILE *stream)
 {
     /// @todo: Take stride into account
     if (self->shape->num_dimensions != 2)

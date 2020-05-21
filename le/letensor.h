@@ -43,8 +43,8 @@ LeTensor *   le_tensor_new_cast_f32         (LeTensor     *tensor);
 LeTensor *   le_tensor_new_f32_equal_u8     (LeTensor     *tensor,
                                              uint8_t       scalar);
 
-bool         le_tensor_equal                (LeTensor     *a,
-                                             LeTensor     *b);
+bool         le_tensor_equal                (const LeTensor     *a,
+                                             const LeTensor     *b);
 
 bool         le_tensor_reshape              (LeTensor     *tensor,
                                              unsigned      num_dimensions,
@@ -53,13 +53,13 @@ bool         le_tensor_reshape              (LeTensor     *tensor,
 LeTensor *   le_tensor_pick                 (LeTensor     *another,
                                              uint32_t      index);
 
-LeTensor *   le_tensor_pick_copy            (LeTensor     *another,
+LeTensor *   le_tensor_pick_copy            (const LeTensor     *another,
                                              uint32_t      index);
 
-uint8_t      le_tensor_u8_at                (LeTensor     *tensor,
+uint8_t      le_tensor_u8_at                (const LeTensor     *tensor,
                                              uint32_t      index);
 
-float        le_tensor_f32_at               (LeTensor     *tensor,
+float        le_tensor_f32_at               (const LeTensor     *tensor,
                                              uint32_t      index);
 
 void         le_tensor_f32_set              (LeTensor     *tensor,
@@ -90,7 +90,7 @@ void         le_tensor_add_scalar           (LeTensor     *a,
 void         le_tensor_subtract_scalar      (LeTensor     *a,
                                              float         b);
 
-float        le_tensor_sum                  (LeTensor     *tensor);
+float        le_tensor_sum                  (const LeTensor     *tensor);
 
 void         le_tensor_apply_sigmoid        (LeTensor     *tensor);
 
@@ -118,15 +118,15 @@ void         le_tensor_free                 (LeTensor     *tensor);
 
 const char * le_tensor_to_cstr              (const LeTensor *tensor);
 
-void         le_tensor_print                (LeTensor     *tensor,
+void         le_tensor_print                (const LeTensor     *tensor,
                                              FILE         *stream);
 
 /** @note: Inner product of two column vectors */
-float        le_dot_product                 (LeTensor     *a,
-                                             LeTensor     *b);
+float        le_dot_product                 (const LeTensor     *a,
+                                             const LeTensor     *b);
 
-float        le_rbf                         (LeTensor     *a,
-                                             LeTensor     *b,
+float        le_rbf                         (const LeTensor     *a,
+                                             const LeTensor     *b,
                                              float         sigma);
 
 typedef struct LeTensorStats
