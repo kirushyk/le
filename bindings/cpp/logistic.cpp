@@ -5,11 +5,11 @@ using namespace le;
 LeLogisticClassifierTrainingOptions c_training_options(le::LogisticClassifier::TrainingOptions options)
 {
     LeLogisticClassifierTrainingOptions c_options;
-    c_options.polynomia_degree = options.polynomia_degree;
-    c_options.learning_rate = options.learning_rate;
+    c_options.polynomia_degree = options.polynomiaDegree;
+    c_options.learning_rate = options.learningRate;
     c_options.regularization = (LeRegularization)options.regularization;
     c_options.lambda = options.lambda;
-    c_options.max_iterations = options.max_iterations;
+    c_options.max_iterations = options.maxIterations;
     return c_options;
 }
 

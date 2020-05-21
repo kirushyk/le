@@ -18,9 +18,9 @@ int main(int argc, char *argv[])
 
     le::LogisticClassifier lc;
     le::LogisticClassifier::TrainingOptions options;
-    options.max_iterations = 100;
-    options.learning_rate = 1.0f;
-    options.polynomia_degree = 1;
+    options.maxIterations = 100;
+    options.learningRate = 1.0f;
+    options.polynomiaDegree = 1;
     options.regularization = le::Regularization::NONE;
     options.lambda = 0.0f;
     lc.train(x, y, options);

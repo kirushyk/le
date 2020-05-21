@@ -17,11 +17,11 @@ class LogisticClassifier: public Model
 public:
     struct TrainingOptions
     {
-        unsigned         polynomia_degree;
-        float            learning_rate;
+        unsigned         polynomiaDegree;
+        float            learningRate;
         Regularization   regularization;
         float            lambda;
-        unsigned         max_iterations;
+        unsigned         maxIterations;
     };
 
     LogisticClassifier();
