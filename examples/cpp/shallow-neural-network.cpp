@@ -21,7 +21,7 @@ int main(int argc, const char *argv[])
     nn.add(le::ActivationLayer("A1", le::Activation::SIGMOID));
     nn.add(le::DenseLayer("D2", 2, 1));
     nn.add(le::ActivationLayer("A2", le::Activation::SIGMOID));
-    // nn.setLoss(le::Loss::LOGISTIC);
+    nn.setLoss(le::Loss::LOGISTIC);
 
     le::Tensor h = nn.predict(x);
     std::cout << "Predicted value =" << std::endl << h << std::endl;
