@@ -116,7 +116,7 @@ void         le_tensor_free                 (LeTensor     *tensor);
 /** @note: Temporary */
 #include <stdio.h>
 
-const char * le_tensor_to_cstr              (LeTensor     *tensor);
+const char * le_tensor_to_cstr              (const LeTensor *tensor);
 
 void         le_tensor_print                (LeTensor     *tensor,
                                              FILE         *stream);

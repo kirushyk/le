@@ -649,7 +649,7 @@ le_tensor_apply_relu(LeTensor *self)
 #define BUFFER_SIZE 1024
 
 const char *
-le_tensor_to_cstr(LeTensor *self)
+le_tensor_to_cstr(const LeTensor *self)
 {
     /// @todo: Fix buffer overflow
     static char buffer[BUFFER_SIZE];
