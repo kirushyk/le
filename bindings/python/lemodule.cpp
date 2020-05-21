@@ -1,13 +1,28 @@
+#include <cstdlib>
+#include <string>
 #include <pybind11/pybind11.h>
 #include <pybind11/numpy.h>
 #include <le.hpp>
-#include <string>
 
 namespace py = pybind11;
 
 py::object tensor(py::array_t<double> elements)
 {
-    le::Tensor t(le::Type::FLOAT32, 1, 1, 1.0);
+    auto r = elements.unchecked<>();
+    unsigned *shapeData = (unsigned *)std::malloc(elements.ndim() * sizeof(unsigned));
+    for (int i = 0; i < elements.ndim(); i++) 
+    {
+        shapeData[i] = r.shape(i);
+    }
+    le::Shape s(elements.ndim(), shapeData);
+    float *tensorData = (float *)std::malloc(le_shape_get_elements_count(s.c_shape()) * sizeof(float));
+    le::Tensor t(le::Type::FLOAT32, s, tensorData);
+    // double sum = 0;
+    // for (ssize_t i = 0; i < r.shape(0); i++)
+    //     for (ssize_t j = 0; j < r.shape(1); j++)
+    //         for (ssize_t k = 0; k < r.shape(2); k++)
+    //             sum += r(i, j, k);
+    // return sum;
     return py::cast(t);
 }
 
