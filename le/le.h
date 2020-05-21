@@ -4,6 +4,7 @@
 #ifndef __LE_H__
 #define __LE_H__
 
+#include "lemacros.h"
 #include "letensor.h"
 #include "lematrix.h"
 #include "lepolynomia.h"

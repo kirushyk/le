@@ -3,9 +3,12 @@
 
 #include <stdint.h>
 #include <stdbool.h>
+#include "lemacros.h"
 
 #ifndef __LESHAPE_H__
 #define __LESHAPE_H__
+
+LE_BEGIN_DECLS
 
 typedef struct LeShape
 {
@@ -35,5 +38,7 @@ uint32_t     le_shape_get_elements_count (LeShape  *shape);
 
 bool         le_shape_equal              (LeShape  *a,
                                           LeShape  *b);
+
+LE_END_DECLS
 
 #endif
