@@ -3,7 +3,7 @@
 
 incdir = include_directories('../..', '../../bindings/cpp')
 
-executable('logistic-regression-cpp', 'logistic-regression.cpp',
+executable('polynomial-logistic-regression-cpp', 'polynomial-logistic-regression.cpp',
     include_directories: incdir,
     link_with: [
         le,

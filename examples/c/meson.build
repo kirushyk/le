@@ -9,7 +9,7 @@ executable('support-vector-machine', 'support-vector-machine.c',
     install: false
 )
 
-executable('logistic-regression', 'logistic-regression.c',
+executable('polynomial-logistic-regression', 'polynomial-logistic-regression.c',
     include_directories: incdir,
     link_with: le,
     install: false
