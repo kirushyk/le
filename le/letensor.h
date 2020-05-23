@@ -24,22 +24,17 @@ LeTensor *   le_tensor_new_from_va_list     (LeType        element_type,
                                              unsigned      num_dimensions,
                                              va_list       dims_and_data);
 
-LeTensor *   le_scalar_new_f32              (float         scalar);
-
-/// @note: Takes ownership of shape
-LeTensor *   le_tensor_new_rand_f32         (LeShape      *shape);
-
-/// @note: Takes ownership of shape
+/// @note: Takes ownership of shape and data
 LeTensor *   le_tensor_new_from_data        (LeType        element_type,
                                              LeShape      *shape,
                                              void         *data);
 
 LeTensor *   le_tensor_new_copy             (const LeTensor *another);
 
-LeTensor *   le_tensor_new_cast_f32         (LeTensor     *tensor);
+/// @note: Takes ownership of shape
+LeTensor *   le_tensor_new_rand_f32         (LeShape      *shape);
 
-LeTensor *   le_tensor_new_f32_equal_u8     (LeTensor     *tensor,
-                                             uint8_t       scalar);
+LeTensor *   le_tensor_new_cast_f32         (LeTensor     *tensor);
 
 bool         le_tensor_equal                (const LeTensor     *a,
                                              const LeTensor     *b);
@@ -111,8 +106,10 @@ void         le_tensor_apply_relu           (LeTensor     *tensor);
 
 void         le_tensor_free                 (LeTensor     *tensor);
 
-/** @note: Temporary */
+/** @note: Section Bad */
 #include <stdio.h>
+
+LeTensor *   le_scalar_new_f32              (float         scalar);
 
 const char * le_tensor_to_cstr              (const LeTensor *tensor);
 
@@ -136,6 +133,9 @@ typedef struct LeTensorStats
 } LeTensorStats;
 
 LeTensorStats le_tensor_get_stats (LeTensor *tensor);
+
+LeTensor *   le_tensor_new_f32_equal_u8     (LeTensor     *tensor,
+                                             uint8_t       scalar);
 
 LE_END_DECLS
 

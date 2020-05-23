@@ -11,8 +11,11 @@ le_type_size(LeType type)
     case LE_TYPE_UINT8:
         return 1;
     case LE_TYPE_INT16:
+    case LE_TYPE_UINT16:
+    case LE_TYPE_FLOAT16:
         return 2;
     case LE_TYPE_INT32:
+    case LE_TYPE_UINT32:
     case LE_TYPE_FLOAT32:
         return 4;
     case LE_TYPE_FLOAT64:

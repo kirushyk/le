@@ -29,7 +29,7 @@ le_tensorlist_save(LeList *tensors, const char *filename)
     FILE *fout = fopen(filename, "wb");
     if (fout)
     {
-        uint8_t version = 1;
+        uint8_t version = 2;
         fwrite(&version, sizeof(version), 1, fout);
         uint16_t num_tensors = 0;
         /// @todo: Make this be LeList function
