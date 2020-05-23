@@ -8,7 +8,7 @@
 #include <Accelerate/Accelerate.h>
 
 LeTensor *
-le_accelerate_matrix_new_product(LeTensor *a, bool transpose_a, LeTensor *b, bool transpose_b)
+le_accelerate_matrix_new_product(const LeTensor *a, bool transpose_a, const LeTensor *b, bool transpose_b)
 {
     /// @todo: Take stride into account
     assert(a->element_type == LE_TYPE_FLOAT32);

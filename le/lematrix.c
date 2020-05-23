@@ -286,7 +286,7 @@ le_matrix_new_one_hot(LeTensor *a, unsigned num_classes)
 }
 
 LeTensor *
-le_matrix_new_product(LeTensor *a, LeTensor *b)
+le_matrix_new_product(const LeTensor *a, const LeTensor *b)
 {
     return le_matrix_new_product_full(a, false, b, false);
 }
