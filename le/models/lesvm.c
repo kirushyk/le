@@ -69,7 +69,7 @@ le_svm_new(void)
 }
 
 static float
-kernel_function(LeTensor *a, LeTensor *b, LeKernel kernel)
+kernel_function(const LeTensor *a, const LeTensor *b, LeKernel kernel)
 {
     switch (kernel) {
     case LE_KERNEL_RBF:
@@ -104,7 +104,7 @@ le_svm_margins(LeSVM *self, LeTensor *x)
         LeTensor *margins = le_matrix_new_uninitialized(1, test_examples_count);
         for (unsigned i = 0; i < test_examples_count; i++)
         {
-            LeTensor *example = le_matrix_get_column(x, i);
+            const LeTensor *example = le_matrix_get_column(x, i);
             
             unsigned j;
             float margin = 0;
