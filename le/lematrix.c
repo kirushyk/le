@@ -390,8 +390,8 @@ le_matrix_new_conv2d(LeTensor *image, LeTensor *filter)
 }
 
 
-LeTensor *
-le_matrix_get_column(LeTensor *matrix, unsigned x)
+const LeTensor *
+le_matrix_get_column(const LeTensor *matrix, unsigned x)
 {
     /// @todo: Take stride into account
     assert(matrix->shape->num_dimensions == 2);
