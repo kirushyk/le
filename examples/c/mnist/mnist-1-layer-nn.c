@@ -18,14 +18,14 @@ main()
     LeTensor *train_input_f32 = le_tensor_new_cast_f32(train_input);
     LeTensor *train_labels = le_data_set_get_output(mnist->train);
     le_tensor_reshape(train_labels, 2, 1, 60000);
-    LeTensor *train_output = le_matrix_new_one_hot_u8f32(train_labels, 10);
+    LeTensor *train_output = le_matrix_new_one_hot(LE_TYPE_FLOAT32, train_labels, 10);
     LeTensor *test_images = le_data_set_get_input(mnist->test);
     le_tensor_reshape(test_images, 2, 10000, 28 * 28);
     LeTensor *test_input = le_matrix_new_transpose(test_images);
     LeTensor *test_input_f32 = le_tensor_new_cast_f32(test_input);
     LeTensor *test_labels = le_data_set_get_output(mnist->test);
     le_tensor_reshape(test_labels, 2, 1, 10000);
-    LeTensor *test_output = le_matrix_new_one_hot_u8f32(test_labels, 10);
+    LeTensor *test_output = le_matrix_new_one_hot(LE_TYPE_FLOAT32, test_labels, 10);
     
     Le1LayerNN *neural_network = le_1_layer_nn_new();
     le_1_layer_nn_init(neural_network, 28 * 28, 10);

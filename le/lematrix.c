@@ -59,6 +59,83 @@ le_matrix_add(LeTensor *self, const LeTensor *another)
 }
 
 void
+le_matrix_set_i8(LeTensor *self, unsigned y, unsigned x, int8_t value)
+{
+    assert(self->shape->num_dimensions == 2);
+    
+    assert(y < self->shape->sizes[0]);
+    assert(x < self->shape->sizes[1]);
+    
+    ((int8_t *)self->data)[y * self->shape->sizes[1] + x] = value;
+}
+
+void
+le_matrix_set_u8(LeTensor *self, unsigned y, unsigned x, uint8_t value)
+{
+    assert(self->shape->num_dimensions == 2);
+    
+    assert(y < self->shape->sizes[0]);
+    assert(x < self->shape->sizes[1]);
+    
+    ((uint8_t *)self->data)[y * self->shape->sizes[1] + x] = value;
+}
+
+void
+le_matrix_set_i16(LeTensor *self, unsigned y, unsigned x, int16_t value)
+{
+    assert(self->shape->num_dimensions == 2);
+    
+    assert(y < self->shape->sizes[0]);
+    assert(x < self->shape->sizes[1]);
+    
+    ((int16_t *)self->data)[y * self->shape->sizes[1] + x] = value;
+}
+
+void
+le_matrix_set_u16(LeTensor *self, unsigned y, unsigned x, uint16_t value)
+{
+    assert(self->shape->num_dimensions == 2);
+    
+    assert(y < self->shape->sizes[0]);
+    assert(x < self->shape->sizes[1]);
+    
+    ((uint16_t *)self->data)[y * self->shape->sizes[1] + x] = value;
+}
+
+void
+le_matrix_set_i32(LeTensor *self, unsigned y, unsigned x, int32_t value)
+{
+    assert(self->shape->num_dimensions == 2);
+    
+    assert(y < self->shape->sizes[0]);
+    assert(x < self->shape->sizes[1]);
+    
+    ((int32_t *)self->data)[y * self->shape->sizes[1] + x] = value;
+}
+
+void
+le_matrix_set_u32(LeTensor *self, unsigned y, unsigned x, uint32_t value)
+{
+    assert(self->shape->num_dimensions == 2);
+    
+    assert(y < self->shape->sizes[0]);
+    assert(x < self->shape->sizes[1]);
+    
+    ((uint32_t *)self->data)[y * self->shape->sizes[1] + x] = value;
+}
+
+void
+le_matrix_set_f16(LeTensor *self, unsigned y, unsigned x, half value)
+{
+    assert(self->shape->num_dimensions == 2);
+    
+    assert(y < self->shape->sizes[0]);
+    assert(x < self->shape->sizes[1]);
+    
+    ((half *)self->data)[y * self->shape->sizes[1] + x] = value;
+}
+
+void
 le_matrix_set_f32(LeTensor *self, unsigned y, unsigned x, float value)
 {
     assert(self->shape->num_dimensions == 2);
@@ -69,8 +146,16 @@ le_matrix_set_f32(LeTensor *self, unsigned y, unsigned x, float value)
     ((float *)self->data)[y * self->shape->sizes[1] + x] = value;
 }
 
-#define F16_0 (uint16_t)0
-#define F16_1 (uint16_t)15360
+void
+le_matrix_set_f64(LeTensor *self, unsigned y, unsigned x, double value)
+{
+    assert(self->shape->num_dimensions == 2);
+    
+    assert(y < self->shape->sizes[0]);
+    assert(x < self->shape->sizes[1]);
+    
+    ((double *)self->data)[y * self->shape->sizes[1] + x] = value;
+}
 
 LeTensor *
 le_matrix_new_identity(LeType type, unsigned size)
@@ -123,7 +208,6 @@ le_matrix_new_identity(LeType type, unsigned size)
             default:
                 break;
             }
-            ((float *)self->data)[y * size + x] = (x == y) ? 1.0 : 0.0;
         }
     }
     
@@ -276,7 +360,7 @@ le_matrix_new_sum(const LeTensor *a, unsigned dimension)
 }
 
 LeTensor *
-le_matrix_new_one_hot_u8f32(const LeTensor *a, unsigned num_classes)
+le_matrix_new_one_hot(LeType type, const LeTensor *a, unsigned num_classes)
 {
     /// @todo: Take stride into account
     assert(a->shape->num_dimensions == 2);
@@ -286,7 +370,7 @@ le_matrix_new_one_hot_u8f32(const LeTensor *a, unsigned num_classes)
     LeTensor *self;
     
     self = malloc(sizeof(struct LeTensor));
-    self->element_type = LE_TYPE_FLOAT32;
+    self->element_type = type;
     self->shape = le_shape_new(2, num_classes, a->shape->sizes[1]);
     self->stride = le_shape_get_last_size(self->shape);
     self->owns_data = true;
@@ -296,8 +380,40 @@ le_matrix_new_one_hot_u8f32(const LeTensor *a, unsigned num_classes)
     {
         for (klass = 0; klass < num_classes; klass++)
         {
-            float label = (klass == le_tensor_at_u8(a, example)) ? 1.0f : 0.0f;
-            le_matrix_set_f32(self, klass, example, label);
+            bool hot = (klass == le_tensor_at_u8(a, example));
+            switch (type)
+            {
+            case LE_TYPE_INT8:
+                le_matrix_set_i8(self, klass, example, hot ? 1 : 0);
+                break;
+            case LE_TYPE_UINT8:
+                le_matrix_set_u8(self, klass, example, hot ? 1 : 0);
+                break;
+            case LE_TYPE_INT16:
+                le_matrix_set_i16(self, klass, example, hot ? 1 : 0);
+                break;
+            case LE_TYPE_UINT16:
+                le_matrix_set_u16(self, klass, example, hot ? 1 : 0);
+                break;
+            case LE_TYPE_INT32:
+                le_matrix_set_i32(self, klass, example, hot ? 1 : 0);
+                break;
+            case LE_TYPE_UINT32:
+                le_matrix_set_u32(self, klass, example, hot ? 1 : 0);
+                break;
+            case LE_TYPE_FLOAT16:
+                le_matrix_set_f16(self, klass, example, hot ? F16_1 : F16_0);
+                break;
+            case LE_TYPE_FLOAT32:
+                le_matrix_set_f32(self, klass, example, hot ? 1.0f : 0.0f);
+                break;
+            case LE_TYPE_FLOAT64:
+                le_matrix_set_f32(self, klass, example, hot ? 1.0 : 0.0);
+                break;
+            case LE_TYPE_VOID:
+            default:
+                break;
+            }
         }
     }
 

@@ -5,9 +5,16 @@
 #define __LETYPE_H__
 
 #include <stddef.h>
+#include <stdint.h>
 #include <le/lemacros.h>
 
 LE_BEGIN_DECLS
+
+#define F16_0 (uint16_t)0
+#define F16_1 (uint16_t)15360
+#ifndef half
+typedef uint16_t half;
+#endif
 
 typedef enum LeType
 {
