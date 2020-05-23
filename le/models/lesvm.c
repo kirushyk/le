@@ -13,8 +13,8 @@ struct LeSVM
     LeModel   parent;
     
     /* Training data */
-    LeTensor *x;
-    LeTensor *y;
+    const LeTensor *x;
+    const LeTensor *y;
     
     LeKernel  kernel;
     float     bias;
