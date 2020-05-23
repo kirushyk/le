@@ -51,13 +51,13 @@ LeTensor * le_matrix_new_sum              (LeTensor     *a,
 LeTensor * le_matrix_new_one_hot          (LeTensor     *a,
                                            unsigned      num_classes);
 
-LeTensor * le_matrix_new_product          (LeTensor     *a,
-                                           LeTensor     *b);
+LeTensor * le_matrix_new_product          (const LeTensor     *a,
+                                           const LeTensor     *b);
 
-LeTensor * le_matrix_new_product_full     (LeTensor     *a,
-                                           bool          transpose_a,
-                                           LeTensor     *b,
-                                           bool          transpose_b);
+LeTensor * le_matrix_new_product_full     (const LeTensor     *a,
+                                           bool                transpose_a,
+                                           const LeTensor     *b,
+                                           bool                transpose_b);
 
                                             
 LeTensor * le_matrix_new_conv2d           (LeTensor     *image,

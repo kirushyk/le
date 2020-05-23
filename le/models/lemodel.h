@@ -22,8 +22,8 @@ typedef struct LeModel
 typedef struct LeModelClass
 {
     LeClass parent;
-    LeTensor * (*predict)         (LeModel *model, LeTensor *x);
-    LeList *   (*get_gradients)   (LeModel *model, LeTensor *x, LeTensor *y);
+    LeTensor * (*predict)         (LeModel *model, const LeTensor *x);
+    LeList *   (*get_gradients)   (LeModel *model, const LeTensor *x, const LeTensor *y);
     float      (*train_iteration) (LeModel *model);
 } LeModelClass;
 

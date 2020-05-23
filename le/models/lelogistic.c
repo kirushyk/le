@@ -26,7 +26,7 @@ typedef struct LeLogisticClassifierClass
 
 static LeLogisticClassifierClass klass;
 
-LeTensor * le_logistic_classifier_predict(LeLogisticClassifier *self, LeTensor *x);
+LeTensor * le_logistic_classifier_predict(LeLogisticClassifier *self, const LeTensor *x);
 
 void
 le_logistic_classifier_class_ensure_init(void)
@@ -61,7 +61,7 @@ le_logistic_classifier_new(void)
 }
 
 LeTensor *
-le_logistic_classifier_predict(LeLogisticClassifier *self, LeTensor *x)
+le_logistic_classifier_predict(LeLogisticClassifier *self, const LeTensor *x)
 {
     unsigned i;
     LeTensor *wt = le_matrix_new_transpose(self->weights);
@@ -104,7 +104,7 @@ le_logistic_classifier_train(LeLogisticClassifier *self, const LeTensor *x_train
         x = le_matrix_new_polynomia(x_prev);
         if (x_prev != x_train)
         {
-            le_tensor_free(x_prev);
+            le_tensor_free((LeTensor *)x_prev);
         }
         x_prev = x;
     }

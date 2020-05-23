@@ -10,7 +10,7 @@
 #define EPSILON 1e-5f
 
 float
-le_logistic_loss(LeTensor *h, LeTensor *y)
+le_logistic_loss(const LeTensor *h, const LeTensor *y)
 {
     assert(h->shape->num_dimensions == 2);
     assert(y->shape->num_dimensions == 2);
@@ -32,7 +32,7 @@ le_logistic_loss(LeTensor *h, LeTensor *y)
 }
 
 float
-le_cross_entropy_loss(LeTensor *h, LeTensor *y)
+le_cross_entropy_loss(const LeTensor *h, const LeTensor *y)
 {
     assert(h->shape->num_dimensions == 2);
     assert(y->shape->num_dimensions == 2);
@@ -59,7 +59,7 @@ le_cross_entropy_loss(LeTensor *h, LeTensor *y)
 }
 
 float
-le_one_hot_misclassification(LeTensor *h, LeTensor *y)
+le_one_hot_misclassification(const LeTensor *h, const LeTensor *y)
 {
     assert(h->shape->num_dimensions == 2);
     assert(y->shape->num_dimensions == 2);
@@ -164,7 +164,7 @@ le_apply_logistic_loss_derivative(LeTensor *h, LeTensor *y)
 }
 
 float 
-le_loss(LeLoss loss, LeTensor *predictions, LeTensor *labels)
+le_loss(LeLoss loss, const LeTensor *predictions, const LeTensor *labels)
 {
     switch (loss) 
     {

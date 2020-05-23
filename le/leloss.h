@@ -9,14 +9,14 @@
 
 LE_BEGIN_DECLS
 
-float le_logistic_loss                       (LeTensor *predictions,
-                                              LeTensor *labels);
+float le_logistic_loss                       (const LeTensor *predictions,
+                                              const LeTensor *labels);
 
-float le_cross_entropy_loss                  (LeTensor *predictions,
-                                              LeTensor *label);
+float le_cross_entropy_loss                  (const LeTensor *predictions,
+                                              const LeTensor *label);
 
-float le_one_hot_misclassification           (LeTensor *predictions,
-                                              LeTensor *labels);
+float le_one_hot_misclassification           (const LeTensor *predictions,
+                                              const LeTensor *labels);
 
 /// @note: Partial derivative with respect to predictions
 /// predictions <- ∂J(predictions, labels) / ∂predictions
@@ -39,15 +39,15 @@ typedef enum LeLoss {
    LE_LOSS_CROSS_ENTROPY
 } LeLoss;
 
-float        le_loss                  (LeLoss    loss,
-                                       LeTensor *predictions,
-                                       LeTensor *labels);
+float        le_loss                  (LeLoss          loss,
+                                       const LeTensor *predictions,
+                                       const LeTensor *labels);
 
-void         le_apply_loss_derivative (LeLoss    loss,
-                                       LeTensor *predictions,
-                                       LeTensor *labels);
+void         le_apply_loss_derivative (LeLoss          loss,
+                                       LeTensor       *predictions,
+                                       LeTensor       *labels);
 
-const char * le_loss_get_desc         (LeLoss    loss);    
+const char * le_loss_get_desc         (LeLoss          loss);    
 
 LE_END_DECLS
 

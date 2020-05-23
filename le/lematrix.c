@@ -292,7 +292,7 @@ le_matrix_new_product(LeTensor *a, LeTensor *b)
 }
 
 LeTensor *
-le_matrix_new_product_full(LeTensor *a, bool transpose_a, LeTensor *b, bool transpose_b)
+le_matrix_new_product_full(const LeTensor *a, bool transpose_a, const LeTensor *b, bool transpose_b)
 {
     /// @todo: Take stride into account
 #ifdef __APPLE__
