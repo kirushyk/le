@@ -67,12 +67,12 @@ void         le_tensor_f32_set              (LeTensor     *tensor,
 void         le_tensor_add                  (LeTensor     *matrix,
                                              LeTensor     *another);
 
-void         le_tensor_subtract             (LeTensor     *a,
-                                             LeTensor     *b);
+void         le_tensor_subtract             (LeTensor       *a,
+                                             const LeTensor *b);
 
-void         le_tensor_subtract_scaled      (LeTensor     *a,
-                                             float         scale,
-                                             LeTensor     *b);
+void         le_tensor_subtract_scaled      (LeTensor       *a,
+                                             float           scale,
+                                             const LeTensor *b);
 
 /// @note: a = a * b
 void         le_tensor_multiply_by_scalar   (LeTensor     *a,

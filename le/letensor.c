@@ -412,7 +412,7 @@ le_tensor_add(LeTensor *a, LeTensor *b)
 }
 
 void
-le_tensor_subtract(LeTensor *a, LeTensor *b)
+le_tensor_subtract(LeTensor *a, const LeTensor *b)
 {
     /// @todo: Take stride into account
     assert(le_shape_equal(a->shape, b->shape));
@@ -427,7 +427,7 @@ le_tensor_subtract(LeTensor *a, LeTensor *b)
 }
 
 void
-le_tensor_subtract_scaled(LeTensor *a, float scale, LeTensor *b)
+le_tensor_subtract_scaled(LeTensor *a, float scale, const LeTensor *b)
 {
     /// @todo: Take stride into account
     assert(le_shape_equal(a->shape, b->shape));

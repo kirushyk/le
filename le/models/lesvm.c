@@ -30,7 +30,8 @@ typedef struct LeSVMClass
 
 static LeSVMClass klass;
 
-LeTensor * le_svm_predict(LeSVM *self, LeTensor *x);
+LeTensor *
+le_svm_predict(LeSVM *self, const LeTensor *x);
 
 void
 le_svm_class_ensure_init(void)
@@ -40,7 +41,7 @@ le_svm_class_ensure_init(void)
     if (!initialized)
     {
         klass.parent.predict =
-        (LeTensor *(*)(LeModel *, LeTensor *))le_svm_predict;
+            (LeTensor *(*)(LeModel *, const LeTensor *))le_svm_predict;
         initialized = 1;
     }
 }
@@ -287,7 +288,7 @@ le_svm_train(LeSVM *self, const LeTensor *x_train, const LeTensor *y_train, LeSV
 }
 
 LeTensor *
-le_svm_predict(LeSVM *self, LeTensor *x)
+le_svm_predict(LeSVM *self, const LeTensor *x)
 {
     assert(self != NULL);
     assert(x != NULL);
