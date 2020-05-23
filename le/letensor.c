@@ -34,16 +34,16 @@ le_tensor_new_from_va_list(LeType element_type, unsigned num_dimensions, va_list
     {
         switch (self->element_type)
         {
-        case LE_TYPE_UINT8:
-            {
-                uint8_t value = (uint8_t)va_arg(dims_and_data, int);
-                ((uint8_t *)self->data)[i] = value;
-            }
-            break;
         case LE_TYPE_INT8:
             {
                 int8_t value = (int8_t)va_arg(dims_and_data, int);
                 ((int8_t *)self->data)[i] = value;
+            }
+            break;
+        case LE_TYPE_UINT8:
+            {
+                uint8_t value = (uint8_t)va_arg(dims_and_data, int);
+                ((uint8_t *)self->data)[i] = value;
             }
             break;
         case LE_TYPE_INT16:
@@ -52,7 +52,19 @@ le_tensor_new_from_va_list(LeType element_type, unsigned num_dimensions, va_list
                 ((int16_t *)self->data)[i] = value;
             }
             break;
+        case LE_TYPE_UINT16:
+            {
+                uint16_t value = (uint16_t)va_arg(dims_and_data, int);
+                ((uint16_t *)self->data)[i] = value;
+            }
+            break;
         case LE_TYPE_INT32:
+            {
+                int32_t value = (int32_t)va_arg(dims_and_data, int);
+                ((int32_t *)self->data)[i] = value;
+            }
+            break;
+        case LE_TYPE_UINT32:
             {
                 int32_t value = (int32_t)va_arg(dims_and_data, int);
                 ((int32_t *)self->data)[i] = value;
