@@ -78,7 +78,7 @@ le_tensorlist_load(const char *filename)
     {
         uint8_t version = 0;
         fread(&version, sizeof(version), 1, fin);
-        if (version == 1)
+        if (version <= 2)
         {
             uint16_t num_tensors = 0;
             fread(&num_tensors, sizeof(num_tensors), 1, fin);
