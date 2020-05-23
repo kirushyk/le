@@ -100,7 +100,7 @@ le_accelerate_rbf(LeTensor *a, LeTensor *b, float sigma)
 }
 
 float
-le_accelerate_dot_product(LeTensor *a, LeTensor *b)
+le_accelerate_dot_product(const LeTensor *a, const LeTensor *b)
 {
     assert(a->element_type == LE_TYPE_FLOAT32);
     assert(b->element_type == LE_TYPE_FLOAT32);
