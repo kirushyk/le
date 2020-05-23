@@ -66,18 +66,19 @@ le_logistic_classifier_predict(LeLogisticClassifier *self, const LeTensor *x)
 {
     unsigned i;
     LeTensor *wt = le_matrix_new_transpose(self->weights);
-    const LeTensor *x_poly = x;
-    const LeTensor *x_prev = x;
+    LeTensor *x_prev = NULL;
+    LeTensor *x_poly = NULL;
     for (i = 0; i < self->polynomia_degree; i++)
     {
-        x_poly = le_matrix_new_polynomia(x_prev);
+        /// @note: Refrain from init x_prev = x to prevent const
+        x_poly = le_matrix_new_polynomia(x_prev ? x_prev : x);
         if (x_prev != x)
         {
             le_tensor_free(x_prev);
         }
         x_prev = x_poly;
     }
-    LeTensor *a = le_matrix_new_product(wt, x_poly);
+    LeTensor *a = le_matrix_new_product(wt, x_poly ? x_poly : x);
     le_tensor_free(wt);
     if (x_poly != x)
     {
