@@ -619,7 +619,7 @@ le_tensor_apply_gt_f32(LeTensor *self, float scalar)
 }
 
 void
-le_tensor_apply_sign(LeTensor *self)
+le_tensor_apply_sgn(LeTensor *self)
 {
     /// @todo: Take stride into account
     unsigned i;

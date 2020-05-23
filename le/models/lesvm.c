@@ -292,7 +292,7 @@ le_svm_predict(LeSVM *self, const LeTensor *x)
     assert(x != NULL);
 
     LeTensor *y_predicted = le_svm_margins(self, x);
-    le_tensor_apply_sign(y_predicted);
+    le_tensor_apply_sgn(y_predicted);
     return y_predicted;
 }
 
