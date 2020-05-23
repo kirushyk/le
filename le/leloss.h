@@ -20,18 +20,18 @@ float le_one_hot_misclassification           (const LeTensor *predictions,
 
 /// @note: Partial derivative with respect to predictions
 /// predictions <- ∂J(predictions, labels) / ∂predictions
-void  le_apply_cross_entropy_loss_derivative (LeTensor *predictions,
-                                              LeTensor *labels);
+void  le_apply_cross_entropy_loss_derivative (LeTensor       *predictions,
+                                              const LeTensor *labels);
 
 /// @note: Partial derivative with respect to predictions
 /// predictions <- ∂J(predictions, labels) / ∂predictions
-void  le_apply_mse_loss_derivative           (LeTensor *predictions,
-                                              LeTensor *labels);
+void  le_apply_mse_loss_derivative           (LeTensor       *predictions,
+                                              const LeTensor *labels);
 
 /// @note: Partial derivative with respect to predictions
 /// predictions <- ∂J(predictions, labels) / ∂predictions
-void  le_apply_logistic_loss_derivative      (LeTensor *predictions,
-                                              LeTensor *labels);
+void  le_apply_logistic_loss_derivative      (LeTensor       *predictions,
+                                              const LeTensor *labels);
 
 typedef enum LeLoss {
    LE_LOSS_MSE,
@@ -45,7 +45,7 @@ float        le_loss                  (LeLoss          loss,
 
 void         le_apply_loss_derivative (LeLoss          loss,
                                        LeTensor       *predictions,
-                                       LeTensor       *labels);
+                                       const LeTensor *labels);
 
 const char * le_loss_get_desc         (LeLoss          loss);    
 

@@ -26,10 +26,10 @@ typedef struct LeSequentialClass
 static LeSequentialClass klass;
 
 LeTensor *
-le_sequential_predict(LeSequential *self, LeTensor *x);
+le_sequential_predict(LeSequential *self, const LeTensor *x);
 
 LeList *
-le_sequential_get_gradients(LeSequential *self, LeTensor *x, LeTensor *y);
+le_sequential_get_gradients(LeSequential *self, const LeTensor *x, const LeTensor *y);
 
 static void
 le_sequential_class_ensure_init()
@@ -39,9 +39,9 @@ le_sequential_class_ensure_init()
     if (!initialized)
     {
         klass.parent.predict =
-        (LeTensor *(*)(LeModel *, LeTensor *))le_sequential_predict;
+            (LeTensor *(*)(LeModel *, const LeTensor *))le_sequential_predict;
         klass.parent.get_gradients =
-            (LeList *(*)(LeModel *, LeTensor *, LeTensor *))le_sequential_get_gradients;
+            (LeList *(*)(LeModel *, const LeTensor *, const LeTensor *))le_sequential_get_gradients;
         initialized = 1;
     }
 }
@@ -90,7 +90,7 @@ le_sequential_set_loss(LeSequential *self, LeLoss loss)
  * @param inputs if not null is used to cache input of each layer.
  */
 static LeTensor *
-forward_propagation(LeSequential *self, LeTensor *x, LeList **inputs)
+forward_propagation(LeSequential *self, const LeTensor *x, LeList **inputs)
 {
     assert(self);
     assert(x);
@@ -118,13 +118,13 @@ forward_propagation(LeSequential *self, LeTensor *x, LeList **inputs)
 }
 
 LeTensor *
-le_sequential_predict(LeSequential *self, LeTensor *x)
+le_sequential_predict(LeSequential *self, const LeTensor *x)
 {
     return forward_propagation(self, x, NULL);
 }
 
 LeList *
-le_sequential_get_gradients(LeSequential *self, LeTensor *x, LeTensor *y)
+le_sequential_get_gradients(LeSequential *self, const LeTensor *x, const LeTensor *y)
 {
     assert(self);
     assert(x);

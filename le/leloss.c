@@ -102,7 +102,7 @@ le_one_hot_misclassification(const LeTensor *h, const LeTensor *y)
 }
 
 void
-le_apply_cross_entropy_loss_derivative(LeTensor *h, LeTensor *y)
+le_apply_cross_entropy_loss_derivative(LeTensor *h, const LeTensor *y)
 {
     assert(h->shape->num_dimensions == 2);
     assert(y->shape->num_dimensions == 2);
@@ -123,7 +123,7 @@ le_apply_cross_entropy_loss_derivative(LeTensor *h, LeTensor *y)
 }
 
 void
-le_apply_mse_loss_derivative(LeTensor *h, LeTensor *y)
+le_apply_mse_loss_derivative(LeTensor *h, const LeTensor *y)
 {
     assert(h->shape->num_dimensions == 2);
     assert(y->shape->num_dimensions == 2);
@@ -142,7 +142,7 @@ le_apply_mse_loss_derivative(LeTensor *h, LeTensor *y)
 }
 
 void
-le_apply_logistic_loss_derivative(LeTensor *h, LeTensor *y)
+le_apply_logistic_loss_derivative(LeTensor *h, const LeTensor *y)
 {
     assert(h->shape->num_dimensions == 2);
     assert(y->shape->num_dimensions == 2);
@@ -179,7 +179,7 @@ le_loss(LeLoss loss, const LeTensor *predictions, const LeTensor *labels)
 }
 
 void
-le_apply_loss_derivative(LeLoss loss, LeTensor *predictions, LeTensor *labels)
+le_apply_loss_derivative(LeLoss loss, LeTensor *predictions, const LeTensor *labels)
 {
     switch (loss) 
     {

@@ -24,8 +24,8 @@ void           le_sequential_add      (LeSequential *model,
 void           le_sequential_set_loss (LeSequential *model,
                                        LeLoss        loss);
 
-LeTensor *     le_sequential_predict  (LeSequential *model,
-                                       LeTensor     *x);
+LeTensor *     le_sequential_predict  (LeSequential       *model,
+                                       const LeTensor     *x);
 
 void           le_sequential_to_dot   (LeSequential *model,
                                        const char   *filename);
