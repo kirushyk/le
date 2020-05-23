@@ -10,7 +10,7 @@ print("Train set: ")
 print("x =\n", x)
 print("y =\n", y)
 
-svm = le.SVM;
+svm = le.SVM();
 svm.train(x, y)
 h = svm.predict(x)
 print("Predicted value =\n", h)
