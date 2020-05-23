@@ -4,6 +4,10 @@
 #ifndef __LE_OBJECT_H__
 #define __LE_OBJECT_H__
 
+#include "lemacros.h"
+
+LE_BEGIN_DECLS
+
 typedef struct LeObject LeObject;
 
 typedef struct LeClass
@@ -23,5 +27,7 @@ struct LeObject
 LeObject * le_object_alloc (void);
 
 void       le_object_free  (LeObject *);
+
+LE_END_DECLS
 
 #endif

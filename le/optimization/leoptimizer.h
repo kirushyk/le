@@ -6,6 +6,9 @@
 
 #include "../leobject.h"
 #include <le/lelist.h>
+#include <le/lemacros.h>
+
+LE_BEGIN_DECLS
 
 typedef struct LeOptimizer
 {
@@ -27,5 +30,7 @@ void le_optimizer_construct (LeOptimizer *optimizer);
 void le_optimizer_step      (LeOptimizer *optimizer);
 
 void le_optimizer_free      (LeOptimizer *optimizer);
+
+LE_END_DECLS
 
 #endif

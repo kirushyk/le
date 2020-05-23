@@ -4,6 +4,10 @@
 #ifndef __LELIST_H__
 #define __LELIST_H__
 
+#include "lemacros.h"
+
+LE_BEGIN_DECLS
+
 typedef struct LeList
 {
     void *data;
@@ -31,5 +35,7 @@ typedef void(* LeCallback)(void *element, void *user_data);
 void     le_list_foreach2 (LeList     *list,
                            LeCallback  callback,
                            void       *user_data);
+
+LE_END_DECLS
 
 #endif

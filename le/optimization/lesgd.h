@@ -8,9 +8,12 @@
 #ifndef __LESGD_H__
 #define __LESGD_H__
 
-#include "leoptimizer.h"
+#include <le/lemacros.h>
 #include <le/lelist.h>
 #include <le/models/lemodel.h>
+#include "leoptimizer.h"
+
+LE_BEGIN_DECLS
 
 typedef struct LeSGD LeSGD;
 
@@ -22,5 +25,7 @@ LeSGD * le_sgd_new  (LeModel  *model,
                      float     learning_rate);
 
 void    le_sgd_free (LeSGD  *optimizer);
+
+LE_END_DECLS
 
 #endif

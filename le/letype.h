@@ -5,6 +5,9 @@
 #define __LETYPE_H__
 
 #include <stddef.h>
+#include <le/lemacros.h>
+
+LE_BEGIN_DECLS
 
 typedef enum LeType
 {
@@ -18,5 +21,7 @@ typedef enum LeType
 } LeType;
 
 size_t le_type_size(LeType type);
+
+LE_END_DECLS
 
 #endif

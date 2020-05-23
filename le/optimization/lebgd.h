@@ -11,6 +11,9 @@
 #include "leoptimizer.h"
 #include <le/lelist.h>
 #include <le/models/lemodel.h>
+#include <le/lemacros.h>
+
+LE_BEGIN_DECLS
 
 typedef struct LeBGD LeBGD;
 
@@ -26,5 +29,7 @@ LeBGD * le_bgd_new        (LeModel  *model,
                            float     learning_rate);
 
 void    le_bgd_free       (LeBGD    *optimizer);
+
+LE_END_DECLS
 
 #endif

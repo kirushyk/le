@@ -5,6 +5,9 @@
 #define __LE1LAYERNN_H__
 
 #include "../letensor.h"
+#include <le/lemacros.h>
+
+LE_BEGIN_DECLS
 
 typedef struct Le1LayerNN Le1LayerNN;
 
@@ -26,5 +29,7 @@ void         le_1_layer_nn_train          (Le1LayerNN                *classifier
                                            Le1LayerNNTrainingOptions  options);
 
 void         le_1_layer_nn_free           (Le1LayerNN                *classifier);
+
+LE_END_DECLS
 
 #endif

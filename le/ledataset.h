@@ -5,6 +5,9 @@
 #define __LETRAININGDATA_H__
 
 #include "letensor.h"
+#include "lemacros.h"
+
+LE_BEGIN_DECLS
 
 typedef struct LeDataSet LeDataSet;
 
@@ -19,5 +22,7 @@ LeTensor *       le_data_set_get_input  (LeDataSet *data);
 LeTensor *       le_data_set_get_output (LeDataSet *data);
 
 void             le_data_set_free       (LeDataSet *data);
+
+LE_END_DECLS
 
 #endif

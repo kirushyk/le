@@ -7,6 +7,9 @@
 #include <le/leobject.h>
 #include <le/letensor.h>
 #include <le/lelist.h>
+#include <le/lemacros.h>
+
+LE_BEGIN_DECLS
 
 /** @note: Abstract Layer class */
 
@@ -55,5 +58,7 @@ LeTensor *   le_layer_backward_prop        (LeLayer     *layer,
 LeShape *    le_layer_get_output_shape     (LeLayer     *layer);
 
 const char * le_layer_get_description      (LeLayer     *layer);
+
+LE_END_DECLS
 
 #endif

@@ -4,7 +4,7 @@
 #ifndef __LEACTIVATIONLAYER_H__
 #define __LEACTIVATIONLAYER_H__
 
-#include "../../lemacros.h"
+#include <le/lemacros.h>
 #include "lelayer.h"
 
 LE_BEGIN_DECLS
