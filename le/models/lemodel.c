@@ -34,7 +34,7 @@ le_model_predict(LeModel *self, const LeTensor *x)
 }
 
 LeList *
-le_model_get_gradients(LeModel *self, LeTensor *x, LeTensor *y)
+le_model_get_gradients(LeModel *self, const LeTensor *x, const LeTensor *y)
 {
     assert(self);
     assert(LE_OBJECT_GET_CLASS(self));

@@ -41,8 +41,8 @@ LeTensor * le_model_predict          (LeModel        *model,
                                       const LeTensor *x);
 
 LeList *   le_model_get_gradients    (LeModel        *model,
-                                      LeTensor       *x,
-                                      LeTensor       *y);
+                                      const LeTensor *x,
+                                      const LeTensor *y);
 
 float      le_model_train_iteration  (LeModel        *model);
 

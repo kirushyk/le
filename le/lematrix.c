@@ -390,7 +390,7 @@ le_matrix_new_conv2d(LeTensor *image, LeTensor *filter)
 }
 
 
-const LeTensor *
+LeTensor *
 le_matrix_get_column(const LeTensor *matrix, unsigned x)
 {
     /// @todo: Take stride into account

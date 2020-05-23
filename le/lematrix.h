@@ -63,8 +63,8 @@ LeTensor * le_matrix_new_product_full     (const LeTensor     *a,
 LeTensor * le_matrix_new_conv2d           (LeTensor     *image,
                                            LeTensor     *filter);
 
-const LeTensor * le_matrix_get_column           (const LeTensor *matrix,
-                                                 unsigned        x);
+LeTensor * le_matrix_get_column           (const LeTensor *matrix,
+                                           unsigned        x);
 
 LeTensor * le_matrix_get_column_copy      (LeTensor     *matrix,
                                            unsigned      x);
