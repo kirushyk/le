@@ -28,10 +28,6 @@ void       le_matrix_set_element          (LeTensor     *matrix,
                                            unsigned      x,
                                            float         value);
 
-LeTensor * le_matrix_new_from_data        (unsigned      height,
-                                           unsigned      width,
-                                           const float  *data);
-
 LeTensor * le_matrix_new_identity         (unsigned      size);
 
 LeTensor * le_matrix_new_uninitialized    (unsigned      height,
@@ -45,10 +41,10 @@ LeTensor * le_matrix_new_rand             (unsigned      height,
 
 LeTensor * le_matrix_new_transpose        (LeTensor     *a);
 
-LeTensor * le_matrix_new_sum              (LeTensor     *a,
+LeTensor * le_matrix_new_sum              (const LeTensor     *a,
                                            unsigned      dimension);
 
-LeTensor * le_matrix_new_one_hot          (LeTensor     *a,
+LeTensor * le_matrix_new_one_hot          (const LeTensor     *a,
                                            unsigned      num_classes);
 
 LeTensor * le_matrix_new_product          (const LeTensor     *a,
@@ -60,8 +56,8 @@ LeTensor * le_matrix_new_product_full     (const LeTensor     *a,
                                            bool                transpose_b);
 
                                             
-LeTensor * le_matrix_new_conv2d           (LeTensor     *image,
-                                           LeTensor     *filter);
+LeTensor * le_matrix_new_conv2d           (const LeTensor     *image,
+                                           const LeTensor     *filter);
 
 LeTensor * le_matrix_get_column           (const LeTensor *matrix,
                                            unsigned        x);

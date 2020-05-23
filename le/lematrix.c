@@ -70,23 +70,6 @@ le_matrix_set_element(LeTensor *self, unsigned y, unsigned x, float value)
 }
 
 LeTensor *
-le_matrix_new_from_data(unsigned height, unsigned width, const float *data)
-{
-    LeTensor *self;
-    size_t data_size = height * width * sizeof(float);
-    
-    self = malloc(sizeof(struct LeTensor));
-    self->element_type = LE_TYPE_FLOAT32;
-    self->shape = le_shape_new(2, height, width);
-    self->stride = width;
-    self->owns_data = false;
-    self->data = malloc(data_size);
-    memcpy(self->data, data, data_size);
-    
-    return self;
-}
-
-LeTensor *
 le_matrix_new_identity(unsigned size)
 {
     unsigned x;
@@ -227,7 +210,7 @@ le_matrix_new_transpose(LeTensor *a)
 
 
 LeTensor *
-le_matrix_new_sum(LeTensor *a, unsigned dimension)
+le_matrix_new_sum(const LeTensor *a, unsigned dimension)
 {
     /// @todo: Take stride into account
     unsigned x, y;
@@ -257,7 +240,7 @@ le_matrix_new_sum(LeTensor *a, unsigned dimension)
 }
 
 LeTensor *
-le_matrix_new_one_hot(LeTensor *a, unsigned num_classes)
+le_matrix_new_one_hot(const LeTensor *a, unsigned num_classes)
 {
     /// @todo: Take stride into account
     assert(a->shape->num_dimensions == 2);
@@ -347,7 +330,7 @@ le_matrix_new_product_full(const LeTensor *a, bool transpose_a, const LeTensor *
 }
 
 LeTensor *
-le_matrix_new_conv2d(LeTensor *image, LeTensor *filter)
+le_matrix_new_conv2d(const LeTensor *image, const LeTensor *filter)
 {
     assert(image->shape->num_dimensions == 2);
     assert(filter->shape->num_dimensions == 2);
