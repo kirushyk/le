@@ -1,6 +1,8 @@
 /* Copyright (c) Kyrylo Polezhaiev and contributors. All rights reserved.
    Released under the MIT license. See LICENSE file in the project root for full license information. */
 
+#define DEFAULT_LOG_CATEGORY "tensor"
+
 #include "letensor.h"
 #include "letensor-imp.h"
 #include <assert.h>
@@ -30,6 +32,10 @@ le_tensor_new_from_va_list(LeType element_type, unsigned num_dimensions, va_list
     self->owns_data = true;
     unsigned elements_count = le_shape_get_elements_count(self->shape);
     self->data = malloc(elements_count * le_type_size(self->element_type));
+
+    if (self->element_type == LE_TYPE_FLOAT16)
+        LE_ERROR("F16 Tensor init from va_list not implemented");
+        
     for (unsigned i = 0; i < elements_count; i++)
     {
         switch (self->element_type)
@@ -82,6 +88,7 @@ le_tensor_new_from_va_list(LeType element_type, unsigned num_dimensions, va_list
                 ((double *)self->data)[i] = value;
             }
             break;
+        case LE_TYPE_FLOAT16:
         case LE_TYPE_VOID:
         default:
             break;
