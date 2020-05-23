@@ -13,8 +13,8 @@ struct LeSVM
     LeModel   parent;
     
     /* Training data */
-    const LeTensor *x;
-    const LeTensor *y;
+    LeTensor *x;
+    LeTensor *y;
     
     LeKernel  kernel;
     float     bias;
@@ -81,7 +81,7 @@ kernel_function(const LeTensor *a, const LeTensor *b, LeKernel kernel)
 }
 
 LeTensor *
-le_svm_margins(LeSVM *self, LeTensor *x)
+le_svm_margins(LeSVM *self, const LeTensor *x)
 {
     if (self == NULL)
         return NULL;
@@ -104,7 +104,7 @@ le_svm_margins(LeSVM *self, LeTensor *x)
         LeTensor *margins = le_matrix_new_uninitialized(1, test_examples_count);
         for (unsigned i = 0; i < test_examples_count; i++)
         {
-            const LeTensor *example = le_matrix_get_column(x, i);
+            LeTensor *example = le_matrix_get_column(x, i);
             
             unsigned j;
             float margin = 0;
