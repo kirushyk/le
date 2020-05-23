@@ -28,7 +28,7 @@ le_matrix_get_height(const LeTensor *self)
 }
 
 float
-le_matrix_at(const LeTensor *self, unsigned y, unsigned x)
+le_matrix_at_f32(const LeTensor *self, unsigned y, unsigned x)
 {
     assert(self->shape->num_dimensions == 2);
     
@@ -59,7 +59,7 @@ le_matrix_add(LeTensor *self, const LeTensor *another)
 }
 
 void
-le_matrix_set_element(LeTensor *self, unsigned y, unsigned x, float value)
+le_matrix_set_f32(LeTensor *self, unsigned y, unsigned x, float value)
 {
     assert(self->shape->num_dimensions == 2);
     
@@ -70,7 +70,7 @@ le_matrix_set_element(LeTensor *self, unsigned y, unsigned x, float value)
 }
 
 LeTensor *
-le_matrix_new_identity(unsigned size)
+le_matrix_new_identity_f32(unsigned size)
 {
     unsigned x;
     unsigned y;
@@ -95,7 +95,7 @@ le_matrix_new_identity(unsigned size)
 }
 
 LeTensor *
-le_matrix_new_uninitialized(unsigned height, unsigned width)
+le_matrix_new_uninitialized_f32(unsigned height, unsigned width)
 {
     LeTensor *self;
     
@@ -110,7 +110,7 @@ le_matrix_new_uninitialized(unsigned height, unsigned width)
 }
 
 LeTensor *
-le_matrix_new_zeros(unsigned height, unsigned width)
+le_matrix_new_zeros_f32(unsigned height, unsigned width)
 {
     unsigned i;
     unsigned elements_count;
@@ -134,7 +134,7 @@ le_matrix_new_zeros(unsigned height, unsigned width)
 
 
 LeTensor *
-le_matrix_new_rand(unsigned height, unsigned width)
+le_matrix_new_rand_f32(unsigned height, unsigned width)
 {
     unsigned i;
     unsigned elements_count;
@@ -240,7 +240,7 @@ le_matrix_new_sum(const LeTensor *a, unsigned dimension)
 }
 
 LeTensor *
-le_matrix_new_one_hot(const LeTensor *a, unsigned num_classes)
+le_matrix_new_one_hot_u8f32(const LeTensor *a, unsigned num_classes)
 {
     /// @todo: Take stride into account
     assert(a->shape->num_dimensions == 2);
@@ -261,7 +261,7 @@ le_matrix_new_one_hot(const LeTensor *a, unsigned num_classes)
         for (klass = 0; klass < num_classes; klass++)
         {
             float label = (klass == le_tensor_at_u8(a, example)) ? 1.0f : 0.0f;
-            le_matrix_set_element(self, klass, example, label);
+            le_matrix_set_f32(self, klass, example, label);
         }
     }
 
@@ -362,10 +362,10 @@ le_matrix_new_conv2d(const LeTensor *image, const LeTensor *filter)
             {
                 for (int32_t fx = 0; fx < fw; fx++)
                 {
-                    value += le_matrix_at(image, oy + fy, ox + fx) * le_matrix_at(filter, fy, fx);
+                    value += le_matrix_at_f32(image, oy + fy, ox + fx) * le_matrix_at_f32(filter, fy, fx);
                 }
             }
-            le_matrix_set_element(self, oy, ox, value);
+            le_matrix_set_f32(self, oy, ox, value);
         }
     }
     
@@ -399,7 +399,7 @@ le_matrix_get_column_copy(LeTensor *self, unsigned x)
     
     unsigned y;
     unsigned height = le_matrix_get_height(self);
-    LeTensor *column = le_matrix_new_uninitialized(height, 1);
+    LeTensor *column = le_matrix_new_uninitialized_f32(height, 1);
     
     for (y = 0; y < height; y++)
     {
@@ -424,7 +424,7 @@ le_matrix_apply_softmax(LeTensor *self)
         float max = -INFINITY;
         for (klass = 0; klass < num_classes; klass++)
         {
-            float value = le_matrix_at(self, klass, example);
+            float value = le_matrix_at_f32(self, klass, example);
             if (value > max)
             {
                 max = value;
@@ -433,15 +433,15 @@ le_matrix_apply_softmax(LeTensor *self)
         float sum = 0;
         for (klass = 0; klass < num_classes; klass++)
         {
-            float activation = expf(le_matrix_at(self, klass, example) - max);
+            float activation = expf(le_matrix_at_f32(self, klass, example) - max);
             sum += activation;
-            le_matrix_set_element(self, klass, example, activation);
+            le_matrix_set_f32(self, klass, example, activation);
         }
         for (klass = 0; klass < num_classes; klass++)
         {
-            float activation = le_matrix_at(self, klass, example);
+            float activation = le_matrix_at_f32(self, klass, example);
             activation /= sum;
-            le_matrix_set_element(self, klass, example, activation);
+            le_matrix_set_f32(self, klass, example, activation);
         }
     }
 }

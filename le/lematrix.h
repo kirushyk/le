@@ -15,7 +15,7 @@ unsigned   le_matrix_get_width            (const LeTensor *matrix);
 
 unsigned   le_matrix_get_height           (const LeTensor *matrix);
 
-float      le_matrix_at                   (const LeTensor *matrix,
+float      le_matrix_at_f32                   (const LeTensor *matrix,
                                            unsigned      y,
                                            unsigned      x);
 
@@ -23,20 +23,20 @@ float      le_matrix_at                   (const LeTensor *matrix,
 void       le_matrix_add                  (LeTensor     *matrix,
                                            const LeTensor *another);
 
-void       le_matrix_set_element          (LeTensor     *matrix,
+void       le_matrix_set_f32          (LeTensor     *matrix,
                                            unsigned      y,
                                            unsigned      x,
                                            float         value);
 
-LeTensor * le_matrix_new_identity         (unsigned      size);
+LeTensor * le_matrix_new_identity_f32         (unsigned      size);
 
-LeTensor * le_matrix_new_uninitialized    (unsigned      height,
+LeTensor * le_matrix_new_uninitialized_f32    (unsigned      height,
                                            unsigned      width);
 
-LeTensor * le_matrix_new_zeros            (unsigned      height,
+LeTensor * le_matrix_new_zeros_f32            (unsigned      height,
                                            unsigned      width);
 
-LeTensor * le_matrix_new_rand             (unsigned      height,
+LeTensor * le_matrix_new_rand_f32             (unsigned      height,
                                            unsigned      width);
 
 LeTensor * le_matrix_new_transpose        (LeTensor     *a);
@@ -44,7 +44,7 @@ LeTensor * le_matrix_new_transpose        (LeTensor     *a);
 LeTensor * le_matrix_new_sum              (const LeTensor     *a,
                                            unsigned      dimension);
 
-LeTensor * le_matrix_new_one_hot          (const LeTensor     *a,
+LeTensor * le_matrix_new_one_hot_u8f32          (const LeTensor     *a,
                                            unsigned      num_classes);
 
 LeTensor * le_matrix_new_product          (const LeTensor     *a,

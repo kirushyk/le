@@ -88,8 +88,6 @@ le_tensor_new_from_va_list(LeType element_type, unsigned num_dimensions, va_list
                 ((double *)self->data)[i] = value;
             }
             break;
-        case LE_TYPE_FLOAT16:
-        case LE_TYPE_VOID:
         default:
             break;
         }

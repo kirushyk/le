@@ -48,8 +48,8 @@ le_cross_entropy_loss(const LeTensor *h, const LeTensor *y)
         float loss = 0.0f;
         for (unsigned j = 0; j < num_classes; j++)
         {
-            float y_ji = le_matrix_at(y, j, i);
-            float h_ji = le_matrix_at(h, j, i);
+            float y_ji = le_matrix_at_f32(y, j, i);
+            float h_ji = le_matrix_at_f32(h, j, i);
             loss -= y_ji * logf(h_ji);
         }
         cost += loss;
@@ -79,13 +79,13 @@ le_one_hot_misclassification(const LeTensor *h, const LeTensor *y)
         float labeled_class_probability = 0.0f;
         for (j = 0; j < classes_count; j++)
         {
-            float predicted_probability = le_matrix_at(h, j, i);
+            float predicted_probability = le_matrix_at_f32(h, j, i);
             if (predicted_probability > predicted_class_probability)
             {
                 predicted_class_probability = predicted_probability;
                 predicted_class = j;
             }
-            float labeled_probability = le_matrix_at(y, j, i);
+            float labeled_probability = le_matrix_at_f32(y, j, i);
             if (labeled_probability > labeled_class_probability)
             {
                 labeled_class_probability = labeled_probability;

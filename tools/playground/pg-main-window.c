@@ -83,12 +83,12 @@ draw_callback(GtkWidget *widget, cairo_t *cr, gpointer data)
         gint examples_count = le_matrix_get_width(input);
         for (i = 0; i < examples_count; i++)
         {
-            double x = width * 0.5 + height * 0.5 * le_matrix_at(input, 0, i);
-            double y = height * 0.5 - height * 0.5 * le_matrix_at(input, 1, i);
+            double x = width * 0.5 + height * 0.5 * le_matrix_at_f32(input, 0, i);
+            double y = height * 0.5 - height * 0.5 * le_matrix_at_f32(input, 1, i);
             window->dark ? cairo_set_source_rgba(cr, 1.0, 1.0, 1.0, 1.0) : cairo_set_source_rgba(cr, 0.0, 0.0, 0.0, 1.0);
             cairo_set_line_width(cr, 0.5);
             cairo_arc(cr, x, y, 2., 0., 2 * M_PI);
-            if (le_matrix_at(output, 0, i) > 0.5)
+            if (le_matrix_at_f32(output, 0, i) > 0.5)
             {
                 cairo_fill(cr);
             }
@@ -106,12 +106,12 @@ draw_callback(GtkWidget *widget, cairo_t *cr, gpointer data)
         gint examples_count = le_matrix_get_width(input);
         for (i = 0; i < examples_count; i++)
         {
-            double x = width * 0.5 + height * 0.5 * le_matrix_at(input, 0, i);
-            double y = height * 0.5 - height * 0.5 * le_matrix_at(input, 1, i);
+            double x = width * 0.5 + height * 0.5 * le_matrix_at_f32(input, 0, i);
+            double y = height * 0.5 - height * 0.5 * le_matrix_at_f32(input, 1, i);
             window->dark ? cairo_set_source_rgba(cr, 0.0, 1.0, 0.0, 1.0) : cairo_set_source_rgba(cr, 0.0, 0.5, 0.0, 1.0);
             cairo_set_line_width(cr, 0.5);
             cairo_arc(cr, x, y, 2., 0., 2 * M_PI);
-            if (le_matrix_at(output, 0, i) > 0.5)
+            if (le_matrix_at_f32(output, 0, i) > 0.5)
             {
                 cairo_fill(cr);
             }
@@ -139,11 +139,11 @@ render_predictions(LeModel *model, guint width, guint height)
     guint8 *pixmap = cairo_image_surface_get_data(surface);
     for (gint y = 0; y < height; y++)
     {
-        LeTensor *row = le_matrix_new_uninitialized(2, width);
+        LeTensor *row = le_matrix_new_uninitialized_f32(2, width);
         for (gint x = 0; x < width; x++)
         {
-            le_matrix_set_element(row, 0, x, x * 2.0f / width - 1.0f);
-            le_matrix_set_element(row, 1, x, y * -2.0f / height + 1.0f);
+            le_matrix_set_f32(row, 0, x, x * 2.0f / width - 1.0f);
+            le_matrix_set_f32(row, 1, x, y * -2.0f / height + 1.0f);
         }
         
         LeTensor *prediction = le_model_predict(model, row);
@@ -154,7 +154,7 @@ render_predictions(LeModel *model, guint width, guint height)
         {
             for (gint x = 0; x < width; x++)
             {
-                ARGB32 color = color_for_logistic(le_matrix_at(prediction, 0, x));
+                ARGB32 color = color_for_logistic(le_matrix_at_f32(prediction, 0, x));
                 ((ARGB32 *)pixmap)[y * width + x] = color;
             }
         }

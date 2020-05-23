@@ -22,11 +22,11 @@ main()
     {
         for (width = MIN_DIMENSION; width <= MAX_DIMENSION; width++)
         {
-            a = le_matrix_new_rand(height, width);
+            a = le_matrix_new_rand_f32(height, width);
             
             for (second_width = MIN_DIMENSION; second_width <= MAX_DIMENSION; second_width++)
             {
-                b = le_matrix_new_rand(width, second_width);
+                b = le_matrix_new_rand_f32(width, second_width);
                 c = le_matrix_new_product(a, b);
                 le_tensor_free(c);
                 le_tensor_free(b);

@@ -14,7 +14,7 @@ le_cuda_matrix_new_product(LeTensor *a, LeTensor *b)
     assert(b->shape->num_dimensions == 2);
     assert(a->shape->sizes[1] == b->shape->sizes[0]);
     
-    LeTensor *c = le_matrix_new_uninitialized(a->shape->sizes[0], b->shape->sizes[1]);
+    LeTensor *c = le_matrix_new_uninitialized_f32(a->shape->sizes[0], b->shape->sizes[1]);
     
     return c;
 }

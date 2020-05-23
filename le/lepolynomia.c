@@ -13,12 +13,12 @@ le_matrix_new_polynomia(const LeTensor *a)
     int additional_features_count = initial_features_count * (initial_features_count + 1) / 2;
     int examples_count = le_matrix_get_width(a);
     
-    LeTensor *polynomia = le_matrix_new_uninitialized(initial_features_count + additional_features_count, examples_count);
+    LeTensor *polynomia = le_matrix_new_uninitialized_f32(initial_features_count + additional_features_count, examples_count);
     for (example = 0; example < examples_count; example++)
     {
         for (feature = 0; feature < initial_features_count; feature++)
         {
-            le_matrix_set_element(polynomia, feature, example, le_matrix_at(a, feature, example));
+            le_matrix_set_f32(polynomia, feature, example, le_matrix_at_f32(a, feature, example));
         }
         
         int additional_feature_index = initial_features_count;
@@ -26,8 +26,8 @@ le_matrix_new_polynomia(const LeTensor *a)
         {
             for (another_feature = feature; another_feature < initial_features_count; another_feature++)
             {
-                float additional_feature = le_matrix_at(a, feature, example) * le_matrix_at(a, another_feature, example);
-                le_matrix_set_element(polynomia, additional_feature_index, example, additional_feature);
+                float additional_feature = le_matrix_at_f32(a, feature, example) * le_matrix_at_f32(a, another_feature, example);
+                le_matrix_set_f32(polynomia, additional_feature_index, example, additional_feature);
                 additional_feature_index++;
             }
         }

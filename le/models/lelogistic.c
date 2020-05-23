@@ -117,7 +117,7 @@ le_logistic_classifier_train(LeLogisticClassifier *self, const LeTensor *x_train
     }
     */
     
-    self->weights = le_matrix_new_zeros(features_count, 1);
+    self->weights = le_matrix_new_zeros_f32(features_count, 1);
     self->bias = 0;
     self->polynomia_degree = options.polynomia_degree;
     

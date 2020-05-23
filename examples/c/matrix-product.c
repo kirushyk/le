@@ -7,11 +7,11 @@
 int
 main(int argc, const char *argv[])
 {
-    LeTensor *a = le_matrix_new_rand(4, 2);
+    LeTensor *a = le_matrix_new_rand_f32(4, 2);
     printf("a =\n");
     le_tensor_print(a, stdout);
     
-    LeTensor *b = le_matrix_new_rand(2, 4);
+    LeTensor *b = le_matrix_new_rand_f32(2, 4);
     printf("b =\n");
     le_tensor_print(b, stdout);
     

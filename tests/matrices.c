@@ -44,22 +44,22 @@ main()
     
     for (height = 1; height < MAX_DIMENSION; height++)
     {
-        a = le_matrix_new_identity(height);
+        a = le_matrix_new_identity_f32(height);
         assert(le_test_ensure_matrix_size(a, height, height));
         le_tensor_free(a);
         
         for (width = 1; width < MAX_DIMENSION; width++)
         {
-            a = le_matrix_new_zeros(height, width);
+            a = le_matrix_new_zeros_f32(height, width);
             assert(le_test_ensure_matrix_size(a, height, width));
             le_tensor_free(a);
             
-            a = le_matrix_new_rand(height, width);
+            a = le_matrix_new_rand_f32(height, width);
             assert(le_test_ensure_matrix_size(a, height, width));
             
             for (second_width = 1; second_width < MAX_DIMENSION; second_width++)
             {
-                b = le_matrix_new_rand(width, second_width);
+                b = le_matrix_new_rand_f32(width, second_width);
                 c = le_matrix_new_product(a, b);
                 assert(le_test_ensure_matrix_size(c, height, second_width));
                 le_tensor_free(c);
@@ -70,8 +70,8 @@ main()
         }
     }
 
-    a = le_matrix_new_zeros(10, 5);
-    b = le_matrix_new_zeros(10, 5);
+    a = le_matrix_new_zeros_f32(10, 5);
+    b = le_matrix_new_zeros_f32(10, 5);
     LeTensor *at = le_matrix_new_transpose(a);
     c = le_matrix_new_product(at, b);
     LeTensor *d = le_matrix_new_product_full(a, true, b, false);

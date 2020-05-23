@@ -36,10 +36,10 @@ le_tensor_new_softmax_jacobians_stacked(LeTensor *softmax_output)
     {
         for (unsigned i = 0; i < num_classes; i++)
         {
-            float si = le_matrix_at(softmax_output, i, example);
+            float si = le_matrix_at_f32(softmax_output, i, example);
             for (unsigned j = 0; j < num_classes; j++)
             {
-                float sj = le_matrix_at(softmax_output, j, example);
+                float sj = le_matrix_at_f32(softmax_output, j, example);
                 float dJ_daij = (i == j) ? si * (1.0f - si) : -si * sj;
                 if (signbit(dJ_daij))
                 {
@@ -198,12 +198,12 @@ le_activation_layer_backward_prop(LeLayer *layer, LeTensor *cached_input, LeTens
                 
                 for (unsigned output = 0; output < classes_count; output++)
                 {
-                    float dJ_da = le_matrix_at(output_gradient, output, example);
-                    float da_dz = le_matrix_at(jacobian, output, input);
+                    float dJ_da = le_matrix_at_f32(output_gradient, output, example);
+                    float da_dz = le_matrix_at_f32(jacobian, output, input);
                     dJ_dz += dJ_da * da_dz;
                 }
             
-                le_matrix_set_element(input_gradient, input, example, dJ_dz);
+                le_matrix_set_f32(input_gradient, input, example, dJ_dz);
             }
             le_tensor_free(jacobian);
         }

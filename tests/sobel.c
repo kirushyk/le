@@ -12,7 +12,7 @@ main()
 {
     LeTensor *output_image;
     LeTensor *expected_output;
-    LeTensor *zeros = le_matrix_new_zeros(4, 4);
+    LeTensor *zeros = le_matrix_new_zeros_f32(4, 4);
 
     LeTensor *sobel_gx_filter = le_tensor_new(LE_TYPE_FLOAT32, 2, 3, 3,   
         1.0, 2.0, 1.0,
