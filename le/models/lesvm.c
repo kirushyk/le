@@ -52,8 +52,6 @@ le_svm_construct(LeSVM *self)
     le_model_construct((LeModel *)self);
     le_svm_class_ensure_init();
     ((LeObject *)self)->klass = (LeClass *)&klass;
-    self->x = NULL;
-    self->y = NULL;
     self->bias = 0.0f;
     self->alphas = NULL;
     self->weights = NULL;
@@ -142,8 +140,8 @@ le_svm_train(LeSVM *self, const LeTensor *x_train, const LeTensor *y_train, LeSV
     assert(examples_count == le_matrix_get_width(y_train));
 
     /// @todo: Add checks
-    self->x = x_train;
-    self->y = y_train;
+    self->x = (LeTensor *)x_train;
+    self->y = (LeTensor *)y_train;
     self->kernel = options.kernel;
     /// @todo: Add cleanup here
     /// @note: Maybe use stack variable instead
