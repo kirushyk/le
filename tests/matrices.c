@@ -44,7 +44,7 @@ main()
     
     for (height = 1; height < MAX_DIMENSION; height++)
     {
-        a = le_matrix_new_identity_f32(height);
+        a = le_matrix_new_identity(LE_TYPE_FLOAT32, height);
         assert(le_test_ensure_matrix_size(a, height, height));
         le_tensor_free(a);
         

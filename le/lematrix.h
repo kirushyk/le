@@ -28,7 +28,8 @@ void       le_matrix_set_f32          (LeTensor     *matrix,
                                            unsigned      x,
                                            float         value);
 
-LeTensor * le_matrix_new_identity_f32         (unsigned      size);
+LeTensor * le_matrix_new_identity         (LeType type,
+                                            unsigned      size);
 
 LeTensor * le_matrix_new_uninitialized_f32    (unsigned      height,
                                            unsigned      width);

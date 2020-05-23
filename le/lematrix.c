@@ -69,8 +69,11 @@ le_matrix_set_f32(LeTensor *self, unsigned y, unsigned x, float value)
     ((float *)self->data)[y * self->shape->sizes[1] + x] = value;
 }
 
+#define F16_0 (uint16_t)0
+#define F16_1 (uint16_t)15360
+
 LeTensor *
-le_matrix_new_identity_f32(unsigned size)
+le_matrix_new_identity(LeType type, unsigned size)
 {
     unsigned x;
     unsigned y;
@@ -87,6 +90,39 @@ le_matrix_new_identity_f32(unsigned size)
     {
         for (x = 0; x < size; x++)
         {
+            switch (type)
+            {
+            case LE_TYPE_INT8:
+                ((int8_t *)self->data)[y * size + x] = (x == y) ? 1 : 0;
+                break;
+            case LE_TYPE_UINT8:
+                ((uint8_t *)self->data)[y * size + x] = (x == y) ? 1 : 0;
+                break;
+            case LE_TYPE_INT16:
+                ((int16_t *)self->data)[y * size + x] = (x == y) ? 1 : 0;
+                break;
+            case LE_TYPE_UINT16:
+                ((uint16_t *)self->data)[y * size + x] = (x == y) ? 1 : 0;
+                break;
+            case LE_TYPE_INT32:
+                ((int32_t *)self->data)[y * size + x] = (x == y) ? 1 : 0;
+                break;
+            case LE_TYPE_UINT32:
+                ((uint32_t *)self->data)[y * size + x] = (x == y) ? 1 : 0;
+                break;
+            case LE_TYPE_FLOAT16:
+                ((uint16_t *)self->data)[y * size + x] = (x == y) ? F16_1 : F16_0;
+                break;
+            case LE_TYPE_FLOAT32:
+                ((float *)self->data)[y * size + x] = (x == y) ? 1.0f : 0.0f;
+                break;
+            case LE_TYPE_FLOAT64:
+                ((double *)self->data)[y * size + x] = (x == y) ? 1.0 : 0.0;
+                break;
+            case LE_TYPE_VOID:
+            default:
+                break;
+            }
             ((float *)self->data)[y * size + x] = (x == y) ? 1.0 : 0.0;
         }
     }
