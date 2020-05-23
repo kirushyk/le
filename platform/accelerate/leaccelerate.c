@@ -54,7 +54,7 @@ le_accelerate_tensor_apply_sigmoid(LeTensor *tensor)
 }
 
 void
-le_accelerate_tensor_apply_sigmoid_prime (LeTensor *tensor)
+le_accelerate_tensor_apply_sigmoid_prime(LeTensor *tensor)
 {
     /// @todo: Take stride into account
     assert(tensor);
@@ -77,7 +77,7 @@ le_accelerate_tensor_apply_sigmoid_prime (LeTensor *tensor)
 }
 
 float
-le_accelerate_rbf(LeTensor *a, LeTensor *b, float sigma)
+le_accelerate_rbf(const LeTensor *a, const LeTensor *b, float sigma)
 {
     assert(a->element_type == LE_TYPE_FLOAT32);
     assert(b->element_type == LE_TYPE_FLOAT32);
