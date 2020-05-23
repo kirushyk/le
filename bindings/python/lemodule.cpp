@@ -35,6 +35,21 @@ public:
     }
 };
 
+class PyLogisticClassifier: public le::LogisticClassifier
+{
+public: 
+    void pyTrain(const le::Tensor &x_train, const le::Tensor &y_train)
+    {
+        le::LogisticClassifier::TrainingOptions options;
+        options.maxIterations = 100;
+        options.learningRate = 1.0f;
+        options.polynomiaDegree = 1;
+        options.regularization = le::Regularization::NONE;
+        options.lambda = 0.0f;
+        train(x_train, y_train, options);
+    }
+};
+
 PYBIND11_MODULE(le, m)
 {
     py::class_<le::Tensor>(m, "Tensor")
@@ -46,6 +61,10 @@ PYBIND11_MODULE(le, m)
         .def(py::init<>())
         .def("train", &PySVM::pyTrain)
         .def("predict", &PySVM::predict);
+    py::class_<PyLogisticClassifier>(m, "LogisticClassifier")
+        .def(py::init<>())
+        .def("train", &PyLogisticClassifier::pyTrain)
+        .def("predict", &PyLogisticClassifier::predict);
     m.doc() = "Le Python Binding";
     m.def("tensor", &tensor, "Create a Le Tensor");
 }
