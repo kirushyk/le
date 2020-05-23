@@ -97,10 +97,10 @@ void         le_tensor_apply_1_minus        (LeTensor     *tensor);
 
 void         le_tensor_apply_x_minus_sqr_x  (LeTensor     *tensor);
 
-void         le_tensor_apply_greater_than   (LeTensor     *tensor,
+void         le_tensor_apply_gt_f32   (LeTensor     *tensor,
                                              float         scalar);
 
-void         le_tensor_apply_svm_prediction (LeTensor     *tensor);
+void         le_tensor_apply_sign (LeTensor     *tensor);
 
 void         le_tensor_apply_relu           (LeTensor     *tensor);
 

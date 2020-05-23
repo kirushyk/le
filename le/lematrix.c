@@ -39,7 +39,7 @@ le_matrix_at(const LeTensor *self, unsigned y, unsigned x)
 }
 
 void
-le_matrix_add(LeTensor *self, LeTensor *another)
+le_matrix_add(LeTensor *self, const LeTensor *another)
 {
     unsigned x, y;
     

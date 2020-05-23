@@ -199,7 +199,7 @@ train_current_model(LEMainWindow *self)
             }
             options.c = atof(gtk_combo_box_text_get_active_text(GTK_COMBO_BOX_TEXT(self->svm_c_combo)));
             LeTensor *labels = le_tensor_new_copy(le_data_set_get_output(self->train_data));
-            le_tensor_apply_svm_prediction(labels);
+            le_tensor_apply_sign(labels);
             le_svm_train((LeSVM *)self->model,
                 le_data_set_get_input(self->train_data),
                 labels,

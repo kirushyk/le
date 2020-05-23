@@ -146,7 +146,7 @@ le_activation_layer_backward_prop(LeLayer *layer, LeTensor *cached_input, LeTens
 
     case LE_ACTIVATION_RELU:
         activation_primes = le_tensor_new_copy(cached_input);
-        le_tensor_apply_greater_than(activation_primes, 0.0f);
+        le_tensor_apply_gt_f32(activation_primes, 0.0f);
         break;
         
     case LE_ACTIVATION_SOFTMAX:

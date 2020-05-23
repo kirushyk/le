@@ -606,7 +606,7 @@ le_tensor_apply_x_minus_sqr_x(LeTensor *self)
 }
 
 void
-le_tensor_apply_greater_than(LeTensor *self, float scalar)
+le_tensor_apply_gt_f32(LeTensor *self, float scalar)
 {
     /// @todo: Take stride into account
     unsigned i;
@@ -619,7 +619,7 @@ le_tensor_apply_greater_than(LeTensor *self, float scalar)
 }
 
 void
-le_tensor_apply_svm_prediction(LeTensor *self)
+le_tensor_apply_sign(LeTensor *self)
 {
     /// @todo: Take stride into account
     unsigned i;
