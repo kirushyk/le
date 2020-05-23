@@ -60,7 +60,7 @@ le_bgd_step(LeOptimizer *optimizer)
         LE_INFO("Parameter %s:\n%s", le_shape_to_cstr(parameter->shape), le_tensor_to_cstr(parameter));
         LeTensor *gradient = (LeTensor *)gradients_iterator->data;
         LE_INFO("Gradient %s:\n%s", le_shape_to_cstr(gradient->shape), le_tensor_to_cstr(gradient));
-        le_tensor_subtract_scaled(parameter, self->learning_rate, gradient);
+        le_tensor_sub_scaled(parameter, self->learning_rate, gradient);
         LeTensorStats gradient_stats = le_tensor_get_stats(gradient);
         LE_INFO("Gradient stats:\n\tmin: %f\n\tmax: %f\n\tmean: %f\n\tdeviation: %f", gradient_stats.min, gradient_stats.max, gradient_stats.mean, gradient_stats.deviation);
     }

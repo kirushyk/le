@@ -35,9 +35,9 @@ main(int argc, const char *argv[])
     {
         printf("Iteration %u. ", i);
         le_optimizer_step(optimizer);
-        float w_ = le_tensor_f32_at(w, 0);
-        le_tensor_f32_set(dw, 0, dJ_dw(w_));
-        float grad_ = le_tensor_f32_at(dw, 0);
+        float w_ = le_tensor_at_f32(w, 0);
+        le_tensor_set_f32(dw, 0, dJ_dw(w_));
+        float grad_ = le_tensor_at_f32(dw, 0);
         printf("J(%0.2f) = %0.2f. Gradient = %0.2f\n", w_, J(w_), grad_);
     }
     

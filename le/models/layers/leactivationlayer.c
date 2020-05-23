@@ -177,7 +177,7 @@ le_activation_layer_backward_prop(LeLayer *layer, LeTensor *cached_input, LeTens
         /// Non-diagonal partial derivatives will be discarded.
         /// Hadamard is used for chain rule.
         input_gradient = le_tensor_new_copy(output_gradient);
-        le_tensor_multiply_elementwise(input_gradient, activation_primes);
+        le_tensor_mul(input_gradient, activation_primes);
         le_tensor_free(activation_primes);
     } 
     else if (activation_jacobians)

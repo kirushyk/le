@@ -302,7 +302,7 @@ le_tensor_pick_copy(const LeTensor *another, uint32_t index)
 }
 
 uint8_t
-le_tensor_u8_at(const LeTensor *tensor, uint32_t index)
+le_tensor_at_u8(const LeTensor *tensor, uint32_t index)
 {
     /// @todo: Take stride into account
     assert(tensor->element_type == LE_TYPE_UINT8);
@@ -311,7 +311,7 @@ le_tensor_u8_at(const LeTensor *tensor, uint32_t index)
 }
 
 float
-le_tensor_f32_at(const LeTensor *tensor, uint32_t index)
+le_tensor_at_f32(const LeTensor *tensor, uint32_t index)
 {
     /// @todo: Take stride into account
     assert(tensor->element_type == LE_TYPE_FLOAT32);
@@ -320,7 +320,7 @@ le_tensor_f32_at(const LeTensor *tensor, uint32_t index)
 }
 
 void
-le_tensor_f32_set(LeTensor *tensor, uint32_t index, float value)
+le_tensor_set_f32(LeTensor *tensor, uint32_t index, float value)
 {
     /// @todo: Take stride into account
     assert(tensor->element_type == LE_TYPE_FLOAT32);
@@ -412,7 +412,7 @@ le_tensor_add(LeTensor *a, LeTensor *b)
 }
 
 void
-le_tensor_subtract(LeTensor *a, const LeTensor *b)
+le_tensor_sub(LeTensor *a, const LeTensor *b)
 {
     /// @todo: Take stride into account
     assert(le_shape_equal(a->shape, b->shape));
@@ -427,7 +427,7 @@ le_tensor_subtract(LeTensor *a, const LeTensor *b)
 }
 
 void
-le_tensor_subtract_scaled(LeTensor *a, float scale, const LeTensor *b)
+le_tensor_sub_scaled(LeTensor *a, float scale, const LeTensor *b)
 {
     /// @todo: Take stride into account
     assert(le_shape_equal(a->shape, b->shape));
@@ -442,7 +442,7 @@ le_tensor_subtract_scaled(LeTensor *a, float scale, const LeTensor *b)
 }
 
 void
-le_tensor_multiply_by_scalar(LeTensor *self, float b)
+le_tensor_mul_f32(LeTensor *self, float b)
 {
     /// @todo: Take stride into account
     unsigned i;
@@ -455,7 +455,7 @@ le_tensor_multiply_by_scalar(LeTensor *self, float b)
 }
 
 void        
-le_tensor_multiply_elementwise(LeTensor *self, LeTensor *b)
+le_tensor_mul(LeTensor *self, const LeTensor *b)
 {
     assert(self->element_type == LE_TYPE_FLOAT32);
     assert(b->element_type == LE_TYPE_FLOAT32);
@@ -472,7 +472,7 @@ le_tensor_multiply_elementwise(LeTensor *self, LeTensor *b)
 }
 
 void
-le_tensor_add_scalar(LeTensor *self, float b)
+le_tensor_add_f32(LeTensor *self, float b)
 {
     /// @todo: Take stride into account
     unsigned i;
@@ -485,7 +485,7 @@ le_tensor_add_scalar(LeTensor *self, float b)
 }
 
 void
-le_tensor_subtract_scalar(LeTensor *self, float b)
+le_tensor_sub_f32(LeTensor *self, float b)
 {
     /// @todo: Take stride into account
     unsigned i;
@@ -498,7 +498,7 @@ le_tensor_subtract_scalar(LeTensor *self, float b)
 }
 
 float
-le_tensor_sum(const LeTensor *self)
+le_tensor_sum_f32(const LeTensor *self)
 {
     /// @todo: Take stride into account
     float sum = 0.0;

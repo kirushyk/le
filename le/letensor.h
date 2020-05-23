@@ -49,41 +49,41 @@ LeTensor *   le_tensor_pick                 (LeTensor     *another,
 LeTensor *   le_tensor_pick_copy            (const LeTensor     *another,
                                              uint32_t      index);
 
-uint8_t      le_tensor_u8_at                (const LeTensor     *tensor,
+uint8_t      le_tensor_at_u8                (const LeTensor     *tensor,
                                              uint32_t      index);
 
-float        le_tensor_f32_at               (const LeTensor     *tensor,
+float        le_tensor_at_f32               (const LeTensor     *tensor,
                                              uint32_t      index);
 
-void         le_tensor_f32_set              (LeTensor     *tensor,
+void         le_tensor_set_f32              (LeTensor     *tensor,
                                              uint32_t      index,
                                              float         value);
 
 void         le_tensor_add                  (LeTensor     *matrix,
                                              LeTensor     *another);
 
-void         le_tensor_subtract             (LeTensor       *a,
+void         le_tensor_sub             (LeTensor       *a,
                                              const LeTensor *b);
 
-void         le_tensor_subtract_scaled      (LeTensor       *a,
+void         le_tensor_sub_scaled      (LeTensor       *a,
                                              float           scale,
                                              const LeTensor *b);
 
 /// @note: a = a * b
-void         le_tensor_multiply_by_scalar   (LeTensor     *a,
+void         le_tensor_mul_f32   (LeTensor     *a,
                                              float         b);
 
 /// @note: a = a * b
-void         le_tensor_multiply_elementwise (LeTensor     *a,
-                                             LeTensor     *b);
+void         le_tensor_mul                  (LeTensor       *a,
+                                             const LeTensor *b);
 
-void         le_tensor_add_scalar           (LeTensor     *a,
+void         le_tensor_add_f32           (LeTensor     *a,
                                              float         b);
 
-void         le_tensor_subtract_scalar      (LeTensor     *a,
+void         le_tensor_sub_f32      (LeTensor     *a,
                                              float         b);
 
-float        le_tensor_sum                  (const LeTensor     *tensor);
+float        le_tensor_sum_f32                  (const LeTensor     *tensor);
 
 void         le_tensor_apply_sigmoid        (LeTensor     *tensor);
 

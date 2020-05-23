@@ -81,7 +81,7 @@ le_logistic_classifier_predict(LeLogisticClassifier *self, const LeTensor *x)
     {
         le_tensor_free(x_poly);
     }
-    le_tensor_add_scalar(a, self->bias);
+    le_tensor_add_f32(a, self->bias);
     le_tensor_apply_sigmoid(a);
     return a;
 }
@@ -129,16 +129,16 @@ le_logistic_classifier_train(LeLogisticClassifier *self, const LeTensor *x_train
         
         float train_set_error = le_logistic_loss(h, y_train);
         
-        le_tensor_subtract(h, y_train);
-        le_tensor_multiply_by_scalar(h, 1.0 / examples_count);
+        le_tensor_sub(h, y_train);
+        le_tensor_mul_f32(h, 1.0 / examples_count);
         LeTensor *dwt = le_matrix_new_product_full(h, false, x, true);
         LeTensor *dw = le_matrix_new_transpose(dwt);
-        le_tensor_multiply_by_scalar(dw, options.learning_rate);
-        float db = le_tensor_sum(h);
+        le_tensor_mul_f32(dw, options.learning_rate);
+        float db = le_tensor_sum_f32(h);
         
         le_tensor_free(dwt);
         le_tensor_free(h);
-        le_tensor_subtract(self->weights, dw);
+        le_tensor_sub(self->weights, dw);
         le_tensor_free(dw);
         self->bias -= options.learning_rate * db;
         

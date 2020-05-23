@@ -23,8 +23,8 @@ le_logistic_loss(const LeTensor *h, const LeTensor *y)
     unsigned elements_count = le_shape_get_elements_count(h->shape);
     for (i = 0; i < elements_count; i++)
     {
-        float yi = le_tensor_f32_at(y, i);
-        float hi = le_tensor_f32_at(h, i);
+        float yi = le_tensor_at_f32(y, i);
+        float hi = le_tensor_at_f32(h, i);
         result -= yi * logf(hi) + (1.0f - yi) * logf(1.0f - hi);
     }
     
@@ -113,12 +113,12 @@ le_apply_cross_entropy_loss_derivative(LeTensor *h, const LeTensor *y)
     unsigned elements_count = le_shape_get_elements_count(h->shape);
     for (i = 0; i < elements_count; i++)
     {
-        float yi = le_tensor_f32_at(y, i * y->stride);
-        float hi = le_tensor_f32_at(h, i * h->stride); /// @note: hi ∈ (0, 1)
+        float yi = le_tensor_at_f32(y, i * y->stride);
+        float hi = le_tensor_at_f32(h, i * h->stride); /// @note: hi ∈ (0, 1)
         if (hi < EPSILON)
             hi = EPSILON;
         float dJ_dh = (yi == 0) ? 0 : (-yi / hi);
-        le_tensor_f32_set(h, i * h->stride, dJ_dh);
+        le_tensor_set_f32(h, i * h->stride, dJ_dh);
     }
 }
 
@@ -134,10 +134,10 @@ le_apply_mse_loss_derivative(LeTensor *h, const LeTensor *y)
     unsigned elements_count = le_shape_get_elements_count(h->shape);
     for (i = 0; i < elements_count; i++)
     {
-        float yi = le_tensor_f32_at(y, i);
-        float hi = le_tensor_f32_at(h, i);
+        float yi = le_tensor_at_f32(y, i);
+        float hi = le_tensor_at_f32(h, i);
         float dJ_dh = hi - yi;
-        le_tensor_f32_set(h, i, dJ_dh);
+        le_tensor_set_f32(h, i, dJ_dh);
     }
 }
 
@@ -153,13 +153,13 @@ le_apply_logistic_loss_derivative(LeTensor *h, const LeTensor *y)
     unsigned elements_count = le_shape_get_elements_count(h->shape);
     for (i = 0; i < elements_count; i++)
     {
-        float yi = le_tensor_f32_at(y, i);
-        float hi = le_tensor_f32_at(h, i); /// @note: hi ∈ (0, 1)
+        float yi = le_tensor_at_f32(y, i);
+        float hi = le_tensor_at_f32(h, i); /// @note: hi ∈ (0, 1)
         float denom = hi * (1.0f - hi);
         if (denom < EPSILON)
             denom = EPSILON;
         float dJ_dh = (hi == yi) ? 0 : ((hi - yi) / denom);
-        le_tensor_f32_set(h, i, dJ_dh);
+        le_tensor_set_f32(h, i, dJ_dh);
     }
 }
 

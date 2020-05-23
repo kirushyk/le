@@ -115,7 +115,7 @@ update_image(LEMainWindow *window)
     }
     
     if (window->output) {
-        int label = le_tensor_u8_at(window->output, window->index);
+        int label = le_tensor_at_u8(window->output, window->index);
         char buffer[8];
         sprintf(buffer, "%d", label);
         gtk_entry_set_text(GTK_ENTRY(window->label_entry), buffer);

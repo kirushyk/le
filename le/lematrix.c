@@ -277,7 +277,7 @@ le_matrix_new_one_hot(LeTensor *a, unsigned num_classes)
     {
         for (klass = 0; klass < num_classes; klass++)
         {
-            float label = (klass == le_tensor_u8_at(a, example)) ? 1.0f : 0.0f;
+            float label = (klass == le_tensor_at_u8(a, example)) ? 1.0f : 0.0f;
             le_matrix_set_element(self, klass, example, label);
         }
     }
