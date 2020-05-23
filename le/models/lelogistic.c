@@ -72,10 +72,7 @@ le_logistic_classifier_predict(LeLogisticClassifier *self, const LeTensor *x)
     {
         /// @note: Refrain from init x_prev = x to prevent const
         x_poly = le_matrix_new_polynomia(x_prev ? x_prev : x);
-        if (x_prev != x)
-        {
-            le_tensor_free(x_prev);
-        }
+        le_tensor_free(x_prev);
         x_prev = x_poly;
     }
     LeTensor *a = le_matrix_new_product(wt, x_poly ? x_poly : x);
