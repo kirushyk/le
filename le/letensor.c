@@ -768,10 +768,12 @@ le_tensor_print(const LeTensor *self, FILE *stream)
 void
 le_tensor_free(LeTensor *self)
 {
+    if (self == NULL)
+        return;
+        
     if (self->owns_data)
-    {
         free(self->data);
-    }
+    
     le_shape_free(self->shape);
     free(self);
 }
