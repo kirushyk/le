@@ -430,9 +430,26 @@ le_tensor_add(LeTensor *a, LeTensor *b)
 }
 
 void
-le_tensor_sub(LeTensor *a, const LeTensor *b)
+le_tensor_sub_f32(LeTensor *self, float b)
+{
+    assert(self->element_type == LE_TYPE_FLOAT32);
+
+    /// @todo: Take stride into account
+    unsigned i;
+    unsigned elements_count = le_shape_get_elements_count(self->shape);
+    
+    for (i = 0; i < elements_count; i++)
+    {
+        ((float *)self->data)[i] -= b;
+    }
+}
+
+void
+le_tensor_sub_tensor(LeTensor *a, const LeTensor *b)
 {
     /// @todo: Take stride into account
+    assert(a->element_type == LE_TYPE_FLOAT32);
+    assert(b->element_type == LE_TYPE_FLOAT32);
     assert(le_shape_equal(a->shape, b->shape));
     
     unsigned i;
@@ -463,7 +480,7 @@ void
 le_tensor_mul_f32(LeTensor *self, float b)
 {
     assert(self->element_type == LE_TYPE_FLOAT32);
-    
+
     /// @todo: Take stride into account
     unsigned i;
     unsigned elements_count = le_shape_get_elements_count(self->shape);
@@ -501,19 +518,6 @@ le_tensor_add_f32(LeTensor *self, float b)
     for (i = 0; i < elements_count; i++)
     {
         ((float *)self->data)[i] += b;
-    }
-}
-
-void
-le_tensor_sub_f32(LeTensor *self, float b)
-{
-    /// @todo: Take stride into account
-    unsigned i;
-    unsigned elements_count = le_shape_get_elements_count(self->shape);
-    
-    for (i = 0; i < elements_count; i++)
-    {
-        ((float *)self->data)[i] -= b;
     }
 }
 

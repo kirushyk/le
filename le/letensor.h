@@ -68,12 +68,19 @@ void               le_tensor_add_f32                       (LeTensor *          
                                                             float                   b);
 
 /// @note: a = a - b
-void               le_tensor_sub                           (LeTensor *              a,
+void               le_tensor_sub_f32                       (LeTensor *              a,
+                                                            float                   b);
+
+/// @note: a = a - b
+void               le_tensor_sub_tensor                    (LeTensor *              a,
                                                             const LeTensor *        b);
 
 /// @note: a = a - b
-void               le_tensor_sub_f32                       (LeTensor *              a,
-                                                            float                   b);
+#define le_tensor_sub(a, b) _Generic((b), \
+   float: le_tensor_sub_f32, \
+   LeTensor *: le_tensor_sub_tensor, \
+   const LeTensor *: le_tensor_sub_tensor \
+)(a, b)
 
 /// @note: a = a - c * b
 void               le_tensor_sub_scaled_f32                (LeTensor *              a,
@@ -81,12 +88,12 @@ void               le_tensor_sub_scaled_f32                (LeTensor *          
                                                             const LeTensor *        b);
 
 /// @note: a = a * b
-void               le_tensor_mul_tensor                    (LeTensor *              a,
-                                                            const LeTensor *        b);
-
-/// @note: a = a * b
 void               le_tensor_mul_f32                       (LeTensor *              a,
                                                             float                   b);
+
+/// @note: a = a * b
+void               le_tensor_mul_tensor                    (LeTensor *              a,
+                                                            const LeTensor *        b);
 
 /// @note: a = a * b
 #define le_tensor_mul(a, b) _Generic((b), \

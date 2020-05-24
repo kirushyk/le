@@ -105,7 +105,7 @@ le_dense_layer_new(const char *name, unsigned inputs, unsigned units)
     /// @todo: Optimize
     float variance = sqrtf(2.0f / (inputs + units));
     le_tensor_mul(self->w, variance);
-    le_tensor_sub_f32(self->w, variance * 0.5f);
+    le_tensor_sub(self->w, variance * 0.5f);
     self->b = le_matrix_new_zeros(LE_TYPE_FLOAT32, units, 1);
     le_layer_append_parameter(LE_LAYER(self), self->w);
     le_layer_append_parameter(LE_LAYER(self), self->b);
