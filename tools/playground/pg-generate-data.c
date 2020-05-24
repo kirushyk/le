@@ -23,9 +23,9 @@ pg_generate_data(const char *pattern_name, unsigned examples_count)
             float scalar = (rand() * 2.0f / RAND_MAX) - 1.0f;
             float x = sinf(scalar * 3.0f * M_PI) * fabs(scalar);
             float y = cosf(scalar * 3.0f * M_PI) * scalar;
-            le_matrix_set_f32(input, 0, i, x);
-            le_matrix_set_f32(input, 1, i, y);
-            le_matrix_set_f32(output, 0, i, scalar > 0.0f ? 1.0f : 0.0f);
+            le_matrix_set(input, 0, i, x);
+            le_matrix_set(input, 1, i, y);
+            le_matrix_set(output, 0, i, scalar > 0.0f ? 1.0f : 0.0f);
         }
     }
     else if (g_strcmp0(pattern_name, "nested") == 0)
@@ -37,9 +37,9 @@ pg_generate_data(const char *pattern_name, unsigned examples_count)
             float angle = rand() * 2.0f * M_PI / RAND_MAX;
             float x = sinf(angle) * distance;
             float y = cosf(angle) * distance;
-            le_matrix_set_f32(input, 0, i, x);
-            le_matrix_set_f32(input, 1, i, y);
-            le_matrix_set_f32(output, 0, i, distance < 0.5f ? 1.0f : 0.0f);
+            le_matrix_set(input, 0, i, x);
+            le_matrix_set(input, 1, i, y);
+            le_matrix_set(output, 0, i, distance < 0.5f ? 1.0f : 0.0f);
         }
     }
     else if (g_strcmp0(pattern_name, "linsep") == 0)
@@ -54,7 +54,7 @@ pg_generate_data(const char *pattern_name, unsigned examples_count)
             float x = le_matrix_at_f32(input, 0, i);
             float y = le_matrix_at_f32(input, 1, i);
             
-            le_matrix_set_f32(output, 0, i, (y > bias + slope * x) ? 1.0f : 0.0f);
+            le_matrix_set(output, 0, i, (y > bias + slope * x) ? 1.0f : 0.0f);
         }
     }
     else if (g_strcmp0(pattern_name, "svb") == 0)
@@ -90,7 +90,7 @@ pg_generate_data(const char *pattern_name, unsigned examples_count)
                 }
             }
             
-            le_matrix_set_f32(output, 0, i, (closest_vector >= SUPPORT_VECTORS_COUNT / 2) ? 1.0f : 0.0f);
+            le_matrix_set(output, 0, i, (closest_vector >= SUPPORT_VECTORS_COUNT / 2) ? 1.0f : 0.0f);
         }
     }
     else

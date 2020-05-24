@@ -119,7 +119,7 @@ le_svm_margins(LeSVM *self, const LeTensor *x)
             }
             margin += self->bias;
             
-            le_matrix_set_f32(margins, 0, i, margin);
+            le_matrix_set(margins, 0, i, margin);
             le_tensor_free(example);
         }
         return margins;
@@ -209,9 +209,9 @@ le_svm_train(LeSVM *self, const LeTensor *x_train, const LeTensor *y_train, LeSV
                             newaj = L;
                         if (fabs(aj - newaj) >= 1e-4)
                         {
-                            le_matrix_set_f32(self->alphas, 0, j, newaj);
+                            le_matrix_set(self->alphas, 0, j, newaj);
                             float newai = ai + le_matrix_at_f32(y_train, 0, i) * le_matrix_at_f32(y_train, 0, j) * (aj - newaj);
-                            le_matrix_set_f32(self->alphas, 0, i, newai);
+                            le_matrix_set(self->alphas, 0, i, newai);
                             
                             float b1 = self->bias - Ei - le_matrix_at_f32(y_train, 0, i) * (newai - ai) * kernel_function(x_train_i, x_train_i, self->kernel)
                             - le_matrix_at_f32(y_train, 0, j) * (newaj - aj) * kernel_function(x_train_i, x_train_j, self->kernel);
@@ -249,7 +249,7 @@ le_svm_train(LeSVM *self, const LeTensor *x_train, const LeTensor *y_train, LeSV
             {
                 s += le_matrix_at_f32(self->alphas, 0, i) * le_matrix_at_f32(y_train, 0, i) * le_matrix_at_f32(x_train, j, i);
             }
-            le_matrix_set_f32(self->weights, j, 0, s);
+            le_matrix_set(self->weights, j, 0, s);
         }
     }
     else
@@ -272,10 +272,10 @@ le_svm_train(LeSVM *self, const LeTensor *x_train, const LeTensor *y_train, LeSV
         {
             if (le_matrix_at_f32(self->alphas, 0, i) >= alpha_tolerance)
             {
-                le_matrix_set_f32(new_alphas, 0, j, le_matrix_at_f32(self->alphas, 0, i));
-                le_matrix_set_f32(self->y, 0, j, le_matrix_at_f32(y_train, 0, i));
+                le_matrix_set(new_alphas, 0, j, le_matrix_at_f32(self->alphas, 0, i));
+                le_matrix_set(self->y, 0, j, le_matrix_at_f32(y_train, 0, i));
                 for (int k = 0; k < features_count; k++)
-                    le_matrix_set_f32(self->x, k, j, le_matrix_at_f32(x_train, k, i));
+                    le_matrix_set(self->x, k, j, le_matrix_at_f32(x_train, k, i));
                 j++;
             }
         }

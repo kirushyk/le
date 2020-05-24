@@ -142,8 +142,8 @@ render_predictions(LeModel *model, guint width, guint height)
         LeTensor *row = le_matrix_new_uninitialized(LE_TYPE_FLOAT32, 2, width);
         for (gint x = 0; x < width; x++)
         {
-            le_matrix_set_f32(row, 0, x, x * 2.0f / width - 1.0f);
-            le_matrix_set_f32(row, 1, x, y * -2.0f / height + 1.0f);
+            le_matrix_set(row, 0, x, x * 2.0f / width - 1.0f);
+            le_matrix_set(row, 1, x, y * -2.0f / height + 1.0f);
         }
         
         LeTensor *prediction = le_model_predict(model, row);
