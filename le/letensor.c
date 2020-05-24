@@ -462,6 +462,8 @@ le_tensor_sub_scaled_f32(LeTensor *a, float scale, const LeTensor *b)
 void
 le_tensor_mul_f32(LeTensor *self, float b)
 {
+    assert(self->element_type == LE_TYPE_FLOAT32);
+    
     /// @todo: Take stride into account
     unsigned i;
     unsigned elements_count = le_shape_get_elements_count(self->shape);
@@ -473,7 +475,7 @@ le_tensor_mul_f32(LeTensor *self, float b)
 }
 
 void        
-le_tensor_mul(LeTensor *self, const LeTensor *b)
+le_tensor_mul_tensor(LeTensor *self, const LeTensor *b)
 {
     assert(self->element_type == LE_TYPE_FLOAT32);
     assert(b->element_type == LE_TYPE_FLOAT32);

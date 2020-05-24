@@ -51,7 +51,7 @@ le_dense_layer_backward_prop(LeLayer *layer, LeTensor *cached_input, LeTensor *c
 
         LeTensor *h = le_tensor_new_copy(output_gradient);
         unsigned examples_count = le_matrix_get_width(h);
-        le_tensor_mul_f32(h, 1.0f / examples_count);
+        le_tensor_mul(h, 1.0f / examples_count);
         LeTensor *dw = le_matrix_new_product_full(h, false, cached_input, true);
         LeTensor *db = le_matrix_new_sum(h, 1);
         le_tensor_free(h);
@@ -104,7 +104,7 @@ le_dense_layer_new(const char *name, unsigned inputs, unsigned units)
     self->w = le_matrix_new_rand_f32(units, inputs);
     /// @todo: Optimize
     float variance = sqrtf(2.0f / (inputs + units));
-    le_tensor_mul_f32(self->w, variance);
+    le_tensor_mul(self->w, variance);
     le_tensor_sub_f32(self->w, variance * 0.5f);
     self->b = le_matrix_new_zeros(LE_TYPE_FLOAT32, units, 1);
     le_layer_append_parameter(LE_LAYER(self), self->w);

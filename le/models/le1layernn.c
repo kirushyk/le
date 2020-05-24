@@ -81,7 +81,7 @@ le_1_layer_nn_get_gradients(Le1LayerNN *self, const LeTensor *x, const LeTensor 
 
     LeTensor *h = le_1_layer_nn_predict(self, x);
     le_tensor_sub(h, y);
-    le_tensor_mul_f32(h, 1.0 / examples_count);
+    le_tensor_mul(h, 1.0f / examples_count);
     LeTensor *dw = le_matrix_new_product_full(h, false, x, true);
     LeTensor *db = le_matrix_new_sum(h, 1);
     le_tensor_free(h);
@@ -138,9 +138,9 @@ le_1_layer_nn_train(Le1LayerNN *self, LeTensor *x_train, LeTensor *y_train, Le1L
         float train_set_error = le_logistic_loss(h, y_train);
 
         le_tensor_sub(h, y_train);
-        le_tensor_mul_f32(h, 1.0 / examples_count);
+        le_tensor_mul(h, 1.0f / examples_count);
         LeTensor *dw = le_matrix_new_product(h, xt);
-        le_tensor_mul_f32(dw, options.learning_rate);
+        le_tensor_mul(dw, options.learning_rate);
         LeTensor *db = le_matrix_new_sum(h, 1);
         
         le_tensor_free(h);

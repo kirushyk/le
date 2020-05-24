@@ -130,10 +130,10 @@ le_logistic_classifier_train(LeLogisticClassifier *self, const LeTensor *x_train
         float train_set_error = le_logistic_loss(h, y_train);
         
         le_tensor_sub(h, y_train);
-        le_tensor_mul_f32(h, 1.0 / examples_count);
+        le_tensor_mul(h, 1.0f / examples_count);
         LeTensor *dwt = le_matrix_new_product_full(h, false, x, true);
         LeTensor *dw = le_matrix_new_transpose(dwt);
-        le_tensor_mul_f32(dw, options.learning_rate);
+        le_tensor_mul(dw, options.learning_rate);
         float db = le_tensor_sum_f32(h);
         
         le_tensor_free(dwt);
