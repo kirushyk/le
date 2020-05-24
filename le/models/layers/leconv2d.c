@@ -60,7 +60,7 @@ le_conv2d_new(const char *name, unsigned filter_size, unsigned num_channels,
     LE_OBJECT_GET_CLASS(self) = LE_CLASS(&klass);
     LeShape *weights_shape = le_shape_new(4, filter_size, filter_size, num_channels, num_filters);
     self->w = le_tensor_new_rand_f32(weights_shape);
-    self->b = le_matrix_new_zeros_f32(num_filters, 1);
+    self->b = le_matrix_new_zeros(LE_TYPE_FLOAT32, num_filters, 1);
     le_layer_append_parameter(LE_LAYER(self), self->w);
     le_layer_append_parameter(LE_LAYER(self), self->b);
     return self;

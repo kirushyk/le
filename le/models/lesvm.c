@@ -145,7 +145,7 @@ le_svm_train(LeSVM *self, const LeTensor *x_train, const LeTensor *y_train, LeSV
     self->kernel = options.kernel;
     /// @todo: Add cleanup here
     /// @note: Maybe use stack variable instead
-    self->alphas = le_matrix_new_zeros_f32(1, examples_count);
+    self->alphas = le_matrix_new_zeros(LE_TYPE_FLOAT32, 1, examples_count);
     self->bias = 0;
     /// @todo: Add cleanup here
     self->weights = NULL;

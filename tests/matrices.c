@@ -50,7 +50,7 @@ main()
         
         for (width = 1; width < MAX_DIMENSION; width++)
         {
-            a = le_matrix_new_zeros_f32(height, width);
+            a = le_matrix_new_zeros(LE_TYPE_FLOAT32, height, width);
             assert(le_test_ensure_matrix_size(a, height, width));
             le_tensor_free(a);
             
@@ -70,8 +70,8 @@ main()
         }
     }
 
-    a = le_matrix_new_zeros_f32(10, 5);
-    b = le_matrix_new_zeros_f32(10, 5);
+    a = le_matrix_new_zeros(LE_TYPE_FLOAT32, 10, 5);
+    b = le_matrix_new_zeros(LE_TYPE_FLOAT32, 10, 5);
     LeTensor *at = le_matrix_new_transpose(a);
     c = le_matrix_new_product(at, b);
     LeTensor *d = le_matrix_new_product_full(a, true, b, false);

@@ -230,7 +230,7 @@ le_matrix_new_uninitialized(LeType type, unsigned height, unsigned width)
 }
 
 LeTensor *
-le_matrix_new_zeros_f32(unsigned height, unsigned width)
+le_matrix_new_zeros(LeType type, unsigned height, unsigned width)
 {
     unsigned i;
     unsigned elements_count;

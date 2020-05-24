@@ -75,7 +75,8 @@ LeTensor * le_matrix_new_uninitialized    (LeType type,
                                           unsigned      height,
                                            unsigned      width);
 
-LeTensor * le_matrix_new_zeros_f32            (unsigned      height,
+LeTensor * le_matrix_new_zeros            (LeType type,
+                                             unsigned      height,
                                            unsigned      width);
 
 LeTensor * le_matrix_new_rand_f32             (unsigned      height,

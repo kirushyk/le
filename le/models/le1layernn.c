@@ -101,8 +101,8 @@ le_1_layer_nn_init(Le1LayerNN *self, unsigned features_count, unsigned classes_c
     assert(self->bias == NULL);
     assert(self->weights == NULL);
     
-    self->weights = le_matrix_new_zeros_f32(classes_count, features_count);
-    self->bias = le_matrix_new_zeros_f32(classes_count, 1);
+    self->weights = le_matrix_new_zeros(LE_TYPE_FLOAT32, classes_count, features_count);
+    self->bias = le_matrix_new_zeros(LE_TYPE_FLOAT32, classes_count, 1);
     
     le_model_append_parameter(LE_MODEL(self), self->weights);
     le_model_append_parameter(LE_MODEL(self), self->bias);
