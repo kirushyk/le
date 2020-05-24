@@ -24,10 +24,10 @@ typedef enum LeLogLevel
 } LeLogLevel;
 
 /** @todo: Add Log Level parameter */
-void le_log (const char *category,
-             LeLogLevel  level,
-             const char *message,
-             ...);
+void               le_log                                  (const char *            category,
+                                                            LeLogLevel              level,
+                                                            const char *            message,
+                                                            ...);
 
 #define LE_ERROR(...)   le_log(DEFAULT_LOG_CATEGORY, LE_LOG_LEVEL_ERROR,   __VA_ARGS__)
 #define LE_WARNING(...) le_log(DEFAULT_LOG_CATEGORY, LE_LOG_LEVEL_WARNING, __VA_ARGS__)
