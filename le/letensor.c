@@ -362,6 +362,8 @@ le_dot_product(const LeTensor *a, const LeTensor *b)
 #ifdef __APPLE__
     return le_accelerate_dot_product(a, b);
 #else
+    assert(a->element_type == LE_TYPE_FLOAT32);
+    assert(b->element_type == LE_TYPE_FLOAT32);
     assert(a->shape->num_dimensions == 2);
     assert(b->shape->num_dimensions == 2);
     
@@ -513,6 +515,7 @@ le_tensor_mul_tensor(LeTensor *self, const LeTensor *b)
 void
 le_tensor_add_f32(LeTensor *self, float b)
 {
+    assert(self->element_type == LE_TYPE_FLOAT32);
     /// @todo: Take stride into account
     unsigned i;
     unsigned elements_count = le_shape_get_elements_count(self->shape);
@@ -526,6 +529,7 @@ le_tensor_add_f32(LeTensor *self, float b)
 float
 le_tensor_sum_f32(const LeTensor *self)
 {
+    assert(self->element_type == LE_TYPE_FLOAT32);
     /// @todo: Take stride into account
     float sum = 0.0;
     unsigned i;
@@ -554,6 +558,7 @@ le_tensor_apply_sigmoid(LeTensor *self)
 #ifdef __APPLE__
     return le_accelerate_tensor_apply_sigmoid(self);
 #else
+    assert(self->element_type == LE_TYPE_FLOAT32);
     unsigned i;
     unsigned elements_count = le_shape_get_elements_count(self->shape);
     
@@ -571,6 +576,7 @@ le_tensor_apply_sigmoid_prime(LeTensor *self)
 #ifdef __APPLE__
     return le_accelerate_tensor_apply_sigmoid_prime(self);
 #else
+    assert(self->element_type == LE_TYPE_FLOAT32);
     unsigned i;
     unsigned elements_count = le_shape_get_elements_count(self->shape);
     
@@ -610,6 +616,8 @@ le_tensor_apply_tanh(LeTensor *self)
 void
 le_tensor_apply_sqr(LeTensor *self)
 {
+    assert(self->element_type == LE_TYPE_FLOAT32);
+
     unsigned i;
     unsigned elements_count = le_shape_get_elements_count(self->shape);
     
@@ -622,6 +630,8 @@ le_tensor_apply_sqr(LeTensor *self)
 void
 le_tensor_apply_1_minus(LeTensor *self)
 {
+    assert(self->element_type == LE_TYPE_FLOAT32);
+
     unsigned i;
     unsigned elements_count = le_shape_get_elements_count(self->shape);
     
@@ -634,6 +644,8 @@ le_tensor_apply_1_minus(LeTensor *self)
 void
 le_tensor_apply_x_minus_sqr_x(LeTensor *self)
 {
+    assert(self->element_type == LE_TYPE_FLOAT32);
+
     unsigned i;
     unsigned elements_count = le_shape_get_elements_count(self->shape);
     
@@ -647,6 +659,8 @@ le_tensor_apply_x_minus_sqr_x(LeTensor *self)
 void
 le_tensor_apply_gt_f32(LeTensor *self, float scalar)
 {
+    assert(self->element_type == LE_TYPE_FLOAT32);
+    
     /// @todo: Take stride into account
     unsigned i;
     unsigned elements_count = le_shape_get_elements_count(self->shape);
@@ -660,6 +674,8 @@ le_tensor_apply_gt_f32(LeTensor *self, float scalar)
 void
 le_tensor_apply_sgn(LeTensor *self)
 {
+    assert(self->element_type == LE_TYPE_FLOAT32);
+
     /// @todo: Take stride into account
     unsigned i;
     unsigned elements_count = le_shape_get_elements_count(self->shape);
@@ -673,6 +689,8 @@ le_tensor_apply_sgn(LeTensor *self)
 void
 le_tensor_apply_relu(LeTensor *self)
 {
+    assert(self->element_type == LE_TYPE_FLOAT32);
+
     /// @todo: Take stride into account
     unsigned i;
     unsigned elements_count = le_shape_get_elements_count(self->shape);
@@ -683,6 +701,8 @@ le_tensor_apply_relu(LeTensor *self)
         ((float *)self->data)[i] = value > 0.0f ? value : 0.0f;
     }
 }
+
+/// @section ugly
 
 #define TENSOR_PRINT_MAX_SIZE 10
 #define BUFFER_SIZE 1024

@@ -138,7 +138,7 @@ void               le_tensor_apply_relu                    (LeTensor *          
 
 void               le_tensor_free                          (LeTensor *              tensor);
 
-/** @note: Section Bad */
+/** @section ugly */
 #include <stdio.h>
 
 LeTensor *         le_scalar_new_f32                       (float                   scalar);
