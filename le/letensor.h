@@ -65,7 +65,7 @@ void               le_tensor_add                           (LeTensor *          
 void               le_tensor_sub                           (LeTensor *              a,
                                                             const LeTensor *        b);
 
-void               le_tensor_sub_scaled                    (LeTensor *              a,
+void               le_tensor_sub_scaled_f32                (LeTensor *              a,
                                                             float                   scale,
                                                             const LeTensor *        b);
 
@@ -134,7 +134,8 @@ typedef struct LeTensorStats
 
 LeTensorStats      le_tensor_get_stats                     (LeTensor *              tensor);
 
-LeTensor *         le_tensor_new_f32_equal_u8              (LeTensor *              tensor,
+LeTensor *         le_tensor_new_equal_u8                  (LeType                  type,
+                                                            LeTensor *              tensor,
                                                             uint8_t                 scalar);
 
 LE_END_DECLS

@@ -146,7 +146,7 @@ le_1_layer_nn_train(Le1LayerNN *self, LeTensor *x_train, LeTensor *y_train, Le1L
         le_tensor_free(h);
         le_tensor_sub(self->weights, dw);
         le_tensor_free(dw);
-        le_tensor_sub_scaled(self->bias, options.learning_rate, db);
+        le_tensor_sub_scaled_f32(self->bias, options.learning_rate, db);
         le_tensor_free(db);
         
         printf("Train Set Error: %f\n", train_set_error);

@@ -197,12 +197,12 @@ le_tensor_new_cast_f32(LeTensor *another)
 }
 
 LeTensor *
-le_tensor_new_f32_equal_u8(LeTensor *another, uint8_t scalar)
+le_tensor_new_equal_u8(LeType type, LeTensor *another, uint8_t scalar)
 {
     unsigned i;
     
     LeTensor *self = malloc(sizeof(struct LeTensor));
-    self->element_type = LE_TYPE_FLOAT32;
+    self->element_type = type;
     self->shape = le_shape_copy(another->shape);
     self->stride = another->stride;
     self->owns_data = true;
@@ -213,7 +213,8 @@ le_tensor_new_f32_equal_u8(LeTensor *another, uint8_t scalar)
     /// @todo: Add support for types other than UINT8
     for (i = 0; i < elements_count; i++)
     {
-        ((float *)self->data)[i] = (((uint8_t *)another->data)[i] == scalar) ? 1.0f : 0.0f;
+        bool equal = (((uint8_t *)another->data)[i] == scalar);
+        ((float *)self->data)[i] = equal ? 1.0f : 0.0f;
     }
     
     return self;
@@ -444,7 +445,7 @@ le_tensor_sub(LeTensor *a, const LeTensor *b)
 }
 
 void
-le_tensor_sub_scaled(LeTensor *a, float scale, const LeTensor *b)
+le_tensor_sub_scaled_f32(LeTensor *a, float scale, const LeTensor *b)
 {
     /// @todo: Take stride into account
     assert(le_shape_equal(a->shape, b->shape));
