@@ -81,7 +81,7 @@ le_logistic_classifier_predict(LeLogisticClassifier *self, const LeTensor *x)
     {
         le_tensor_free(x_poly);
     }
-    le_tensor_add_f32(a, self->bias);
+    le_tensor_add(a, self->bias);
     le_tensor_apply_sigmoid(a);
     return a;
 }

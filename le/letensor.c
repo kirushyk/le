@@ -415,7 +415,7 @@ le_rbf(const LeTensor *a, const LeTensor *b, float sigma)
 }
 
 void
-le_tensor_add(LeTensor *a, LeTensor *b)
+le_tensor_add_tensor(LeTensor *a, LeTensor *b)
 {
     /// @todo: Take stride into account
     assert(le_shape_equal(a->shape, b->shape));

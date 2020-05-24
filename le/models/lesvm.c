@@ -90,7 +90,7 @@ le_svm_margins(LeSVM *self, const LeTensor *x)
         LeTensor *weights_transposed = le_matrix_new_transpose(self->weights);
         LeTensor *margins = le_matrix_new_product(weights_transposed, x);
         le_tensor_free(weights_transposed);
-        le_tensor_add_f32(margins, self->bias);
+        le_tensor_add(margins, self->bias);
         return margins;
     }
     else

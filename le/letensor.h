@@ -60,12 +60,19 @@ void               le_tensor_set_f32                       (LeTensor *          
                                                             float                   value);
 
 /// @note: a = a + b
-void               le_tensor_add                           (LeTensor *              a,
+void               le_tensor_add_f32                       (LeTensor *              a,
+                                                            float                   b);
+
+/// @note: a = a + b
+void               le_tensor_add_tensor                    (LeTensor *              a,
                                                             LeTensor *              b);
 
 /// @note: a = a + b
-void               le_tensor_add_f32                       (LeTensor *              a,
-                                                            float                   b);
+#define le_tensor_add(a, b) _Generic((b), \
+   float: le_tensor_add_f32, \
+   LeTensor *: le_tensor_add_tensor, \
+   const LeTensor *: le_tensor_add_tensor \
+)(a, b)
 
 /// @note: a = a - b
 void               le_tensor_sub_f32                       (LeTensor *              a,
