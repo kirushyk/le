@@ -10,6 +10,7 @@
 
 LE_BEGIN_DECLS
 
+/// Base class for all optimizers
 typedef struct LeOptimizer
 {
     LeObject parent;

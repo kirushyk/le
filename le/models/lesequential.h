@@ -12,6 +12,7 @@
 
 LE_BEGIN_DECLS
 
+/// Sequential model is a plain stack of layers where each layer has exactly one input and one output
 typedef struct LeSequential LeSequential;
 
 #define LE_SEQUENTIAL(a) ((LeSequential *)(a))

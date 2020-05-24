@@ -11,6 +11,7 @@
 
 LE_BEGIN_DECLS
 
+/// Tensors are multi-dimensional arrays containing elements of a uniform type
 typedef struct LeTensor LeTensor;
 
 #define LE_TENSOR(tensor) ((LeTensor *)(tensor))
