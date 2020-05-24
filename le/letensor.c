@@ -418,6 +418,8 @@ void
 le_tensor_add_tensor(LeTensor *a, LeTensor *b)
 {
     /// @todo: Take stride into account
+    assert(a->element_type == LE_TYPE_FLOAT32);
+    assert(b->element_type == LE_TYPE_FLOAT32);
     assert(le_shape_equal(a->shape, b->shape));
     
     unsigned i;
