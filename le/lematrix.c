@@ -517,7 +517,7 @@ le_matrix_new_conv2d(const LeTensor *image, const LeTensor *filter)
                     value += le_matrix_at_f32(image, oy + fy, ox + fx) * le_matrix_at_f32(filter, fy, fx);
                 }
             }
-            le_matrix_set_f32(self, oy, ox, value);
+            le_matrix_set(self, oy, ox, value);
         }
     }
     
