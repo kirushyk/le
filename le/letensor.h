@@ -59,29 +59,36 @@ void               le_tensor_set_f32                       (LeTensor *          
                                                             uint32_t                index,
                                                             float                   value);
 
-void               le_tensor_add                           (LeTensor *              matrix,
-                                                            LeTensor *              another);
+/// @note: a = a + b
+void               le_tensor_add                           (LeTensor *              a,
+                                                            LeTensor *              b);
 
+/// @note: a = a + b
+void               le_tensor_add_f32                       (LeTensor *              a,
+                                                            float                   b);
+
+/// @note: a = a - b
 void               le_tensor_sub                           (LeTensor *              a,
                                                             const LeTensor *        b);
 
+/// @note: a = a - b
+void               le_tensor_sub_f32                       (LeTensor *              a,
+                                                            float                   b);
+
+/// @note: a = a - c * b
 void               le_tensor_sub_scaled_f32                (LeTensor *              a,
-                                                            float                   scale,
+                                                            float                   c,
+                                                            const LeTensor *        b);
+
+/// @note: a = a * b
+void               le_tensor_mul                           (LeTensor *              a,
                                                             const LeTensor *        b);
 
 /// @note: a = a * b
 void               le_tensor_mul_f32                       (LeTensor *              a,
                                                             float                   b);
 
-/// @note: a = a * b
-void               le_tensor_mul                           (LeTensor *              a,
-                                                            const LeTensor *        b);
 
-void               le_tensor_add_f32                       (LeTensor *              a,
-                                                            float                   b);
-
-void               le_tensor_sub_f32                       (LeTensor *              a,
-                                                            float                   b);
 
 float              le_tensor_sum_f32                       (const LeTensor *        tensor);
 
