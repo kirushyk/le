@@ -582,7 +582,20 @@ le_tensor_apply_tanh(LeTensor *self)
     
     for (i = 0; i < elements_count; i++)
     {
-        ((float *)self->data)[i] = tanhf(((float *)self->data)[i]);
+        switch (self->element_type)
+        {
+        case LE_TYPE_FLOAT32:
+            ((float *)self->data)[i] = tanhf(((float *)self->data)[i]);
+            break;
+
+        case LE_TYPE_FLOAT64:
+            ((double *)self->data)[i] = tanh(((double *)self->data)[i]);
+            break;
+        
+        default:
+            LE_ERROR("%s: Type %s not supported", __func__, le_type_name(self->element_type));
+            return;
+        }
     }
 }
 

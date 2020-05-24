@@ -30,7 +30,9 @@ typedef enum LeType
     LE_TYPE_FLOAT64
 } LeType;
 
-size_t le_type_size(LeType type);
+size_t             le_type_size                            (LeType                  type);
+
+const char *       le_type_name                            (LeType                  type);
 
 LE_END_DECLS
 

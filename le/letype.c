@@ -25,3 +25,31 @@ le_type_size(LeType type)
         return 0;
     }
 }
+
+const char *
+le_type_name(LeType type)
+{
+    switch (type) {
+    case LE_TYPE_INT8:
+        return "int8";
+    case LE_TYPE_UINT8:
+        return "uint8";
+    case LE_TYPE_INT16:
+        return "int16";
+    case LE_TYPE_UINT16:
+        return "uint16";
+    case LE_TYPE_FLOAT16:
+        return "float16";
+    case LE_TYPE_INT32:
+        return "int32";
+    case LE_TYPE_UINT32:
+        return "uint32";
+    case LE_TYPE_FLOAT32:
+        return "float32";
+    case LE_TYPE_FLOAT64:
+        return "float64";
+    case LE_TYPE_VOID:
+    default:
+        return "void";
+    }
+}
