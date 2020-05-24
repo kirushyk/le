@@ -591,6 +591,8 @@ le_tensor_apply_sigmoid_prime(LeTensor *self)
 void
 le_tensor_apply_tanh(LeTensor *self)
 {
+    assert(self->element_type == LE_TYPE_FLOAT32 ||
+           self->element_type == LE_TYPE_FLOAT64);
     unsigned i;
     unsigned elements_count = le_shape_get_elements_count(self->shape);
     
@@ -601,13 +603,10 @@ le_tensor_apply_tanh(LeTensor *self)
         case LE_TYPE_FLOAT32:
             ((float *)self->data)[i] = tanhf(((float *)self->data)[i]);
             break;
-
         case LE_TYPE_FLOAT64:
             ((double *)self->data)[i] = tanh(((double *)self->data)[i]);
             break;
-        
         default:
-            LE_ERROR("%s: Type %s not supported", __func__, le_type_name(self->element_type));
             return;
         }
     }
@@ -616,50 +615,89 @@ le_tensor_apply_tanh(LeTensor *self)
 void
 le_tensor_apply_sqr(LeTensor *self)
 {
-    assert(self->element_type == LE_TYPE_FLOAT32);
+    assert(self->element_type == LE_TYPE_FLOAT32 ||
+           self->element_type == LE_TYPE_FLOAT64);
 
     unsigned i;
     unsigned elements_count = le_shape_get_elements_count(self->shape);
     
     for (i = 0; i < elements_count; i++)
     {
-        ((float *)self->data)[i] = ((float *)self->data)[i] * ((float *)self->data)[i];
+        switch (self->element_type)
+        {
+        case LE_TYPE_FLOAT32:
+            ((float *)self->data)[i] = ((float *)self->data)[i] * ((float *)self->data)[i];
+            break;
+        case LE_TYPE_FLOAT64:
+            ((double *)self->data)[i] = ((double *)self->data)[i] * ((double *)self->data)[i];
+            break;
+        default:
+            return;
+        }
     }
 }
 
 void
 le_tensor_apply_1_minus(LeTensor *self)
 {
-    assert(self->element_type == LE_TYPE_FLOAT32);
+    assert(self->element_type == LE_TYPE_FLOAT32 ||
+           self->element_type == LE_TYPE_FLOAT64);
 
     unsigned i;
     unsigned elements_count = le_shape_get_elements_count(self->shape);
     
     for (i = 0; i < elements_count; i++)
     {
-        ((float *)self->data)[i] = 1.0f - ((float *)self->data)[i];
+        switch (self->element_type)
+        {
+        case LE_TYPE_FLOAT32:
+            ((float *)self->data)[i] = 1.0f - ((float *)self->data)[i];
+            break;
+        case LE_TYPE_FLOAT64:
+            ((double *)self->data)[i] = 1.0f - ((double *)self->data)[i];
+            break;
+        default:
+            return;
+        }
     }
 }
 
 void
 le_tensor_apply_x_minus_sqr_x(LeTensor *self)
 {
-    assert(self->element_type == LE_TYPE_FLOAT32);
+    assert(self->element_type == LE_TYPE_FLOAT32 ||
+           self->element_type == LE_TYPE_FLOAT64);
 
     unsigned i;
     unsigned elements_count = le_shape_get_elements_count(self->shape);
     
     for (i = 0; i < elements_count; i++)
     {
-        float x = ((float *)self->data)[i];
-        ((float *)self->data)[i] = x * (1 - x);
+        switch (self->element_type)
+        {
+        case LE_TYPE_FLOAT32:
+            {
+                float x = ((float *)self->data)[i];
+                ((float *)self->data)[i] = x * (1 - x);
+            }
+            break;
+        case LE_TYPE_FLOAT64:
+            {
+                double x = ((double *)self->data)[i];
+                ((double *)self->data)[i] = x * (1 - x);
+            }
+            break;
+        default:
+            return;
+        }
     }
 }
 
 void
 le_tensor_apply_gt_f32(LeTensor *self, float scalar)
 {
-    assert(self->element_type == LE_TYPE_FLOAT32);
+    assert(self->element_type == LE_TYPE_FLOAT32 ||
+           self->element_type == LE_TYPE_FLOAT64);
     
     /// @todo: Take stride into account
     unsigned i;
@@ -667,7 +705,17 @@ le_tensor_apply_gt_f32(LeTensor *self, float scalar)
     
     for (i = 0; i < elements_count; i++)
     {
-        ((float *)self->data)[i] = ((float *)self->data)[i] > scalar ? 1.0f : 0.0f;
+        switch (self->element_type)
+        {
+        case LE_TYPE_FLOAT32:
+            ((float *)self->data)[i] = ((float *)self->data)[i] > scalar ? 1.0f : 0.0f;
+            break;
+        case LE_TYPE_FLOAT64:
+            ((double *)self->data)[i] = ((double *)self->data)[i] > scalar ? 1.0 : 0.0;
+            break;
+        default:
+            return;
+        }
     }
 }
 
