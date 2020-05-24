@@ -68,6 +68,18 @@ void               le_matrix_set_f64                       (LeTensor *          
                                                             unsigned                x,
                                                             double                  value);
 
+/// @note: Half is not accepted here
+#define le_matrix_set(m, y, x, v) _Generic((v), \
+   int8_t: le_matrix_set_i8, \
+   uint8_t: le_matrix_set_u8, \
+   int16_t: le_matrix_set_i16, \
+   uint16_t: le_matrix_set_u16, \
+   int32_t: le_matrix_set_i32, \
+   uint32_t: le_matrix_set_u32, \
+   float: le_matrix_set_f32, \
+   double: le_matrix_set_f64 \
+)(m, y, x, v)
+
 LeTensor *         le_matrix_new_identity                  (LeType                  type,
                                                             unsigned                size);
 

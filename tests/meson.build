@@ -10,6 +10,7 @@ le_tests = [
     ['mnist.c'],
     ['list.c'],
     ['matrices.c'],
+    ['type-generic-matrices.c'],
     ['sobel.c'],
     ['tensorlist.c']
 ]

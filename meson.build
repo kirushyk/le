@@ -5,7 +5,7 @@ project('le', 'c',
     version: '0.0.1',
     meson_version: '>= 0.54.0',
     default_options: [
-        'c_std=c99',
+        'c_std=c11',
         'cpp_std=c++14',
         'warning_level=1',
         'buildtype=debug'
