@@ -215,16 +215,16 @@ le_matrix_new_identity(LeType type, unsigned size)
 }
 
 LeTensor *
-le_matrix_new_uninitialized_f32(unsigned height, unsigned width)
+le_matrix_new_uninitialized(LeType type, unsigned height, unsigned width)
 {
     LeTensor *self;
     
     self = malloc(sizeof(struct LeTensor));
-    self->element_type = LE_TYPE_FLOAT32;
+    self->element_type = type;
     self->shape = le_shape_new(2, height, width);
     self->stride = width;
     self->owns_data = true;
-    self->data = malloc(height * width * sizeof(float));
+    self->data = malloc(height * width * le_type_size(self->element_type));
     
     return self;
 }
@@ -551,7 +551,7 @@ le_matrix_get_column_copy(LeTensor *self, unsigned x)
     
     unsigned y;
     unsigned height = le_matrix_get_height(self);
-    LeTensor *column = le_matrix_new_uninitialized_f32(height, 1);
+    LeTensor *column = le_matrix_new_uninitialized(self->element_type, height, 1);
     
     for (y = 0; y < height; y++)
     {

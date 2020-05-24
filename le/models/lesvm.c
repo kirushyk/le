@@ -99,7 +99,7 @@ le_svm_margins(LeSVM *self, const LeTensor *x)
             return NULL;
         
         unsigned test_examples_count = le_matrix_get_width(x);
-        LeTensor *margins = le_matrix_new_uninitialized_f32(1, test_examples_count);
+        LeTensor *margins = le_matrix_new_uninitialized(LE_TYPE_FLOAT32, 1, test_examples_count);
         for (unsigned i = 0; i < test_examples_count; i++)
         {
             LeTensor *example = le_matrix_get_column(x, i);
@@ -241,7 +241,7 @@ le_svm_train(LeSVM *self, const LeTensor *x_train, const LeTensor *y_train, LeSV
     if (self->kernel == LE_KERNEL_LINEAR)
     {
         /* For linear kernel, we calculate weights */
-        self->weights = le_matrix_new_uninitialized_f32(features_count, 1);
+        self->weights = le_matrix_new_uninitialized(LE_TYPE_FLOAT32, features_count, 1);
         for (int j = 0; j < features_count; j++)
         {
             float s = 0.0f;
@@ -263,9 +263,9 @@ le_svm_train(LeSVM *self, const LeTensor *x_train, const LeTensor *y_train, LeSV
                 support_vectors_count++;
         }
         
-        LeTensor *new_alphas = le_matrix_new_uninitialized_f32(1, support_vectors_count);
-        self->x = le_matrix_new_uninitialized_f32(features_count, support_vectors_count);
-        self->y = le_matrix_new_uninitialized_f32(1, support_vectors_count);
+        LeTensor *new_alphas = le_matrix_new_uninitialized(LE_TYPE_FLOAT32, 1, support_vectors_count);
+        self->x = le_matrix_new_uninitialized(LE_TYPE_FLOAT32, features_count, support_vectors_count);
+        self->y = le_matrix_new_uninitialized(LE_TYPE_FLOAT32, 1, support_vectors_count);
 
         int j = 0; /// Iterator for new matrices
         for (int i = 0; i < examples_count; i++)

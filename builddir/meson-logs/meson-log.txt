@@ -1,0 +1,246 @@
+Build started at 2020-05-24T03:00:56.104898
+Main binary: /usr/local/opt/python@3.8/bin/python3.8
+Build Options: -Dbuildtype=debug
+Python system: Darwin
+The Meson build system
+Version: 0.54.1
+Source dir: /Users/svetlana/Developer/le
+Build dir: /Users/svetlana/Developer/le/builddir
+Build type: native build
+None of 'PKG_CONFIG_PATH' are defined in the environment, not changing global flags.
+None of 'PKG_CONFIG_PATH' are defined in the environment, not changing global flags.
+Project name: le
+Project version: 0.0.1
+None of 'CC' are defined in the environment, not changing global flags.
+None of 'CFLAGS' are defined in the environment, not changing global flags.
+None of 'LDFLAGS' are defined in the environment, not changing global flags.
+None of 'CPPFLAGS' are defined in the environment, not changing global flags.
+None of 'CC_LD' are defined in the environment, not changing global flags.
+Sanity testing C compiler: cc
+Is cross compiler: False.
+Sanity check compiler command line: cc /Users/svetlana/Developer/le/builddir/meson-private/sanitycheckc.c -o /Users/svetlana/Developer/le/builddir/meson-private/sanitycheckc.exe -pipe
+Sanity check compile stdout:
+
+-----
+Sanity check compile stderr:
+
+-----
+Running test binary command: /Users/svetlana/Developer/le/builddir/meson-private/sanitycheckc.exe
+C compiler for the build machine: cc (clang 11.0.3 "Apple clang version 11.0.3 (clang-1103.0.32.62)")
+C linker for the build machine: cc ld64 556.6
+None of 'AR' are defined in the environment, not changing global flags.
+None of 'CC' are defined in the environment, not changing global flags.
+None of 'CFLAGS' are defined in the environment, not changing global flags.
+None of 'LDFLAGS' are defined in the environment, not changing global flags.
+None of 'CPPFLAGS' are defined in the environment, not changing global flags.
+None of 'CC_LD' are defined in the environment, not changing global flags.
+Sanity testing C compiler: cc
+Is cross compiler: False.
+Sanity check compiler command line: cc /Users/svetlana/Developer/le/builddir/meson-private/sanitycheckc.c -o /Users/svetlana/Developer/le/builddir/meson-private/sanitycheckc.exe -pipe
+Sanity check compile stdout:
+
+-----
+Sanity check compile stderr:
+
+-----
+Running test binary command: /Users/svetlana/Developer/le/builddir/meson-private/sanitycheckc.exe
+C compiler for the host machine: cc (clang 11.0.3 "Apple clang version 11.0.3 (clang-1103.0.32.62)")
+C linker for the host machine: cc ld64 556.6
+None of 'AR' are defined in the environment, not changing global flags.
+Build machine cpu family: x86_64
+Build machine cpu: x86_64
+Host machine cpu family: x86_64
+Host machine cpu: x86_64
+Target machine cpu family: x86_64
+Target machine cpu: x86_64
+Running compile:
+Working directory:  /Users/svetlana/Developer/le/builddir/meson-private/tmpdmous150
+Command line:  cc /Users/svetlana/Developer/le/builddir/meson-private/tmpdmous150/testfile.c -o /Users/svetlana/Developer/le/builddir/meson-private/tmpdmous150/output.exe -pipe -O0 -framework accelerate 
+
+Code:
+ int main(void) { return 0; }
+Compiler stdout:
+ 
+Compiler stderr:
+ 
+Run-time dependency appleframeworks found: YES (accelerate)
+Default path env var: None
+Search paths: []
+Run-time dependency CUDA (modules: cudart, cublas) found: NO 
+Running compile:
+Working directory:  /Users/svetlana/Developer/le/builddir/meson-private/tmp8ctxeuev
+Command line:  cc /Users/svetlana/Developer/le/builddir/meson-private/tmp8ctxeuev/testfile.c -o /Users/svetlana/Developer/le/builddir/meson-private/tmp8ctxeuev/output.exe -pipe -O0 -lm -Wl,-undefined,dynamic_lookup 
+
+Code:
+ int main(void) { return 0; }
+Compiler stdout:
+ 
+Compiler stderr:
+ 
+Library m found: YES
+Running compile:
+Working directory:  /Users/svetlana/Developer/le/builddir/meson-private/tmpv76a30_4
+Command line:  cc /Users/svetlana/Developer/le/builddir/meson-private/tmpv76a30_4/testfile.c -o /Users/svetlana/Developer/le/builddir/meson-private/tmpv76a30_4/output.exe -pipe -O0 -lz -Wl,-undefined,dynamic_lookup 
+
+Code:
+ int main(void) { return 0; }
+Compiler stdout:
+ 
+Compiler stderr:
+ 
+Library z found: YES
+Library m found: YES
+Configuring mnist-config.h using configuration
+None of 'CXX' are defined in the environment, not changing global flags.
+None of 'CXXFLAGS' are defined in the environment, not changing global flags.
+None of 'LDFLAGS' are defined in the environment, not changing global flags.
+None of 'CPPFLAGS' are defined in the environment, not changing global flags.
+None of 'CXX_LD' are defined in the environment, not changing global flags.
+Sanity testing C++ compiler: c++
+Is cross compiler: False.
+Sanity check compiler command line: c++ /Users/svetlana/Developer/le/builddir/meson-private/sanitycheckcpp.cc -o /Users/svetlana/Developer/le/builddir/meson-private/sanitycheckcpp.exe -pipe
+Sanity check compile stdout:
+
+-----
+Sanity check compile stderr:
+
+-----
+Running test binary command: /Users/svetlana/Developer/le/builddir/meson-private/sanitycheckcpp.exe
+C++ compiler for the host machine: c++ (clang 11.0.3 "Apple clang version 11.0.3 (clang-1103.0.32.62)")
+C++ linker for the host machine: c++ ld64 556.6
+Program python3 (pybind11) found: YES (/usr/local/bin/python3) modules: pybind11
+Pkg-config binary for MachineChoice.HOST is not cached.
+None of 'PKG_CONFIG' are defined in the environment, not changing global flags.
+Pkg-config binary missing from cross or native file, or env var undefined.
+Trying a default Pkg-config fallback at pkg-config
+Trying pkg-config binary pkg-config for machine MachineChoice.HOST at ['/usr/local/bin/pkg-config']
+Found pkg-config: /usr/local/bin/pkg-config (0.29.2)
+Determining dependency 'python-3.7m' with pkg-config executable '/usr/local/bin/pkg-config'
+PKG_CONFIG_PATH: 
+Called `/usr/local/bin/pkg-config --modversion python-3.7m` -> 0
+3.7
+PKG_CONFIG_PATH: 
+Called `/usr/local/bin/pkg-config --cflags python-3.7m` -> 0
+-I/usr/local/opt/python/Frameworks/Python.framework/Versions/3.7/include/python3.7m
+PKG_CONFIG_PATH: 
+Called `/usr/local/bin/pkg-config python-3.7m --libs` -> 0
+-L/usr/local/opt/python/Frameworks/Python.framework/Versions/3.7/lib -lpython3.7m
+PKG_CONFIG_PATH: 
+Called `/usr/local/bin/pkg-config python-3.7m --libs` -> 0
+-L/usr/local/opt/python/Frameworks/Python.framework/Versions/3.7/lib -lpython3.7m
+None of 'PKG_CONFIG_PATH' are defined in the environment, not changing global flags.
+Running compile:
+Working directory:  /Users/svetlana/Developer/le/builddir/meson-private/tmpseg3x4da
+Command line:  c++ /Users/svetlana/Developer/le/builddir/meson-private/tmpseg3x4da/testfile.cpp -o /Users/svetlana/Developer/le/builddir/meson-private/tmpseg3x4da/output.exe -pipe -O0 -fpermissive 
+
+Code:
+ #include<stdio.h>
+        
+        int main(void) {
+            printf("%ld\n", (long)(sizeof(void *)));
+            return 0;
+        };
+Compiler stdout:
+ 
+Compiler stderr:
+ 
+Program stdout:
+
+8
+
+Program stderr:
+
+
+Running compile:
+Working directory:  /Users/svetlana/Developer/le/builddir/meson-private/tmpvyq9nn_1
+Command line:  c++ /Users/svetlana/Developer/le/builddir/meson-private/tmpvyq9nn_1/testfile.cpp -o /Users/svetlana/Developer/le/builddir/meson-private/tmpvyq9nn_1/output.obj -pipe -c -O0 -fpermissive --print-search-dirs 
+
+Code:
+ 
+Compiler stdout:
+ programs: =/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin
+libraries: =/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/11.0.3
+
+Compiler stderr:
+ 
+Found "python-3.7m" via pkgconfig lookup in LIBPC (/usr/local/opt/python/Frameworks/Python.framework/Versions/3.7/lib/pkgconfig)
+Dependency python found: YES (pkgconfig)
+None of 'RUSTC' are defined in the environment, not changing global flags.
+None of 'CC' are defined in the environment, not changing global flags.
+None of 'CFLAGS' are defined in the environment, not changing global flags.
+None of 'LDFLAGS' are defined in the environment, not changing global flags.
+None of 'CPPFLAGS' are defined in the environment, not changing global flags.
+None of 'CC_LD' are defined in the environment, not changing global flags.
+None of 'RUSTC_LD' are defined in the environment, not changing global flags.
+None of 'RUST_LD' are defined in the environment, not changing global flags.
+Compiler for language rust for the host machine not found.
+Configuring test-config.h using configuration
+Adding test "objects_objects"
+Adding test "mnist"
+Adding test "list"
+Adding test "matrices"
+Adding test "sobel"
+Adding test "tensorlist"
+Adding benchmark "matrices_benchmark"
+Pkg-config binary for MachineChoice.HOST is cached.
+Determining dependency 'gtk+-3.0' with pkg-config executable '/usr/local/bin/pkg-config'
+PKG_CONFIG_PATH: 
+Called `/usr/local/bin/pkg-config --modversion gtk+-3.0` -> 0
+3.24.18
+PKG_CONFIG_PATH: 
+Called `/usr/local/bin/pkg-config --cflags gtk+-3.0` -> 0
+-I/usr/local/Cellar/libffi/3.3/include -I/usr/local/Cellar/gtk+3/3.24.18_1/include/gtk-3.0 -I/usr/local/Cellar/glib/2.64.2_1/include/gio-unix-2.0 -I/usr/local/Cellar/cairo/1.16.0_3/include/cairo -I/usr/local/Cellar/libepoxy/1.5.4_1/include -I/usr/local/Cellar/pango/1.44.7/include/pango-1.0 -I/usr/local/Cellar/fribidi/1.0.9/include/fribidi -I/usr/local/Cellar/harfbuzz/2.6.5_1/include/harfbuzz -I/usr/local/Cellar/graphite2/1.3.14/include -I/usr/local/Cellar/atk/2.36.0/include/atk-1.0 -I/usr/local/Cellar/cairo/1.16.0_3/include/cairo -I/usr/local/Cellar/pixman/0.40.0/include/pixman-1 -I/usr/local/Cellar/fontconfig/2.13.1/include -I/usr/local/opt/freetype/include/freetype2 -I/usr/local/Cellar/libpng/1.6.37/include/libpng16 -I/usr/local/Cellar/gdk-pixbuf/2.40.0_1/include/gdk-pixbuf-2.0 -I/usr/local/Cellar/glib/2.64.2_1/include -I/usr/local/Cellar/glib/2.64.2_1/include/glib-2.0 -I/usr/local/Cellar/glib/2.64.2_1/lib/glib-2.0/include -I/usr/local/opt/gettext/include -I/usr/local/Cellar/pcre/8.44/include
+PKG_CONFIG_PATH: 
+Called `/usr/local/bin/pkg-config gtk+-3.0 --libs` -> 0
+-L/usr/local/Cellar/gtk+3/3.24.18_1/lib -L/usr/local/Cellar/pango/1.44.7/lib -L/usr/local/Cellar/harfbuzz/2.6.5_1/lib -L/usr/local/Cellar/atk/2.36.0/lib -L/usr/local/Cellar/cairo/1.16.0_3/lib -L/usr/local/Cellar/gdk-pixbuf/2.40.0_1/lib -L/usr/local/Cellar/glib/2.64.2_1/lib -L/usr/local/opt/gettext/lib -lgtk-3 -lgdk-3 -framework Cocoa -framework Carbon -framework CoreGraphics -lpangocairo-1.0 -lpango-1.0 -lharfbuzz -latk-1.0 -lcairo-gobject -lcairo -lgdk_pixbuf-2.0 -lgio-2.0 -lgobject-2.0 -lglib-2.0 -lintl
+PKG_CONFIG_PATH: 
+Called `/usr/local/bin/pkg-config gtk+-3.0 --libs` -> 0
+-L/usr/local/Cellar/gtk+3/3.24.18_1/lib -L/usr/local/Cellar/pango/1.44.7/lib -L/usr/local/Cellar/harfbuzz/2.6.5_1/lib -L/usr/local/Cellar/atk/2.36.0/lib -L/usr/local/Cellar/cairo/1.16.0_3/lib -L/usr/local/Cellar/gdk-pixbuf/2.40.0_1/lib -L/usr/local/Cellar/glib/2.64.2_1/lib -L/usr/local/opt/gettext/lib -lgtk-3 -lgdk-3 -framework Cocoa -framework Carbon -framework CoreGraphics -lpangocairo-1.0 -lpango-1.0 -lharfbuzz -latk-1.0 -lcairo-gobject -lcairo -lgdk_pixbuf-2.0 -lgio-2.0 -lgobject-2.0 -lglib-2.0 -lintl
+None of 'PKG_CONFIG_PATH' are defined in the environment, not changing global flags.
+Run-time dependency gtk+-3.0 found: YES 3.24.18
+Dependency gtk+-3.0 found: YES 3.24.18 (cached)
+Pkg-config binary for MachineChoice.HOST is cached.
+Determining dependency 'libsoup-2.4' with pkg-config executable '/usr/local/bin/pkg-config'
+PKG_CONFIG_PATH: 
+Called `/usr/local/bin/pkg-config --modversion libsoup-2.4` -> 0
+2.70.0
+PKG_CONFIG_PATH: 
+Called `/usr/local/bin/pkg-config --cflags libsoup-2.4` -> 0
+-I/usr/local/Cellar/libffi/3.3/include -I/usr/local/Cellar/libsoup/2.70.0/include/libsoup-2.4 -I/usr/local/Cellar/libpsl/0.21.0_2/include -I/usr/local/Cellar/glib/2.64.2_1/include -I/usr/local/Cellar/glib/2.64.2_1/include/glib-2.0 -I/usr/local/Cellar/glib/2.64.2_1/lib/glib-2.0/include -I/usr/local/opt/gettext/include -I/usr/local/Cellar/pcre/8.44/include
+PKG_CONFIG_PATH: 
+Called `/usr/local/bin/pkg-config libsoup-2.4 --libs` -> 0
+-L/usr/local/Cellar/libsoup/2.70.0/lib -L/usr/local/Cellar/glib/2.64.2_1/lib -L/usr/local/opt/gettext/lib -lsoup-2.4 -lgio-2.0 -lgobject-2.0 -lglib-2.0 -lintl
+PKG_CONFIG_PATH: 
+Called `/usr/local/bin/pkg-config libsoup-2.4 --libs` -> 0
+-L/usr/local/Cellar/libsoup/2.70.0/lib -L/usr/local/Cellar/glib/2.64.2_1/lib -L/usr/local/opt/gettext/lib -lsoup-2.4 -lgio-2.0 -lgobject-2.0 -lglib-2.0 -lintl
+None of 'PKG_CONFIG_PATH' are defined in the environment, not changing global flags.
+Run-time dependency libsoup-2.4 found: YES 2.70.0
+Configuring board-config.h using configuration
+Build targets in project: 28
+
+Found ninja-1.10.0 at /usr/local/bin/ninja
+Running compile:
+Working directory:  /var/folders/m4/9rcmkj7j1n3_kkgdq4gxp28m0000gn/T/tmpw0_o9pmq
+Command line:  c++ /var/folders/m4/9rcmkj7j1n3_kkgdq4gxp28m0000gn/T/tmpw0_o9pmq/testfile.cpp -o /var/folders/m4/9rcmkj7j1n3_kkgdq4gxp28m0000gn/T/tmpw0_o9pmq/output.obj -pipe -c -std=c++14 
+
+Code:
+ int i = static_cast<int>(0);
+Compiler stdout:
+ 
+Compiler stderr:
+ 
+Compiler accepts -std=c++14: YES
+Running compile:
+Working directory:  /Users/svetlana/Developer/le/builddir/meson-private/tmp6qakrvgj
+Command line:  cc /Users/svetlana/Developer/le/builddir/meson-private/tmp6qakrvgj/testfile.c -o /Users/svetlana/Developer/le/builddir/meson-private/tmp6qakrvgj/output.obj -pipe -c -O0 --print-search-dirs 
+
+Code:
+ 
+Compiler stdout:
+ programs: =/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin
+libraries: =/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/11.0.3
+
+Compiler stderr:
+ 
+None of 'STRIP' are defined in the environment, not changing global flags.
+None of 'STRIP' are defined in the environment, not changing global flags.

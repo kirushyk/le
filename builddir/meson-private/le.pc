@@ -1,0 +1,10 @@
+prefix=/usr/local
+libdir=${prefix}/lib
+includedir=${prefix}/include
+
+Name: lible
+Description: Machine Learning library.
+URL: https://github.com/kirushyk/le
+Version: 0.0.1
+Libs: -L${libdir} -lle -framework accelerate -lm
+Cflags:-I${includedir}

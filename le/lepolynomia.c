@@ -1,19 +1,23 @@
 /* Copyright (c) Kyrylo Polezhaiev and contributors. All rights reserved.
    Released under the MIT license. See LICENSE file in the project root for full license information. */
 
+#include <assert.h>
 #include "lepolynomia.h"
+#include "letensor-imp.h"
 #include "lematrix.h"
 
 LeTensor *
 le_matrix_new_polynomia(const LeTensor *a)
 {
+    assert(a->element_type == LE_TYPE_FLOAT32);
+
     int example;
     int feature, another_feature;
     int initial_features_count = le_matrix_get_height(a);
     int additional_features_count = initial_features_count * (initial_features_count + 1) / 2;
     int examples_count = le_matrix_get_width(a);
     
-    LeTensor *polynomia = le_matrix_new_uninitialized_f32(initial_features_count + additional_features_count, examples_count);
+    LeTensor *polynomia = le_matrix_new_uninitialized(a->element_type, initial_features_count + additional_features_count, examples_count);
     for (example = 0; example < examples_count; example++)
     {
         for (feature = 0; feature < initial_features_count; feature++)

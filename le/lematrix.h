@@ -71,7 +71,8 @@ void       le_matrix_set_f64          (LeTensor     *matrix,
 LeTensor * le_matrix_new_identity         (LeType type,
                                             unsigned      size);
 
-LeTensor * le_matrix_new_uninitialized_f32    (unsigned      height,
+LeTensor * le_matrix_new_uninitialized    (LeType type,
+                                          unsigned      height,
                                            unsigned      width);
 
 LeTensor * le_matrix_new_zeros_f32            (unsigned      height,

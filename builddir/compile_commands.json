@@ -1,0 +1,398 @@
+[
+  {
+    "directory": "/Users/svetlana/Developer/le/builddir",
+    "command": "cc -Iplatform/accelerate/b229142@@le_accelerate@sta -Iplatform/accelerate -I../platform/accelerate -I. -I.. -Xclang -fcolor-diagnostics -pipe -Wall -Winvalid-pch -std=c99 -g -MD -MQ 'platform/accelerate/b229142@@le_accelerate@sta/leaccelerate.c.o' -MF 'platform/accelerate/b229142@@le_accelerate@sta/leaccelerate.c.o.d' -o 'platform/accelerate/b229142@@le_accelerate@sta/leaccelerate.c.o' -c ../platform/accelerate/leaccelerate.c",
+    "file": "../platform/accelerate/leaccelerate.c",
+    "output": "platform/accelerate/b229142@@le_accelerate@sta/leaccelerate.c.o"
+  },
+  {
+    "directory": "/Users/svetlana/Developer/le/builddir",
+    "command": "cc -Ile/61098a4@@le@sta -Ile -I../le -I. -I.. -Xclang -fcolor-diagnostics -pipe -Wall -Winvalid-pch -std=c99 -g -MD -MQ 'le/61098a4@@le@sta/lelist.c.o' -MF 'le/61098a4@@le@sta/lelist.c.o.d' -o 'le/61098a4@@le@sta/lelist.c.o' -c ../le/lelist.c",
+    "file": "../le/lelist.c",
+    "output": "le/61098a4@@le@sta/lelist.c.o"
+  },
+  {
+    "directory": "/Users/svetlana/Developer/le/builddir",
+    "command": "cc -Ile/61098a4@@le@sta -Ile -I../le -I. -I.. -Xclang -fcolor-diagnostics -pipe -Wall -Winvalid-pch -std=c99 -g -MD -MQ 'le/61098a4@@le@sta/ledataset.c.o' -MF 'le/61098a4@@le@sta/ledataset.c.o.d' -o 'le/61098a4@@le@sta/ledataset.c.o' -c ../le/ledataset.c",
+    "file": "../le/ledataset.c",
+    "output": "le/61098a4@@le@sta/ledataset.c.o"
+  },
+  {
+    "directory": "/Users/svetlana/Developer/le/builddir",
+    "command": "cc -Ile/61098a4@@le@sta -Ile -I../le -I. -I.. -Xclang -fcolor-diagnostics -pipe -Wall -Winvalid-pch -std=c99 -g -MD -MQ 'le/61098a4@@le@sta/letype.c.o' -MF 'le/61098a4@@le@sta/letype.c.o.d' -o 'le/61098a4@@le@sta/letype.c.o' -c ../le/letype.c",
+    "file": "../le/letype.c",
+    "output": "le/61098a4@@le@sta/letype.c.o"
+  },
+  {
+    "directory": "/Users/svetlana/Developer/le/builddir",
+    "command": "cc -Ile/61098a4@@le@sta -Ile -I../le -I. -I.. -Xclang -fcolor-diagnostics -pipe -Wall -Winvalid-pch -std=c99 -g -MD -MQ 'le/61098a4@@le@sta/leshape.c.o' -MF 'le/61098a4@@le@sta/leshape.c.o.d' -o 'le/61098a4@@le@sta/leshape.c.o' -c ../le/leshape.c",
+    "file": "../le/leshape.c",
+    "output": "le/61098a4@@le@sta/leshape.c.o"
+  },
+  {
+    "directory": "/Users/svetlana/Developer/le/builddir",
+    "command": "cc -Ile/61098a4@@le@sta -Ile -I../le -I. -I.. -Xclang -fcolor-diagnostics -pipe -Wall -Winvalid-pch -std=c99 -g -MD -MQ 'le/61098a4@@le@sta/letensor.c.o' -MF 'le/61098a4@@le@sta/letensor.c.o.d' -o 'le/61098a4@@le@sta/letensor.c.o' -c ../le/letensor.c",
+    "file": "../le/letensor.c",
+    "output": "le/61098a4@@le@sta/letensor.c.o"
+  },
+  {
+    "directory": "/Users/svetlana/Developer/le/builddir",
+    "command": "cc -Ile/61098a4@@le@sta -Ile -I../le -I. -I.. -Xclang -fcolor-diagnostics -pipe -Wall -Winvalid-pch -std=c99 -g -MD -MQ 'le/61098a4@@le@sta/lematrix.c.o' -MF 'le/61098a4@@le@sta/lematrix.c.o.d' -o 'le/61098a4@@le@sta/lematrix.c.o' -c ../le/lematrix.c",
+    "file": "../le/lematrix.c",
+    "output": "le/61098a4@@le@sta/lematrix.c.o"
+  },
+  {
+    "directory": "/Users/svetlana/Developer/le/builddir",
+    "command": "cc -Ile/61098a4@@le@sta -Ile -I../le -I. -I.. -Xclang -fcolor-diagnostics -pipe -Wall -Winvalid-pch -std=c99 -g -MD -MQ 'le/61098a4@@le@sta/lepolynomia.c.o' -MF 'le/61098a4@@le@sta/lepolynomia.c.o.d' -o 'le/61098a4@@le@sta/lepolynomia.c.o' -c ../le/lepolynomia.c",
+    "file": "../le/lepolynomia.c",
+    "output": "le/61098a4@@le@sta/lepolynomia.c.o"
+  },
+  {
+    "directory": "/Users/svetlana/Developer/le/builddir",
+    "command": "cc -Ile/61098a4@@le@sta -Ile -I../le -I. -I.. -Xclang -fcolor-diagnostics -pipe -Wall -Winvalid-pch -std=c99 -g -MD -MQ 'le/61098a4@@le@sta/models_lelogistic.c.o' -MF 'le/61098a4@@le@sta/models_lelogistic.c.o.d' -o 'le/61098a4@@le@sta/models_lelogistic.c.o' -c ../le/models/lelogistic.c",
+    "file": "../le/models/lelogistic.c",
+    "output": "le/61098a4@@le@sta/models_lelogistic.c.o"
+  },
+  {
+    "directory": "/Users/svetlana/Developer/le/builddir",
+    "command": "cc -Ile/61098a4@@le@sta -Ile -I../le -I. -I.. -Xclang -fcolor-diagnostics -pipe -Wall -Winvalid-pch -std=c99 -g -MD -MQ 'le/61098a4@@le@sta/models_le1layernn.c.o' -MF 'le/61098a4@@le@sta/models_le1layernn.c.o.d' -o 'le/61098a4@@le@sta/models_le1layernn.c.o' -c ../le/models/le1layernn.c",
+    "file": "../le/models/le1layernn.c",
+    "output": "le/61098a4@@le@sta/models_le1layernn.c.o"
+  },
+  {
+    "directory": "/Users/svetlana/Developer/le/builddir",
+    "command": "cc -Ile/61098a4@@le@sta -Ile -I../le -I. -I.. -Xclang -fcolor-diagnostics -pipe -Wall -Winvalid-pch -std=c99 -g -MD -MQ 'le/61098a4@@le@sta/models_lemodel.c.o' -MF 'le/61098a4@@le@sta/models_lemodel.c.o.d' -o 'le/61098a4@@le@sta/models_lemodel.c.o' -c ../le/models/lemodel.c",
+    "file": "../le/models/lemodel.c",
+    "output": "le/61098a4@@le@sta/models_lemodel.c.o"
+  },
+  {
+    "directory": "/Users/svetlana/Developer/le/builddir",
+    "command": "cc -Ile/61098a4@@le@sta -Ile -I../le -I. -I.. -Xclang -fcolor-diagnostics -pipe -Wall -Winvalid-pch -std=c99 -g -MD -MQ 'le/61098a4@@le@sta/models_lesvm.c.o' -MF 'le/61098a4@@le@sta/models_lesvm.c.o.d' -o 'le/61098a4@@le@sta/models_lesvm.c.o' -c ../le/models/lesvm.c",
+    "file": "../le/models/lesvm.c",
+    "output": "le/61098a4@@le@sta/models_lesvm.c.o"
+  },
+  {
+    "directory": "/Users/svetlana/Developer/le/builddir",
+    "command": "cc -Ile/61098a4@@le@sta -Ile -I../le -I. -I.. -Xclang -fcolor-diagnostics -pipe -Wall -Winvalid-pch -std=c99 -g -MD -MQ 'le/61098a4@@le@sta/models_layers_lelayer.c.o' -MF 'le/61098a4@@le@sta/models_layers_lelayer.c.o.d' -o 'le/61098a4@@le@sta/models_layers_lelayer.c.o' -c ../le/models/layers/lelayer.c",
+    "file": "../le/models/layers/lelayer.c",
+    "output": "le/61098a4@@le@sta/models_layers_lelayer.c.o"
+  },
+  {
+    "directory": "/Users/svetlana/Developer/le/builddir",
+    "command": "cc -Ile/61098a4@@le@sta -Ile -I../le -I. -I.. -Xclang -fcolor-diagnostics -pipe -Wall -Winvalid-pch -std=c99 -g -MD -MQ 'le/61098a4@@le@sta/models_layers_ledenselayer.c.o' -MF 'le/61098a4@@le@sta/models_layers_ledenselayer.c.o.d' -o 'le/61098a4@@le@sta/models_layers_ledenselayer.c.o' -c ../le/models/layers/ledenselayer.c",
+    "file": "../le/models/layers/ledenselayer.c",
+    "output": "le/61098a4@@le@sta/models_layers_ledenselayer.c.o"
+  },
+  {
+    "directory": "/Users/svetlana/Developer/le/builddir",
+    "command": "cc -Ile/61098a4@@le@sta -Ile -I../le -I. -I.. -Xclang -fcolor-diagnostics -pipe -Wall -Winvalid-pch -std=c99 -g -MD -MQ 'le/61098a4@@le@sta/models_layers_leactivationlayer.c.o' -MF 'le/61098a4@@le@sta/models_layers_leactivationlayer.c.o.d' -o 'le/61098a4@@le@sta/models_layers_leactivationlayer.c.o' -c ../le/models/layers/leactivationlayer.c",
+    "file": "../le/models/layers/leactivationlayer.c",
+    "output": "le/61098a4@@le@sta/models_layers_leactivationlayer.c.o"
+  },
+  {
+    "directory": "/Users/svetlana/Developer/le/builddir",
+    "command": "cc -Ile/61098a4@@le@sta -Ile -I../le -I. -I.. -Xclang -fcolor-diagnostics -pipe -Wall -Winvalid-pch -std=c99 -g -MD -MQ 'le/61098a4@@le@sta/models_layers_leconv2d.c.o' -MF 'le/61098a4@@le@sta/models_layers_leconv2d.c.o.d' -o 'le/61098a4@@le@sta/models_layers_leconv2d.c.o' -c ../le/models/layers/leconv2d.c",
+    "file": "../le/models/layers/leconv2d.c",
+    "output": "le/61098a4@@le@sta/models_layers_leconv2d.c.o"
+  },
+  {
+    "directory": "/Users/svetlana/Developer/le/builddir",
+    "command": "cc -Ile/61098a4@@le@sta -Ile -I../le -I. -I.. -Xclang -fcolor-diagnostics -pipe -Wall -Winvalid-pch -std=c99 -g -MD -MQ 'le/61098a4@@le@sta/models_lesequential.c.o' -MF 'le/61098a4@@le@sta/models_lesequential.c.o.d' -o 'le/61098a4@@le@sta/models_lesequential.c.o' -c ../le/models/lesequential.c",
+    "file": "../le/models/lesequential.c",
+    "output": "le/61098a4@@le@sta/models_lesequential.c.o"
+  },
+  {
+    "directory": "/Users/svetlana/Developer/le/builddir",
+    "command": "cc -Ile/61098a4@@le@sta -Ile -I../le -I. -I.. -Xclang -fcolor-diagnostics -pipe -Wall -Winvalid-pch -std=c99 -g -MD -MQ 'le/61098a4@@le@sta/optimization_leoptimizer.c.o' -MF 'le/61098a4@@le@sta/optimization_leoptimizer.c.o.d' -o 'le/61098a4@@le@sta/optimization_leoptimizer.c.o' -c ../le/optimization/leoptimizer.c",
+    "file": "../le/optimization/leoptimizer.c",
+    "output": "le/61098a4@@le@sta/optimization_leoptimizer.c.o"
+  },
+  {
+    "directory": "/Users/svetlana/Developer/le/builddir",
+    "command": "cc -Ile/61098a4@@le@sta -Ile -I../le -I. -I.. -Xclang -fcolor-diagnostics -pipe -Wall -Winvalid-pch -std=c99 -g -MD -MQ 'le/61098a4@@le@sta/optimization_lebgd.c.o' -MF 'le/61098a4@@le@sta/optimization_lebgd.c.o.d' -o 'le/61098a4@@le@sta/optimization_lebgd.c.o' -c ../le/optimization/lebgd.c",
+    "file": "../le/optimization/lebgd.c",
+    "output": "le/61098a4@@le@sta/optimization_lebgd.c.o"
+  },
+  {
+    "directory": "/Users/svetlana/Developer/le/builddir",
+    "command": "cc -Ile/61098a4@@le@sta -Ile -I../le -I. -I.. -Xclang -fcolor-diagnostics -pipe -Wall -Winvalid-pch -std=c99 -g -MD -MQ 'le/61098a4@@le@sta/optimization_lesgd.c.o' -MF 'le/61098a4@@le@sta/optimization_lesgd.c.o.d' -o 'le/61098a4@@le@sta/optimization_lesgd.c.o' -c ../le/optimization/lesgd.c",
+    "file": "../le/optimization/lesgd.c",
+    "output": "le/61098a4@@le@sta/optimization_lesgd.c.o"
+  },
+  {
+    "directory": "/Users/svetlana/Developer/le/builddir",
+    "command": "cc -Ile/61098a4@@le@sta -Ile -I../le -I. -I.. -Xclang -fcolor-diagnostics -pipe -Wall -Winvalid-pch -std=c99 -g -MD -MQ 'le/61098a4@@le@sta/leloss.c.o' -MF 'le/61098a4@@le@sta/leloss.c.o.d' -o 'le/61098a4@@le@sta/leloss.c.o' -c ../le/leloss.c",
+    "file": "../le/leloss.c",
+    "output": "le/61098a4@@le@sta/leloss.c.o"
+  },
+  {
+    "directory": "/Users/svetlana/Developer/le/builddir",
+    "command": "cc -Ile/61098a4@@le@sta -Ile -I../le -I. -I.. -Xclang -fcolor-diagnostics -pipe -Wall -Winvalid-pch -std=c99 -g -MD -MQ 'le/61098a4@@le@sta/lelog.c.o' -MF 'le/61098a4@@le@sta/lelog.c.o.d' -o 'le/61098a4@@le@sta/lelog.c.o' -c ../le/lelog.c",
+    "file": "../le/lelog.c",
+    "output": "le/61098a4@@le@sta/lelog.c.o"
+  },
+  {
+    "directory": "/Users/svetlana/Developer/le/builddir",
+    "command": "cc -Iext/idx/cecdb43@@le_idx@sta -Iext/idx -I../ext/idx -I. -I.. -Xclang -fcolor-diagnostics -pipe -Wall -Winvalid-pch -std=c99 -g -MD -MQ 'ext/idx/cecdb43@@le_idx@sta/leidx.c.o' -MF 'ext/idx/cecdb43@@le_idx@sta/leidx.c.o.d' -o 'ext/idx/cecdb43@@le_idx@sta/leidx.c.o' -c ../ext/idx/leidx.c",
+    "file": "../ext/idx/leidx.c",
+    "output": "ext/idx/cecdb43@@le_idx@sta/leidx.c.o"
+  },
+  {
+    "directory": "/Users/svetlana/Developer/le/builddir",
+    "command": "cc -Iext/mnist/d32dfe0@@le_mnist@sta -Iext/mnist -I../ext/mnist -I. -I.. -Xclang -fcolor-diagnostics -pipe -Wall -Winvalid-pch -std=c99 -g -MD -MQ 'ext/mnist/d32dfe0@@le_mnist@sta/lemnist.c.o' -MF 'ext/mnist/d32dfe0@@le_mnist@sta/lemnist.c.o.d' -o 'ext/mnist/d32dfe0@@le_mnist@sta/lemnist.c.o' -c ../ext/mnist/lemnist.c",
+    "file": "../ext/mnist/lemnist.c",
+    "output": "ext/mnist/d32dfe0@@le_mnist@sta/lemnist.c.o"
+  },
+  {
+    "directory": "/Users/svetlana/Developer/le/builddir",
+    "command": "cc -Iext/tensorlist/8655dae@@le_tensorlist@sta -Iext/tensorlist -I../ext/tensorlist -I. -I.. -Xclang -fcolor-diagnostics -pipe -Wall -Winvalid-pch -std=c99 -g -MD -MQ 'ext/tensorlist/8655dae@@le_tensorlist@sta/letensorlist.c.o' -MF 'ext/tensorlist/8655dae@@le_tensorlist@sta/letensorlist.c.o.d' -o 'ext/tensorlist/8655dae@@le_tensorlist@sta/letensorlist.c.o' -c ../ext/tensorlist/letensorlist.c",
+    "file": "../ext/tensorlist/letensorlist.c",
+    "output": "ext/tensorlist/8655dae@@le_tensorlist@sta/letensorlist.c.o"
+  },
+  {
+    "directory": "/Users/svetlana/Developer/le/builddir",
+    "command": "c++ -Ibindings/cpp/229195f@@le_cpp@sta -Ibindings/cpp -I../bindings/cpp -I. -I.. -Xclang -fcolor-diagnostics -pipe -Wall -Winvalid-pch -Wnon-virtual-dtor -std=c++14 -g -MD -MQ 'bindings/cpp/229195f@@le_cpp@sta/tensor.cpp.o' -MF 'bindings/cpp/229195f@@le_cpp@sta/tensor.cpp.o.d' -o 'bindings/cpp/229195f@@le_cpp@sta/tensor.cpp.o' -c ../bindings/cpp/tensor.cpp",
+    "file": "../bindings/cpp/tensor.cpp",
+    "output": "bindings/cpp/229195f@@le_cpp@sta/tensor.cpp.o"
+  },
+  {
+    "directory": "/Users/svetlana/Developer/le/builddir",
+    "command": "c++ -Ibindings/cpp/229195f@@le_cpp@sta -Ibindings/cpp -I../bindings/cpp -I. -I.. -Xclang -fcolor-diagnostics -pipe -Wall -Winvalid-pch -Wnon-virtual-dtor -std=c++14 -g -MD -MQ 'bindings/cpp/229195f@@le_cpp@sta/model.cpp.o' -MF 'bindings/cpp/229195f@@le_cpp@sta/model.cpp.o.d' -o 'bindings/cpp/229195f@@le_cpp@sta/model.cpp.o' -c ../bindings/cpp/model.cpp",
+    "file": "../bindings/cpp/model.cpp",
+    "output": "bindings/cpp/229195f@@le_cpp@sta/model.cpp.o"
+  },
+  {
+    "directory": "/Users/svetlana/Developer/le/builddir",
+    "command": "c++ -Ibindings/cpp/229195f@@le_cpp@sta -Ibindings/cpp -I../bindings/cpp -I. -I.. -Xclang -fcolor-diagnostics -pipe -Wall -Winvalid-pch -Wnon-virtual-dtor -std=c++14 -g -MD -MQ 'bindings/cpp/229195f@@le_cpp@sta/logistic.cpp.o' -MF 'bindings/cpp/229195f@@le_cpp@sta/logistic.cpp.o.d' -o 'bindings/cpp/229195f@@le_cpp@sta/logistic.cpp.o' -c ../bindings/cpp/logistic.cpp",
+    "file": "../bindings/cpp/logistic.cpp",
+    "output": "bindings/cpp/229195f@@le_cpp@sta/logistic.cpp.o"
+  },
+  {
+    "directory": "/Users/svetlana/Developer/le/builddir",
+    "command": "c++ -Ibindings/cpp/229195f@@le_cpp@sta -Ibindings/cpp -I../bindings/cpp -I. -I.. -Xclang -fcolor-diagnostics -pipe -Wall -Winvalid-pch -Wnon-virtual-dtor -std=c++14 -g -MD -MQ 'bindings/cpp/229195f@@le_cpp@sta/svm.cpp.o' -MF 'bindings/cpp/229195f@@le_cpp@sta/svm.cpp.o.d' -o 'bindings/cpp/229195f@@le_cpp@sta/svm.cpp.o' -c ../bindings/cpp/svm.cpp",
+    "file": "../bindings/cpp/svm.cpp",
+    "output": "bindings/cpp/229195f@@le_cpp@sta/svm.cpp.o"
+  },
+  {
+    "directory": "/Users/svetlana/Developer/le/builddir",
+    "command": "c++ -Ibindings/cpp/229195f@@le_cpp@sta -Ibindings/cpp -I../bindings/cpp -I. -I.. -Xclang -fcolor-diagnostics -pipe -Wall -Winvalid-pch -Wnon-virtual-dtor -std=c++14 -g -MD -MQ 'bindings/cpp/229195f@@le_cpp@sta/shape.cpp.o' -MF 'bindings/cpp/229195f@@le_cpp@sta/shape.cpp.o.d' -o 'bindings/cpp/229195f@@le_cpp@sta/shape.cpp.o' -c ../bindings/cpp/shape.cpp",
+    "file": "../bindings/cpp/shape.cpp",
+    "output": "bindings/cpp/229195f@@le_cpp@sta/shape.cpp.o"
+  },
+  {
+    "directory": "/Users/svetlana/Developer/le/builddir",
+    "command": "c++ -Ibindings/cpp/229195f@@le_cpp@sta -Ibindings/cpp -I../bindings/cpp -I. -I.. -Xclang -fcolor-diagnostics -pipe -Wall -Winvalid-pch -Wnon-virtual-dtor -std=c++14 -g -MD -MQ 'bindings/cpp/229195f@@le_cpp@sta/sequential.cpp.o' -MF 'bindings/cpp/229195f@@le_cpp@sta/sequential.cpp.o.d' -o 'bindings/cpp/229195f@@le_cpp@sta/sequential.cpp.o' -c ../bindings/cpp/sequential.cpp",
+    "file": "../bindings/cpp/sequential.cpp",
+    "output": "bindings/cpp/229195f@@le_cpp@sta/sequential.cpp.o"
+  },
+  {
+    "directory": "/Users/svetlana/Developer/le/builddir",
+    "command": "c++ -Ibindings/cpp/229195f@@le_cpp@sta -Ibindings/cpp -I../bindings/cpp -I. -I.. -Xclang -fcolor-diagnostics -pipe -Wall -Winvalid-pch -Wnon-virtual-dtor -std=c++14 -g -MD -MQ 'bindings/cpp/229195f@@le_cpp@sta/layer.cpp.o' -MF 'bindings/cpp/229195f@@le_cpp@sta/layer.cpp.o.d' -o 'bindings/cpp/229195f@@le_cpp@sta/layer.cpp.o' -c ../bindings/cpp/layer.cpp",
+    "file": "../bindings/cpp/layer.cpp",
+    "output": "bindings/cpp/229195f@@le_cpp@sta/layer.cpp.o"
+  },
+  {
+    "directory": "/Users/svetlana/Developer/le/builddir",
+    "command": "c++ -Ibindings/cpp/229195f@@le_cpp@sta -Ibindings/cpp -I../bindings/cpp -I. -I.. -Xclang -fcolor-diagnostics -pipe -Wall -Winvalid-pch -Wnon-virtual-dtor -std=c++14 -g -MD -MQ 'bindings/cpp/229195f@@le_cpp@sta/activation-layer.cpp.o' -MF 'bindings/cpp/229195f@@le_cpp@sta/activation-layer.cpp.o.d' -o 'bindings/cpp/229195f@@le_cpp@sta/activation-layer.cpp.o' -c ../bindings/cpp/activation-layer.cpp",
+    "file": "../bindings/cpp/activation-layer.cpp",
+    "output": "bindings/cpp/229195f@@le_cpp@sta/activation-layer.cpp.o"
+  },
+  {
+    "directory": "/Users/svetlana/Developer/le/builddir",
+    "command": "c++ -Ibindings/cpp/229195f@@le_cpp@sta -Ibindings/cpp -I../bindings/cpp -I. -I.. -Xclang -fcolor-diagnostics -pipe -Wall -Winvalid-pch -Wnon-virtual-dtor -std=c++14 -g -MD -MQ 'bindings/cpp/229195f@@le_cpp@sta/dense-layer.cpp.o' -MF 'bindings/cpp/229195f@@le_cpp@sta/dense-layer.cpp.o.d' -o 'bindings/cpp/229195f@@le_cpp@sta/dense-layer.cpp.o' -c ../bindings/cpp/dense-layer.cpp",
+    "file": "../bindings/cpp/dense-layer.cpp",
+    "output": "bindings/cpp/229195f@@le_cpp@sta/dense-layer.cpp.o"
+  },
+  {
+    "directory": "/Users/svetlana/Developer/le/builddir",
+    "command": "c++ -Ibindings/python/7cc5956@@le.cpython-37m-darwin@sha -Ibindings/python -I../bindings/python -I. -I.. -Ibindings/cpp -I../bindings/cpp -I/usr/local/opt/python/Frameworks/Python.framework/Versions/3.7/include/python3.7m -Xclang -fcolor-diagnostics -pipe -Wall -Winvalid-pch -Wnon-virtual-dtor -std=c++14 -g -MD -MQ 'bindings/python/7cc5956@@le.cpython-37m-darwin@sha/lemodule.cpp.o' -MF 'bindings/python/7cc5956@@le.cpython-37m-darwin@sha/lemodule.cpp.o.d' -o 'bindings/python/7cc5956@@le.cpython-37m-darwin@sha/lemodule.cpp.o' -c ../bindings/python/lemodule.cpp",
+    "file": "../bindings/python/lemodule.cpp",
+    "output": "bindings/python/7cc5956@@le.cpython-37m-darwin@sha/lemodule.cpp.o"
+  },
+  {
+    "directory": "/Users/svetlana/Developer/le/builddir",
+    "command": "cc -Itests/59830eb@@objects_objects@exe -Itests -I../tests -I. -I.. -Xclang -fcolor-diagnostics -pipe -Wall -Winvalid-pch -std=c99 -g -MD -MQ 'tests/59830eb@@objects_objects@exe/objects_objects.c.o' -MF 'tests/59830eb@@objects_objects@exe/objects_objects.c.o.d' -o 'tests/59830eb@@objects_objects@exe/objects_objects.c.o' -c ../tests/objects/objects.c",
+    "file": "../tests/objects/objects.c",
+    "output": "tests/59830eb@@objects_objects@exe/objects_objects.c.o"
+  },
+  {
+    "directory": "/Users/svetlana/Developer/le/builddir",
+    "command": "cc -Itests/59830eb@@objects_objects@exe -Itests -I../tests -I. -I.. -Xclang -fcolor-diagnostics -pipe -Wall -Winvalid-pch -std=c99 -g -MD -MQ 'tests/59830eb@@objects_objects@exe/objects_base.c.o' -MF 'tests/59830eb@@objects_objects@exe/objects_base.c.o.d' -o 'tests/59830eb@@objects_objects@exe/objects_base.c.o' -c ../tests/objects/base.c",
+    "file": "../tests/objects/base.c",
+    "output": "tests/59830eb@@objects_objects@exe/objects_base.c.o"
+  },
+  {
+    "directory": "/Users/svetlana/Developer/le/builddir",
+    "command": "cc -Itests/59830eb@@objects_objects@exe -Itests -I../tests -I. -I.. -Xclang -fcolor-diagnostics -pipe -Wall -Winvalid-pch -std=c99 -g -MD -MQ 'tests/59830eb@@objects_objects@exe/objects_a.c.o' -MF 'tests/59830eb@@objects_objects@exe/objects_a.c.o.d' -o 'tests/59830eb@@objects_objects@exe/objects_a.c.o' -c ../tests/objects/a.c",
+    "file": "../tests/objects/a.c",
+    "output": "tests/59830eb@@objects_objects@exe/objects_a.c.o"
+  },
+  {
+    "directory": "/Users/svetlana/Developer/le/builddir",
+    "command": "cc -Itests/59830eb@@objects_objects@exe -Itests -I../tests -I. -I.. -Xclang -fcolor-diagnostics -pipe -Wall -Winvalid-pch -std=c99 -g -MD -MQ 'tests/59830eb@@objects_objects@exe/objects_b.c.o' -MF 'tests/59830eb@@objects_objects@exe/objects_b.c.o.d' -o 'tests/59830eb@@objects_objects@exe/objects_b.c.o' -c ../tests/objects/b.c",
+    "file": "../tests/objects/b.c",
+    "output": "tests/59830eb@@objects_objects@exe/objects_b.c.o"
+  },
+  {
+    "directory": "/Users/svetlana/Developer/le/builddir",
+    "command": "cc -Itests/59830eb@@mnist@exe -Itests -I../tests -I. -I.. -Xclang -fcolor-diagnostics -pipe -Wall -Winvalid-pch -std=c99 -g -MD -MQ 'tests/59830eb@@mnist@exe/mnist.c.o' -MF 'tests/59830eb@@mnist@exe/mnist.c.o.d' -o 'tests/59830eb@@mnist@exe/mnist.c.o' -c ../tests/mnist.c",
+    "file": "../tests/mnist.c",
+    "output": "tests/59830eb@@mnist@exe/mnist.c.o"
+  },
+  {
+    "directory": "/Users/svetlana/Developer/le/builddir",
+    "command": "cc -Itests/59830eb@@list@exe -Itests -I../tests -I. -I.. -Xclang -fcolor-diagnostics -pipe -Wall -Winvalid-pch -std=c99 -g -MD -MQ 'tests/59830eb@@list@exe/list.c.o' -MF 'tests/59830eb@@list@exe/list.c.o.d' -o 'tests/59830eb@@list@exe/list.c.o' -c ../tests/list.c",
+    "file": "../tests/list.c",
+    "output": "tests/59830eb@@list@exe/list.c.o"
+  },
+  {
+    "directory": "/Users/svetlana/Developer/le/builddir",
+    "command": "cc -Itests/59830eb@@matrices@exe -Itests -I../tests -I. -I.. -Xclang -fcolor-diagnostics -pipe -Wall -Winvalid-pch -std=c99 -g -MD -MQ 'tests/59830eb@@matrices@exe/matrices.c.o' -MF 'tests/59830eb@@matrices@exe/matrices.c.o.d' -o 'tests/59830eb@@matrices@exe/matrices.c.o' -c ../tests/matrices.c",
+    "file": "../tests/matrices.c",
+    "output": "tests/59830eb@@matrices@exe/matrices.c.o"
+  },
+  {
+    "directory": "/Users/svetlana/Developer/le/builddir",
+    "command": "cc -Itests/59830eb@@sobel@exe -Itests -I../tests -I. -I.. -Xclang -fcolor-diagnostics -pipe -Wall -Winvalid-pch -std=c99 -g -MD -MQ 'tests/59830eb@@sobel@exe/sobel.c.o' -MF 'tests/59830eb@@sobel@exe/sobel.c.o.d' -o 'tests/59830eb@@sobel@exe/sobel.c.o' -c ../tests/sobel.c",
+    "file": "../tests/sobel.c",
+    "output": "tests/59830eb@@sobel@exe/sobel.c.o"
+  },
+  {
+    "directory": "/Users/svetlana/Developer/le/builddir",
+    "command": "cc -Itests/59830eb@@tensorlist@exe -Itests -I../tests -I. -I.. -Xclang -fcolor-diagnostics -pipe -Wall -Winvalid-pch -std=c99 -g -MD -MQ 'tests/59830eb@@tensorlist@exe/tensorlist.c.o' -MF 'tests/59830eb@@tensorlist@exe/tensorlist.c.o.d' -o 'tests/59830eb@@tensorlist@exe/tensorlist.c.o' -c ../tests/tensorlist.c",
+    "file": "../tests/tensorlist.c",
+    "output": "tests/59830eb@@tensorlist@exe/tensorlist.c.o"
+  },
+  {
+    "directory": "/Users/svetlana/Developer/le/builddir",
+    "command": "cc -Ibenchmarks/cb1d2fd@@matrices_benchmark@exe -Ibenchmarks -I../benchmarks -I. -I.. -Xclang -fcolor-diagnostics -pipe -Wall -Winvalid-pch -std=c99 -g -MD -MQ 'benchmarks/cb1d2fd@@matrices_benchmark@exe/matrices.c.o' -MF 'benchmarks/cb1d2fd@@matrices_benchmark@exe/matrices.c.o.d' -o 'benchmarks/cb1d2fd@@matrices_benchmark@exe/matrices.c.o' -c ../benchmarks/matrices.c",
+    "file": "../benchmarks/matrices.c",
+    "output": "benchmarks/cb1d2fd@@matrices_benchmark@exe/matrices.c.o"
+  },
+  {
+    "directory": "/Users/svetlana/Developer/le/builddir",
+    "command": "cc -Iexamples/c/3d1b513@@support-vector-machine@exe -Iexamples/c -I../examples/c -I. -I.. -Xclang -fcolor-diagnostics -pipe -Wall -Winvalid-pch -std=c99 -g -MD -MQ 'examples/c/3d1b513@@support-vector-machine@exe/support-vector-machine.c.o' -MF 'examples/c/3d1b513@@support-vector-machine@exe/support-vector-machine.c.o.d' -o 'examples/c/3d1b513@@support-vector-machine@exe/support-vector-machine.c.o' -c ../examples/c/support-vector-machine.c",
+    "file": "../examples/c/support-vector-machine.c",
+    "output": "examples/c/3d1b513@@support-vector-machine@exe/support-vector-machine.c.o"
+  },
+  {
+    "directory": "/Users/svetlana/Developer/le/builddir",
+    "command": "cc -Iexamples/c/3d1b513@@polynomial-logistic-regression@exe -Iexamples/c -I../examples/c -I. -I.. -Xclang -fcolor-diagnostics -pipe -Wall -Winvalid-pch -std=c99 -g -MD -MQ 'examples/c/3d1b513@@polynomial-logistic-regression@exe/polynomial-logistic-regression.c.o' -MF 'examples/c/3d1b513@@polynomial-logistic-regression@exe/polynomial-logistic-regression.c.o.d' -o 'examples/c/3d1b513@@polynomial-logistic-regression@exe/polynomial-logistic-regression.c.o' -c ../examples/c/polynomial-logistic-regression.c",
+    "file": "../examples/c/polynomial-logistic-regression.c",
+    "output": "examples/c/3d1b513@@polynomial-logistic-regression@exe/polynomial-logistic-regression.c.o"
+  },
+  {
+    "directory": "/Users/svetlana/Developer/le/builddir",
+    "command": "cc -Iexamples/c/3d1b513@@polynomia@exe -Iexamples/c -I../examples/c -I. -I.. -Xclang -fcolor-diagnostics -pipe -Wall -Winvalid-pch -std=c99 -g -MD -MQ 'examples/c/3d1b513@@polynomia@exe/polynomia.c.o' -MF 'examples/c/3d1b513@@polynomia@exe/polynomia.c.o.d' -o 'examples/c/3d1b513@@polynomia@exe/polynomia.c.o' -c ../examples/c/polynomia.c",
+    "file": "../examples/c/polynomia.c",
+    "output": "examples/c/3d1b513@@polynomia@exe/polynomia.c.o"
+  },
+  {
+    "directory": "/Users/svetlana/Developer/le/builddir",
+    "command": "cc -Iexamples/c/3d1b513@@shallow-neural-network@exe -Iexamples/c -I../examples/c -I. -I.. -Xclang -fcolor-diagnostics -pipe -Wall -Winvalid-pch -std=c99 -g -MD -MQ 'examples/c/3d1b513@@shallow-neural-network@exe/shallow-neural-network.c.o' -MF 'examples/c/3d1b513@@shallow-neural-network@exe/shallow-neural-network.c.o.d' -o 'examples/c/3d1b513@@shallow-neural-network@exe/shallow-neural-network.c.o' -c ../examples/c/shallow-neural-network.c",
+    "file": "../examples/c/shallow-neural-network.c",
+    "output": "examples/c/3d1b513@@shallow-neural-network@exe/shallow-neural-network.c.o"
+  },
+  {
+    "directory": "/Users/svetlana/Developer/le/builddir",
+    "command": "cc -Iexamples/c/mnist/f82966c@@mnist-logistic-regression@exe -Iexamples/c/mnist -I../examples/c/mnist -I. -I.. -Xclang -fcolor-diagnostics -pipe -Wall -Winvalid-pch -std=c99 -g -MD -MQ 'examples/c/mnist/f82966c@@mnist-logistic-regression@exe/mnist-logistic-regression.c.o' -MF 'examples/c/mnist/f82966c@@mnist-logistic-regression@exe/mnist-logistic-regression.c.o.d' -o 'examples/c/mnist/f82966c@@mnist-logistic-regression@exe/mnist-logistic-regression.c.o' -c ../examples/c/mnist/mnist-logistic-regression.c",
+    "file": "../examples/c/mnist/mnist-logistic-regression.c",
+    "output": "examples/c/mnist/f82966c@@mnist-logistic-regression@exe/mnist-logistic-regression.c.o"
+  },
+  {
+    "directory": "/Users/svetlana/Developer/le/builddir",
+    "command": "cc -Iexamples/c/mnist/f82966c@@mnist-1-layer-nn@exe -Iexamples/c/mnist -I../examples/c/mnist -I. -I.. -Xclang -fcolor-diagnostics -pipe -Wall -Winvalid-pch -std=c99 -g -MD -MQ 'examples/c/mnist/f82966c@@mnist-1-layer-nn@exe/mnist-1-layer-nn.c.o' -MF 'examples/c/mnist/f82966c@@mnist-1-layer-nn@exe/mnist-1-layer-nn.c.o.d' -o 'examples/c/mnist/f82966c@@mnist-1-layer-nn@exe/mnist-1-layer-nn.c.o' -c ../examples/c/mnist/mnist-1-layer-nn.c",
+    "file": "../examples/c/mnist/mnist-1-layer-nn.c",
+    "output": "examples/c/mnist/f82966c@@mnist-1-layer-nn@exe/mnist-1-layer-nn.c.o"
+  },
+  {
+    "directory": "/Users/svetlana/Developer/le/builddir",
+    "command": "cc -Iexamples/c/mnist/f82966c@@mnist-sgd@exe -Iexamples/c/mnist -I../examples/c/mnist -I. -I.. -Xclang -fcolor-diagnostics -pipe -Wall -Winvalid-pch -std=c99 -g -MD -MQ 'examples/c/mnist/f82966c@@mnist-sgd@exe/mnist-sgd.c.o' -MF 'examples/c/mnist/f82966c@@mnist-sgd@exe/mnist-sgd.c.o.d' -o 'examples/c/mnist/f82966c@@mnist-sgd@exe/mnist-sgd.c.o' -c ../examples/c/mnist/mnist-sgd.c",
+    "file": "../examples/c/mnist/mnist-sgd.c",
+    "output": "examples/c/mnist/f82966c@@mnist-sgd@exe/mnist-sgd.c.o"
+  },
+  {
+    "directory": "/Users/svetlana/Developer/le/builddir",
+    "command": "cc -Iexamples/c/optimization/7dd0e40@@gradient-descent@exe -Iexamples/c/optimization -I../examples/c/optimization -I. -I.. -Xclang -fcolor-diagnostics -pipe -Wall -Winvalid-pch -std=c99 -g -MD -MQ 'examples/c/optimization/7dd0e40@@gradient-descent@exe/gradient-descent.c.o' -MF 'examples/c/optimization/7dd0e40@@gradient-descent@exe/gradient-descent.c.o.d' -o 'examples/c/optimization/7dd0e40@@gradient-descent@exe/gradient-descent.c.o' -c ../examples/c/optimization/gradient-descent.c",
+    "file": "../examples/c/optimization/gradient-descent.c",
+    "output": "examples/c/optimization/7dd0e40@@gradient-descent@exe/gradient-descent.c.o"
+  },
+  {
+    "directory": "/Users/svetlana/Developer/le/builddir",
+    "command": "c++ -Iexamples/cpp/813c7e2@@polynomial-logistic-regression-cpp@exe -Iexamples/cpp -I../examples/cpp -I. -I.. -Ibindings/cpp -I../bindings/cpp -Xclang -fcolor-diagnostics -pipe -Wall -Winvalid-pch -Wnon-virtual-dtor -std=c++14 -g -MD -MQ 'examples/cpp/813c7e2@@polynomial-logistic-regression-cpp@exe/polynomial-logistic-regression.cpp.o' -MF 'examples/cpp/813c7e2@@polynomial-logistic-regression-cpp@exe/polynomial-logistic-regression.cpp.o.d' -o 'examples/cpp/813c7e2@@polynomial-logistic-regression-cpp@exe/polynomial-logistic-regression.cpp.o' -c ../examples/cpp/polynomial-logistic-regression.cpp",
+    "file": "../examples/cpp/polynomial-logistic-regression.cpp",
+    "output": "examples/cpp/813c7e2@@polynomial-logistic-regression-cpp@exe/polynomial-logistic-regression.cpp.o"
+  },
+  {
+    "directory": "/Users/svetlana/Developer/le/builddir",
+    "command": "c++ -Iexamples/cpp/813c7e2@@support-vector-machine-cpp@exe -Iexamples/cpp -I../examples/cpp -I. -I.. -Ibindings/cpp -I../bindings/cpp -Xclang -fcolor-diagnostics -pipe -Wall -Winvalid-pch -Wnon-virtual-dtor -std=c++14 -g -MD -MQ 'examples/cpp/813c7e2@@support-vector-machine-cpp@exe/support-vector-machine.cpp.o' -MF 'examples/cpp/813c7e2@@support-vector-machine-cpp@exe/support-vector-machine.cpp.o.d' -o 'examples/cpp/813c7e2@@support-vector-machine-cpp@exe/support-vector-machine.cpp.o' -c ../examples/cpp/support-vector-machine.cpp",
+    "file": "../examples/cpp/support-vector-machine.cpp",
+    "output": "examples/cpp/813c7e2@@support-vector-machine-cpp@exe/support-vector-machine.cpp.o"
+  },
+  {
+    "directory": "/Users/svetlana/Developer/le/builddir",
+    "command": "c++ -Iexamples/cpp/813c7e2@@shallow-neural-network-cpp@exe -Iexamples/cpp -I../examples/cpp -I. -I.. -Ibindings/cpp -I../bindings/cpp -Xclang -fcolor-diagnostics -pipe -Wall -Winvalid-pch -Wnon-virtual-dtor -std=c++14 -g -MD -MQ 'examples/cpp/813c7e2@@shallow-neural-network-cpp@exe/shallow-neural-network.cpp.o' -MF 'examples/cpp/813c7e2@@shallow-neural-network-cpp@exe/shallow-neural-network.cpp.o.d' -o 'examples/cpp/813c7e2@@shallow-neural-network-cpp@exe/shallow-neural-network.cpp.o' -c ../examples/cpp/shallow-neural-network.cpp",
+    "file": "../examples/cpp/shallow-neural-network.cpp",
+    "output": "examples/cpp/813c7e2@@shallow-neural-network-cpp@exe/shallow-neural-network.cpp.o"
+  },
+  {
+    "directory": "/Users/svetlana/Developer/le/builddir",
+    "command": "cc -Itools/mnist-inspect/3dbb431@@mnist-inspect@exe -Itools/mnist-inspect -I../tools/mnist-inspect -I. -I.. -I/usr/local/Cellar/libffi/3.3/include -I/usr/local/Cellar/gtk+3/3.24.18_1/include/gtk-3.0 -I/usr/local/Cellar/glib/2.64.2_1/include/gio-unix-2.0 -I/usr/local/Cellar/libepoxy/1.5.4_1/include -I/usr/local/Cellar/pango/1.44.7/include/pango-1.0 -I/usr/local/Cellar/fribidi/1.0.9/include/fribidi -I/usr/local/Cellar/harfbuzz/2.6.5_1/include/harfbuzz -I/usr/local/Cellar/graphite2/1.3.14/include -I/usr/local/Cellar/atk/2.36.0/include/atk-1.0 -I/usr/local/Cellar/cairo/1.16.0_3/include/cairo -I/usr/local/Cellar/pixman/0.40.0/include/pixman-1 -I/usr/local/Cellar/fontconfig/2.13.1/include -I/usr/local/opt/freetype/include/freetype2 -I/usr/local/Cellar/libpng/1.6.37/include/libpng16 -I/usr/local/Cellar/gdk-pixbuf/2.40.0_1/include/gdk-pixbuf-2.0 -I/usr/local/Cellar/glib/2.64.2_1/include -I/usr/local/Cellar/glib/2.64.2_1/include/glib-2.0 -I/usr/local/Cellar/glib/2.64.2_1/lib/glib-2.0/include -I/usr/local/opt/gettext/include -I/usr/local/Cellar/pcre/8.44/include -Xclang -fcolor-diagnostics -pipe -Wall -Winvalid-pch -std=c99 -g -MD -MQ 'tools/mnist-inspect/3dbb431@@mnist-inspect@exe/main.c.o' -MF 'tools/mnist-inspect/3dbb431@@mnist-inspect@exe/main.c.o.d' -o 'tools/mnist-inspect/3dbb431@@mnist-inspect@exe/main.c.o' -c ../tools/mnist-inspect/main.c",
+    "file": "../tools/mnist-inspect/main.c",
+    "output": "tools/mnist-inspect/3dbb431@@mnist-inspect@exe/main.c.o"
+  },
+  {
+    "directory": "/Users/svetlana/Developer/le/builddir",
+    "command": "cc -Itools/mnist-inspect/3dbb431@@mnist-inspect@exe -Itools/mnist-inspect -I../tools/mnist-inspect -I. -I.. -I/usr/local/Cellar/libffi/3.3/include -I/usr/local/Cellar/gtk+3/3.24.18_1/include/gtk-3.0 -I/usr/local/Cellar/glib/2.64.2_1/include/gio-unix-2.0 -I/usr/local/Cellar/libepoxy/1.5.4_1/include -I/usr/local/Cellar/pango/1.44.7/include/pango-1.0 -I/usr/local/Cellar/fribidi/1.0.9/include/fribidi -I/usr/local/Cellar/harfbuzz/2.6.5_1/include/harfbuzz -I/usr/local/Cellar/graphite2/1.3.14/include -I/usr/local/Cellar/atk/2.36.0/include/atk-1.0 -I/usr/local/Cellar/cairo/1.16.0_3/include/cairo -I/usr/local/Cellar/pixman/0.40.0/include/pixman-1 -I/usr/local/Cellar/fontconfig/2.13.1/include -I/usr/local/opt/freetype/include/freetype2 -I/usr/local/Cellar/libpng/1.6.37/include/libpng16 -I/usr/local/Cellar/gdk-pixbuf/2.40.0_1/include/gdk-pixbuf-2.0 -I/usr/local/Cellar/glib/2.64.2_1/include -I/usr/local/Cellar/glib/2.64.2_1/include/glib-2.0 -I/usr/local/Cellar/glib/2.64.2_1/lib/glib-2.0/include -I/usr/local/opt/gettext/include -I/usr/local/Cellar/pcre/8.44/include -Xclang -fcolor-diagnostics -pipe -Wall -Winvalid-pch -std=c99 -g -MD -MQ 'tools/mnist-inspect/3dbb431@@mnist-inspect@exe/mi-main-window.c.o' -MF 'tools/mnist-inspect/3dbb431@@mnist-inspect@exe/mi-main-window.c.o.d' -o 'tools/mnist-inspect/3dbb431@@mnist-inspect@exe/mi-main-window.c.o' -c ../tools/mnist-inspect/mi-main-window.c",
+    "file": "../tools/mnist-inspect/mi-main-window.c",
+    "output": "tools/mnist-inspect/3dbb431@@mnist-inspect@exe/mi-main-window.c.o"
+  },
+  {
+    "directory": "/Users/svetlana/Developer/le/builddir",
+    "command": "cc -Itools/mnist-inspect/3dbb431@@mnist-inspect@exe -Itools/mnist-inspect -I../tools/mnist-inspect -I. -I.. -I/usr/local/Cellar/libffi/3.3/include -I/usr/local/Cellar/gtk+3/3.24.18_1/include/gtk-3.0 -I/usr/local/Cellar/glib/2.64.2_1/include/gio-unix-2.0 -I/usr/local/Cellar/libepoxy/1.5.4_1/include -I/usr/local/Cellar/pango/1.44.7/include/pango-1.0 -I/usr/local/Cellar/fribidi/1.0.9/include/fribidi -I/usr/local/Cellar/harfbuzz/2.6.5_1/include/harfbuzz -I/usr/local/Cellar/graphite2/1.3.14/include -I/usr/local/Cellar/atk/2.36.0/include/atk-1.0 -I/usr/local/Cellar/cairo/1.16.0_3/include/cairo -I/usr/local/Cellar/pixman/0.40.0/include/pixman-1 -I/usr/local/Cellar/fontconfig/2.13.1/include -I/usr/local/opt/freetype/include/freetype2 -I/usr/local/Cellar/libpng/1.6.37/include/libpng16 -I/usr/local/Cellar/gdk-pixbuf/2.40.0_1/include/gdk-pixbuf-2.0 -I/usr/local/Cellar/glib/2.64.2_1/include -I/usr/local/Cellar/glib/2.64.2_1/include/glib-2.0 -I/usr/local/Cellar/glib/2.64.2_1/lib/glib-2.0/include -I/usr/local/opt/gettext/include -I/usr/local/Cellar/pcre/8.44/include -Xclang -fcolor-diagnostics -pipe -Wall -Winvalid-pch -std=c99 -g -MD -MQ 'tools/mnist-inspect/3dbb431@@mnist-inspect@exe/mi-menus.c.o' -MF 'tools/mnist-inspect/3dbb431@@mnist-inspect@exe/mi-menus.c.o.d' -o 'tools/mnist-inspect/3dbb431@@mnist-inspect@exe/mi-menus.c.o' -c ../tools/mnist-inspect/mi-menus.c",
+    "file": "../tools/mnist-inspect/mi-menus.c",
+    "output": "tools/mnist-inspect/3dbb431@@mnist-inspect@exe/mi-menus.c.o"
+  },
+  {
+    "directory": "/Users/svetlana/Developer/le/builddir",
+    "command": "cc -Itools/playground/35d530b@@le-playground@exe -Itools/playground -I../tools/playground -I. -I.. -I/usr/local/Cellar/libffi/3.3/include -I/usr/local/Cellar/gtk+3/3.24.18_1/include/gtk-3.0 -I/usr/local/Cellar/glib/2.64.2_1/include/gio-unix-2.0 -I/usr/local/Cellar/libepoxy/1.5.4_1/include -I/usr/local/Cellar/pango/1.44.7/include/pango-1.0 -I/usr/local/Cellar/fribidi/1.0.9/include/fribidi -I/usr/local/Cellar/harfbuzz/2.6.5_1/include/harfbuzz -I/usr/local/Cellar/graphite2/1.3.14/include -I/usr/local/Cellar/atk/2.36.0/include/atk-1.0 -I/usr/local/Cellar/cairo/1.16.0_3/include/cairo -I/usr/local/Cellar/pixman/0.40.0/include/pixman-1 -I/usr/local/Cellar/fontconfig/2.13.1/include -I/usr/local/opt/freetype/include/freetype2 -I/usr/local/Cellar/libpng/1.6.37/include/libpng16 -I/usr/local/Cellar/gdk-pixbuf/2.40.0_1/include/gdk-pixbuf-2.0 -I/usr/local/Cellar/glib/2.64.2_1/include -I/usr/local/Cellar/glib/2.64.2_1/include/glib-2.0 -I/usr/local/Cellar/glib/2.64.2_1/lib/glib-2.0/include -I/usr/local/opt/gettext/include -I/usr/local/Cellar/pcre/8.44/include -Xclang -fcolor-diagnostics -pipe -Wall -Winvalid-pch -std=c99 -g -MD -MQ 'tools/playground/35d530b@@le-playground@exe/main.c.o' -MF 'tools/playground/35d530b@@le-playground@exe/main.c.o.d' -o 'tools/playground/35d530b@@le-playground@exe/main.c.o' -c ../tools/playground/main.c",
+    "file": "../tools/playground/main.c",
+    "output": "tools/playground/35d530b@@le-playground@exe/main.c.o"
+  },
+  {
+    "directory": "/Users/svetlana/Developer/le/builddir",
+    "command": "cc -Itools/playground/35d530b@@le-playground@exe -Itools/playground -I../tools/playground -I. -I.. -I/usr/local/Cellar/libffi/3.3/include -I/usr/local/Cellar/gtk+3/3.24.18_1/include/gtk-3.0 -I/usr/local/Cellar/glib/2.64.2_1/include/gio-unix-2.0 -I/usr/local/Cellar/libepoxy/1.5.4_1/include -I/usr/local/Cellar/pango/1.44.7/include/pango-1.0 -I/usr/local/Cellar/fribidi/1.0.9/include/fribidi -I/usr/local/Cellar/harfbuzz/2.6.5_1/include/harfbuzz -I/usr/local/Cellar/graphite2/1.3.14/include -I/usr/local/Cellar/atk/2.36.0/include/atk-1.0 -I/usr/local/Cellar/cairo/1.16.0_3/include/cairo -I/usr/local/Cellar/pixman/0.40.0/include/pixman-1 -I/usr/local/Cellar/fontconfig/2.13.1/include -I/usr/local/opt/freetype/include/freetype2 -I/usr/local/Cellar/libpng/1.6.37/include/libpng16 -I/usr/local/Cellar/gdk-pixbuf/2.40.0_1/include/gdk-pixbuf-2.0 -I/usr/local/Cellar/glib/2.64.2_1/include -I/usr/local/Cellar/glib/2.64.2_1/include/glib-2.0 -I/usr/local/Cellar/glib/2.64.2_1/lib/glib-2.0/include -I/usr/local/opt/gettext/include -I/usr/local/Cellar/pcre/8.44/include -Xclang -fcolor-diagnostics -pipe -Wall -Winvalid-pch -std=c99 -g -MD -MQ 'tools/playground/35d530b@@le-playground@exe/pg-main-window.c.o' -MF 'tools/playground/35d530b@@le-playground@exe/pg-main-window.c.o.d' -o 'tools/playground/35d530b@@le-playground@exe/pg-main-window.c.o' -c ../tools/playground/pg-main-window.c",
+    "file": "../tools/playground/pg-main-window.c",
+    "output": "tools/playground/35d530b@@le-playground@exe/pg-main-window.c.o"
+  },
+  {
+    "directory": "/Users/svetlana/Developer/le/builddir",
+    "command": "cc -Itools/playground/35d530b@@le-playground@exe -Itools/playground -I../tools/playground -I. -I.. -I/usr/local/Cellar/libffi/3.3/include -I/usr/local/Cellar/gtk+3/3.24.18_1/include/gtk-3.0 -I/usr/local/Cellar/glib/2.64.2_1/include/gio-unix-2.0 -I/usr/local/Cellar/libepoxy/1.5.4_1/include -I/usr/local/Cellar/pango/1.44.7/include/pango-1.0 -I/usr/local/Cellar/fribidi/1.0.9/include/fribidi -I/usr/local/Cellar/harfbuzz/2.6.5_1/include/harfbuzz -I/usr/local/Cellar/graphite2/1.3.14/include -I/usr/local/Cellar/atk/2.36.0/include/atk-1.0 -I/usr/local/Cellar/cairo/1.16.0_3/include/cairo -I/usr/local/Cellar/pixman/0.40.0/include/pixman-1 -I/usr/local/Cellar/fontconfig/2.13.1/include -I/usr/local/opt/freetype/include/freetype2 -I/usr/local/Cellar/libpng/1.6.37/include/libpng16 -I/usr/local/Cellar/gdk-pixbuf/2.40.0_1/include/gdk-pixbuf-2.0 -I/usr/local/Cellar/glib/2.64.2_1/include -I/usr/local/Cellar/glib/2.64.2_1/include/glib-2.0 -I/usr/local/Cellar/glib/2.64.2_1/lib/glib-2.0/include -I/usr/local/opt/gettext/include -I/usr/local/Cellar/pcre/8.44/include -Xclang -fcolor-diagnostics -pipe -Wall -Winvalid-pch -std=c99 -g -MD -MQ 'tools/playground/35d530b@@le-playground@exe/pg-menus.c.o' -MF 'tools/playground/35d530b@@le-playground@exe/pg-menus.c.o.d' -o 'tools/playground/35d530b@@le-playground@exe/pg-menus.c.o' -c ../tools/playground/pg-menus.c",
+    "file": "../tools/playground/pg-menus.c",
+    "output": "tools/playground/35d530b@@le-playground@exe/pg-menus.c.o"
+  },
+  {
+    "directory": "/Users/svetlana/Developer/le/builddir",
+    "command": "cc -Itools/playground/35d530b@@le-playground@exe -Itools/playground -I../tools/playground -I. -I.. -I/usr/local/Cellar/libffi/3.3/include -I/usr/local/Cellar/gtk+3/3.24.18_1/include/gtk-3.0 -I/usr/local/Cellar/glib/2.64.2_1/include/gio-unix-2.0 -I/usr/local/Cellar/libepoxy/1.5.4_1/include -I/usr/local/Cellar/pango/1.44.7/include/pango-1.0 -I/usr/local/Cellar/fribidi/1.0.9/include/fribidi -I/usr/local/Cellar/harfbuzz/2.6.5_1/include/harfbuzz -I/usr/local/Cellar/graphite2/1.3.14/include -I/usr/local/Cellar/atk/2.36.0/include/atk-1.0 -I/usr/local/Cellar/cairo/1.16.0_3/include/cairo -I/usr/local/Cellar/pixman/0.40.0/include/pixman-1 -I/usr/local/Cellar/fontconfig/2.13.1/include -I/usr/local/opt/freetype/include/freetype2 -I/usr/local/Cellar/libpng/1.6.37/include/libpng16 -I/usr/local/Cellar/gdk-pixbuf/2.40.0_1/include/gdk-pixbuf-2.0 -I/usr/local/Cellar/glib/2.64.2_1/include -I/usr/local/Cellar/glib/2.64.2_1/include/glib-2.0 -I/usr/local/Cellar/glib/2.64.2_1/lib/glib-2.0/include -I/usr/local/opt/gettext/include -I/usr/local/Cellar/pcre/8.44/include -Xclang -fcolor-diagnostics -pipe -Wall -Winvalid-pch -std=c99 -g -MD -MQ 'tools/playground/35d530b@@le-playground@exe/pg-generate-data.c.o' -MF 'tools/playground/35d530b@@le-playground@exe/pg-generate-data.c.o.d' -o 'tools/playground/35d530b@@le-playground@exe/pg-generate-data.c.o' -c ../tools/playground/pg-generate-data.c",
+    "file": "../tools/playground/pg-generate-data.c",
+    "output": "tools/playground/35d530b@@le-playground@exe/pg-generate-data.c.o"
+  },
+  {
+    "directory": "/Users/svetlana/Developer/le/builddir",
+    "command": "cc -Itools/playground/35d530b@@le-playground@exe -Itools/playground -I../tools/playground -I. -I.. -I/usr/local/Cellar/libffi/3.3/include -I/usr/local/Cellar/gtk+3/3.24.18_1/include/gtk-3.0 -I/usr/local/Cellar/glib/2.64.2_1/include/gio-unix-2.0 -I/usr/local/Cellar/libepoxy/1.5.4_1/include -I/usr/local/Cellar/pango/1.44.7/include/pango-1.0 -I/usr/local/Cellar/fribidi/1.0.9/include/fribidi -I/usr/local/Cellar/harfbuzz/2.6.5_1/include/harfbuzz -I/usr/local/Cellar/graphite2/1.3.14/include -I/usr/local/Cellar/atk/2.36.0/include/atk-1.0 -I/usr/local/Cellar/cairo/1.16.0_3/include/cairo -I/usr/local/Cellar/pixman/0.40.0/include/pixman-1 -I/usr/local/Cellar/fontconfig/2.13.1/include -I/usr/local/opt/freetype/include/freetype2 -I/usr/local/Cellar/libpng/1.6.37/include/libpng16 -I/usr/local/Cellar/gdk-pixbuf/2.40.0_1/include/gdk-pixbuf-2.0 -I/usr/local/Cellar/glib/2.64.2_1/include -I/usr/local/Cellar/glib/2.64.2_1/include/glib-2.0 -I/usr/local/Cellar/glib/2.64.2_1/lib/glib-2.0/include -I/usr/local/opt/gettext/include -I/usr/local/Cellar/pcre/8.44/include -Xclang -fcolor-diagnostics -pipe -Wall -Winvalid-pch -std=c99 -g -MD -MQ 'tools/playground/35d530b@@le-playground@exe/pg-color.c.o' -MF 'tools/playground/35d530b@@le-playground@exe/pg-color.c.o.d' -o 'tools/playground/35d530b@@le-playground@exe/pg-color.c.o' -c ../tools/playground/pg-color.c",
+    "file": "../tools/playground/pg-color.c",
+    "output": "tools/playground/35d530b@@le-playground@exe/pg-color.c.o"
+  },
+  {
+    "directory": "/Users/svetlana/Developer/le/builddir",
+    "command": "cc -Itools/board/520f1a6@@le-board@exe -Itools/board -I../tools/board -I. -I.. -I/usr/local/Cellar/libffi/3.3/include -I/usr/local/Cellar/libsoup/2.70.0/include/libsoup-2.4 -I/usr/local/Cellar/libpsl/0.21.0_2/include -I/usr/local/Cellar/glib/2.64.2_1/include -I/usr/local/Cellar/glib/2.64.2_1/include/glib-2.0 -I/usr/local/Cellar/glib/2.64.2_1/lib/glib-2.0/include -I/usr/local/opt/gettext/include -I/usr/local/Cellar/pcre/8.44/include -Xclang -fcolor-diagnostics -pipe -Wall -Winvalid-pch -std=c99 -g -MD -MQ 'tools/board/520f1a6@@le-board@exe/file.c.o' -MF 'tools/board/520f1a6@@le-board@exe/file.c.o.d' -o 'tools/board/520f1a6@@le-board@exe/file.c.o' -c ../tools/board/file.c",
+    "file": "../tools/board/file.c",
+    "output": "tools/board/520f1a6@@le-board@exe/file.c.o"
+  },
+  {
+    "directory": "/Users/svetlana/Developer/le/builddir",
+    "command": "cc -Itools/board/520f1a6@@le-board@exe -Itools/board -I../tools/board -I. -I.. -I/usr/local/Cellar/libffi/3.3/include -I/usr/local/Cellar/libsoup/2.70.0/include/libsoup-2.4 -I/usr/local/Cellar/libpsl/0.21.0_2/include -I/usr/local/Cellar/glib/2.64.2_1/include -I/usr/local/Cellar/glib/2.64.2_1/include/glib-2.0 -I/usr/local/Cellar/glib/2.64.2_1/lib/glib-2.0/include -I/usr/local/opt/gettext/include -I/usr/local/Cellar/pcre/8.44/include -Xclang -fcolor-diagnostics -pipe -Wall -Winvalid-pch -std=c99 -g -MD -MQ 'tools/board/520f1a6@@le-board@exe/main.c.o' -MF 'tools/board/520f1a6@@le-board@exe/main.c.o.d' -o 'tools/board/520f1a6@@le-board@exe/main.c.o' -c ../tools/board/main.c",
+    "file": "../tools/board/main.c",
+    "output": "tools/board/520f1a6@@le-board@exe/main.c.o"
+  }
+]
