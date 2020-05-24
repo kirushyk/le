@@ -23,7 +23,7 @@ Optimization algorithms supported:
 
 ### From Source
 
-[Meson Build system](https://mesonbuild.com) is used to automate building and installation. To create build directory, type:
+You will need C11 compiler. If you want Python bindings you should have C++14 compiler and [Pybind11](https://github.com/pybind/pybind11) installed. [Meson Build system](https://mesonbuild.com) is used to automate building and installation. To create build directory, type:
 
     meson {source_directory_name} {build_directory_name}
 
