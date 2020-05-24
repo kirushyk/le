@@ -587,13 +587,13 @@ le_matrix_apply_softmax(LeTensor *self)
         {
             float activation = expf(le_matrix_at_f32(self, klass, example) - max);
             sum += activation;
-            le_matrix_set_f32(self, klass, example, activation);
+            le_matrix_set(self, klass, example, activation);
         }
         for (klass = 0; klass < num_classes; klass++)
         {
             float activation = le_matrix_at_f32(self, klass, example);
             activation /= sum;
-            le_matrix_set_f32(self, klass, example, activation);
+            le_matrix_set(self, klass, example, activation);
         }
     }
 }
