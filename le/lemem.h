@@ -9,9 +9,9 @@
 
 LE_BEGIN_DECLS
 
-void * le_alloc (size_t  size);
+void *             le_alloc                                (size_t             size);
 
-void   le_free  (void   *block);
+void               le_free                                 (void              *block);
 
 LE_END_DECLS
 
