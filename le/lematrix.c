@@ -61,6 +61,7 @@ le_matrix_add(LeTensor *self, const LeTensor *another)
 void
 le_matrix_set_i8(LeTensor *self, unsigned y, unsigned x, int8_t value)
 {
+    assert(self->element_type == LE_TYPE_INT8);
     assert(self->shape->num_dimensions == 2);
     
     assert(y < self->shape->sizes[0]);
@@ -72,6 +73,7 @@ le_matrix_set_i8(LeTensor *self, unsigned y, unsigned x, int8_t value)
 void
 le_matrix_set_u8(LeTensor *self, unsigned y, unsigned x, uint8_t value)
 {
+    assert(self->element_type == LE_TYPE_UINT8);
     assert(self->shape->num_dimensions == 2);
     
     assert(y < self->shape->sizes[0]);
@@ -83,6 +85,7 @@ le_matrix_set_u8(LeTensor *self, unsigned y, unsigned x, uint8_t value)
 void
 le_matrix_set_i16(LeTensor *self, unsigned y, unsigned x, int16_t value)
 {
+    assert(self->element_type == LE_TYPE_INT16);
     assert(self->shape->num_dimensions == 2);
     
     assert(y < self->shape->sizes[0]);
@@ -94,6 +97,7 @@ le_matrix_set_i16(LeTensor *self, unsigned y, unsigned x, int16_t value)
 void
 le_matrix_set_u16(LeTensor *self, unsigned y, unsigned x, uint16_t value)
 {
+    assert(self->element_type == LE_TYPE_UINT16);
     assert(self->shape->num_dimensions == 2);
     
     assert(y < self->shape->sizes[0]);
@@ -105,6 +109,7 @@ le_matrix_set_u16(LeTensor *self, unsigned y, unsigned x, uint16_t value)
 void
 le_matrix_set_i32(LeTensor *self, unsigned y, unsigned x, int32_t value)
 {
+    assert(self->element_type == LE_TYPE_INT32);
     assert(self->shape->num_dimensions == 2);
     
     assert(y < self->shape->sizes[0]);
@@ -116,6 +121,7 @@ le_matrix_set_i32(LeTensor *self, unsigned y, unsigned x, int32_t value)
 void
 le_matrix_set_u32(LeTensor *self, unsigned y, unsigned x, uint32_t value)
 {
+    assert(self->element_type == LE_TYPE_UINT32);
     assert(self->shape->num_dimensions == 2);
     
     assert(y < self->shape->sizes[0]);
@@ -127,6 +133,7 @@ le_matrix_set_u32(LeTensor *self, unsigned y, unsigned x, uint32_t value)
 void
 le_matrix_set_f16(LeTensor *self, unsigned y, unsigned x, half value)
 {
+    assert(self->element_type == LE_TYPE_FLOAT16);
     assert(self->shape->num_dimensions == 2);
     
     assert(y < self->shape->sizes[0]);
@@ -138,6 +145,7 @@ le_matrix_set_f16(LeTensor *self, unsigned y, unsigned x, half value)
 void
 le_matrix_set_f32(LeTensor *self, unsigned y, unsigned x, float value)
 {
+    assert(self->element_type == LE_TYPE_FLOAT32);
     assert(self->shape->num_dimensions == 2);
     
     assert(y < self->shape->sizes[0]);
@@ -149,6 +157,7 @@ le_matrix_set_f32(LeTensor *self, unsigned y, unsigned x, float value)
 void
 le_matrix_set_f64(LeTensor *self, unsigned y, unsigned x, double value)
 {
+    assert(self->element_type == LE_TYPE_FLOAT64);
     assert(self->shape->num_dimensions == 2);
     
     assert(y < self->shape->sizes[0]);
