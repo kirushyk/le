@@ -1,5 +1,4 @@
 #include "layer.hpp"
-#include <le/le.h>
 
 using namespace le;
 

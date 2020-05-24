@@ -1,6 +1,6 @@
 #pragma once
 #include <memory>
-#include <le/le.h>
+#include <le/models/lemodel.h>
 #include "tensor.hpp"
 
 namespace le

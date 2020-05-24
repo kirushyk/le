@@ -1,4 +1,5 @@
 #include "dense-layer.hpp"
+#include <le/models/layers/ledenselayer.h>
 
 using namespace le;
 

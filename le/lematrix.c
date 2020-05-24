@@ -543,7 +543,7 @@ le_matrix_get_column(const LeTensor *matrix, unsigned x)
 }
                   
 LeTensor *
-le_matrix_get_column_copy(LeTensor *self, unsigned x)
+le_matrix_get_column_copy(const LeTensor *self, unsigned x)
 {
     /// @todo: Take stride into account
     assert(self->shape->num_dimensions == 2);

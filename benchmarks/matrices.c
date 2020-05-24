@@ -2,7 +2,7 @@
    Released under the MIT license. See LICENSE file in the project root for full license information. */
 
 #include <stdlib.h>
-#include <le/le.h>
+#include <le/lematrix.h>
 
 #define MIN_DIMENSION 16
 #define MAX_DIMENSION 48

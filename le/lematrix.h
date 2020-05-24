@@ -106,7 +106,7 @@ LeTensor *         le_matrix_new_conv2d                    (const LeTensor *   i
 LeTensor *         le_matrix_get_column                    (const LeTensor *   matrix,
                                                             unsigned           x);
 
-LeTensor *         le_matrix_get_column_copy               (LeTensor *         matrix,
+LeTensor *         le_matrix_get_column_copy               (const LeTensor *   matrix,
                                                             unsigned           x);
 
 void               le_matrix_apply_softmax                 (LeTensor *         matrix);

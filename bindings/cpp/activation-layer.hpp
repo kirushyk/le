@@ -1,6 +1,7 @@
 #pragma once
 #include <string>
 #include "layer.hpp"
+#include <le/models/layers/leactivationlayer.h>
 
 namespace le
 {
