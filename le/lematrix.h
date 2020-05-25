@@ -73,6 +73,7 @@ void               le_matrix_set_f64                       (LeTensor *          
                                                             double                  value);
 
 /// @note: Half is not accepted here
+/// @note: Make sure to pass correct argument type here
 #define le_matrix_set(m, y, x, v) _Generic((v), \
    int8_t: le_matrix_set_i8, \
    uint8_t: le_matrix_set_u8, \
