@@ -30,12 +30,23 @@ le_matrix_get_height(const LeTensor *self)
 float
 le_matrix_at_f32(const LeTensor *self, unsigned y, unsigned x)
 {
+    assert(self->element_type == LE_TYPE_FLOAT32);
     assert(self->shape->num_dimensions == 2);
-    
     assert(y < self->shape->sizes[0]);
     assert(x < self->shape->sizes[1]);
     
     return ((float *)self->data)[y * self->shape->sizes[1] + x];
+}
+
+double
+le_matrix_at_f64(const LeTensor *self, unsigned y, unsigned x)
+{
+    assert(self->element_type == LE_TYPE_FLOAT64);
+    assert(self->shape->num_dimensions == 2);
+    assert(y < self->shape->sizes[0]);
+    assert(x < self->shape->sizes[1]);
+    
+    return ((double *)self->data)[y * self->shape->sizes[1] + x];
 }
 
 void
