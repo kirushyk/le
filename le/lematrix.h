@@ -21,6 +21,18 @@ float              le_matrix_at_f32                        (const LeTensor *    
 
 double             le_matrix_at_f64                        (const LeTensor *        matrix,
                                                             unsigned                y,
+                                                            unsigned                x);   
+
+int8_t             le_matrix_at_i8                         (const LeTensor *        matrix,
+                                                            unsigned                y,
+                                                            unsigned                x);
+
+int16_t            le_matrix_at_i16                        (const LeTensor *        matrix,
+                                                            unsigned                y,
+                                                            unsigned                x);
+
+int32_t            le_matrix_at_i32                        (const LeTensor *        matrix,
+                                                            unsigned                y,
                                                             unsigned                x);                             
 
 /// @note: Unlike le_tensor_add, supports horizontal broadcasting

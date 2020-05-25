@@ -49,6 +49,39 @@ le_matrix_at_f64(const LeTensor *self, unsigned y, unsigned x)
     return ((double *)self->data)[y * self->shape->sizes[1] + x];
 }
 
+int8_t
+le_matrix_at_i8(const LeTensor *self, unsigned y, unsigned x)
+{
+    assert(self->element_type == LE_TYPE_INT8);
+    assert(self->shape->num_dimensions == 2);
+    assert(y < self->shape->sizes[0]);
+    assert(x < self->shape->sizes[1]);
+    
+    return ((int8_t *)self->data)[y * self->shape->sizes[1] + x];
+}
+
+int16_t
+le_matrix_at_i16(const LeTensor *self, unsigned y, unsigned x)
+{
+    assert(self->element_type == LE_TYPE_INT16);
+    assert(self->shape->num_dimensions == 2);
+    assert(y < self->shape->sizes[0]);
+    assert(x < self->shape->sizes[1]);
+    
+    return ((int16_t *)self->data)[y * self->shape->sizes[1] + x];
+}
+
+int32_t
+le_matrix_at_i32(const LeTensor *self, unsigned y, unsigned x)
+{
+    assert(self->element_type == LE_TYPE_INT32);
+    assert(self->shape->num_dimensions == 2);
+    assert(y < self->shape->sizes[0]);
+    assert(x < self->shape->sizes[1]);
+    
+    return ((int32_t *)self->data)[y * self->shape->sizes[1] + x];
+}
+
 void
 le_matrix_add(LeTensor *self, const LeTensor *another)
 {
