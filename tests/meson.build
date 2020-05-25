@@ -12,6 +12,7 @@ le_tests = [
     ['matrices.c'],
     ['type-generic.c'],
     ['sobel.c'],
+    ['relu.c'],
     ['tensorlist.c']
 ]
 
