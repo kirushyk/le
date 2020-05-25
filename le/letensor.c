@@ -753,38 +753,25 @@ le_tensor_apply_relu(LeTensor *self)
     {
         switch (self->element_type)
         {
+#define APPLY_RELU(T) { T value = ((T *)self->data)[i]; ((T *)self->data)[i] = value > 0 ? value : 0;  }
         case LE_TYPE_FLOAT32:
-            {
-                float value = ((float *)self->data)[i];
-                ((float *)self->data)[i] = value > 0.0f ? value : 0.0f;
-            }
+            APPLY_RELU(float)
             break;
         case LE_TYPE_FLOAT64:
-            {
-                double value = ((double *)self->data)[i];
-                ((double *)self->data)[i] = value > 0.0 ? value : 0.0;
-            }
+            APPLY_RELU(double)
             break;
         case LE_TYPE_INT8:
-            {
-                int8_t value = ((int8_t *)self->data)[i];
-                ((int8_t *)self->data)[i] = value > 0 ? value : 0;
-            }
+            APPLY_RELU(int8_t)
             break;
         case LE_TYPE_INT16:
-            {
-                int16_t value = ((int16_t *)self->data)[i];
-                ((int16_t *)self->data)[i] = value > 0 ? value : 0;
-            }
+            APPLY_RELU(int16_t)
             break;
         case LE_TYPE_INT32:
-            {
-                int32_t value = ((int32_t *)self->data)[i];
-                ((int32_t *)self->data)[i] = value > 0 ? value : 0;
-            }
+            APPLY_RELU(int32_t)
             break;
         default:
             return;
+#undef APPLY_RELU
         }
     }
 }
