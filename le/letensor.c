@@ -737,7 +737,13 @@ le_tensor_apply_sgn(LeTensor *self)
 void
 le_tensor_apply_relu(LeTensor *self)
 {
-    assert(self->element_type == LE_TYPE_FLOAT32);
+    /// @note: Not implemented for half precision floating point values (float16)
+    /// @note: There is no sense in applying ReLU to Tensors of unsigned integers.
+    assert(self->element_type == LE_TYPE_FLOAT32 ||
+           self->element_type == LE_TYPE_FLOAT64 ||
+           self->element_type == LE_TYPE_INT8 ||
+           self->element_type == LE_TYPE_INT16 ||
+           self->element_type == LE_TYPE_INT32);
 
     /// @todo: Take stride into account
     unsigned i;
@@ -745,8 +751,41 @@ le_tensor_apply_relu(LeTensor *self)
     
     for (i = 0; i < elements_count; i++)
     {
-        float value = ((float *)self->data)[i];
-        ((float *)self->data)[i] = value > 0.0f ? value : 0.0f;
+        switch (self->element_type)
+        {
+        case LE_TYPE_FLOAT32:
+            {
+                float value = ((float *)self->data)[i];
+                ((float *)self->data)[i] = value > 0.0f ? value : 0.0f;
+            }
+            break;
+        case LE_TYPE_FLOAT64:
+            {
+                double value = ((double *)self->data)[i];
+                ((double *)self->data)[i] = value > 0.0 ? value : 0.0;
+            }
+            break;
+        case LE_TYPE_INT8:
+            {
+                int8_t value = ((int8_t *)self->data)[i];
+                ((int8_t *)self->data)[i] = value > 0 ? value : 0;
+            }
+            break;
+        case LE_TYPE_INT16:
+            {
+                int16_t value = ((int16_t *)self->data)[i];
+                ((int16_t *)self->data)[i] = value > 0 ? value : 0;
+            }
+            break;
+        case LE_TYPE_INT32:
+            {
+                int32_t value = ((int32_t *)self->data)[i];
+                ((int32_t *)self->data)[i] = value > 0 ? value : 0;
+            }
+            break;
+        default:
+            return;
+        }
     }
 }
 
