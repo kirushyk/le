@@ -127,7 +127,7 @@ void               le_tensor_apply_x_minus_sqr_x           (LeTensor *          
 void               le_tensor_apply_gt_f32                  (LeTensor *              tensor,
                                                             float                   scalar);
 
-/// @note: a = a * b
+/// @note: a = a > b
 #define le_tensor_apply_gt(tensor, scalar) _Generic((scalar), \
    float: le_tensor_apply_gt_f32 \
 )(tensor, scalar)
