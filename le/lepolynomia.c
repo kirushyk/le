@@ -1,10 +1,10 @@
 /* Copyright (c) Kyrylo Polezhaiev and contributors. All rights reserved.
    Released under the MIT license. See LICENSE file in the project root for full license information. */
 
-#include <assert.h>
 #include "lepolynomia.h"
-#include "letensor-imp.h"
-#include "lematrix.h"
+#include <assert.h>
+#include <le/tensors/letensor-imp.h>
+#include <le/tensors/lematrix.h>
 
 LeTensor *
 le_matrix_new_polynomia(const LeTensor *a)

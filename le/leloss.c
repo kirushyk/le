@@ -5,7 +5,7 @@
 #include <assert.h>
 #include <math.h>
 #include <stdbool.h>
-#include "letensor-imp.h"
+#include "tensors/letensor-imp.h"
 
 #define EPSILON 1e-5f
 

@@ -5,7 +5,7 @@
 #include <assert.h>
 #include <stdlib.h>
 #include <stdbool.h>
-#include <le/lematrix.h>
+#include <le/tensors/lematrix.h>
 
 typedef struct LeConv2DClass
 {

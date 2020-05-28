@@ -5,7 +5,7 @@
 #include <assert.h>
 #include <stdlib.h>
 #include <le/le.h>
-#include <le/letensor-imp.h>
+#include <le/tensors/letensor-imp.h>
 #include <ext/mnist/lemnist.h>
 #include <math.h>
 

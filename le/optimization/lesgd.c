@@ -7,10 +7,10 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <assert.h>
-#include <le/letensor.h>
-#include <le/letensor-imp.h>
+#include <le/tensors/letensor.h>
+#include <le/tensors/letensor-imp.h>
 #include <le/lelog.h>
-#include <le/lematrix.h>
+#include <le/tensors/lematrix.h>
 
 struct LeSGD
 {

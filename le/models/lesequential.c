@@ -4,12 +4,12 @@
 #define DEFAULT_LOG_CATEGORY "sequential"
 
 #include "lesequential.h"
-#include <le/lelog.h>
-#include <le/leloss.h>
 #include <assert.h>
 #include <stdlib.h>
+#include <le/lelog.h>
+#include <le/leloss.h>
 #include "lelist.h"
-#include "lematrix.h"
+#include <le/tensors/lematrix.h>
 
 struct LeSequential
 {

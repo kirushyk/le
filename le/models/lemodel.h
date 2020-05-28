@@ -4,9 +4,9 @@
 #ifndef __LE_MODEL_H__
 #define __LE_MODEL_H__
 
-#include "../lemacros.h"
+#include <le/lemacros.h>
 #include "../leobject.h"
-#include "../letensor.h"
+#include <le/tensors/letensor.h>
 #include "../lelist.h"
 
 LE_BEGIN_DECLS

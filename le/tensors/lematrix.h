@@ -6,7 +6,7 @@
 #ifndef __LEMATRIX_H__
 #define __LEMATRIX_H__
 
-#include "lemacros.h"
+#include <le/lemacros.h>
 #include "letensor.h"
 
 LE_BEGIN_DECLS

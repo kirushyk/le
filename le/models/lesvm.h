@@ -5,7 +5,7 @@
 #define __LESVM_H__
 
 #include "../lemacros.h"
-#include "../letensor.h"
+#include <le/tensors/letensor.h>
 
 LE_BEGIN_DECLS
 

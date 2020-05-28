@@ -141,8 +141,6 @@ void               le_tensor_free                          (LeTensor *          
 /** @section ugly */
 #include <stdio.h>
 
-LeTensor *         le_scalar_new_f32                       (float                   scalar);
-
 const char *       le_tensor_to_cstr                       (const LeTensor *        tensor);
 
 void               le_tensor_print                         (const LeTensor *        tensor,

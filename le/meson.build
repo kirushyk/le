@@ -6,10 +6,11 @@ incdir = include_directories('../')
 le_sources = [
     'lelist.c',
     'ledataset.c',
-    'letype.c',
-    'leshape.c',
-    'letensor.c',
-    'lematrix.c',
+    'tensors/letype.c',
+    'tensors/leshape.c',
+    'tensors/letensor.c',
+    'tensors/lescalar.c',
+    'tensors/lematrix.c',
     'lepolynomia.c',
     'models/lelogistic.c',
     'models/le1layernn.c',
@@ -40,7 +41,7 @@ endif
 install_headers('lepolynomia.h', subdir : 'le')
 install_headers('leloss.h', subdir : 'le')
 install_headers('ledataset.h', subdir : 'le')
-install_headers('letensor.h', subdir : 'le')
+install_headers('tensors/letensor.h', subdir : 'le/tensors')
 install_headers('optimization/leoptimizer.h', subdir : 'le/optimization')
 install_headers('optimization/lebgd.h', subdir : 'le/optimization')
 install_headers('optimization/lesgd.h', subdir : 'le/optimization')
@@ -57,11 +58,12 @@ install_headers('models/le1layernn.h', subdir : 'le/models')
 install_headers('models/lelogistic.h', subdir : 'le/models')
 install_headers('le.h', subdir : 'le')
 install_headers('lemem.h', subdir : 'le')
-install_headers('lematrix.h', subdir : 'le')
-install_headers('letensor-imp.h', subdir : 'le')
-install_headers('letype.h', subdir : 'le')
+install_headers('tensors/letype.h', subdir : 'le')
+install_headers('tensors/leshape.h', subdir : 'le')
+install_headers('tensors/lematrix.h', subdir : 'le/tensors')
+install_headers('tensors/letensor-imp.h', subdir : 'le/tensors')
+install_headers('tensors/lescalar.h', subdir : 'le/tensors')
 install_headers('lelog.h', subdir : 'le')
-install_headers('leshape.h', subdir : 'le')
 
 le = static_library('le', le_sources,
     include_directories: incdir,

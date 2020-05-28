@@ -1,9 +1,0 @@
-prefix=/Users/svetlana/Developer/le/builddir
-srcdir=/Users/svetlana/Developer/le
-
-Name: lible
-Description: Machine Learning library.
-URL: https://github.com/kirushyk/le
-Version: 0.0.1
-Libs: -L${prefix}/le -lle -framework accelerate -lm
-Cflags:-I${prefix}/le -I${srcdir}/le -I${prefix}/le/../ -I${srcdir}/le/../

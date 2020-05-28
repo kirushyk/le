@@ -6,8 +6,8 @@
 #include <assert.h>
 #include <stdlib.h>
 #include <le/lelog.h>
-#include <le/lematrix.h>
-#include <le/letensor-imp.h>
+#include <le/tensors/lematrix.h>
+#include <le/tensors/letensor-imp.h>
 
 #define DEFAULT_LOG_CATEGORY "activation-layer"
 

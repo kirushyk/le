@@ -5,7 +5,7 @@
 #define __LE_LAYER_H__
 
 #include <le/leobject.h>
-#include <le/letensor.h>
+#include <le/tensors/letensor.h>
 #include <le/lelist.h>
 #include <le/lemacros.h>
 

@@ -1,1 +1,0 @@
-[{"cmd": ["/Users/svetlana/Developer/le/builddir/benchmarks/matrices_benchmark"], "env": {}, "name": "matrices_benchmark", "workdir": null, "timeout": 180, "suite": ["le"], "is_parallel": true, "priority": 0, "protocol": "exitcode"}]

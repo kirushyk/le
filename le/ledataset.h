@@ -4,7 +4,7 @@
 #ifndef __LETRAININGDATA_H__
 #define __LETRAININGDATA_H__
 
-#include "letensor.h"
+#include <le/tensors/letensor.h>
 #include "lemacros.h"
 
 LE_BEGIN_DECLS

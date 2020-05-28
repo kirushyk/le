@@ -4,7 +4,7 @@
 #include <stdlib.h>
 #include <assert.h>
 #include <le/le.h>
-#include <le/letensor-imp.h>
+#include <le/tensors/letensor-imp.h>
 #include <ext/mnist/lemnist.h>
 #include <ext/mnist/mnist-config.h>
 

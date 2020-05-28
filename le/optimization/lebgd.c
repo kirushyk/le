@@ -4,12 +4,12 @@
 #define DEFAULT_LOG_CATEGORY "bgd"
 
 #include "lebgd.h"
-#include <assert.h>
-#include <le/letensor.h>
-#include <le/letensor-imp.h>
-#include <le/lelog.h>
-#include <stdlib.h>
 #include <stdio.h>
+#include <stdlib.h>
+#include <assert.h>
+#include <le/tensors/letensor.h>
+#include <le/tensors/letensor-imp.h>
+#include <le/lelog.h>
 
 struct LeBGD
 {

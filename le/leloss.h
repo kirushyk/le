@@ -4,7 +4,7 @@
 #ifndef __LELOSS_H__
 #define __LELOSS_H__
 
-#include "lematrix.h"
+#include <le/tensors/lematrix.h>
 #include "lemacros.h"
 
 LE_BEGIN_DECLS

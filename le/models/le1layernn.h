@@ -4,7 +4,7 @@
 #ifndef __LE1LAYERNN_H__
 #define __LE1LAYERNN_H__
 
-#include "../letensor.h"
+#include <le/tensors/letensor.h>
 #include <le/lemacros.h>
 
 LE_BEGIN_DECLS

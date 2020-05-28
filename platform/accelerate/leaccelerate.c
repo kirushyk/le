@@ -4,7 +4,7 @@
 #include "leaccelerate.h"
 #include <assert.h>
 #include <le/le.h>
-#include <le/letensor-imp.h>
+#include <le/tensors/letensor-imp.h>
 #include <Accelerate/Accelerate.h>
 
 LeTensor *

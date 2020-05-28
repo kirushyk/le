@@ -6,7 +6,7 @@
 #include <assert.h>
 #include <stdlib.h>
 #include "lemodel.h"
-#include "lematrix.h"
+#include <le/tensors/lematrix.h>
 
 struct LeSVM
 {

@@ -5,7 +5,7 @@
 #define __LE_SEQUENTIAL_H__
 
 #include "../lemacros.h"
-#include "../letensor.h"
+#include <le/tensors/letensor.h>
 #include "../leloss.h"
 #include "lemodel.h"
 #include "layers/lelayer.h"

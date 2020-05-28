@@ -6,8 +6,8 @@
 #include <assert.h>
 #include <stdlib.h>
 #include "lemodel.h"
-#include "letensor-imp.h"
-#include "lematrix.h"
+#include <le/tensors/letensor-imp.h>
+#include <le/tensors/lematrix.h>
 #include "lepolynomia.h"
 #include "leloss.h"
 

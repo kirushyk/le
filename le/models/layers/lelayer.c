@@ -5,8 +5,8 @@
 #include <assert.h>
 #include <stdlib.h>
 #include <string.h>
-#include <le/lematrix.h>
-#include <le/letensor-imp.h>
+#include <le/tensors/lematrix.h>
+#include <le/tensors/letensor-imp.h>
 
 void
 le_layer_construct(LeLayer *self, const char *name)

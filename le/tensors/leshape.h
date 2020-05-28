@@ -6,7 +6,7 @@
 
 #include <stdint.h>
 #include <stdbool.h>
-#include "lemacros.h"
+#include <le/lemacros.h>
 
 LE_BEGIN_DECLS
 

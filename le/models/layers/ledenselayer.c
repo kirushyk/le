@@ -5,7 +5,7 @@
 #include <math.h>
 #include <assert.h>
 #include <stdlib.h>
-#include <le/lematrix.h>
+#include <le/tensors/lematrix.h>
 
 typedef struct LeDenseLayerClass
 {

@@ -5,8 +5,9 @@
 #define __LE_H__
 
 #include "lemacros.h"
-#include "letensor.h"
-#include "lematrix.h"
+#include "tensors/letensor.h"
+#include "tensors/lescalar.h"
+#include "tensors/lematrix.h"
 #include "lepolynomia.h"
 #include "leobject.h"
 #include "ledataset.h"

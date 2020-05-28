@@ -3,7 +3,7 @@
 #include <cstdarg>
 #include <iomanip>
 #include <le/le.h>
-#include <le/letensor-imp.h>
+#include <le/tensors/letensor-imp.h>
 
 using namespace le;
 

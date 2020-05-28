@@ -4,8 +4,8 @@
 #ifndef __LELOGISTIC_H__
 #define __LELOGISTIC_H__
 
-#include "../lemacros.h"
-#include "../letensor.h"
+#include <le/lemacros.h>
+#include <le/tensors/letensor.h>
 
 LE_BEGIN_DECLS
 

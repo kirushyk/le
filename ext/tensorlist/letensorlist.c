@@ -8,7 +8,7 @@
 #include <stdint.h>
 #include <assert.h>
 #include <stdlib.h>
-#include <le/letensor-imp.h>
+#include <le/tensors/letensor-imp.h>
 
 static void
 le_tensor_serialize(LeTensor *tensor, FILE *fout)
