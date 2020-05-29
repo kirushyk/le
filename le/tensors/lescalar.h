@@ -11,6 +11,8 @@ typedef LeTensor LeScalar;
 
 LeScalar *         le_scalar_new_f32                       (float                   scalar);
 
+LeScalar *         le_scalar_new_f64                       (double                  scalar);
+
 LE_END_DECLS
 
 #endif
