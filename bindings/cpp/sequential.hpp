@@ -22,4 +22,6 @@ public:
     
 };
 
+Sequential & operator <<(Sequential &nn, Layer layer);
+
 }
