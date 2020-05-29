@@ -33,6 +33,13 @@ Tensor::Tensor(const Tensor &tensor):
     priv->tensor = le_tensor_new_copy(tensor.c_tensor());
 }
 
+Tensor::Tensor(Tensor &&tensor):
+    priv(std::make_shared<Private>())
+{
+    priv->tensor = tensor.priv->tensor;
+    tensor.priv->tensor = NULL;
+}
+
 Tensor::Tensor(LeTensor *c_tensor):
     priv(std::make_shared<Private>())
 {

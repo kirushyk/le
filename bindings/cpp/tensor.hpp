@@ -13,6 +13,7 @@ public:
     Tensor(Type t, unsigned num_dimensions, ...);
     Tensor(Type t, Shape s, void *data);
     Tensor(const Tensor &tensor);
+    Tensor(Tensor &&tensor);
     Tensor(LeTensor *c_tensor);
     ~Tensor();
 
