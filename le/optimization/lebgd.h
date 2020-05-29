@@ -19,16 +19,20 @@ typedef struct LeBGD LeBGD;
 
 #define LE_BGD(o) ((LeBGD *)(o))
 
-LeBGD * le_bgd_new_simple (LeList   *parameters,
-                           LeList   *gradients,
-                           float     learning_rate);
+LeBGD *            le_bgd_new_simple                       (LeList *                parameters,
+                                                            LeList *                gradients,
+                                                            float                   learning_rate);
 
-LeBGD * le_bgd_new        (LeModel  *model,
-                           LeTensor *input,
-                           LeTensor *output,
-                           float     learning_rate);
+LeBGD *            le_bgd_new                              (LeModel *               model,
+                                                            LeTensor *              input,
+                                                            LeTensor *              output,
+                                                            float                   learning_rate);
 
-void    le_bgd_free       (LeBGD    *optimizer);
+/// @note: le_optimizer_step virtual method will call this function if optimizer subclass is BGD.
+/// Exposed to speed-up C++ bindings.
+void               le_bgd_step                             (LeOptimizer *           optimizer);
+
+void               le_bgd_free                             (LeBGD *                 optimizer);
 
 LE_END_DECLS
 

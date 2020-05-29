@@ -29,7 +29,7 @@ typedef struct LeBGDClass
 
 static LeBGDClass klass;
 
-static void
+void
 le_bgd_step(LeOptimizer *optimizer)
 {
     LeBGD *self = (LeBGD *)optimizer;
