@@ -13,6 +13,11 @@ LeScalar *         le_scalar_new_f32                       (float               
 
 LeScalar *         le_scalar_new_f64                       (double                  scalar);
 
+#define le_scalar_new(s) _Generic(s, \
+   float: le_scalar_new_f32, \
+   double: le_scalar_new_f64 \
+)(s)
+
 LE_END_DECLS
 
 #endif
