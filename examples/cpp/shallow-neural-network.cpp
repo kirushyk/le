@@ -18,10 +18,10 @@ int main(int argc, const char *argv[])
 
     std::cout << "Creating Neural Network Structure" << std::endl;
     le::Sequential nn;
-    nn.add(le::DenseLayer("D1", 2, 2));
-    nn.add(le::ActivationLayer("A1", le::Activation::SIGMOID));
-    nn.add(le::DenseLayer("D2", 2, 1));
-    nn.add(le::ActivationLayer("A2", le::Activation::SIGMOID));
+    nn << le::DenseLayer("D1", 2, 2);
+    nn << le::ActivationLayer("A1", le::Activation::SIGMOID);
+    nn << le::DenseLayer("D2", 2, 1);
+    nn << le::ActivationLayer("A2", le::Activation::SIGMOID);
     nn.setLoss(le::Loss::LOGISTIC);
 
     std::cout << "Training Neural Network" << std::endl;
