@@ -18,7 +18,7 @@ void Sequential::setLoss(Loss loss)
     le_sequential_set_loss((LeSequential *)c_model(), (LeLoss)loss);
 }
 
-Sequential & operator <<(Sequential &nn, Layer layer)
+Sequential & le::operator <<(Sequential &nn, Layer layer)
 {
     nn.add(layer);
     return nn;
