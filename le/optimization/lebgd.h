@@ -24,8 +24,8 @@ LeBGD *            le_bgd_new_simple                       (LeList *            
                                                             float                   learning_rate);
 
 LeBGD *            le_bgd_new                              (LeModel *               model,
-                                                            LeTensor *              input,
-                                                            LeTensor *              output,
+                                                            const LeTensor *        input,
+                                                            const LeTensor *        output,
                                                             float                   learning_rate);
 
 /// @note: le_optimizer_step virtual method will call this function if optimizer subclass is BGD.

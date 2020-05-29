@@ -17,8 +17,8 @@ struct LeBGD
     
     unsigned iteration;
     LeModel *model;
-    LeTensor *input;
-    LeTensor *output;
+    const LeTensor *input;
+    const LeTensor *output;
     float learning_rate;
 };
 
@@ -126,7 +126,7 @@ le_bgd_new_simple(LeList *parameters, LeList *gradients, float learning_rate)
 }
 
 LeBGD *
-le_bgd_new(LeModel *model, LeTensor *input, LeTensor *output, float learning_rate)
+le_bgd_new(LeModel *model, const LeTensor *input, const LeTensor *output, float learning_rate)
 {
     assert(model);
 
