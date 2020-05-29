@@ -65,6 +65,9 @@ PYBIND11_MODULE(le, m)
         .def(py::init<>())
         .def("train", &PyLogisticClassifier::pyTrain)
         .def("predict", &PyLogisticClassifier::predict);
+    py::class_<le::Sequential>(m, "Sequential")
+        .def(py::init<>())
+        .def("predict", &le::Sequential::predict);
     m.doc() = "Le Python Binding";
     m.def("tensor", &tensor, "Create a Le Tensor");
 }
