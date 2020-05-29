@@ -7,3 +7,4 @@
 #include "sequential.hpp"
 #include "dense-layer.hpp"
 #include "activation-layer.hpp"
+#include "bgd.hpp"

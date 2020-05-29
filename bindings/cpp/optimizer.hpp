@@ -1,6 +1,6 @@
 #pragma once
 #include <memory>
-#include <le/optimizers/leoptimizer.h>
+#include <le/optimization/leoptimizer.h>
 
 namespace le
 {
@@ -9,9 +9,10 @@ class Optimizer
 {
 public:
     Optimizer();
-    ~Optimizer();
+    virtual ~Optimizer();
 
     LeOptimizer *c_optimizer();
+    virtual void step();
 
 protected:
     void setCOptimizer(LeOptimizer *c_optimizer);

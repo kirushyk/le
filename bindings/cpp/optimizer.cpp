@@ -27,3 +27,8 @@ void Optimizer::setCOptimizer(LeOptimizer *c_optimizer)
 {
     priv->c_optimizer = c_optimizer;
 }
+
+void Optimizer::step()
+{
+    le_optimizer_step(priv->c_optimizer);
+}

@@ -7,7 +7,9 @@ le_cpp_sources = [
     'sequential.cpp',
     'layer.cpp',
     'activation-layer.cpp',
-    'dense-layer.cpp'
+    'dense-layer.cpp',
+    'optimizer.cpp',
+    'bgd.cpp'
 ]
 
 if add_languages('cpp', native: false, required: false)
