@@ -7,6 +7,7 @@
 Le is Machine Learning framework written in Pure C designed so that programs using it will be easy to read. It provides library for:
 * Tensor Manipulation.
 * Linear Algebra.
+* Model Training and Inference (Prediction).
 
 At this moment following ML models are implemented:
 * Polynomial Regression.
