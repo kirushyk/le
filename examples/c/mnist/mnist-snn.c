@@ -2,13 +2,16 @@
    Released under the MIT license. See LICENSE file in the project root for full license information. */
 
 #include <stdlib.h>
+#include <string.h>
 #include <assert.h>
 #include <le/le.h>
 #include <le/tensors/letensor-imp.h>
 #include <ext/mnist/lemnist.h>
 
+#define DEFAULT_LOG_CATEGORY "mnist-snn"
+
 int
-main()
+main(int argc, char *argv[])
 {
     MNIST *mnist = le_mnist_load(NULL);
 
@@ -41,26 +44,47 @@ main()
 
     le_sequential_to_dot(neural_network, "2nn.dot");
 
-    LeSGD *optimizer = le_sgd_new(LE_MODEL(neural_network), train_input_f32, train_output, 0.1f);
-    for (unsigned i = 0; i <= 2500; i++)
-    {
-        le_optimizer_step(LE_OPTIMIZER(optimizer));
-        
-        if (i % 100 == 0) {
-            printf("Iteration %d.\n", i);
-            
-            LeTensor *train_prediction = le_model_predict(LE_MODEL(neural_network), train_input_f32);
-            float train_set_error = le_one_hot_misclassification(train_prediction, train_output);
-            printf("Train Set Error: %f\n", train_set_error);
-            le_tensor_free(train_prediction);
+    LeOptimizer *optimizer = NULL;
 
-            LeTensor *test_prediction = le_model_predict(LE_MODEL(neural_network), test_input_f32);
-            float test_set_error = le_one_hot_misclassification(test_prediction, test_output);
-            printf("Test Set Error: %f\n", test_set_error);
-            le_tensor_free(test_prediction);
+    if (argc == 2)
+    {
+        if (strcmp(argv[1], "bgd") == 0)
+        {
+            optimizer = LE_OPTIMIZER(le_bgd_new(LE_MODEL(neural_network), train_input_f32, train_output, 0.1f));
+        }
+        else if (strcmp(argv[1], "sgd") == 0)
+        {
+            optimizer = LE_OPTIMIZER(le_sgd_new(LE_MODEL(neural_network), train_input_f32, train_output, 0.1f));
         }
     }
+
+    if (optimizer)
+    {
+        for (unsigned i = 0; i <= 2500; i++)
+        {
+            le_optimizer_step(LE_OPTIMIZER(optimizer));
+            
+            if (i % 100 == 0) {
+                printf("Iteration %d.\n", i);
+                
+                LeTensor *train_prediction = le_model_predict(LE_MODEL(neural_network), train_input_f32);
+                float train_set_error = le_one_hot_misclassification(train_prediction, train_output);
+                printf("Train Set Error: %f\n", train_set_error);
+                le_tensor_free(train_prediction);
+
+                LeTensor *test_prediction = le_model_predict(LE_MODEL(neural_network), test_input_f32);
+                float test_set_error = le_one_hot_misclassification(test_prediction, test_output);
+                printf("Test Set Error: %f\n", test_set_error);
+                le_tensor_free(test_prediction);
+            }
+        }
+    }
+    else
+    {
+        LE_ERROR("No Optimizer specified");
+    }
     
+
     le_sequential_free(neural_network);
     le_tensor_free(test_output);
     le_tensor_free(test_input_f32);

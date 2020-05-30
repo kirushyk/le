@@ -15,7 +15,7 @@ executable('mnist-1-layer-nn', 'mnist-1-layer-nn.c',
     install: false
 )
 
-executable('mnist-sgd', 'mnist-sgd.c',
+executable('mnist-snn', 'mnist-snn.c',
     include_directories: incdir,
     link_with: mnist_example_deps,
     install: false
