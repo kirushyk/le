@@ -45,26 +45,32 @@ main(int argc, char *argv[])
     le_sequential_to_dot(neural_network, "2nn.dot");
 
     LeOptimizer *optimizer = NULL;
+    unsigned print_module = 1;
+    unsigned num_epochs = 2500;
 
     if (argc == 2)
     {
         if (strcmp(argv[1], "bgd") == 0)
         {
             optimizer = LE_OPTIMIZER(le_bgd_new(LE_MODEL(neural_network), train_input_f32, train_output, 0.1f));
+            print_module = 1;
+            num_epochs = 250;
         }
         else if (strcmp(argv[1], "sgd") == 0)
         {
             optimizer = LE_OPTIMIZER(le_sgd_new(LE_MODEL(neural_network), train_input_f32, train_output, 0.1f));
+            print_module = 100;
+            num_epochs = 2500;
         }
     }
 
     if (optimizer)
     {
-        for (unsigned i = 0; i <= 2500; i++)
+        for (unsigned i = 0; i <= num_epochs; i++)
         {
             le_optimizer_step(LE_OPTIMIZER(optimizer));
             
-            if (i % 100 == 0) {
+            if (i % print_module == 0) {
                 printf("Iteration %d.\n", i);
                 
                 LeTensor *train_prediction = le_model_predict(LE_MODEL(neural_network), train_input_f32);
