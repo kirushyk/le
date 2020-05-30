@@ -12,7 +12,6 @@ Le is Machine Learning framework written in Pure C designed so that programs usi
 At this moment following ML models are implemented:
 * Polynomial Regression.
 * Support Vector Machines (SVM).
-* 1-Layer Neural Network.
 * Sequential Feed-forward Neural Network (Multiple Layer Perceptron, MLP).
 
 Optimization algorithms supported:
