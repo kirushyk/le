@@ -162,6 +162,52 @@ le_tensor_new_copy(const LeTensor *another)
 }
 
 LeTensor *
+le_tensor_new_zeros_like(const LeTensor *another)
+{
+    assert(another);
+    
+    LeTensor *self = malloc(sizeof(struct LeTensor));
+    self->element_type = another->element_type;
+    self->shape = le_shape_copy(another->shape);
+    self->stride = another->stride;
+    self->owns_data = true;
+    unsigned elements_count = le_shape_get_elements_count(self->shape);
+    size_t data_size = elements_count * le_type_size(another->element_type);
+    self->data = malloc(data_size);
+    for (unsigned i = 0; i < elements_count; i++)
+    {
+        switch (self->element_type)
+        {
+        case LE_TYPE_INT8:
+        case LE_TYPE_UINT8:
+            ((int8_t *)self->data)[i] = 0;
+            break;
+        case LE_TYPE_INT16:
+        case LE_TYPE_UINT16:
+            ((int16_t *)self->data)[i] = 0;
+            break;
+        case LE_TYPE_INT32:
+        case LE_TYPE_UINT32:
+            ((int32_t *)self->data)[i] = 0;
+            break;
+        case LE_TYPE_FLOAT16:
+            ((uint16_t *)self->data)[i] = F16_0;
+            break;
+        case LE_TYPE_FLOAT32:
+            ((float *)self->data)[i] = 0.0f;
+            break;
+        case LE_TYPE_FLOAT64:
+            ((double *)self->data)[i] = 0.0;
+            break;
+        default:
+            break;
+        }
+    }
+    return self;
+}
+
+
+LeTensor *
 le_tensor_new_cast(LeTensor *another, LeType type)
 {
     assert(le_cast_rawcpy[type][another->element_type] || le_cast_fn[type][another->element_type]);

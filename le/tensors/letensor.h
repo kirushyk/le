@@ -32,6 +32,8 @@ LeTensor *         le_tensor_new_from_data                 (LeType              
 
 LeTensor *         le_tensor_new_copy                      (const LeTensor *        another);
 
+LeTensor *         le_tensor_new_zeros_like                (const LeTensor *        another);
+
 /// @note: Takes ownership of shape
 LeTensor *         le_tensor_new_rand_f32                  (LeShape *               shape);
 
