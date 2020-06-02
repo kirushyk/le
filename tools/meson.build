@@ -3,4 +3,3 @@
 
 subdir('mnist-inspect')
 subdir('playground')
-subdir('board')
