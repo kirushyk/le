@@ -106,6 +106,11 @@ le_sgd_step(LeOptimizer *optimizer)
         LE_WARNING("Extra gradients passed");
     }
     
+    if (momentum_iterator)
+    {
+        LE_WARNING("Extra momenta passed");
+    }
+    
     le_list_foreach(optimizer->gradients, (LeFunction)le_tensor_free);
     
     self->iteration++;
