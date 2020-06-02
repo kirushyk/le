@@ -1,7 +1,7 @@
 /* Copyright (c) Kyrylo Polezhaiev and contributors. All rights reserved.
    Released under the MIT license. See LICENSE file in the project root for full license information.
  
-   Vanilla Stochastic Gradient Descent Optimization Algorithm
+  Stochastic Gradient Descent with Momentum Optimization Algorithm
  
  */
 
@@ -19,12 +19,13 @@ typedef struct LeSGD LeSGD;
 
 #define LE_SGD(o) ((LeSGD *)(o))
 
-LeSGD * le_sgd_new  (LeModel  *model,
-                     LeTensor *input,
-                     LeTensor *output,
-                     float     learning_rate);
+LeSGD *            le_sgd_new                              (LeModel *               model,
+                                                            LeTensor *              input,
+                                                            LeTensor *              output,
+                                                            float                   learning_rate,
+                                                            float                   momentum);
 
-void    le_sgd_free (LeSGD  *optimizer);
+void               le_sgd_free                             (LeSGD *                 optimizer);
 
 LE_END_DECLS
 

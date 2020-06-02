@@ -133,7 +133,7 @@ le_sgd_construct(LeSGD *self)
 }
 
 LeSGD *
-le_sgd_new(LeModel *model, LeTensor *input, LeTensor *output, float learning_rate)
+le_sgd_new(LeModel *model, LeTensor *input, LeTensor *output, float learning_rate, float momentum)
 {
     assert(model);
     LeSGD *self = malloc(sizeof(LeSGD));
@@ -149,7 +149,7 @@ le_sgd_new(LeModel *model, LeTensor *input, LeTensor *output, float learning_rat
     self->model = model;
     self->input = input;
     self->output = output;
-    self->momentum_rate = 0.1f;
+    self->momentum_rate = momentum;
     return self;
 }
 
