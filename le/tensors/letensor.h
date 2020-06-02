@@ -70,7 +70,7 @@ void               le_tensor_add_tensor                    (LeTensor *          
                                                             LeTensor *              b);
 
 /// @note: a = a + b
-#define le_tensor_add(a, b) _Generic((b), \
+#define le_tensor_add(a, b) _Generic(b, \
    float: le_tensor_add_f32, \
    LeTensor *: le_tensor_add_tensor, \
    const LeTensor *: le_tensor_add_tensor \
@@ -85,7 +85,7 @@ void               le_tensor_sub_tensor                    (LeTensor *          
                                                             const LeTensor *        b);
 
 /// @note: a = a - b
-#define le_tensor_sub(a, b) _Generic((b), \
+#define le_tensor_sub(a, b) _Generic(b, \
    float: le_tensor_sub_f32, \
    LeTensor *: le_tensor_sub_tensor, \
    const LeTensor *: le_tensor_sub_tensor \
@@ -105,7 +105,7 @@ void               le_tensor_mul_tensor                    (LeTensor *          
                                                             const LeTensor *        b);
 
 /// @note: a = a * b
-#define le_tensor_mul(a, b) _Generic((b), \
+#define le_tensor_mul(a, b) _Generic(b, \
    float: le_tensor_mul_f32, \
    LeTensor *: le_tensor_mul_tensor, \
    const LeTensor *: le_tensor_mul_tensor \
@@ -129,7 +129,7 @@ void               le_tensor_apply_gt_f32                  (LeTensor *          
                                                             float                   scalar);
 
 /// @note: a = a > b
-#define le_tensor_apply_gt(tensor, scalar) _Generic((scalar), \
+#define le_tensor_apply_gt(tensor, scalar) _Generic(scalar, \
    float: le_tensor_apply_gt_f32 \
 )(tensor, scalar)
 
