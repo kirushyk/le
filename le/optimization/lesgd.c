@@ -23,7 +23,7 @@ struct LeSGD
     LeTensor *input;
     LeTensor *output;
 
-    LeList *momentums;
+    LeList *momenta;
 };
 
 typedef struct LeSGDClass
@@ -64,9 +64,9 @@ le_sgd_step(LeOptimizer *optimizer)
 
     optimizer->gradients = le_model_get_gradients(self->model, input, output);
 
-    if (self->momentums == NULL)
+    if (self->momenta == NULL)
     {
-        self->momentums = le_sgd_init_momentum(optimizer->gradients);
+        self->momenta = le_sgd_init_momentum(optimizer->gradients);
     }
 
     le_tensor_free(output);
@@ -74,7 +74,7 @@ le_sgd_step(LeOptimizer *optimizer)
 
     for (parameters_iterator = optimizer->parameters,
             gradients_iterator = optimizer->gradients,
-            momentum_iterator = self->momentums;
+            momentum_iterator = self->momenta;
          parameters_iterator &&
             gradients_iterator &&
             momentum_iterator;
@@ -156,6 +156,6 @@ le_sgd_new(LeModel *model, LeTensor *input, LeTensor *output, float learning_rat
 void
 le_sgd_free(LeSGD *optimizer)
 {
-    le_list_foreach(optimizer->momentums, LE_FUNCTION(le_tensor_free));
+    le_list_foreach(optimizer->momenta, LE_FUNCTION(le_tensor_free));
     free(optimizer);
 }
