@@ -27,6 +27,7 @@ LeList *           le_list_append                          (LeList *            
                                                             void *                  data);
 
 typedef void(* LeFunction)(void *element);
+#define LE_FUNCTION(fn) ((LeFunction)(fn))
 
 void               le_list_foreach                         (LeList *                list,
                                                             LeFunction              function);
