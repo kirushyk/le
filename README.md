@@ -47,7 +47,7 @@ To install compiled binaries locally, type:
 
 ## Tools
 
-* [Le Board](github.com/kirushyk/le-board);
+* [Le Board](https://github.com/kirushyk/le-board);
 * [Le Playground](/tools/playground);
 * [Le MNIST Inspect](/tools/mnist-inspect).
 
