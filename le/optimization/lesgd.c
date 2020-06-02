@@ -1,8 +1,6 @@
 /* Copyright (c) Kyrylo Polezhaiev and contributors. All rights reserved.
    Released under the MIT license. See LICENSE file in the project root for full license information. */
 
-#define DEFAULT_LOG_CATEGORY "sgd"
-
 #include "lesgd.h"
 #include <stdlib.h>
 #include <stdio.h>
@@ -12,17 +10,20 @@
 #include <le/lelog.h>
 #include <le/tensors/lematrix.h>
 
+#define DEFAULT_LOG_CATEGORY "sgd"
+
 struct LeSGD
 {
     LeOptimizer parent;
     float learning_rate;
+    float momentum_rate;
 
     unsigned iteration;
     LeModel *model;
     LeTensor *input;
     LeTensor *output;
 
-    LeList *momentum;
+    LeList *momentums;
 };
 
 typedef struct LeSGDClass
@@ -52,6 +53,7 @@ le_sgd_step(LeOptimizer *optimizer)
     LeSGD *self = (LeSGD *)optimizer;
     LeList *parameters_iterator;
     LeList *gradients_iterator;
+    LeList *momentum_iterator;
 
     LE_INFO("Step");
     
@@ -62,17 +64,23 @@ le_sgd_step(LeOptimizer *optimizer)
 
     optimizer->gradients = le_model_get_gradients(self->model, input, output);
 
-    if (self->momentum == NULL)
+    if (self->momentums == NULL)
     {
-        self->momentum = le_sgd_init_momentum(optimizer->gradients);
+        self->momentums = le_sgd_init_momentum(optimizer->gradients);
     }
 
     le_tensor_free(output);
     le_tensor_free(input);
 
-    for (parameters_iterator = optimizer->parameters, gradients_iterator = optimizer->gradients;
-         parameters_iterator && gradients_iterator;
-         parameters_iterator = parameters_iterator->next, gradients_iterator = gradients_iterator->next)
+    for (parameters_iterator = optimizer->parameters,
+            gradients_iterator = optimizer->gradients,
+            momentum_iterator = self->momentums;
+         parameters_iterator &&
+            gradients_iterator &&
+            momentum_iterator;
+         parameters_iterator = parameters_iterator->next,
+            gradients_iterator = gradients_iterator->next,
+            momentum_iterator = momentum_iterator->next)
     {
         LeTensor *parameter = (LeTensor *)parameters_iterator->data;
         LE_INFO("Parameter %s:\n%s", le_shape_to_cstr(parameter->shape), le_tensor_to_cstr(parameter));
@@ -138,12 +146,13 @@ le_sgd_new(LeModel *model, LeTensor *input, LeTensor *output, float learning_rat
     self->model = model;
     self->input = input;
     self->output = output;
+    self->momentum_rate = 0.1f;
     return self;
 }
 
 void
 le_sgd_free(LeSGD *optimizer)
 {
-    le_list_foreach(optimizer->momentum, LE_FUNCTION(le_tensor_free));
+    le_list_foreach(optimizer->momentums, LE_FUNCTION(le_tensor_free));
     free(optimizer);
 }
