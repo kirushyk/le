@@ -164,7 +164,7 @@ le_tensor_new_copy(const LeTensor *another)
 LeTensor *
 le_tensor_new_cast(LeTensor *another, LeType type)
 {
-    assert(le_cast_fn[type][another->element_type]);
+    assert(le_cast_rawcpy[type][another->element_type] || le_cast_fn[type][another->element_type]);
     
     LeTensor *self = malloc(sizeof(struct LeTensor));
     self->element_type = type;
@@ -175,11 +175,18 @@ le_tensor_new_cast(LeTensor *another, LeType type)
     size_t data_size = elements_count * le_type_size(self->element_type);
     self->data = malloc(data_size);
     
-    /// @todo: Add support for types other than UINT8
-    for (unsigned i = 0; i < elements_count; i++)
+    if (le_cast_rawcpy[self->element_type][another->element_type])
     {
-        le_cast_fn[type][another->element_type](self->data, another->data, i);
+        assert(le_type_size(self->element_type) == le_type_size(another->element_type));
+        memcpy(self->data, another->data, data_size);
     }
+    else
+    {
+        for (unsigned i = 0; i < elements_count; i++)
+        {
+            le_cast_fn[self->element_type][another->element_type](self->data, another->data, i);
+        }
+    } 
     
     return self;
 }
