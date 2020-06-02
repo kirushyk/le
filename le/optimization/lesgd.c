@@ -55,6 +55,8 @@ le_sgd_step(LeOptimizer *optimizer)
     {
         LeTensor *parameter = (LeTensor *)parameters_iterator->data;
         LE_INFO("Parameter %s:\n%s", le_shape_to_cstr(parameter->shape), le_tensor_to_cstr(parameter));
+        LeTensorStats parameter_stats = le_tensor_get_stats(parameter);
+        LE_INFO("Parameter stats:\n\tmin: %f\n\tmax: %f\n\tmean: %f\n\tdeviation: %f", parameter_stats.min, parameter_stats.max, parameter_stats.mean, parameter_stats.deviation);
         LeTensor *gradients = (LeTensor *)gradients_iterator->data;
         LE_INFO("Gradient %s:\n%s", le_shape_to_cstr(gradients->shape), le_tensor_to_cstr(gradients));
         le_tensor_sub_scaled_f32(parameter, self->learning_rate, gradients);
