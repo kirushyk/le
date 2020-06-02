@@ -24,15 +24,15 @@ bool le_cast_rawcpy[LE_TYPE_COUNT][LE_TYPE_COUNT] =
 
 LeCast le_cast_fn[LE_TYPE_COUNT][LE_TYPE_COUNT] =
 {
-    /* to\from  void  i8    u8    i16   u16   i32   u32   f16   f32   f64 */
-    /* void */ {NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL},
-    /* i8   */ {NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL},
-    /* u8   */ {NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL},
-    /* i16  */ {NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL},
-    /* u16  */ {NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL},
-    /* i32  */ {NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL},
-    /* u32  */ {NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL},
-    /* f16  */ {NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL},
-    /* f32  */ {NULL, NULL, f32_u8, NULL, NULL, NULL, NULL, NULL, NULL, NULL},
-    /* f64  */ {NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL}
+    /* to\from  void     i8       u8       i16      u16      i32      u32      f16      f32      f64 */
+    /* void */ {NULL,    NULL,    NULL,    NULL,    NULL,    NULL,    NULL,    NULL,    NULL,    NULL},
+    /* i8   */ {NULL,    NULL,    NULL,    NULL,    NULL,    NULL,    NULL,    NULL,    NULL,    NULL},
+    /* u8   */ {NULL,    NULL,    NULL,    NULL,    NULL,    NULL,    NULL,    NULL,    NULL,    NULL},
+    /* i16  */ {NULL,    NULL,    NULL,    NULL,    NULL,    NULL,    NULL,    NULL,    NULL,    NULL},
+    /* u16  */ {NULL,    NULL,    NULL,    NULL,    NULL,    NULL,    NULL,    NULL,    NULL,    NULL},
+    /* i32  */ {NULL,    NULL,    NULL,    NULL,    NULL,    NULL,    NULL,    NULL,    NULL,    NULL},
+    /* u32  */ {NULL,    NULL,    NULL,    NULL,    NULL,    NULL,    NULL,    NULL,    NULL,    NULL},
+    /* f16  */ {NULL,    NULL,    NULL,    NULL,    NULL,    NULL,    NULL,    NULL,    NULL,    NULL},
+    /* f32  */ {NULL,    NULL,    f32_u8,  NULL,    NULL,    NULL,    NULL,    NULL,    NULL,    NULL},
+    /* f64  */ {NULL,    NULL,    NULL,    NULL,    NULL,    NULL,    NULL,    NULL,    NULL,    NULL}
 };
