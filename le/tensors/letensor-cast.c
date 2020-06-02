@@ -1,11 +1,14 @@
 #include "letensor-cast.h"
 #include <assert.h>
 
-void
-f32_u8(void *dst, void *src, size_t index)
-{
-    ((float *)dst)[index] = ((uint8_t *)src)[index];
+#define DEFINE_SIMPLE_CAST_FN(dst_type, dsttype_name, src_type, srctype_name) \
+void \
+dsttype_name ## _ ## srctype_name(void *dst, void *src, size_t index) \
+{ \
+    ((dst_type *)dst)[index] = ((src_type *)src)[index]; \
 }
+
+DEFINE_SIMPLE_CAST_FN(float, f32, uint8_t, u8)
 
 bool le_cast_rawcpy[LE_TYPE_COUNT][LE_TYPE_COUNT] =
 {
