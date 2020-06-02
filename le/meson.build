@@ -9,6 +9,7 @@ le_sources = [
     'tensors/letype.c',
     'tensors/leshape.c',
     'tensors/letensor.c',
+    'tensors/letensor-cast.c',
     'tensors/lescalar.c',
     'tensors/lematrix.c',
     'lepolynomia.c',
@@ -62,6 +63,7 @@ install_headers('tensors/letype.h', subdir : 'le')
 install_headers('tensors/leshape.h', subdir : 'le')
 install_headers('tensors/lematrix.h', subdir : 'le/tensors')
 install_headers('tensors/letensor-imp.h', subdir : 'le/tensors')
+install_headers('tensors/letensor-cast.h', subdir : 'le/tensors')
 install_headers('tensors/lescalar.h', subdir : 'le/tensors')
 install_headers('lelog.h', subdir : 'le')
 

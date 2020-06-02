@@ -35,7 +35,8 @@ LeTensor *         le_tensor_new_copy                      (const LeTensor *    
 /// @note: Takes ownership of shape
 LeTensor *         le_tensor_new_rand_f32                  (LeShape *               shape);
 
-LeTensor *         le_tensor_new_cast_f32                  (LeTensor *              tensor);
+LeTensor *         le_tensor_new_cast                      (LeTensor *              tensor,
+                                                            LeType                  type);
 
 bool               le_tensor_equal                         (const LeTensor *        a,
                                                             const LeTensor *        b);

@@ -5,6 +5,7 @@
 
 #include "letensor.h"
 #include "letensor-imp.h"
+#include "letensor-cast.h"
 #include <assert.h>
 #include <stdlib.h>
 #include <string.h>
@@ -161,12 +162,12 @@ le_tensor_new_copy(const LeTensor *another)
 }
 
 LeTensor *
-le_tensor_new_cast_f32(LeTensor *another)
+le_tensor_new_cast(LeTensor *another, LeType type)
 {
-    unsigned i;
+    assert(le_cast_fn[type][another->element_type]);
     
     LeTensor *self = malloc(sizeof(struct LeTensor));
-    self->element_type = LE_TYPE_FLOAT32;
+    self->element_type = type;
     self->shape = le_shape_copy(another->shape);
     self->stride = another->stride;
     self->owns_data = true;
@@ -175,9 +176,9 @@ le_tensor_new_cast_f32(LeTensor *another)
     self->data = malloc(data_size);
     
     /// @todo: Add support for types other than UINT8
-    for (i = 0; i < elements_count; i++)
+    for (unsigned i = 0; i < elements_count; i++)
     {
-        ((float *)self->data)[i] = ((uint8_t *)another->data)[i] * (2.0f / 255.0f) - 1.0f;
+        le_cast_fn[type][another->element_type](self->data, another->data, i);
     }
     
     return self;

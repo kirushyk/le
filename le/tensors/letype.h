@@ -27,7 +27,9 @@ typedef enum LeType
     LE_TYPE_UINT32,
     LE_TYPE_FLOAT16,
     LE_TYPE_FLOAT32,
-    LE_TYPE_FLOAT64
+    LE_TYPE_FLOAT64,
+
+    LE_TYPE_COUNT
 } LeType;
 
 size_t             le_type_size                            (LeType                  type);
