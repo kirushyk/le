@@ -52,7 +52,7 @@ le_sgd_step(LeOptimizer *optimizer)
     LeList *gradients_iterator;
     LeList *momentum_iterator;
 
-    LE_INFO("Step");
+    LE_INFO("Epoch %u Step %u", LE_OPTIMIZER(self)->epoch, LE_OPTIMIZER(self)->step);
     
     unsigned num_examples = le_matrix_get_width(self->input);
     unsigned example_index = LE_OPTIMIZER(self)->step % num_examples;
