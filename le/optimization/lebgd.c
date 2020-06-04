@@ -19,7 +19,6 @@ struct LeBGD
     LeModel *model;
     const LeTensor *input;
     const LeTensor *output;
-    float learning_rate;
 };
 
 typedef struct LeBGDClass
@@ -60,7 +59,7 @@ le_bgd_step(LeOptimizer *optimizer)
         LE_INFO("Parameter %s:\n%s", le_shape_to_cstr(parameter->shape), le_tensor_to_cstr(parameter));
         LeTensor *gradient = (LeTensor *)gradients_iterator->data;
         LE_INFO("Gradient %s:\n%s", le_shape_to_cstr(gradient->shape), le_tensor_to_cstr(gradient));
-        le_tensor_sub_scaled_f32(parameter, self->learning_rate, gradient);
+        le_tensor_sub_scaled_f32(parameter, optimizer->learning_rate, gradient);
         LeTensorStats gradient_stats = le_tensor_get_stats(gradient);
         LE_INFO("Gradient stats:\n\tmin: %f\n\tmax: %f\n\tmean: %f\n\tdeviation: %f", gradient_stats.min, gradient_stats.max, gradient_stats.mean, gradient_stats.deviation);
     }
@@ -116,7 +115,7 @@ le_bgd_new_simple(LeList *parameters, LeList *gradients, float learning_rate)
     }
     LE_OPTIMIZER(self)->parameters = parameters;
     LE_OPTIMIZER(self)->gradients = gradients;
-    self->learning_rate = learning_rate;
+    LE_OPTIMIZER(self)->learning_rate = learning_rate;
 
     self->iteration = 0;
     self->model = NULL;
@@ -138,7 +137,7 @@ le_bgd_new(LeModel *model, const LeTensor *input, const LeTensor *output, float 
     }
     LE_OPTIMIZER(self)->parameters = le_model_get_parameters(model);
     LE_OPTIMIZER(self)->gradients = NULL;
-    self->learning_rate = learning_rate;
+    LE_OPTIMIZER(self)->learning_rate = learning_rate;
 
     self->iteration = 0;
     self->model = model;

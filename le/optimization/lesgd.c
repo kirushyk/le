@@ -15,7 +15,6 @@
 struct LeSGD
 {
     LeOptimizer parent;
-    float learning_rate;
     float momentum_rate;
 
     unsigned iteration;
@@ -92,7 +91,7 @@ le_sgd_step(LeOptimizer *optimizer)
         LE_INFO("Gradient stats:\n\tmin: %f\n\tmax: %f\n\tmean: %f\n\tdeviation: %f", gradient_stats.min, gradient_stats.max, gradient_stats.mean, gradient_stats.deviation);
         LeTensor *momentum = LE_TENSOR(momentum_iterator->data);
         le_tensor_add(momentum, gradient);
-        le_tensor_sub_scaled_f32(parameter, self->learning_rate, momentum);
+        le_tensor_sub_scaled_f32(parameter, optimizer->learning_rate, momentum);
         le_tensor_mul(momentum, self->momentum_rate);
     }
 
@@ -148,7 +147,7 @@ le_sgd_new(LeModel *model, LeTensor *input, LeTensor *output, float learning_rat
         LE_WARNING("Learning rate = %f", learning_rate);
     }
     LE_OPTIMIZER(self)->parameters = le_model_get_parameters(model);
-    self->learning_rate = learning_rate;
+    LE_OPTIMIZER(self)->learning_rate = learning_rate;
 
     self->iteration = 0;
     self->model = model;
