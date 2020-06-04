@@ -17,6 +17,7 @@ typedef struct LeOptimizer
     LeList *parameters;
     LeList *gradients;
     float learning_rate;
+    unsigned step, epoch;
 } LeOptimizer;
 
 #define LE_OPTIMIZER(obj) ((LeOptimizer *)(obj))

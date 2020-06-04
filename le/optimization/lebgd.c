@@ -15,7 +15,6 @@ struct LeBGD
 {
     LeOptimizer parent;
     
-    unsigned iteration;
     LeModel *model;
     const LeTensor *input;
     const LeTensor *output;
@@ -78,6 +77,9 @@ le_bgd_step(LeOptimizer *optimizer)
     {
         le_list_foreach(gradients, (LeFunction)le_tensor_free);
     }
+
+    LE_OPTIMIZER(self)->step++;
+    LE_OPTIMIZER(self)->epoch++;
 }
 
 void
@@ -113,11 +115,12 @@ le_bgd_new_simple(LeList *parameters, LeList *gradients, float learning_rate)
     {
         LE_WARNING("Learning rate = %f", learning_rate);
     }
+    LE_OPTIMIZER(self)->step = 0;
+    LE_OPTIMIZER(self)->epoch = 0;
     LE_OPTIMIZER(self)->parameters = parameters;
     LE_OPTIMIZER(self)->gradients = gradients;
     LE_OPTIMIZER(self)->learning_rate = learning_rate;
 
-    self->iteration = 0;
     self->model = NULL;
     self->input = NULL;
     self->output = NULL;
@@ -135,11 +138,12 @@ le_bgd_new(LeModel *model, const LeTensor *input, const LeTensor *output, float 
     {
         LE_WARNING("Learning rate = %f", learning_rate);
     }
+    LE_OPTIMIZER(self)->step = 0;
+    LE_OPTIMIZER(self)->epoch = 0;
     LE_OPTIMIZER(self)->parameters = le_model_get_parameters(model);
     LE_OPTIMIZER(self)->gradients = NULL;
     LE_OPTIMIZER(self)->learning_rate = learning_rate;
 
-    self->iteration = 0;
     self->model = model;
     self->input = input;
     self->output = output;
