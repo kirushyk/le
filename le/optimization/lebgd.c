@@ -15,7 +15,6 @@ struct LeBGD
 {
     LeOptimizer parent;
     
-    LeModel *model;
     const LeTensor *input;
     const LeTensor *output;
 };
@@ -39,9 +38,9 @@ le_bgd_step(LeOptimizer *optimizer)
     LeList *gradients = NULL;
     bool own_gradients = false;
 
-    if (self->model)
+    if (optimizer->model)
     {
-        gradients = le_model_get_gradients(self->model, self->input, self->output);
+        gradients = le_model_get_gradients(optimizer->model, self->input, self->output);
         own_gradients = true;
     }
     else if (optimizer->gradients)
@@ -115,13 +114,13 @@ le_bgd_new_simple(LeList *parameters, LeList *gradients, float learning_rate)
     {
         LE_WARNING("Learning rate = %f", learning_rate);
     }
+    LE_OPTIMIZER(self)->model = NULL;
     LE_OPTIMIZER(self)->step = 0;
     LE_OPTIMIZER(self)->epoch = 0;
     LE_OPTIMIZER(self)->parameters = parameters;
     LE_OPTIMIZER(self)->gradients = gradients;
     LE_OPTIMIZER(self)->learning_rate = learning_rate;
 
-    self->model = NULL;
     self->input = NULL;
     self->output = NULL;
     return self;
@@ -138,13 +137,13 @@ le_bgd_new(LeModel *model, const LeTensor *input, const LeTensor *output, float 
     {
         LE_WARNING("Learning rate = %f", learning_rate);
     }
+    LE_OPTIMIZER(self)->model = model;
     LE_OPTIMIZER(self)->step = 0;
     LE_OPTIMIZER(self)->epoch = 0;
-    LE_OPTIMIZER(self)->parameters = le_model_get_parameters(model);
+    LE_OPTIMIZER(self)->parameters = le_model_get_parameters(LE_OPTIMIZER(self)->model);
     LE_OPTIMIZER(self)->gradients = NULL;
     LE_OPTIMIZER(self)->learning_rate = learning_rate;
 
-    self->model = model;
     self->input = input;
     self->output = output;
     return self;

@@ -10,7 +10,6 @@
 
 #include "leoptimizer.h"
 #include <le/lelist.h>
-#include <le/models/lemodel.h>
 #include <le/lemacros.h>
 
 LE_BEGIN_DECLS

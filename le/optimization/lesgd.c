@@ -15,12 +15,11 @@
 struct LeSGD
 {
     LeOptimizer parent;
-    float momentum_rate;
 
-    LeModel *model;
     LeTensor *input;
     LeTensor *output;
 
+    float momentum_rate;
     LeList *momenta;
 };
 
@@ -60,7 +59,7 @@ le_sgd_step(LeOptimizer *optimizer)
     LeTensor *input = le_matrix_get_column(self->input, example_index);
     LeTensor *output = le_matrix_get_column(self->output, example_index);
 
-    optimizer->gradients = le_model_get_gradients(self->model, input, output);
+    optimizer->gradients = le_model_get_gradients(LE_OPTIMIZER(self)->model, input, output);
 
     if (self->momenta == NULL)
     {
@@ -149,12 +148,12 @@ le_sgd_new(LeModel *model, LeTensor *input, LeTensor *output, float learning_rat
     {
         LE_WARNING("Learning rate = %f", learning_rate);
     }
+    LE_OPTIMIZER(self)->model = model;
     LE_OPTIMIZER(self)->step = 0;
     LE_OPTIMIZER(self)->epoch = 0;
-    LE_OPTIMIZER(self)->parameters = le_model_get_parameters(model);
+    LE_OPTIMIZER(self)->parameters = le_model_get_parameters(LE_OPTIMIZER(self)->model);
     LE_OPTIMIZER(self)->learning_rate = learning_rate;
 
-    self->model = model;
     self->input = input;
     self->output = output;
     self->momenta = NULL;

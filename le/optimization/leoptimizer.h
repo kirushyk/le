@@ -7,6 +7,7 @@
 #include "../leobject.h"
 #include <le/lelist.h>
 #include <le/lemacros.h>
+#include <le/models/lemodel.h>
 
 LE_BEGIN_DECLS
 
@@ -14,6 +15,8 @@ LE_BEGIN_DECLS
 typedef struct LeOptimizer
 {
     LeObject parent;
+
+    LeModel *model;
     LeList *parameters;
     LeList *gradients;
     float learning_rate;
