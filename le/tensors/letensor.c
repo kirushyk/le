@@ -149,16 +149,29 @@ LeTensor *
 le_tensor_new_copy(const LeTensor *another)
 {
     assert(another);
-    assert(another->stride == le_shape_get_last_size(another->shape));
     
     LeTensor *self = malloc(sizeof(struct LeTensor));
     self->element_type = another->element_type;
     self->shape = le_shape_copy(another->shape);
-    self->stride = another->stride;
+    self->stride = le_shape_get_last_size(self->shape);
     self->owns_data = true;
-    size_t data_size = le_shape_get_elements_count(another->shape) * le_type_size(another->element_type);
+    size_t data_size = le_shape_get_elements_count(self->shape) * le_type_size(self->element_type);
     self->data = malloc(data_size);
-    memcpy(self->data, another->data, data_size);
+    if (another->stride == le_shape_get_last_size(another->shape))
+    {
+        memcpy(self->data, another->data, data_size);
+    }
+    else
+    {
+        unsigned regions_count = le_shape_get_regions_count(another->shape);
+        size_t region_size = self->stride * le_type_size(self->element_type);
+        for (unsigned i = 0; i < regions_count; i++)
+        {
+            memcpy((uint8_t *)self->data + i * region_size,
+                (uint8_t *)another->data + i * another->stride * another->element_type,
+                region_size);
+        }
+    }
     return self;
 }
 
@@ -368,6 +381,15 @@ le_tensor_at_u8(const LeTensor *tensor, uint32_t index)
     assert(tensor->element_type == LE_TYPE_UINT8);
 
     return ((uint8_t *)tensor->data)[index];
+}
+
+uint32_t
+le_tensor_at_u32(const LeTensor *tensor, uint32_t index)
+{
+    /// @todo: Take stride into account
+    assert(tensor->element_type == LE_TYPE_UINT32);
+
+    return ((uint32_t *)tensor->data)[index];
 }
 
 float

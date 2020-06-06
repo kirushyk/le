@@ -56,6 +56,9 @@ LeTensor *         le_tensor_pick_copy                     (const LeTensor *    
 uint8_t            le_tensor_at_u8                         (const LeTensor *        tensor,
                                                             uint32_t                index);
 
+uint32_t           le_tensor_at_u32                        (const LeTensor *        tensor,
+                                                            uint32_t                index);
+
 float              le_tensor_at_f32                        (const LeTensor *        tensor,
                                                             uint32_t                index);
 
