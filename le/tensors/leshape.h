@@ -36,6 +36,9 @@ const char * le_shape_to_cstr            (LeShape  *shape);
 
 uint32_t     le_shape_get_elements_count (LeShape  *shape);
 
+/// @todo: Come up with a better name
+uint32_t     le_shape_get_regions_count  (LeShape  *shape);
+
 bool         le_shape_equal              (LeShape  *a,
                                           LeShape  *b);
 

@@ -141,6 +141,24 @@ le_shape_get_elements_count(LeShape *shape)
     return count;
 }
 
+uint32_t
+le_shape_get_regions_count(LeShape *shape)
+{
+    assert(shape);
+    assert(shape->sizes);
+    
+    uint32_t count = 0;
+    if (shape)
+    {
+        count = 1;
+        for (unsigned i = 0; i < shape->num_dimensions - 1; i++)
+        {
+            count *= shape->sizes[i];
+        }
+    }
+    return count;
+}
+
 bool
 le_shape_equal(LeShape *a, LeShape *b)
 {
