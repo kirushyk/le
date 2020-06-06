@@ -82,6 +82,17 @@ le_matrix_at_i32(const LeTensor *self, unsigned y, unsigned x)
     return ((int32_t *)self->data)[y * self->shape->sizes[1] + x];
 }
 
+uint32_t
+le_matrix_at_u32(const LeTensor *self, unsigned y, unsigned x)
+{
+    assert(self->element_type == LE_TYPE_UINT32);
+    assert(self->shape->num_dimensions == 2);
+    assert(y < self->shape->sizes[0]);
+    assert(x < self->shape->sizes[1]);
+    
+    return ((uint32_t *)self->data)[y * self->stride + x];
+}
+
 void
 le_matrix_add(LeTensor *self, const LeTensor *another)
 {
