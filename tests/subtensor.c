@@ -19,6 +19,12 @@ main()
     LeTensor *subtensor = le_tensor_pick(tensor, 0);
     le_tensor_free(subtensor);
     LeTensor *middle_column = le_matrix_get_column(tensor, 1);
+    assert(le_matrix_at_u32(middle_column, 0, 0) == 2);
+    assert(le_matrix_at_u32(middle_column, 1, 0) == 5);
+    assert(le_matrix_at_u32(middle_column, 2, 0) == 8);
+    assert(le_tensor_at_u32(middle_column, 0) == 2);
+    assert(le_tensor_at_u32(middle_column, 1) == 5);
+    assert(le_tensor_at_u32(middle_column, 2) == 8);
     le_tensor_free(middle_column);
     le_tensor_free(tensor);
     return 0;
