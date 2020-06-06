@@ -149,6 +149,7 @@ LeTensor *
 le_tensor_new_copy(const LeTensor *another)
 {
     assert(another);
+    assert(another->stride == le_shape_get_last_size(another->shape));
     
     LeTensor *self = malloc(sizeof(struct LeTensor));
     self->element_type = another->element_type;
