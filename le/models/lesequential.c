@@ -108,7 +108,7 @@ forward_propagation(LeSequential *self, const LeTensor *x, LeList **inputs)
             *inputs = le_list_append(*inputs, le_tensor_new_copy(signal));
         }
         LE_INFO("signal =\n%s", le_tensor_to_cstr(signal));
-        LE_INFO("Layer: %s", current_layer->name);
+        LE_INFO("Layer %s Forward", current_layer->name);
         LeTensor *output = le_layer_forward_prop(current_layer, signal);
         le_tensor_free(signal);
         signal = output;
@@ -152,7 +152,7 @@ le_sequential_get_gradients(LeSequential *self, const LeTensor *x, const LeTenso
          current = current->prev, inputs = inputs->prev)
     {
         LeLayer *current_layer = LE_LAYER(current->data);
-        LE_INFO("Layer: %s", current_layer->name);
+        LE_INFO("Layer %s Backward", current_layer->name);
         LeList *current_layer_param_gradients = NULL;
         LeTensor *cached_input = LE_TENSOR(inputs->data);
         LeTensor *cached_output = NULL;
