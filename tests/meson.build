@@ -13,7 +13,8 @@ le_tests = [
     ['type-generic.c'],
     ['sobel.c'],
     ['relu.c'],
-    ['tensorlist.c']
+    ['tensorlist.c'],
+    ['subtensor.c']
 ]
 
 foreach filenames : le_tests
