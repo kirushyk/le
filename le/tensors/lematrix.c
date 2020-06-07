@@ -386,14 +386,13 @@ le_matrix_new_rand_f32(unsigned height, unsigned width)
 { \
     for (x = 0; x < self->shape->sizes[1]; x++) \
     { \
-        ((type *)self->data)[y * self->shape->sizes[1] + x] = ((type *)a->data)[x * a->shape->sizes[1] + y]; \
+        ((type *)self->data)[y * self->shape->sizes[1] + x] = ((type *)a->data)[x * a->stride + y]; \
     } \
 }
 
 LeTensor *
 le_matrix_new_transpose(LeTensor *a)
 {
-    /// @todo: Take stride into account
     assert(a->shape->num_dimensions == 2);
 
     unsigned x;
