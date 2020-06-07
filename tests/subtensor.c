@@ -17,14 +17,22 @@ main()
         7, 8, 9
     );
 
-    LeTensor *subtensor = le_tensor_pick(tensor, 0);
-    assert(le_tensor_at_u32(subtensor, 0) == 1);
-    assert(le_tensor_at_u32(subtensor, 1) == 2);
-    assert(le_tensor_at_u32(subtensor, 2) == 3);
+    LeTensor *subtensor = le_tensor_pick(tensor, 1);
+    assert(le_tensor_at_u32(subtensor, 0) == 4);
+    assert(le_tensor_at_u32(subtensor, 1) == 5);
+    assert(le_tensor_at_u32(subtensor, 2) == 6);
     LeTensor *subtensor_copy = le_tensor_new_copy(subtensor);
-    assert(le_tensor_at_u32(subtensor_copy, 0) == 1);
-    assert(le_tensor_at_u32(subtensor_copy, 1) == 2);
-    assert(le_tensor_at_u32(subtensor_copy, 2) == 3);
+    assert(le_tensor_at_u32(subtensor_copy, 0) == 4);
+    assert(le_tensor_at_u32(subtensor_copy, 1) == 5);
+    assert(le_tensor_at_u32(subtensor_copy, 2) == 6);
+    assert(le_tensor_equal(subtensor, subtensor_copy));
+    LeTensor *subtensor_direct_copy = le_tensor_pick_copy(subtensor, 1);
+    assert(le_tensor_at_u32(subtensor_direct_copy, 0) == 4);
+    assert(le_tensor_at_u32(subtensor_direct_copy, 1) == 5);
+    assert(le_tensor_at_u32(subtensor_direct_copy, 2) == 6);
+    assert(le_tensor_equal(subtensor, subtensor_direct_copy));
+    assert(le_tensor_equal(subtensor_direct_copy, subtensor_copy));
+    le_tensor_free(subtensor_direct_copy);
     le_tensor_free(subtensor_copy);
     le_tensor_free(subtensor);
 
