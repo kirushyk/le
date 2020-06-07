@@ -374,13 +374,19 @@ le_tensor_pick_copy(const LeTensor *another, uint32_t index)
     return self;
 }
 
+uint32_t
+virtual_index(uint32_t logical_index, uint32_t last_size, uint32_t stride)
+{
+    return (last_size == stride) ? logical_index : (logical_index / last_size * stride + logical_index % last_size);
+}
+
 uint8_t
 le_tensor_at_u8(const LeTensor *tensor, uint32_t index)
 {
     /// @todo: Take stride into account
     assert(tensor->element_type == LE_TYPE_UINT8);
 
-    return ((uint8_t *)tensor->data)[index];
+    return ((uint8_t *)tensor->data)[virtual_index(index, le_shape_get_last_size(tensor->shape), tensor->stride)];
 }
 
 uint32_t
@@ -389,7 +395,7 @@ le_tensor_at_u32(const LeTensor *tensor, uint32_t index)
     /// @todo: Take stride into account
     assert(tensor->element_type == LE_TYPE_UINT32);
 
-    return ((uint32_t *)tensor->data)[index];
+    return ((uint32_t *)tensor->data)[virtual_index(index, le_shape_get_last_size(tensor->shape), tensor->stride)];
 }
 
 float
@@ -398,7 +404,7 @@ le_tensor_at_f32(const LeTensor *tensor, uint32_t index)
     /// @todo: Take stride into account
     assert(tensor->element_type == LE_TYPE_FLOAT32);
     
-    return ((float *)tensor->data)[index];
+    return ((float *)tensor->data)[virtual_index(index, le_shape_get_last_size(tensor->shape), tensor->stride)];
 }
 
 void
