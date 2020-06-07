@@ -21,6 +21,11 @@ main()
     assert(le_tensor_at_u32(subtensor, 0) == 1);
     assert(le_tensor_at_u32(subtensor, 1) == 2);
     assert(le_tensor_at_u32(subtensor, 2) == 3);
+    LeTensor *subtensor_copy = le_tensor_new_copy(subtensor);
+    assert(le_tensor_at_u32(subtensor_copy, 0) == 1);
+    assert(le_tensor_at_u32(subtensor_copy, 1) == 2);
+    assert(le_tensor_at_u32(subtensor_copy, 2) == 3);
+    le_tensor_free(subtensor_copy);
     le_tensor_free(subtensor);
 
     LeTensor *middle_column = le_matrix_get_column(tensor, 1);
@@ -30,16 +35,26 @@ main()
     assert(le_tensor_at_u32(middle_column, 0) == 2);
     assert(le_tensor_at_u32(middle_column, 1) == 5);
     assert(le_tensor_at_u32(middle_column, 2) == 8);
-    le_tensor_free(middle_column);
-
-    LeTensor *middle_column_copy = le_matrix_get_column(tensor, 1);
+    LeTensor *middle_column_copy = le_tensor_new_copy(middle_column);
     assert(le_matrix_at_u32(middle_column_copy, 0, 0) == 2);
     assert(le_matrix_at_u32(middle_column_copy, 1, 0) == 5);
     assert(le_matrix_at_u32(middle_column_copy, 2, 0) == 8);
     assert(le_tensor_at_u32(middle_column_copy, 0) == 2);
     assert(le_tensor_at_u32(middle_column_copy, 1) == 5);
     assert(le_tensor_at_u32(middle_column_copy, 2) == 8);
+    assert(le_tensor_equal(middle_column, middle_column_copy));
+    LeTensor *middle_column_direct_copy = le_matrix_get_column(tensor, 1);
+    assert(le_matrix_at_u32(middle_column_direct_copy, 0, 0) == 2);
+    assert(le_matrix_at_u32(middle_column_direct_copy, 1, 0) == 5);
+    assert(le_matrix_at_u32(middle_column_direct_copy, 2, 0) == 8);
+    assert(le_tensor_at_u32(middle_column_direct_copy, 0) == 2);
+    assert(le_tensor_at_u32(middle_column_direct_copy, 1) == 5);
+    assert(le_tensor_at_u32(middle_column_direct_copy, 2) == 8);
+    assert(le_tensor_equal(middle_column, middle_column_direct_copy));
+    assert(le_tensor_equal(middle_column_copy, middle_column_direct_copy));
+    le_tensor_free(middle_column_direct_copy);
     le_tensor_free(middle_column_copy);
+    le_tensor_free(middle_column);
 
     le_tensor_free(tensor);
     return 0;
