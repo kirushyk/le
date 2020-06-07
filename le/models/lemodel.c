@@ -13,7 +13,7 @@ static LeModelClass klass;
 void
 le_model_construct(LeModel *self)
 {
-    LE_OBJECT_GET_CLASS(self) = (LeClass *)&klass;
+    LE_OBJECT_GET_CLASS(self) = LE_CLASS(&klass);
     self->parameters = NULL;
 }
 

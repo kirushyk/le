@@ -10,17 +10,20 @@ static LeOptimizerClass klass;
 void
 le_optimizer_construct(LeOptimizer *self)
 {
-    ((LeObject *)self)->klass = (LeClass *)&klass;
+    LE_OBJECT_GET_CLASS(self) = LE_CLASS(&klass);
+    self->model = NULL;
+    self->parameters = NULL;
+    self->gradients = NULL;
 }
 
 void
 le_optimizer_step(LeOptimizer *self)
 {
     assert(self);
-    assert(((LeObject *)self)->klass);
-    assert(((LeOptimizerClass *)((LeObject *)self)->klass)->step);
+    assert(LE_OBJECT_GET_CLASS(self));
+    assert(LE_OPTIMIZER_GET_CLASS(self)->step);
     
-    ((LeOptimizerClass *)((LeObject *)self)->klass)->step(self);
+    LE_OPTIMIZER_GET_CLASS(self)->step(self);
 }
 
 void

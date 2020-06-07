@@ -32,6 +32,9 @@ typedef struct LeOptimizerClass
     void (*step)(LeOptimizer *model);
 } LeOptimizerClass;
 
+#define LE_OPTIMIZER_CLASS(klass) ((LeOptimizerClass *)(klass))
+#define LE_OPTIMIZER_GET_CLASS(obj) (LE_OPTIMIZER_CLASS(LE_OBJECT_GET_CLASS(obj)))
+
 void               le_optimizer_construct                  (LeOptimizer *           optimizer);
 
 void               le_optimizer_step                       (LeOptimizer *           optimizer);
