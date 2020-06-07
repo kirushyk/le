@@ -82,7 +82,8 @@ main()
     LeTensor *bt = le_matrix_new_transpose(b);
     c = le_matrix_new_product(a, bt);
     d = le_matrix_new_product_full(a, false, b, true);
-    assert(le_tensor_equal(c, d));
+    float sad = le_tensor_sad_f32(c, d);
+    assert(sad < 1e-3f);
     le_tensor_free(bt);
     le_tensor_free(b);
     le_tensor_free(a);

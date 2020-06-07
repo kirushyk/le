@@ -628,15 +628,33 @@ le_tensor_sum_f32(const LeTensor *self)
     assert(self->element_type == LE_TYPE_FLOAT32);
     /// @todo: Take stride into account
     float sum = 0.0;
-    unsigned i;
     unsigned elements_count = le_shape_get_elements_count(self->shape);
     
-    for (i = 0; i < elements_count; i++)
+    for (unsigned i = 0; i < elements_count; i++)
     {
         sum += ((float *)self->data)[i];
     }
     
     return sum;
+}
+
+float
+le_tensor_sad_f32(const LeTensor *a, const LeTensor *b)
+{
+    assert(a->element_type == LE_TYPE_FLOAT32);
+    assert(b->element_type == LE_TYPE_FLOAT32);
+    assert(le_shape_equal(a->shape, b->shape));
+
+    float sad = 0.0;
+    unsigned elements_count = le_shape_get_elements_count(a->shape);
+    
+    for (unsigned i = 0; i < elements_count; i++)
+    {
+        sad += fabs(le_tensor_at_f32(a, i) - le_tensor_at_f32(b, i));
+    }
+    
+    return sad;
+
 }
 
 #ifndef __APPLE__
