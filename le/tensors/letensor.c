@@ -374,7 +374,7 @@ le_tensor_pick_copy(const LeTensor *another, uint32_t index)
     return self;
 }
 
-uint32_t
+static inline uint32_t
 virtual_index(uint32_t logical_index, uint32_t last_size, uint32_t stride)
 {
     return (last_size == stride) ? logical_index : (logical_index / last_size * stride + logical_index % last_size);
