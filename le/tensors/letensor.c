@@ -648,6 +648,7 @@ le_tensor_sad_f32(const LeTensor *a, const LeTensor *b)
     float sad = 0.0;
     unsigned elements_count = le_shape_get_elements_count(a->shape);
     
+    /// @note: SSE2 and ARM NEON provide instructions for this
     for (unsigned i = 0; i < elements_count; i++)
     {
         sad += fabs(le_tensor_at_f32(a, i) - le_tensor_at_f32(b, i));
