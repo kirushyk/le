@@ -106,6 +106,11 @@ void               le_tensor_sub_scaled_f32                (LeTensor *          
                                                             float                   c,
                                                             const LeTensor *        b);
 
+#define le_tensor_sub_scaled(a, s, b) \
+    _Generic(s, \
+        float: le_tensor_sub_scaled_f32 \
+    )(a, s, b)
+    
 /// @note: a = a * b
 void               le_tensor_mul_f32                       (LeTensor *              a,
                                                             float                   b);
