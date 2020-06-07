@@ -47,7 +47,7 @@ le_sgd_init_momenta(LeList *gradients)
 static void
 le_sgd_step(LeOptimizer *optimizer)
 {
-    LeSGD *self = (LeSGD *)optimizer;
+    LeSGD *self = LE_SGD(optimizer);
     LeList *parameters_iterator;
     LeList *gradients_iterator;
     LeList *momentum_iterator;
