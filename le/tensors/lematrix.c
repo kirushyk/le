@@ -35,7 +35,7 @@ le_matrix_at_f32(const LeTensor *self, unsigned y, unsigned x)
     assert(y < self->shape->sizes[0]);
     assert(x < self->shape->sizes[1]);
     
-    return ((float *)self->data)[y * self->shape->sizes[1] + x];
+    return ((float *)self->data)[y * self->stride + x];
 }
 
 double
@@ -46,7 +46,7 @@ le_matrix_at_f64(const LeTensor *self, unsigned y, unsigned x)
     assert(y < self->shape->sizes[0]);
     assert(x < self->shape->sizes[1]);
     
-    return ((double *)self->data)[y * self->shape->sizes[1] + x];
+    return ((double *)self->data)[y * self->stride + x];
 }
 
 int8_t
@@ -57,7 +57,7 @@ le_matrix_at_i8(const LeTensor *self, unsigned y, unsigned x)
     assert(y < self->shape->sizes[0]);
     assert(x < self->shape->sizes[1]);
     
-    return ((int8_t *)self->data)[y * self->shape->sizes[1] + x];
+    return ((int8_t *)self->data)[y * self->stride + x];
 }
 
 int16_t
@@ -68,7 +68,7 @@ le_matrix_at_i16(const LeTensor *self, unsigned y, unsigned x)
     assert(y < self->shape->sizes[0]);
     assert(x < self->shape->sizes[1]);
     
-    return ((int16_t *)self->data)[y * self->shape->sizes[1] + x];
+    return ((int16_t *)self->data)[y * self->stride + x];
 }
 
 int32_t
@@ -79,7 +79,7 @@ le_matrix_at_i32(const LeTensor *self, unsigned y, unsigned x)
     assert(y < self->shape->sizes[0]);
     assert(x < self->shape->sizes[1]);
     
-    return ((int32_t *)self->data)[y * self->shape->sizes[1] + x];
+    return ((int32_t *)self->data)[y * self->stride + x];
 }
 
 uint32_t
