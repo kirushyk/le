@@ -52,14 +52,14 @@ le_sgd_step(LeOptimizer *optimizer)
     LeList *gradients_iterator;
     LeList *momentum_iterator;
 
-    LE_INFO("Epoch %u Step %u", LE_OPTIMIZER(self)->epoch, LE_OPTIMIZER(self)->step);
+    LE_INFO("Epoch %u Step %u", optimizer->epoch, optimizer->step);
     
     unsigned num_examples = le_matrix_get_width(self->input);
-    unsigned example_index = LE_OPTIMIZER(self)->step % num_examples;
+    unsigned example_index = optimizer->step % num_examples;
     LeTensor *input = le_matrix_get_column(self->input, example_index);
     LeTensor *output = le_matrix_get_column(self->output, example_index);
 
-    optimizer->gradients = le_model_get_gradients(LE_OPTIMIZER(self)->model, input, output);
+    optimizer->gradients = le_model_get_gradients(optimizer->model, input, output);
 
     if (self->momenta == NULL)
     {
@@ -89,7 +89,7 @@ le_sgd_step(LeOptimizer *optimizer)
         LE_INFO("Gradient stats:\n\tmin: %f\n\tmax: %f\n\tmean: %f\n\tdeviation: %f", gradient_stats.min, gradient_stats.max, gradient_stats.mean, gradient_stats.deviation);
         LeTensor *momentum = LE_TENSOR(momentum_iterator->data);
         le_tensor_add(momentum, gradient);
-        le_tensor_sub_scaled_f32(parameter, optimizer->learning_rate, momentum);
+        le_tensor_sub_scaled(parameter, optimizer->learning_rate, momentum);
         le_tensor_mul(momentum, self->momentum_rate);
     }
 
@@ -110,10 +110,10 @@ le_sgd_step(LeOptimizer *optimizer)
     
     le_list_foreach(optimizer->gradients, (LeFunction)le_tensor_free);
     
-    LE_OPTIMIZER(self)->step++;
-    if (LE_OPTIMIZER(self)->step % num_examples == 0)
+    optimizer->step++;
+    if (optimizer->step % num_examples == 0)
     {
-        LE_OPTIMIZER(self)->epoch++;
+        optimizer->epoch++;
     }
 }
 
