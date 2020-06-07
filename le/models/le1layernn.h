@@ -9,6 +9,7 @@
 
 LE_BEGIN_DECLS
 
+/// @note: Temporary Model needed to develop MLP and SGD. To be removed later.
 typedef struct Le1LayerNN Le1LayerNN;
 
 Le1LayerNN * le_1_layer_nn_new   (void);

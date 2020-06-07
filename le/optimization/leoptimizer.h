@@ -31,11 +31,11 @@ typedef struct LeOptimizerClass
     void (*step)(LeOptimizer *model);
 } LeOptimizerClass;
 
-void le_optimizer_construct (LeOptimizer *optimizer);
+void               le_optimizer_construct                  (LeOptimizer *           optimizer);
 
-void le_optimizer_step      (LeOptimizer *optimizer);
+void               le_optimizer_step                       (LeOptimizer *           optimizer);
 
-void le_optimizer_free      (LeOptimizer *optimizer);
+void               le_optimizer_free                       (LeOptimizer *           optimizer);
 
 LE_END_DECLS
 

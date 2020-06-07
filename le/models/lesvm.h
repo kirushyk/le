@@ -19,7 +19,7 @@ typedef struct LeSVM LeSVM;
 
 #define LE_SVM(obj) ((LeSVM *)(obj))
 
-LeSVM *                le_svm_new                          (void);
+LeSVM *                 le_svm_new                         (void);
 
 typedef struct LeSVMTrainingOptions
 {
@@ -27,12 +27,12 @@ typedef struct LeSVMTrainingOptions
     float    c;
 } LeSVMTrainingOptions;
 
-void                   le_svm_train                        (LeSVM *                 svm,
+void                    le_svm_train                       (LeSVM *                 svm,
                                                             const LeTensor *        x_train,
                                                             const LeTensor *        y_train,
                                                             LeSVMTrainingOptions    options);
 
-void                   le_svm_free                         (LeSVM *                 svm);
+void                    le_svm_free                        (LeSVM *                 svm);
 
 LE_END_DECLS
 

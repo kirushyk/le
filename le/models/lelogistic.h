@@ -24,19 +24,20 @@ typedef enum LeRegularization
 
 typedef struct LeLogisticClassifierTrainingOptions
 {
-    unsigned         polynomia_degree;
-    float            learning_rate;
-    LeRegularization regularization;
-    float            lambda;
-    unsigned         max_iterations;
+    unsigned                 polynomia_degree;
+    float                    learning_rate;
+    LeRegularization         regularization;
+    float                    lambda;
+    unsigned                 max_iterations;
 } LeLogisticClassifierTrainingOptions;
 
-void                   le_logistic_classifier_train   (LeLogisticClassifier                *classifier,
-                                                       const LeTensor                      *x_train,
-                                                       const LeTensor                      *y_train,
-                                                       LeLogisticClassifierTrainingOptions  options);
+void                    le_logistic_classifier_train       (LeLogisticClassifier *  classifier,
+                                                            const LeTensor *        x_train,
+                                                            const LeTensor *        y_train,
+                                                            LeLogisticClassifierTrainingOptions
+                                                                                    options);
 
-void                   le_logistic_classifier_free    (LeLogisticClassifier                *classifier);
+void                    le_logistic_classifier_free        (LeLogisticClassifier *  classifier);
 
 LE_END_DECLS
 
