@@ -165,10 +165,11 @@ le_tensor_new_copy(const LeTensor *another)
     {
         unsigned regions_count = le_shape_get_regions_count(another->shape);
         size_t region_size = self->stride * le_type_size(self->element_type);
+        size_t bytes_stride = another->stride * le_type_size(another->element_type);
         for (unsigned i = 0; i < regions_count; i++)
         {
             memcpy((uint8_t *)self->data + i * region_size,
-                (uint8_t *)another->data + i * another->stride * another->element_type,
+                (uint8_t *)another->data + i * bytes_stride,
                 region_size);
         }
     }
