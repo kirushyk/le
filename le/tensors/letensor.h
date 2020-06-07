@@ -40,6 +40,8 @@ LeTensor *         le_tensor_new_rand_f32                  (LeShape *           
 LeTensor *         le_tensor_new_cast                      (LeTensor *              tensor,
                                                             LeType                  type);
 
+bool               le_tensor_contiguous                    (const LeTensor *        tensor);
+
 bool               le_tensor_equal                         (const LeTensor *        a,
                                                             const LeTensor *        b);
 
@@ -51,6 +53,9 @@ LeTensor *         le_tensor_pick                          (LeTensor *          
                                                             uint32_t                index);
 
 LeTensor *         le_tensor_pick_copy                     (const LeTensor *        another,
+                                                            uint32_t                index);
+
+void *             le_tensor_at                            (const LeTensor *        another,
                                                             uint32_t                index);
 
 uint8_t            le_tensor_at_u8                         (const LeTensor *        tensor,

@@ -277,6 +277,12 @@ le_tensor_new_equal_u8(LeType type, LeTensor *another, uint8_t scalar)
 }
 
 bool
+le_tensor_contiguous(const LeTensor *tensor)
+{
+    return tensor->stride == le_shape_get_last_size(tensor->shape);
+}
+
+bool
 le_tensor_equal(const LeTensor *a, const LeTensor *b)
 {
     /// @todo: Take stride into account
@@ -294,8 +300,25 @@ le_tensor_equal(const LeTensor *a, const LeTensor *b)
     if (!le_shape_equal(a->shape, b->shape))
         return false;
     
-    if (memcmp(a->data, b->data, le_shape_get_elements_count(a->shape) * le_type_size(a->element_type)))
-        return false;
+    uint32_t elements_count = le_shape_get_elements_count(a->shape);
+    if (le_tensor_contiguous(a) && le_tensor_contiguous(b))
+    {
+        if (memcmp(a->data, b->data, elements_count * le_type_size(a->element_type)))
+        {
+            return false;
+        }
+    }
+    else
+    {
+        /// @todo: Optimize case when both tensors are not contiguous but share same region size
+        for (uint32_t i = 0; i < elements_count; i++)
+        {
+            if (memcmp(le_tensor_at(a, i), le_tensor_at(b, i), le_type_size(a->element_type)))
+            {
+                return false;
+            }
+        }
+    }
     
     return true;
 }
@@ -379,6 +402,12 @@ static inline uint32_t
 virtual_index(uint32_t logical_index, uint32_t last_size, uint32_t stride)
 {
     return (last_size == stride) ? logical_index : (logical_index / last_size * stride + logical_index % last_size);
+}
+
+void *
+le_tensor_at(const LeTensor *tensor, uint32_t index)
+{
+    return (uint8_t *)tensor->data + le_type_size(tensor->element_type) * virtual_index(index, le_shape_get_last_size(tensor->shape), tensor->stride);
 }
 
 uint8_t
