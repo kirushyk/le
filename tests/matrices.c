@@ -70,8 +70,8 @@ main()
         }
     }
 
-    a = le_matrix_new_zeros(LE_TYPE_FLOAT32, 10, 5);
-    b = le_matrix_new_zeros(LE_TYPE_FLOAT32, 10, 5);
+    a = le_matrix_new_rand_f32(10, 5);
+    b = le_matrix_new_rand_f32(10, 5);
     LeTensor *at = le_matrix_new_transpose(a);
     c = le_matrix_new_product(at, b);
     LeTensor *d = le_matrix_new_product_full(a, true, b, false);
