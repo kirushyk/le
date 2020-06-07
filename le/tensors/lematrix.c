@@ -320,7 +320,39 @@ le_matrix_new_zeros(LeType type, unsigned height, unsigned width)
     
     for (i = 0; i < elements_count; i++)
     {
-        ((float *)self->data)[i] = 0.0f;
+        switch (type)
+        {
+        case LE_TYPE_INT8:
+            ((int8_t *)self->data)[i] = 0;
+            break;
+        case LE_TYPE_UINT8:
+            ((uint8_t *)self->data)[i] = 0;
+            break;
+        case LE_TYPE_INT16:
+            ((int16_t *)self->data)[i] = 0;
+            break;
+        case LE_TYPE_UINT16:
+            ((uint16_t *)self->data)[i] = 0;
+            break;
+        case LE_TYPE_INT32:
+            ((int32_t *)self->data)[i] = 0;
+            break;
+        case LE_TYPE_UINT32:
+            ((uint32_t *)self->data)[i] = 0;
+            break;
+        case LE_TYPE_FLOAT16:
+            ((uint16_t *)self->data)[i] = F16_0;
+            break;
+        case LE_TYPE_FLOAT32:
+            ((float *)self->data)[i] = 0.0f;
+            break;
+        case LE_TYPE_FLOAT64:
+            ((double *)self->data)[i] = 0.0;
+            break;
+        case LE_TYPE_VOID:
+        default:
+            break;
+        }
     }
     
     return self;
