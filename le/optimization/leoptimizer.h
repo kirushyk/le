@@ -14,13 +14,14 @@ LE_BEGIN_DECLS
 /// Base class for all optimizers
 typedef struct LeOptimizer
 {
-    LeObject parent;
+    LeObject                 parent;
 
-    LeModel *model;
-    LeList *parameters;
-    LeList *gradients;
-    float learning_rate;
-    unsigned step, epoch;
+    LeModel                 *model;
+    LeList                  *parameters;
+    LeList                  *gradients;
+    float                    learning_rate;
+    unsigned                 step;
+    unsigned                 epoch;
 } LeOptimizer;
 
 #define LE_OPTIMIZER(obj) ((LeOptimizer *)(obj))
