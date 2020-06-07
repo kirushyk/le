@@ -26,7 +26,7 @@ main()
     assert(le_tensor_at_u32(subtensor_copy, 1) == 5);
     assert(le_tensor_at_u32(subtensor_copy, 2) == 6);
     assert(le_tensor_equal(subtensor, subtensor_copy));
-    LeTensor *subtensor_direct_copy = le_tensor_pick_copy(subtensor, 1);
+    LeTensor *subtensor_direct_copy = le_tensor_pick_copy(tensor, 1);
     assert(le_tensor_at_u32(subtensor_direct_copy, 0) == 4);
     assert(le_tensor_at_u32(subtensor_direct_copy, 1) == 5);
     assert(le_tensor_at_u32(subtensor_direct_copy, 2) == 6);
