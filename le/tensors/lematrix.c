@@ -109,7 +109,7 @@ le_matrix_add(LeTensor *self, const LeTensor *another)
         for (x = 0; x < self->shape->sizes[1]; x++)
         {
             /// @todo: Take stride into account
-            ((float *)self->data)[y * self->shape->sizes[1] + x] += ((float *)another->data)[y];
+            ((float *)self->data)[y * self->stride + x] += ((float *)another->data)[y];
         }
     }
 }
@@ -122,9 +122,10 @@ le_matrix_set_i8(LeTensor *self, unsigned y, unsigned x, int8_t value)
     
     assert(y < self->shape->sizes[0]);
     assert(x < self->shape->sizes[1]);
+    assert(x < self->stride);
     
     /// @todo: Take stride into account
-    ((int8_t *)self->data)[y * self->shape->sizes[1] + x] = value;
+    ((int8_t *)self->data)[y * self->stride + x] = value;
 }
 
 void
@@ -135,9 +136,10 @@ le_matrix_set_u8(LeTensor *self, unsigned y, unsigned x, uint8_t value)
     
     assert(y < self->shape->sizes[0]);
     assert(x < self->shape->sizes[1]);
+    assert(x < self->stride);
     
     /// @todo: Take stride into account
-    ((uint8_t *)self->data)[y * self->shape->sizes[1] + x] = value;
+    ((uint8_t *)self->data)[y * self->stride + x] = value;
 }
 
 void
@@ -148,9 +150,10 @@ le_matrix_set_i16(LeTensor *self, unsigned y, unsigned x, int16_t value)
     
     assert(y < self->shape->sizes[0]);
     assert(x < self->shape->sizes[1]);
+    assert(x < self->stride);
     
     /// @todo: Take stride into account
-    ((int16_t *)self->data)[y * self->shape->sizes[1] + x] = value;
+    ((int16_t *)self->data)[y * self->stride + x] = value;
 }
 
 void
@@ -161,9 +164,10 @@ le_matrix_set_u16(LeTensor *self, unsigned y, unsigned x, uint16_t value)
     
     assert(y < self->shape->sizes[0]);
     assert(x < self->shape->sizes[1]);
+    assert(x < self->stride);
     
     /// @todo: Take stride into account
-    ((uint16_t *)self->data)[y * self->shape->sizes[1] + x] = value;
+    ((uint16_t *)self->data)[y * self->stride + x] = value;
 }
 
 void
@@ -174,9 +178,10 @@ le_matrix_set_i32(LeTensor *self, unsigned y, unsigned x, int32_t value)
     
     assert(y < self->shape->sizes[0]);
     assert(x < self->shape->sizes[1]);
+    assert(x < self->stride);
     
     /// @todo: Take stride into account
-    ((int32_t *)self->data)[y * self->shape->sizes[1] + x] = value;
+    ((int32_t *)self->data)[y * self->stride + x] = value;
 }
 
 void
@@ -187,9 +192,10 @@ le_matrix_set_u32(LeTensor *self, unsigned y, unsigned x, uint32_t value)
     
     assert(y < self->shape->sizes[0]);
     assert(x < self->shape->sizes[1]);
+    assert(x < self->stride);
     
     /// @todo: Take stride into account
-    ((uint32_t *)self->data)[y * self->shape->sizes[1] + x] = value;
+    ((uint32_t *)self->data)[y * self->stride + x] = value;
 }
 
 void
@@ -200,9 +206,10 @@ le_matrix_set_f16(LeTensor *self, unsigned y, unsigned x, half value)
     
     assert(y < self->shape->sizes[0]);
     assert(x < self->shape->sizes[1]);
+    assert(x < self->stride);
     
     /// @todo: Take stride into account
-    ((half *)self->data)[y * self->shape->sizes[1] + x] = value;
+    ((half *)self->data)[y * self->stride + x] = value;
 }
 
 void
@@ -213,9 +220,10 @@ le_matrix_set_f32(LeTensor *self, unsigned y, unsigned x, float value)
     
     assert(y < self->shape->sizes[0]);
     assert(x < self->shape->sizes[1]);
+    assert(x < self->stride);
     
     /// @todo: Take stride into account
-    ((float *)self->data)[y * self->shape->sizes[1] + x] = value;
+    ((float *)self->data)[y * self->stride + x] = value;
 }
 
 void
@@ -226,9 +234,10 @@ le_matrix_set_f64(LeTensor *self, unsigned y, unsigned x, double value)
     
     assert(y < self->shape->sizes[0]);
     assert(x < self->shape->sizes[1]);
+    assert(x < self->stride);
     
     /// @todo: Take stride into account
-    ((double *)self->data)[y * self->shape->sizes[1] + x] = value;
+    ((double *)self->data)[y * self->stride + x] = value;
 }
 
 LeTensor *

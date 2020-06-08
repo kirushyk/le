@@ -1037,16 +1037,17 @@ le_tensor_get_stats(LeTensor *self)
 
     /// @todo: Take stride into account
     unsigned elements_count = le_shape_get_elements_count(self->shape);
+    uint32_t last_size = le_shape_get_last_size(self->shape);
 
     if (elements_count >= 1)
     {
-        float value = ((float *)self->data)[0];
+        float value = ((float *)self->data)[virtual_index(0, last_size, self->stride)];
         stats.max = value;
         stats.min = value;
         stats.mean = value;
         for (unsigned i = 1; i < elements_count; i++)
         {
-            float value = ((float *)self->data)[i];
+            float value = ((float *)self->data)[virtual_index(i, last_size, self->stride)];
             if (value > stats.max)
                 stats.max = value;
             if (value < stats.min)
@@ -1056,7 +1057,7 @@ le_tensor_get_stats(LeTensor *self)
         stats.mean /= elements_count;
         for (unsigned i = 1; i < elements_count; i++)
         {
-            float value = ((float *)self->data)[i];
+            float value = ((float *)self->data)[virtual_index(i, last_size, self->stride)];
             stats.deviation += fabs(value - stats.mean);
         }
         stats.deviation /= elements_count;
