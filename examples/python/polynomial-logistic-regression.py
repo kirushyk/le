@@ -10,7 +10,7 @@ print("Train set: ")
 print("x =\n", x)
 print("y =\n", y)
 
-classifier = le.LogisticClassifier();
+classifier = le.LogisticClassifier()
 classifier.train(x, y)
 h = classifier.predict(x)
 print("Predicted value =\n", h)
