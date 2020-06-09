@@ -80,6 +80,7 @@ PYBIND11_MODULE(le, m)
         .value("SOFTMAX", le::Activation::SOFTMAX);
     py::class_<le::Sequential>(m, "Sequential")
         .def(py::init<>())
+        .def("add", &le::Sequential::add)
         .def("predict", &le::Sequential::predict);
     m.doc() = "Le Python Binding";
     m.def("tensor", &tensor, "Create a Le Tensor");
