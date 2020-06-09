@@ -11,6 +11,6 @@ print("x =\n", x)
 print("y =\n", y)
 
 svm = le.SVM()
-svm.train(x, y)
+svm.train(x, y, kernel=le.Kernel.LINEAR, c=1.0)
 h = svm.predict(x)
 print("Predicted value =\n", h)
