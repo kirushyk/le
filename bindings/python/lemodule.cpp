@@ -68,6 +68,10 @@ PYBIND11_MODULE(le, m)
         .def(py::init<>())
         .def("train", &PyLogisticClassifier::pyTrain)
         .def("predict", &PyLogisticClassifier::predict);
+    py::enum_<le::Loss>(m, "Loss")
+        .value("MSE", le::Loss::MSE)
+        .value("LOGISTIC", le::Loss::LOGISTIC)
+        .value("CROSS_ENTROPY", le::Loss::CROSS_ENTROPY);
     py::class_<le::Sequential>(m, "Sequential")
         .def(py::init<>())
         .def("predict", &le::Sequential::predict);
