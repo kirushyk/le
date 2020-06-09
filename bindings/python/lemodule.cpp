@@ -26,7 +26,7 @@ py::object tensor(py::array_t<float> elements)
 class PySVM: public le::SVM
 {
 public: 
-    void pyTrain(const le::Tensor &x_train, const le::Tensor &y_train)
+    void pyTrain(const le::Tensor &x_train, const le::Tensor &y_train, const le::Kernel kernel, const float c)
     {
         le::SVM::TrainingOptions options;
         options.kernel = le::Kernel::LINEAR;
@@ -62,7 +62,7 @@ PYBIND11_MODULE(le, m)
         .value("RBF", le::Kernel::RBF);
     py::class_<PySVM>(m, "SVM")
         .def(py::init<>())
-        .def("train", &PySVM::pyTrain)
+        .def("train", &PySVM::pyTrain, py::arg("x"), py::arg("y"), py::arg("kernel") = le::Kernel::LINEAR, py::arg("c") = 1.0f)
         .def("predict", &PySVM::predict);
     py::class_<PyLogisticClassifier>(m, "LogisticClassifier")
         .def(py::init<>())
