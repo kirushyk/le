@@ -72,6 +72,12 @@ PYBIND11_MODULE(le, m)
         .value("MSE", le::Loss::MSE)
         .value("LOGISTIC", le::Loss::LOGISTIC)
         .value("CROSS_ENTROPY", le::Loss::CROSS_ENTROPY);
+    py::enum_<le::Activation>(m, "Activation")
+        .value("LINEAR", le::Activation::LINEAR)
+        .value("SIGMOID", le::Activation::SIGMOID)
+        .value("TANH", le::Activation::TANH)
+        .value("RELU", le::Activation::RELU)
+        .value("SOFTMAX", le::Activation::SOFTMAX);
     py::class_<le::Sequential>(m, "Sequential")
         .def(py::init<>())
         .def("predict", &le::Sequential::predict);
