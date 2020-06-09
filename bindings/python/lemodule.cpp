@@ -78,6 +78,9 @@ PYBIND11_MODULE(le, m)
         .value("TANH", le::Activation::TANH)
         .value("RELU", le::Activation::RELU)
         .value("SOFTMAX", le::Activation::SOFTMAX);
+    py::class_<le::Layer>(m, "Layer");
+    py::class_<le::DenseLayer, le::Layer>(m, "DenseLayer");
+    py::class_<le::ActivationLayer, le::Layer>(m, "ActivationLayer");
     py::class_<le::Sequential>(m, "Sequential")
         .def(py::init<>())
         .def("add", &le::Sequential::add)
