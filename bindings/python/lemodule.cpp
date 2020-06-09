@@ -57,6 +57,9 @@ PYBIND11_MODULE(le, m)
         {
             return le_tensor_to_cstr(tensor.c_tensor());
         });
+    py::enum_<le::Kernel>(m, "Kernel")
+        .value("LINEAR", le::Kernel::LINEAR)
+        .value("RBF", le::Kernel::RBF);
     py::class_<PySVM>(m, "SVM")
         .def(py::init<>())
         .def("train", &PySVM::pyTrain)
