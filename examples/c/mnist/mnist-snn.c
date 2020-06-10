@@ -6,14 +6,13 @@
 #include <stdlib.h>
 #include <string.h>
 #include <assert.h>
-#include <stdbool.h>
 #include <le/le.h>
 #include <le/tensors/letensor-imp.h>
 #include <ext/mnist/lemnist.h>
 
 #define DEFAULT_LOG_CATEGORY "mnist-snn"
 
-bool should_quit = false;
+static volatile sig_atomic_t should_quit = 0;
 
 void
 on_int_signal(int dummy) 
@@ -23,7 +22,7 @@ on_int_signal(int dummy)
         exit(0);
     }
     fprintf(stderr, "\nScheduling quit after current optimization step done\n");
-    should_quit = true;
+    should_quit = 1;
 }
 
 int
