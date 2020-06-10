@@ -15,7 +15,7 @@
 static volatile sig_atomic_t should_quit = 0;
 
 void
-on_int_signal(int dummy) 
+on_int_signal(int dummy)
 {
     if (should_quit)
     {
@@ -74,13 +74,13 @@ main(int argc, char *argv[])
         if (strcmp(argv[1], "bgd") == 0)
         {
             optimizer = LE_OPTIMIZER(le_bgd_new(LE_MODEL(neural_network), train_input_f32, train_output, 0.03f));
-            print_module = 1;
+            print_module = 10;
             num_epochs = 250;
         }
         else if (strcmp(argv[1], "sgd") == 0)
         {
             optimizer = LE_OPTIMIZER(le_sgd_new(LE_MODEL(neural_network), train_input_f32, train_output, 0.f, 0.9f));
-            print_module = 1;
+            print_module = 100;
             num_epochs = 2500;
         }
     }
@@ -91,7 +91,11 @@ main(int argc, char *argv[])
         {
             le_optimizer_step(optimizer);
             
-            if (i % print_module == 0) {
+            if (i % print_module == 0) 
+            {
+                if (i > 0)
+                    printf("\n");
+
                 printf("Iteration %d\n", i);
                 
                 LeTensor *train_prediction = le_model_predict(LE_MODEL(neural_network), train_input_f32);
@@ -103,6 +107,10 @@ main(int argc, char *argv[])
                 float test_set_error = le_cross_entropy_loss(test_prediction, test_output);
                 printf("Test Set Error: %f\n", test_set_error);
                 le_tensor_free(test_prediction);
+            }
+            else
+            {
+                printf(".");
             }
         }
     }
