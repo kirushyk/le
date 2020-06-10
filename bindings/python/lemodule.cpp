@@ -90,9 +90,11 @@ PYBIND11_MODULE(le, m)
         .def("add", &le::Sequential::add)
         .def("setLoss", &le::Sequential::setLoss)
         .def("predict", &le::Sequential::predict);
-    py::class_<le::Optimizer>(m, "Optimizer");
+    py::class_<le::Optimizer>(m, "Optimizer")
+        .def("step", &le::Optimizer::step);
     py::class_<le::BGD, le::Optimizer>(m, "BGD")
-        .def(py::init<le::Model, le::Tensor, le::Tensor, float>(), py::arg("model"), py::arg("x"), py::arg("y"), py::arg("learning_rate") = 1.0f);
+        .def(py::init<le::Model, le::Tensor, le::Tensor, float>(), py::arg("model"), py::arg("x"), py::arg("y"), py::arg("learning_rate") = 1.0f)
+        .def("step", &le::BGD::step);
     m.doc() = "Le Python Binding";
     m.def("tensor", &tensor, "Create a Le Tensor");
 }
