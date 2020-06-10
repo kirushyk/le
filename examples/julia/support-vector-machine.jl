@@ -3,11 +3,11 @@ x = Tensor([[1.0, 2.0, 3.0, 4.0],
 
 y = Tensor([[-1.0, -1.0, 1.0, 1.0]])
 
-print("Train set: ")
-print("x =\n", x)
-print("y =\n", y)
+println("Train set: ")
+println("x =\n", x)
+println("y =\n", y)
 
-svm = le.SVM();
+svm = SVM()
 svm.train(x, y)
 h = svm.predict(x)
-print("Predicted value =\n", h)
+println("Predicted value =\n", h)
