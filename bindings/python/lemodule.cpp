@@ -23,6 +23,11 @@ py::object tensor(py::array_t<float> elements)
     return py::cast(t);
 }
 
+static float logistic_loss(const le::Tensor &h, const le::Tensor &y)
+{
+    return le_logistic_loss(h.c_tensor(), y.c_tensor());
+}
+
 class PySVM: public le::SVM
 {
 public: 
@@ -97,4 +102,5 @@ PYBIND11_MODULE(le, m)
         .def("step", &le::BGD::step);
     m.doc() = "Le Python Binding";
     m.def("tensor", &tensor, "Create a Le Tensor");
+    m.def("logistic_loss", &logistic_loss, "Compares output with ground truth");
 }
