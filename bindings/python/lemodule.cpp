@@ -7,7 +7,7 @@
 
 namespace py = pybind11;
 
-py::object tensor(py::array_t<float> elements)
+static py::object tensor(py::array_t<float> elements)
 {
     auto r = elements.unchecked<>();
     unsigned *shapeData = (unsigned *)std::malloc(elements.ndim() * sizeof(unsigned));
