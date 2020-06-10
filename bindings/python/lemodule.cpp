@@ -60,11 +60,13 @@ PYBIND11_MODULE(le, m)
     py::enum_<le::Kernel>(m, "Kernel")
         .value("LINEAR", le::Kernel::LINEAR)
         .value("RBF", le::Kernel::RBF);
-    py::class_<PySVM>(m, "SVM")
+    py::class_<le::Model>(m, "Model")
+        .def("predict", &le::Model::predict);
+    py::class_<PySVM, le::Model>(m, "SVM")
         .def(py::init<>())
         .def("train", &PySVM::pyTrain, py::arg("x"), py::arg("y"), py::arg("kernel") = le::Kernel::LINEAR, py::arg("c") = 1.0f)
         .def("predict", &PySVM::predict);
-    py::class_<PyLogisticClassifier>(m, "LogisticClassifier")
+    py::class_<PyLogisticClassifier, le::Model>(m, "LogisticClassifier")
         .def(py::init<>())
         .def("train", &PyLogisticClassifier::pyTrain)
         .def("predict", &PyLogisticClassifier::predict);
@@ -83,7 +85,7 @@ PYBIND11_MODULE(le, m)
         .def(py::init<std::string, unsigned, unsigned>());
     py::class_<le::ActivationLayer, le::Layer>(m, "ActivationLayer")
         .def(py::init<std::string, le::Activation>());
-    py::class_<le::Sequential>(m, "Sequential")
+    py::class_<le::Sequential, le::Model>(m, "Sequential")
         .def(py::init<>())
         .def("add", &le::Sequential::add)
         .def("setLoss", &le::Sequential::setLoss)
