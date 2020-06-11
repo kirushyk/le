@@ -67,6 +67,9 @@ uint32_t           le_tensor_at_u32                        (const LeTensor *    
 float              le_tensor_at_f32                        (const LeTensor *        tensor,
                                                             uint32_t                index);
 
+void               le_tensor_assign                        (LeTensor *              tensor,
+                                                            const LeTensor *        another);
+
 void               le_tensor_set_f32                       (LeTensor *              tensor,
                                                             uint32_t                index,
                                                             float                   value);

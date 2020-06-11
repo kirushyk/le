@@ -435,6 +435,19 @@ le_tensor_at_f32(const LeTensor *tensor, uint32_t index)
 }
 
 void
+le_tensor_assign(LeTensor *tensor, const LeTensor *another)
+{
+    if ((tensor->element_type == another->element_type)
+        && (tensor->stride == le_shape_get_last_size(tensor->shape))
+        && (another->stride == le_shape_get_last_size(another->shape))
+        && le_shape_equal(tensor->shape, another->shape))
+    {
+        size_t data_size = le_shape_get_elements_count(another->shape) * le_type_size(another->element_type);
+        memcpy(tensor->data, another->data, data_size);
+    }
+}
+
+void
 le_tensor_set_f32(LeTensor *tensor, uint32_t index, float value)
 {
     assert(tensor->element_type == LE_TYPE_FLOAT32);
