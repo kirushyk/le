@@ -119,14 +119,14 @@ main(int argc, char *argv[])
                     break;
                 }
             }
-        }
 
-        if (parameters_iterator || loaded_parameters_iterator)
-        {
-            LE_ERROR("Incorrect number of loaded parameters");
-        }
+            if (parameters_iterator || loaded_parameters_iterator)
+            {
+                LE_ERROR("Incorrect number of loaded parameters");
+            }
 
-        printf("Successfully loaded parameters fom %s", filename);
+            printf("Successfully loaded parameters fom %s", filename);
+        }
     }
 
     if (optimizer)
