@@ -9,6 +9,7 @@
 #include <le/le.h>
 #include <le/tensors/letensor-imp.h>
 #include <ext/mnist/lemnist.h>
+#include <ext/tensorlist/letensorlist.h>
 
 #define DEFAULT_LOG_CATEGORY "mnist-snn"
 
@@ -68,8 +69,9 @@ main(int argc, char *argv[])
     LeOptimizer *optimizer = NULL;
     unsigned print_module = 1;
     unsigned num_epochs = 2500;
+    const char *filename = NULL;
 
-    if (argc == 2)
+    if (argc >= 2)
     {
         if (strcmp(argv[1], "bgd") == 0)
         {
@@ -83,6 +85,48 @@ main(int argc, char *argv[])
             print_module = 100;
             num_epochs = 2500;
         }
+        if (argc >= 3)
+        {
+            filename = argv[2];
+        }
+    }
+
+    if (filename)
+    {
+        LeList *parameters_iterator = NULL;
+        LeList *parameters = le_model_get_parameters(LE_MODEL(neural_network));
+        LeList *loaded_parameters_iterator = NULL;
+        LeList *loaded_parameters = le_tensorlist_load(filename);
+        
+        if (loaded_parameters)
+        {
+            for (parameters_iterator = parameters,
+                    loaded_parameters_iterator = loaded_parameters;
+                parameters_iterator && loaded_parameters_iterator;
+                parameters_iterator = parameters_iterator->next,
+                    loaded_parameters_iterator = loaded_parameters_iterator->next)
+            {
+                LeTensor *parameter = LE_TENSOR(parameters_iterator->data);
+                LeTensor *loaded_parameter = LE_TENSOR(loaded_parameters_iterator->data);
+                if (le_shape_equal(parameter->shape, loaded_parameter->shape) &&
+                    parameter->element_type == loaded_parameter->element_type)
+                {
+                    le_tensor_assign(parameter, loaded_parameter);
+                }
+                else
+                {
+                    LE_ERROR("Incorrect shape or element type of loaded parameter");
+                    break;
+                }
+            }
+        }
+
+        if (parameters_iterator || loaded_parameters_iterator)
+        {
+            LE_ERROR("Incorrect number of loaded parameters");
+        }
+
+        printf("Successfully loaded parameters fom %s", filename);
     }
 
     if (optimizer)
@@ -119,8 +163,12 @@ main(int argc, char *argv[])
     {
         LE_ERROR("No Optimizer specified");
     }
-    
 
+    if (filename)
+    {
+        le_tensorlist_save(le_model_get_parameters(LE_MODEL(neural_network)), filename);
+    }
+    
     le_sequential_free(neural_network);
     le_tensor_free(test_output);
     le_tensor_free(test_input_f32);

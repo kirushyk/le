@@ -1,6 +1,7 @@
 mnist_example_deps = [
     le,
-    mnist
+    mnist,
+    tensorlist
 ]
 
 executable('mnist-logistic-regression', 'mnist-logistic-regression.c',
