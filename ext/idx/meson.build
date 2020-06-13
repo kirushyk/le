@@ -7,12 +7,18 @@ idx_sources = [
     'leidx.c'
 ]
 
-idx_deps = [
-    cc.find_library('z')
-]
+zlib = cc.find_library('z', required: false)
 
-idx = static_library('le_idx', idx_sources,
-    dependencies: idx_deps,
-    include_directories: incdir,
-    link_with: le,
-)
+have_idx = zlib.found()
+
+if zlib.found()
+    idx_deps = [
+        zlib
+    ]
+
+    idx = static_library('le_idx', idx_sources,
+        include_directories: incdir,
+        dependencies: idx_deps,
+        link_with: le,
+    )
+endif

@@ -11,28 +11,31 @@ mnist_deps = [
     cc.find_library('m')
 ]
 
-mnist = static_library('le_mnist', mnist_sources,
-    dependencies: mnist_deps,
-    include_directories: incdir,
-    link_with: [
-        le,
-        idx
-    ]
-)
+have_mnist = have_idx
+if have_idx
+    mnist = static_library('le_mnist', mnist_sources,
+        dependencies: mnist_deps,
+        include_directories: incdir,
+        link_with: [
+            le,
+            idx
+        ]
+    )
 
-mnist_path = get_option('datadir') / 'le' / 'ext' / 'mnist'
+    mnist_path = get_option('datadir') / 'le' / 'ext' / 'mnist'
 
-config = configuration_data()
-config.set_quoted('MNIST_DATASET_SOURCE_PATH', meson.current_source_dir())
-config.set_quoted('MNIST_DATASET_INSTALL_PATH', get_option('prefix') / mnist_path)
-configure_file(output: 'mnist-config.h', configuration: config)
+    config = configuration_data()
+    config.set_quoted('MNIST_DATASET_SOURCE_PATH', meson.current_source_dir())
+    config.set_quoted('MNIST_DATASET_INSTALL_PATH', get_option('prefix') / mnist_path)
+    configure_file(output: 'mnist-config.h', configuration: config)
 
-install_data(
-    [
-        't10k-images-idx3-ubyte.gz',
-        't10k-labels-idx1-ubyte.gz',
-        'train-images-idx3-ubyte.gz',
-        'train-labels-idx1-ubyte.gz'
-    ],
-    install_dir : mnist_path
-)
+    install_data(
+        [
+            't10k-images-idx3-ubyte.gz',
+            't10k-labels-idx1-ubyte.gz',
+            'train-images-idx3-ubyte.gz',
+            'train-labels-idx1-ubyte.gz'
+        ],
+        install_dir : mnist_path
+    )
+endif
