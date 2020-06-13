@@ -3,6 +3,7 @@
 
 #define DEFAULT_LOG_CATEGORY "tensor"
 
+#include "../config.h"
 #include <le/lelog.h>
 #include "letensor.h"
 #include "letensor-imp.h"
@@ -471,6 +472,8 @@ le_dot_product(const LeTensor *a, const LeTensor *b)
 {
 #ifdef __APPLE__
     return le_accelerate_dot_product(a, b);
+#elif defined(HAVE_OPENBLAS)
+    return le_openblas_dot_product(a, transpose_a, b, transpose_b);
 #else
     assert(a->element_type == LE_TYPE_FLOAT32);
     assert(b->element_type == LE_TYPE_FLOAT32);
