@@ -7,7 +7,6 @@ configure_file(output: 'test-config.h', configuration: config)
 
 le_tests = [
     ['objects/objects.c', 'objects/base.c', 'objects/a.c', 'objects/b.c'],
-    ['mnist.c'],
     ['list.c'],
     ['matrices.c'],
     ['type-generic.c'],
@@ -17,16 +16,22 @@ le_tests = [
     ['subtensor.c']
 ]
 
+le_tests_deps = [
+    le,
+    tensorlist
+]
+
+if have_mnist
+    le_tests += ['mnist.c']
+    le_tests_deps += mnist
+endif
+
 foreach filenames : le_tests
     filename = filenames[0]
     test_name = filename.split('.')[0].underscorify()
     exe = executable(test_name, filenames,
         include_directories: include_directories('..'),
-        link_with: [
-            le,
-            mnist,
-            tensorlist
-        ],
+        link_with: le_tests_deps,
         install: false
     )
     test(test_name, exe, timeout : 3 * 60)
