@@ -19,7 +19,7 @@ le_log(const char *category, LeLogLevel level, const char *message, ...)
     if (level == LE_LOG_LEVEL_INFO)
     {
         const char *le_debug = getenv("LE_DEBUG");
-        if ((le_debug == NULL) || strcasecmp(le_debug, category))
+        if ((le_debug == NULL) || strcmp(le_debug, category))
         {
             return;
         }
