@@ -177,11 +177,26 @@ erase_model(LEMainWindow *self)
     self->classifier_visualisation = NULL;
 }
 
+static void
+update_epoch_label(LEMainWindow *self)
+{
+    unsigned epoch = 0;
+    if (self->optimizer)
+    {
+        epoch = LE_OPTIMIZER(self->optimizer)->epoch;
+    }
+    gchar buffer[16];
+    sprintf(buffer, "%u", epoch);
+    gtk_label_set_text(GTK_LABEL(self->epoch_label), buffer);
+}
+
 void
 train_current_model(LEMainWindow *self)
 {
     if (self->train_data == NULL)
         return;
+
+    float learning_rate = atof(gtk_combo_box_text_get_active_text(GTK_COMBO_BOX_TEXT(self->alpha_combo)));
     
     switch (self->preferred_model_type)
     {
@@ -210,16 +225,20 @@ train_current_model(LEMainWindow *self)
         
     case PREFERRED_MODEL_TYPE_NEURAL_NETWORK:
         {
-            LeTensor *labels = le_tensor_new_copy(le_data_set_get_output(self->train_data));
-
-            self->optimizer = LE_OPTIMIZER(le_bgd_new(self->model, le_data_set_get_input(self->train_data), labels,
-                atof(gtk_combo_box_text_get_active_text(GTK_COMBO_BOX_TEXT(self->alpha_combo)))));
+            if (self->optimizer == NULL)
+            {
+                LeTensor *x = le_data_set_get_input(self->train_data);
+                LeTensor *labels = le_tensor_new_copy(le_data_set_get_output(self->train_data));
+                self->optimizer = LE_OPTIMIZER(le_bgd_new(self->model, x, labels, learning_rate));
+            }
+            self->optimizer->learning_rate = learning_rate;
             for (unsigned i = 0; i <= 400; i++)
             {
                 le_optimizer_step(LE_OPTIMIZER(self->optimizer));
             }
-            le_bgd_free(LE_BGD(self->optimizer));
-            le_tensor_free(labels);
+            /// le_bgd_free(LE_BGD(self->optimizer));
+            /// @todo: free
+            /// le_tensor_free(labels);
         }
         break;
         
@@ -229,7 +248,7 @@ train_current_model(LEMainWindow *self)
             LeLogisticClassifierTrainingOptions options;
             options.max_iterations = 400;
             options.polynomia_degree = atoi(gtk_combo_box_text_get_active_text(GTK_COMBO_BOX_TEXT(self->polynomia_degree_combo)));
-            options.learning_rate = atof(gtk_combo_box_text_get_active_text(GTK_COMBO_BOX_TEXT(self->alpha_combo)));
+            options.learning_rate = learning_rate;
             switch (gtk_combo_box_get_active(GTK_COMBO_BOX(self->regularization_combo))) {
             case 1:
                 options.regularization = LE_REGULARIZATION_L1;
@@ -256,6 +275,8 @@ train_current_model(LEMainWindow *self)
         gtk_widget_get_allocated_height(GTK_WIDGET(self->drawing_area)));
     
     gtk_widget_queue_draw(GTK_WIDGET(self));
+    
+    update_epoch_label(self);
 }
 
 void
@@ -274,11 +295,11 @@ create_model(LEMainWindow *self)
         le_sequential_add(LE_SEQUENTIAL(self->model),
                             LE_LAYER(le_dense_layer_new("D1", 2, 50)));
         le_sequential_add(LE_SEQUENTIAL(self->model),
-                            LE_LAYER(le_activation_layer_new("A1", LE_ACTIVATION_RELU)));
+                            LE_LAYER(le_activation_layer_new("A1", LE_ACTIVATION_TANH)));
         le_sequential_add(LE_SEQUENTIAL(self->model),
                             LE_LAYER(le_dense_layer_new("D2", 50, 30)));
         le_sequential_add(LE_SEQUENTIAL(self->model),
-                            LE_LAYER(le_activation_layer_new("A2", LE_ACTIVATION_RELU)));
+                            LE_LAYER(le_activation_layer_new("A2", LE_ACTIVATION_TANH)));
         le_sequential_add(LE_SEQUENTIAL(self->model),
                             LE_LAYER(le_dense_layer_new("D3", 30, 1)));
         le_sequential_add(LE_SEQUENTIAL(self->model),
@@ -300,8 +321,6 @@ generate_data(LEMainWindow *self, const gchar *pattern)
     self->train_data = pg_generate_data(pattern, examples_count);
     examples_count = atoi(gtk_combo_box_text_get_active_text(GTK_COMBO_BOX_TEXT(self->test_set_combo)));
     self->test_data = pg_generate_data(pattern, examples_count);
-    
-    erase_model(self);
     
     gtk_widget_queue_draw(GTK_WIDGET(self));
 }
@@ -404,6 +423,8 @@ le_main_window_set_preffered_model(GtkWidget *window, PreferredModelType model_t
         gtk_widget_show_all(self->gd_vbox);
         break;
     }
+
+    create_model(self);
 }
 
 void
@@ -433,8 +454,15 @@ reset_button_clicked(GtkButton *button, gpointer user_data)
 {
     LEMainWindow *self = LE_MAIN_WINDOW(user_data);
     
-    erase_model(self);
+    create_model(self);
+    if (self->optimizer)
+    {
+        le_optimizer_free(self->optimizer);
+        self->optimizer = NULL;
+    }
     gtk_widget_queue_draw(GTK_WIDGET(self));
+
+    update_epoch_label(self);
 }
 
 static void
@@ -442,7 +470,6 @@ start_button_clicked(GtkButton *button, gpointer user_data)
 {
     LEMainWindow *self = LE_MAIN_WINDOW(user_data);
 
-    create_model(self);
     train_current_model(self);
 }
 
