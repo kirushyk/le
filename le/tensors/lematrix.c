@@ -10,8 +10,7 @@
 #include "letensor-imp.h"
 #ifdef __APPLE__
 #include "../platform/accelerate/leaccelerate.h"
-#endif
-#ifdef HAVE_OPENBLAS
+#elif defined(HAVE_OPENBLAS)
 #include "../platform/openblas/leopenblas.h"
 #endif
 
