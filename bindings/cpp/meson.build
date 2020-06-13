@@ -12,7 +12,8 @@ le_cpp_sources = [
     'bgd.cpp'
 ]
 
-if add_languages('cpp', native: false, required: false)
+have_cpp = add_languages('cpp', native: false, required: false)
+if have_cpp
     le_cpp = static_library('le_cpp',
         le_cpp_sources,
         include_directories: incdir,

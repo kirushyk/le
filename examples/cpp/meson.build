@@ -3,26 +3,28 @@
 
 incdir = include_directories('../..', '../../bindings/cpp')
 
-executable('polynomial-logistic-regression-cpp', 'polynomial-logistic-regression.cpp',
-    include_directories: incdir,
-    link_with: [
-        le_cpp
-    ],
-    install: false
-)
+if have_cpp
+    executable('polynomial-logistic-regression-cpp', 'polynomial-logistic-regression.cpp',
+        include_directories: incdir,
+        link_with: [
+            le_cpp
+        ],
+        install: false
+    )
 
-executable('support-vector-machine-cpp', 'support-vector-machine.cpp',
-    include_directories: incdir,
-    link_with: [
-        le_cpp
-    ],
-    install: false
-)
+    executable('support-vector-machine-cpp', 'support-vector-machine.cpp',
+        include_directories: incdir,
+        link_with: [
+            le_cpp
+        ],
+        install: false
+    )
 
-executable('shallow-neural-network-cpp', 'shallow-neural-network.cpp',
-    include_directories: incdir,
-    link_with: [
-        le_cpp
-    ],
-    install: false
-)
+    executable('shallow-neural-network-cpp', 'shallow-neural-network.cpp',
+        include_directories: incdir,
+        link_with: [
+            le_cpp
+        ],
+        install: false
+    )
+endif

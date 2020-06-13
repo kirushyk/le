@@ -17,15 +17,17 @@ py_dep = py3.dependency()
 
 incdir = include_directories('../..', '../../bindings/cpp')
 
-pylib = py3.extension_module('le',
-    'lemodule.cpp',
-    link_with: [
-        le,
-        le_cpp
-    ],
-    dependencies: py_dep,
-    include_directories: incdir,
-    install: true
-)
+if have_cpp
+    pylib = py3.extension_module('le',
+        'lemodule.cpp',
+        link_with: [
+            le,
+            le_cpp
+        ],
+        dependencies: py_dep,
+        include_directories: incdir,
+        install: true
+    )
+endif
 
 pypathdir = meson.current_build_dir()
