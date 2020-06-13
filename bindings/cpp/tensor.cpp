@@ -67,9 +67,9 @@ std::ostream & le::operator << (std::ostream &output, const Tensor &tensor)
     }
 
     output << '[';
-    for (int y = 0; (y < c_tensor->shape->sizes[0]) && (y < TENSOR_PRINT_MAX_SIZE); y++)
+    for (std::uint32_t y = 0; (y < c_tensor->shape->sizes[0]) && (y < TENSOR_PRINT_MAX_SIZE); y++)
     {
-        int x;
+        std::uint32_t x;
         for (x = 0; (x < c_tensor->shape->sizes[1]) && (x < TENSOR_PRINT_MAX_SIZE); x++)
         {
             switch (tensor.priv->tensor->element_type)
