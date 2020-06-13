@@ -2,7 +2,7 @@
 # Released under the MIT license. See LICENSE file in the project root for full license information.
 
 project('le', 'c',
-    version: '0.0.1',
+    version: '0.1.1',
     meson_version: '>= 0.54.0',
     default_options: [
         'c_std=c11',
