@@ -35,6 +35,11 @@ le_bgd_step(LeOptimizer *optimizer)
 
     LE_INFO("Step");
 
+    if (optimizer->learning_rate <= 0.0f)
+    {
+        LE_WARNING("Learning rate = %f", optimizer->learning_rate);
+    }
+
     LeList *gradients = NULL;
     bool own_gradients = false;
 
