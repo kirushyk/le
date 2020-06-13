@@ -11,10 +11,6 @@ le_playground_sources = [
     'pg-color.c'
 ]
 
-gtk = dependency('gtk+-3.0',
-    required: false
-)
-
 if gtk.found()
     executable('le-playground', le_playground_sources,
         dependencies: gtk,

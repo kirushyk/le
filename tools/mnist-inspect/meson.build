@@ -9,15 +9,15 @@ mnist_inspect_sources = [
     'mi-menus.c'
 ]
 
-mnist_inspect_deps = dependency('gtk+-3.0')
-
-executable('mnist-inspect', mnist_inspect_sources,
-    dependencies: mnist_inspect_deps,
-    include_directories: incdir,
-    link_with: [
-        le,
-        mnist
-    ],
-    install: true
-)
+if gtk.found()
+    executable('mnist-inspect', mnist_inspect_sources,
+        dependencies: gtk,
+        include_directories: incdir,
+        link_with: [
+            le,
+            mnist
+        ],
+        install: true
+    )
+endif
 
