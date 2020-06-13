@@ -40,6 +40,10 @@ if accelerate.found()
     le_libs += le_accelerate
 endif
 
+if openblas.found()
+    le_libs += le_openblas
+endif
+
 install_headers('lepolynomia.h', subdir : 'le')
 install_headers('leloss.h', subdir : 'le')
 install_headers('ledataset.h', subdir : 'le')
@@ -83,6 +87,10 @@ le_pkg_libs = [
 
 if accelerate.found()
     le_pkg_libs += accelerate
+endif
+
+if openblas.found()
+    le_pkg_libs += openblas
 endif
 
 pkg.generate(

@@ -12,7 +12,9 @@ openblas = dependency('openblas',
     required: false
 )
 
-if openblas.found()
+have_openblas = openblas.found()
+
+if have_openblas
     le_openblas = static_library('le_openblas', le_openblas_sources,
         dependencies: [
             openblas
