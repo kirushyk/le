@@ -7,7 +7,6 @@
 #include <stdio.h>
 #if defined(__linux__)
 #include <byteswap.h>
-#define bswap_32(x) __bswap_32(x)
 #elif defined(__APPLE__)
 #include <libkern/OSByteOrder.h>
 #define bswap_32(x) OSSwapInt32(x)
