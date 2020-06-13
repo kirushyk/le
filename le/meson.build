@@ -40,9 +40,13 @@ if accelerate.found()
     le_libs += le_accelerate
 endif
 
-if openblas.found()
+if have_openblas
     le_libs += le_openblas
 endif
+
+config = configuration_data()
+config.set('HAVE_OPENBLAS', have_openblas)
+configure_file(output: 'config.h', configuration: config)
 
 install_headers('lepolynomia.h', subdir : 'le')
 install_headers('leloss.h', subdir : 'le')
