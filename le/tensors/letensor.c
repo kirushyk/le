@@ -3,6 +3,7 @@
 
 #define DEFAULT_LOG_CATEGORY "tensor"
 
+#include <le/lelog.h>
 #include "letensor.h"
 #include "letensor-imp.h"
 #include "letensor-cast.h"
