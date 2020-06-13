@@ -57,11 +57,8 @@ render_image(uint8_t *data)
 static gboolean
 draw_callback(GtkWidget *widget, cairo_t *cr, gpointer data)
 {
-    guint width, height;
     LEMainWindow *window;
-    
-    width = gtk_widget_get_allocated_width(widget);
-    height = gtk_widget_get_allocated_height(widget);
+
     window = LE_MAIN_WINDOW(data);
     
     if (window->image_visualisation)
