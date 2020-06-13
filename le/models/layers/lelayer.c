@@ -5,6 +5,7 @@
 #include <assert.h>
 #include <stdlib.h>
 #include <string.h>
+#include <le/lemem.h>
 #include <le/tensors/lematrix.h>
 #include <le/tensors/letensor-imp.h>
 
@@ -14,7 +15,7 @@ le_layer_construct(LeLayer *self, const char *name)
     assert(self);
     
     self->parameters = NULL;
-    self->name = strdup(name);
+    self->name = le_strdup(name);
 }
 
 LeTensor *

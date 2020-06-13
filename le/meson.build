@@ -26,6 +26,7 @@ le_sources = [
     'optimization/lebgd.c',
     'optimization/lesgd.c',
     'leloss.c',
+    'lemem.c',
     'lelog.c'
 ]
 

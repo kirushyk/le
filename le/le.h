@@ -22,6 +22,7 @@
 #include "optimization/lebgd.h"
 #include "optimization/lesgd.h"
 #include "leloss.h"
+#include "lemem.h"
 #include "lelog.h"
 
 #endif
