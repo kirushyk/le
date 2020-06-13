@@ -13,7 +13,7 @@ main(int argc, const char *argv[])
         4.0, 3.0, 2.0, 1.0
     );
     
-    LeTensor *y = le_tensor_new(LE_TYPE_FLOAT32, 2, 2, 4,
+    LeTensor *y = le_tensor_new(LE_TYPE_FLOAT32, 2, 1, 4,
         0.0, 0.0, 1.0, 1.0
     );
     
@@ -32,7 +32,7 @@ main(int argc, const char *argv[])
     options.lambda = 0.0f;
     le_logistic_classifier_train(lc, x, y, options);
     
-    LeTensor *h = le_model_predict((LeModel *)lc, x);
+    LeTensor *h = le_model_predict(LE_MODEL(lc), x);
     printf("Predicted value =\n");
     le_tensor_print(h, stdout);
     
