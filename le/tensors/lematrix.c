@@ -1,6 +1,7 @@
 /* Copyright (c) Kyrylo Polezhaiev and contributors. All rights reserved.
    Released under the MIT license. See LICENSE file in the project root for full license information. */
 
+#include "../config.h"
 #include "lematrix.h"
 #include <assert.h>
 #include <stdlib.h>
@@ -9,6 +10,9 @@
 #include "letensor-imp.h"
 #ifdef __APPLE__
 #include "../platform/accelerate/leaccelerate.h"
+#endif
+#ifdef HAVE_OPENBLAS
+#include "../platform/openblas/leopenblas.h"
 #endif
 
 unsigned
@@ -546,6 +550,8 @@ le_matrix_new_product_full(const LeTensor *a, bool transpose_a, const LeTensor *
     /// @todo: Take stride into account
 #ifdef __APPLE__
     return le_accelerate_matrix_new_product(a, transpose_a, b, transpose_b);
+#elif defined(HAVE_OPENBLAS)
+    return le_openblas_matrix_new_product(a, transpose_a, b, transpose_b);
 #else
     assert(a->shape->num_dimensions == 2);
     assert(b->shape->num_dimensions == 2);
