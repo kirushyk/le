@@ -6,7 +6,9 @@ py3 = py_mod.find_installation('python3',
     required: false
 )
 
-have_python = py3.found() and have_cpp
+py_dep = py3.dependency(required: false)
+
+have_python = py3.found() and have_cpp and py_dep.found()
 
 if have_python
     py_purelib = py3.get_path('purelib')
@@ -18,7 +20,6 @@ if have_python
     if not py_platlib.endswith('site-packages')
         error('Python3 platlib path seems invalid? ' + py_platlib)
     endif
-    py_dep = py3.dependency()
 
     incdir = include_directories('../..', '../../bindings/cpp')
 
