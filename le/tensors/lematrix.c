@@ -3,6 +3,7 @@
 
 #include "../config.h"
 #include "lematrix.h"
+#include <le/math/lerand.h>
 #include <assert.h>
 #include <stdlib.h>
 #include <string.h>
@@ -388,7 +389,7 @@ le_matrix_new_rand_f32(unsigned height, unsigned width)
     
     for (i = 0; i < elements_count; i++)
     {
-        ((float *)self->data)[i] = rand() / (float)RAND_MAX;
+        ((float *)self->data)[i] = le_random_normal_f32();
     }
     
     return self;
