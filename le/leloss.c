@@ -53,7 +53,8 @@ le_cross_entropy_loss(const LeTensor *h, const LeTensor *y)
         {
             float y_ji = le_matrix_at_f32(y, j, i);
             float h_ji = le_matrix_at_f32(h, j, i);
-            loss -= y_ji * logf(h_ji);
+            if (y_ji > 0)
+                loss -= y_ji * logf(h_ji);
         }
         cost += loss;
     }
