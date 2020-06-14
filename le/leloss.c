@@ -25,7 +25,10 @@ le_logistic_loss(const LeTensor *h, const LeTensor *y)
     {
         float yi = le_tensor_at_f32(y, i);
         float hi = le_tensor_at_f32(h, i);
-        result -= yi * logf(hi) + (1.0f - yi) * logf(1.0f - hi);
+        if (yi > 0)
+            result -= yi * logf(hi);
+        if (yi < 1)
+            result -= (1.0f - yi) * logf(1.0f - hi);
     }
     
     return result / elements_count;
