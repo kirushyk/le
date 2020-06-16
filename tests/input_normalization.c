@@ -31,7 +31,7 @@ train_until_convergence(bool use_normalization)
 #define TRAIN_COUNT 100
 
 /** @note: Idea of this test is to check whether normalization will accelerate
- *         gradient descent convergence in 
+ *         gradient descent convergence in stretched dataset
  */
 int
 main(int argc, char *argv[])
