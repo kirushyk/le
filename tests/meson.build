@@ -13,7 +13,8 @@ le_tests = [
     ['sobel.c'],
     ['relu.c'],
     ['tensorlist.c'],
-    ['subtensor.c']
+    ['subtensor.c'],
+    ['input_normalization.c']
 ]
 
 le_tests_deps = [
