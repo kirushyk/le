@@ -19,7 +19,12 @@ train_until_convergence(bool use_normalization)
     LeTensor *y = le_tensor_new(LE_TYPE_FLOAT32, 2, 1, 4,
         0.0, 0.0, 1.0, 1.0
     );
-    
+
+    LeSequential *nn = le_sequential_new();
+    le_sequential_add(nn, LE_LAYER(le_dense_layer_new("FC1", 2, 1)));
+    le_sequential_add(nn, LE_LAYER(le_activation_layer_new("A1", LE_ACTIVATION_SIGMOID)));
+    le_sequential_free(nn);
+
     steps_count = rand() % (use_normalization ? 255 : 1024);
 
     le_tensor_free(y);
