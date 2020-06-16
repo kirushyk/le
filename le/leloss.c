@@ -2,6 +2,7 @@
    Released under the MIT license. See LICENSE file in the project root for full license information. */
 
 #include "leloss.h"
+#include <le/math/leclamp.h>
 #include <assert.h>
 #include <math.h>
 #include <stdbool.h>

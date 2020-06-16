@@ -5,6 +5,8 @@
 #define __LE_H__
 
 #include "lemacros.h"
+#include "math/leclamp.h"
+#include "math/lerand.h"
 #include "tensors/letensor.h"
 #include "tensors/lescalar.h"
 #include "tensors/lematrix.h"

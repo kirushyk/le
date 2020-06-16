@@ -7,6 +7,7 @@ le_sources = [
     'lelist.c',
     'ledataset.c',
     'math/lerand.c',
+    'math/leclamp.c',
     'tensors/letype.c',
     'tensors/leshape.c',
     'tensors/letensor.c',
@@ -53,6 +54,7 @@ install_headers('lepolynomia.h', subdir : 'le')
 install_headers('leloss.h', subdir : 'le')
 install_headers('ledataset.h', subdir : 'le')
 install_headers('math/lerand.h', subdir : 'le/math')
+install_headers('math/leclamp.h', subdir : 'le/math')
 install_headers('tensors/letensor.h', subdir : 'le/tensors')
 install_headers('optimization/leoptimizer.h', subdir : 'le/optimization')
 install_headers('optimization/lebgd.h', subdir : 'le/optimization')
