@@ -28,7 +28,7 @@ train_until_convergence(bool use_normalization)
     return steps_count;
 }
 
-#define TRAIN_COUNT 128
+#define TRAIN_COUNT 100
 
 /** @note: Idea of this test is to check whether normalization will accelerate
  *         gradient descent convergence in 
@@ -42,14 +42,16 @@ main(int argc, char *argv[])
     printf("Training WITHOUT input normalization...\n");
     for (int i = 0; i < TRAIN_COUNT; i++)
     {
+        printf("\33[2K\r%d / %d", i + 1, TRAIN_COUNT);
         steps_till_convergence[i] = train_until_convergence(false);
         mean_steps_count_withoout_norm += steps_till_convergence[i];
     }
     mean_steps_count_withoout_norm /= TRAIN_COUNT;
 
-    printf("Training WITH input normalization...\n");
+    printf("\nTraining WITH input normalization...\n");
     for (int i = 0; i < TRAIN_COUNT; i++)
     {
+        printf("\33[2K\r%d / %d", i + 1, TRAIN_COUNT);
         steps_till_convergence[i] = train_until_convergence(true);
         mean_steps_count_with_norm += steps_till_convergence[i];
     }
@@ -57,7 +59,7 @@ main(int argc, char *argv[])
 
     if (mean_steps_count_with_norm < mean_steps_count_withoout_norm)
     {
-        printf("Average number of steps reduced: %.1f < %.1f\n", mean_steps_count_with_norm, mean_steps_count_withoout_norm);
+        printf("\nAverage number of steps reduced: %.1f < %.1f\n", mean_steps_count_with_norm, mean_steps_count_withoout_norm);
         printf("Input normalization accelerated convergence\n");
         return EXIT_SUCCESS;
     }
