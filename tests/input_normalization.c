@@ -3,17 +3,19 @@
 #include <stdbool.h>
 #include <le/le.h>
 
+#define MAX_STEPS 1000
+
 /** @note: This function will return amount of gradient descent steps taken to
  *         fit shallow neural network to dataset scaled in different dimensions
  */
 unsigned
 train_until_convergence(bool use_normalization)
 {
-    unsigned steps_count = 0;
+    unsigned steps_count = MAX_STEPS;
 
     LeTensor *x = le_tensor_new(LE_TYPE_FLOAT32, 2, 2, 4,
         1.0, 2.0, 3.0, 4.0,
-        400.0, 300.0, 200.0, 100.0
+        40.0, 30.0, 20.0, 10.0
     );
     
     LeTensor *y = le_tensor_new(LE_TYPE_FLOAT32, 2, 1, 4,
@@ -23,9 +25,22 @@ train_until_convergence(bool use_normalization)
     LeSequential *nn = le_sequential_new();
     le_sequential_add(nn, LE_LAYER(le_dense_layer_new("FC1", 2, 1)));
     le_sequential_add(nn, LE_LAYER(le_activation_layer_new("A1", LE_ACTIVATION_SIGMOID)));
+    LeBGD *optimizer = le_bgd_new(LE_MODEL(nn), x, y, 1.0f);
+    for (unsigned i = 0; i <= MAX_STEPS; i++)
+    {
+        le_optimizer_step(LE_OPTIMIZER(optimizer));
+        LeTensor *h = le_model_predict(LE_MODEL(nn), x);
+        float loss = le_logistic_loss(h, y);
+        le_tensor_free(h);
+        if (loss < 1.0f)
+        {
+            steps_count = i;
+            break;
+        }
+    }
+    
+    le_bgd_free(optimizer);
     le_sequential_free(nn);
-
-    steps_count = rand() % (use_normalization ? 255 : 1024);
 
     le_tensor_free(y);
     le_tensor_free(x);
@@ -42,29 +57,34 @@ int
 main(int argc, char *argv[])
 {
     unsigned steps_till_convergence[TRAIN_COUNT];
-    float mean_steps_count_with_norm = 0.0f, mean_steps_count_withoout_norm = 0.0f;
+    float mean_steps_count_with_norm = 0.0f, mean_steps_count_without_norm = 0.0f;
 
     printf("Training WITHOUT input normalization...\n");
     for (int i = 0; i < TRAIN_COUNT; i++)
     {
         printf("\33[2K\r%d / %d", i + 1, TRAIN_COUNT);
+        fflush(stdout);
         steps_till_convergence[i] = train_until_convergence(false);
-        mean_steps_count_withoout_norm += steps_till_convergence[i];
+        mean_steps_count_without_norm += steps_till_convergence[i];
     }
-    mean_steps_count_withoout_norm /= TRAIN_COUNT;
+    mean_steps_count_without_norm /= TRAIN_COUNT;
+    printf("\nAverage number of steps taken: %.1f\n", mean_steps_count_without_norm);
 
-    printf("\nTraining WITH input normalization...\n");
+    printf("Training WITH input normalization...\n");
     for (int i = 0; i < TRAIN_COUNT; i++)
     {
         printf("\33[2K\r%d / %d", i + 1, TRAIN_COUNT);
+        fflush(stdout);
         steps_till_convergence[i] = train_until_convergence(true);
         mean_steps_count_with_norm += steps_till_convergence[i];
     }
     mean_steps_count_with_norm /= TRAIN_COUNT;
+    printf("\nAverage number of steps taken: %.1f\n", mean_steps_count_with_norm);
 
-    if (mean_steps_count_with_norm < mean_steps_count_withoout_norm)
+
+    if (mean_steps_count_with_norm < mean_steps_count_without_norm)
     {
-        printf("\nAverage number of steps reduced: %.1f < %.1f\n", mean_steps_count_with_norm, mean_steps_count_withoout_norm);
+        printf("Average number of steps reduced: %.1f < %.1f\n", mean_steps_count_with_norm, mean_steps_count_without_norm);
         printf("Input normalization accelerated convergence\n");
         return EXIT_SUCCESS;
     }
