@@ -37,6 +37,6 @@ Optimization algorithms supported:
 
 ## License
 
-Copyright &copy; 2017 Kyrylo Polezhaiev and contributors. All rights reserved.
+Copyright &copy; 2017 Kyrylo Polezhaiev. All rights reserved.
 
 Le is released under the [MIT](LICENSE) License.
