@@ -56,7 +56,7 @@ main(int argc, char *argv[])
     le_sequential_add(neural_network,
                       LE_LAYER(le_dense_layer_new("FC_1", 28 * 28, 300)));
     le_sequential_add(neural_network,
-                      LE_LAYER(le_activation_layer_new("ReLU", LE_ACTIVATION_RELU)));
+                      LE_LAYER(le_activation_layer_new("ReLU", LE_ACTIVATION_TANH)));
     le_sequential_add(neural_network,
                       LE_LAYER(le_dense_layer_new("FC_2", 300, 10)));
     le_sequential_add(neural_network,
