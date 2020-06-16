@@ -1,16 +1,38 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
+#include <le/le.h>
 
+/** @note: This function will return amount of gradient descent steps taken to
+ *         fit shallow neural network to dataset scaled in different dimensions
+ */
 unsigned
 train_until_convergence(bool use_normalization)
 {
-    unsigned steps_count = rand() % (use_normalization ? 255 : 1024);
+    unsigned steps_count = 0;
+
+    LeTensor *x = le_tensor_new(LE_TYPE_FLOAT32, 2, 2, 4,
+        1.0, 2.0, 3.0, 4.0,
+        400.0, 300.0, 200.0, 100.0
+    );
+    
+    LeTensor *y = le_tensor_new(LE_TYPE_FLOAT32, 2, 1, 4,
+        0.0, 0.0, 1.0, 1.0
+    );
+    
+    steps_count = rand() % (use_normalization ? 255 : 1024);
+
+    le_tensor_free(y);
+    le_tensor_free(x);
+
     return steps_count;
 }
 
 #define TRAIN_COUNT 128
 
+/** @note: Idea of this test is to check whether normalization will accelerate
+ *         gradient descent convergence in 
+ */
 int
 main(int argc, char *argv[])
 {
