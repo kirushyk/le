@@ -10,6 +10,7 @@
 int
 main(int argc, const char *argv[])
 {
+    sranddev();
     LeTensor *x = le_tensor_new(LE_TYPE_FLOAT32, 2, 2, 4,
         1.0, 2.0, 1.0, 2.0,
         2.0, 2.0, 1.0, 1.0
@@ -44,7 +45,7 @@ main(int argc, const char *argv[])
     le_sequential_to_dot(neural_network, "snn.dot");
     
     LE_INFO("Training Neural Network");
-    LeBGD *optimizer = le_bgd_new(LE_MODEL(neural_network), x, y, 3.f);
+    LeBGD *optimizer = le_bgd_new(LE_MODEL(neural_network), x, y, 1.f);
     for (unsigned i = 0; i <= 1000; i++)
     {
         le_optimizer_step(LE_OPTIMIZER(optimizer));
