@@ -13,10 +13,15 @@ train_until_convergence(bool use_normalization)
 {
     unsigned steps_count = MAX_STEPS;
 
-    LeTensor *x = le_tensor_new(LE_TYPE_FLOAT32, 2, 2, 4,
-        1.0, 2.0, 3.0, 4.0,
-        40.0, 30.0, 20.0, 10.0
-    );
+    LeTensor *x = use_normalization ?
+        le_tensor_new(LE_TYPE_FLOAT32, 2, 2, 4,
+            1.0, 2.0, 3.0, 4.0,
+            4.0, 3.0, 2.0, 1.0
+        ) :
+        le_tensor_new(LE_TYPE_FLOAT32, 2, 2, 4,
+            1.0, 2.0, 3.0, 4.0,
+            40.0, 30.0, 20.0, 10.0
+        );
     
     LeTensor *y = le_tensor_new(LE_TYPE_FLOAT32, 2, 1, 4,
         0.0, 0.0, 1.0, 1.0
