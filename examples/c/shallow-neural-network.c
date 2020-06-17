@@ -3,8 +3,10 @@
 
 #define DEFAULT_LOG_CATEGORY "snn"
 
-#include <stdio.h>
 #include <math.h>
+#include <time.h>
+#include <stdio.h>
+#include <stdlib.h>
 #include <le/le.h>
 
 int
