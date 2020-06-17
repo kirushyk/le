@@ -196,7 +196,8 @@ train_current_model(LEMainWindow *self)
     if (self->train_data == NULL)
         return;
 
-    float learning_rate = atof(gtk_combo_box_text_get_active_text(GTK_COMBO_BOX_TEXT(self->alpha_combo)));
+    float learning_rate = 1.0f;
+    sscanf(gtk_combo_box_text_get_active_text(GTK_COMBO_BOX_TEXT(self->alpha_combo)), "%f", &learning_rate);
     
     switch (self->preferred_model_type)
     {
@@ -212,7 +213,7 @@ train_current_model(LEMainWindow *self)
                 options.kernel = LE_KERNEL_LINEAR;
                 break;
             }
-            options.c = atof(gtk_combo_box_text_get_active_text(GTK_COMBO_BOX_TEXT(self->svm_c_combo)));
+            sscanf(gtk_combo_box_text_get_active_text(GTK_COMBO_BOX_TEXT(self->svm_c_combo)), "%f", &options.c);
             LeTensor *labels = le_tensor_new_copy(le_data_set_get_output(self->train_data));
             le_tensor_apply_sgn(labels);
             le_svm_train((LeSVM *)self->model,
@@ -261,7 +262,7 @@ train_current_model(LEMainWindow *self)
                 options.regularization = LE_REGULARIZATION_NONE;
                 break;
             }
-            options.lambda = atof(gtk_combo_box_text_get_active_text(GTK_COMBO_BOX_TEXT(self->lambda_combo)));
+            sscanf(gtk_combo_box_text_get_active_text(GTK_COMBO_BOX_TEXT(self->lambda_combo)), "%f", &options.lambda);
             le_logistic_classifier_train((LeLogisticClassifier *)self->model,
                 le_data_set_get_input(self->train_data),
                 le_data_set_get_output(self->train_data),
