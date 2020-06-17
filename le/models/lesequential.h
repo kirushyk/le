@@ -28,6 +28,10 @@ void                    le_sequential_set_loss             (LeSequential *      
 LeTensor *              le_sequential_predict              (LeSequential *          model,
                                                             const LeTensor *        x);
 
+LeList *                le_sequential_get_gradients        (LeSequential           *model,
+                                                            const LeTensor         *x, 
+                                                            const LeTensor         *y);
+
 void                    le_sequential_to_dot               (LeSequential *          model,
                                                             const char *            filename);
 
