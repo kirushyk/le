@@ -10,7 +10,12 @@
 int
 main(int argc, const char *argv[])
 {
+#ifdef __APPLE__
     sranddev();
+#else
+    srand(time(0));
+#endif
+
     LeTensor *x = le_tensor_new(LE_TYPE_FLOAT32, 2, 2, 4,
         1.0, 2.0, 1.0, 2.0,
         2.0, 2.0, 1.0, 1.0
