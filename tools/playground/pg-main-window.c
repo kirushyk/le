@@ -293,17 +293,21 @@ create_model(LEMainWindow *self)
     case PREFERRED_MODEL_TYPE_NEURAL_NETWORK:
         self->model = (LeModel *)le_sequential_new();
         le_sequential_add(LE_SEQUENTIAL(self->model),
-                            LE_LAYER(le_dense_layer_new("D1", 2, 50)));
+                            LE_LAYER(le_dense_layer_new("D1", 2, 30)));
         le_sequential_add(LE_SEQUENTIAL(self->model),
                             LE_LAYER(le_activation_layer_new("A1", LE_ACTIVATION_TANH)));
         le_sequential_add(LE_SEQUENTIAL(self->model),
-                            LE_LAYER(le_dense_layer_new("D2", 50, 30)));
+                            LE_LAYER(le_dense_layer_new("D2", 30, 50)));
         le_sequential_add(LE_SEQUENTIAL(self->model),
                             LE_LAYER(le_activation_layer_new("A2", LE_ACTIVATION_TANH)));
         le_sequential_add(LE_SEQUENTIAL(self->model),
-                            LE_LAYER(le_dense_layer_new("D3", 30, 1)));
+                            LE_LAYER(le_dense_layer_new("D3", 50, 30)));
         le_sequential_add(LE_SEQUENTIAL(self->model),
-                            LE_LAYER(le_activation_layer_new("A3", LE_ACTIVATION_SIGMOID)));
+                            LE_LAYER(le_activation_layer_new("A3", LE_ACTIVATION_TANH)));
+        le_sequential_add(LE_SEQUENTIAL(self->model),
+                            LE_LAYER(le_dense_layer_new("D4", 30, 1)));
+        le_sequential_add(LE_SEQUENTIAL(self->model),
+                            LE_LAYER(le_activation_layer_new("A4", LE_ACTIVATION_SIGMOID)));
         le_sequential_set_loss(LE_SEQUENTIAL(self->model), LE_LOSS_LOGISTIC);
         break;
         
