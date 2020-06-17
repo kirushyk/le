@@ -24,7 +24,7 @@ main()
         7.0, 8.0, 9.0
     ));
     tensorlist = le_list_append(tensorlist, le_matrix_new_zeros(LE_TYPE_FLOAT32, 300, 300));
-    tensorlist = le_list_append(tensorlist, le_matrix_new_rand_f32(50, 50));
+    tensorlist = le_list_append(tensorlist, le_matrix_new_rand_f32(LE_DISTRIBUTION_UNIFORM, 50, 50));
     tensorlist = le_list_append(tensorlist, le_tensor_new(LE_TYPE_INT16, 2, 5, 5,
         5, 4, 3, 2, 1,
         6, 5, 4, 3, 2,

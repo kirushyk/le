@@ -7,6 +7,7 @@
 #define __LEMATRIX_H__
 
 #include <le/lemacros.h>
+#include <le/math/lerand.h>
 #include "letensor.h"
 
 LE_BEGIN_DECLS
@@ -112,7 +113,8 @@ LeTensor *         le_matrix_new_zeros                     (LeType              
                                                             unsigned                height,
                                                             unsigned                width);
 
-LeTensor *         le_matrix_new_rand_f32                  (unsigned                height,
+LeTensor *         le_matrix_new_rand_f32                  (LeDistribution          distribution,
+                                                            unsigned                height,
                                                             unsigned                width);
 
 LeTensor *         le_matrix_new_transpose                 (LeTensor *              a);

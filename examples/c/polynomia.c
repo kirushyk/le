@@ -7,7 +7,7 @@
 int
 main(int argc, const char *argv[])
 {
-    LeTensor *a = le_matrix_new_rand_f32(2, 4);
+    LeTensor *a = le_matrix_new_rand_f32(LE_DISTRIBUTION_UNIFORM, 2, 4);
     printf("a =\n");
     le_tensor_print(a, stdout);
     

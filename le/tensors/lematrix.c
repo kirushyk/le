@@ -373,7 +373,7 @@ le_matrix_new_zeros(LeType type, unsigned height, unsigned width)
 
 
 LeTensor *
-le_matrix_new_rand_f32(unsigned height, unsigned width)
+le_matrix_new_rand_f32(LeDistribution distribution, unsigned height, unsigned width)
 {
     unsigned i;
     unsigned elements_count;
@@ -389,7 +389,7 @@ le_matrix_new_rand_f32(unsigned height, unsigned width)
     
     for (i = 0; i < elements_count; i++)
     {
-        ((float *)self->data)[i] = le_random_normal_f32();
+        ((float *)self->data)[i] = le_random_f32(distribution);
     }
     
     return self;
