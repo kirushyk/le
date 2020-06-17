@@ -57,9 +57,7 @@ render_image(uint8_t *data)
 static gboolean
 draw_callback(GtkWidget *widget, cairo_t *cr, gpointer data)
 {
-    LEMainWindow *window;
-
-    window = LE_MAIN_WINDOW(data);
+    LEMainWindow *window = LE_MAIN_WINDOW(data);
     
     if (window->image_visualisation)
     {

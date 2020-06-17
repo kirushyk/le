@@ -57,14 +57,10 @@ G_DEFINE_TYPE(LEMainWindow, le_main_window, GTK_TYPE_APPLICATION_WINDOW);
 
 static gboolean
 draw_callback(GtkWidget *widget, cairo_t *cr, gpointer data)
-{
-    gint i;
-    guint width, height;
-    LEMainWindow *window;
-    
-    width = gtk_widget_get_allocated_width(widget);
-    height = gtk_widget_get_allocated_height(widget);
-    window = LE_MAIN_WINDOW(data);
+{   
+    guint width = gtk_widget_get_allocated_width(widget);
+    guint height = gtk_widget_get_allocated_height(widget);
+    LEMainWindow *window = LE_MAIN_WINDOW(data);
     
     window->dark ? cairo_set_source_rgba(cr, 0.0, 0.0, 0.0, 1.0) : cairo_set_source_rgba(cr, 1.0, 1.0, 1.0, 1.0);
     cairo_rectangle(cr, 0, 0, width, height);
@@ -81,7 +77,7 @@ draw_callback(GtkWidget *widget, cairo_t *cr, gpointer data)
         LeTensor *input = le_data_set_get_input(window->train_data);
         LeTensor *output = le_data_set_get_output(window->train_data);
         gint examples_count = le_matrix_get_width(input);
-        for (i = 0; i < examples_count; i++)
+        for (gint i = 0; i < examples_count; i++)
         {
             double x = width * 0.5 + height * 0.5 * le_matrix_at_f32(input, 0, i);
             double y = height * 0.5 - height * 0.5 * le_matrix_at_f32(input, 1, i);
@@ -104,7 +100,7 @@ draw_callback(GtkWidget *widget, cairo_t *cr, gpointer data)
         LeTensor *input = le_data_set_get_input(window->test_data);
         LeTensor *output = le_data_set_get_output(window->test_data);;
         gint examples_count = le_matrix_get_width(input);
-        for (i = 0; i < examples_count; i++)
+        for (gint i = 0; i < examples_count; i++)
         {
             double x = width * 0.5 + height * 0.5 * le_matrix_at_f32(input, 0, i);
             double y = height * 0.5 - height * 0.5 * le_matrix_at_f32(input, 1, i);

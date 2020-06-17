@@ -39,10 +39,7 @@ le_startup(GApplication *application, gpointer user_data)
 
 int
 main(int argc, char *argv[])
-{
-    GtkApplication *app;
-    int status;
-    
+{    
 #if __APPLE__
     sranddev();
 #else
@@ -53,10 +50,10 @@ main(int argc, char *argv[])
     g_set_prgname("le-gtk-demo");
     g_set_application_name("Le Playground");
     
-    app = gtk_application_new("com.github.kirushyk.le.gtk-demo", G_APPLICATION_HANDLES_OPEN);
+    GtkApplication *app = gtk_application_new("com.github.kirushyk.le.gtk-demo", G_APPLICATION_HANDLES_OPEN);
     g_signal_connect(app, "activate", G_CALLBACK(le_activate), NULL);
     g_signal_connect(app, "startup", G_CALLBACK(le_startup), NULL);
-    status = g_application_run(G_APPLICATION(app), argc, argv);
+    int status = g_application_run(G_APPLICATION(app), argc, argv);
     g_object_unref(app);
     
     return status;

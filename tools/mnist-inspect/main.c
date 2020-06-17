@@ -20,8 +20,7 @@ static GActionEntry app_entries[] =
 static void
 le_activate(GtkApplication *application, gpointer user_data)
 {
-    GtkWidget *window;
-    window = le_main_window_new(application);
+    GtkWidget *window = le_main_window_new(application);
     gtk_widget_show_all(window);
 }
 
@@ -36,17 +35,14 @@ le_startup(GApplication *application, gpointer user_data)
 
 int
 main(int argc, char *argv[])
-{
-    GtkApplication *app;
-    int status;
-    
+{    
     g_set_prgname("le-mnist-inspect");
     g_set_application_name("Le MNIST Inspect");
     
-    app = gtk_application_new("org.kirushyk.le-mnist-inspect", G_APPLICATION_HANDLES_OPEN);
+    GtkApplication *app = gtk_application_new("org.kirushyk.le-mnist-inspect", G_APPLICATION_HANDLES_OPEN);
     g_signal_connect(app, "activate", G_CALLBACK(le_activate), NULL);
     g_signal_connect(app, "startup", G_CALLBACK(le_startup), NULL);
-    status = g_application_run(G_APPLICATION(app), argc, argv);
+    int status = g_application_run(G_APPLICATION(app), argc, argv);
     g_object_unref(app);
     
     return status;
