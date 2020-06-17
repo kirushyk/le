@@ -32,6 +32,10 @@ LeList *                le_sequential_get_gradients        (LeSequential        
                                                             const LeTensor         *x, 
                                                             const LeTensor         *y);
 
+LeList *                le_sequential_check_gradients      (LeSequential           *model,
+                                                            const LeTensor         *x, 
+                                                            const LeTensor         *y);
+
 void                    le_sequential_to_dot               (LeSequential *          model,
                                                             const char *            filename);
 
