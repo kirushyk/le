@@ -99,18 +99,18 @@ le_matrix_at_u32(const LeTensor *self, unsigned y, unsigned x)
 
 void
 le_matrix_add(LeTensor *self, const LeTensor *another)
-{
-    unsigned x, y;
-    
+{    
+    assert(self->stride == le_shape_get_last_size(self->shape));
+    assert(another->stride == le_shape_get_last_size(another->shape));
     assert(self->shape->num_dimensions == 2);
     
     /// @note: Add horizontal broadcasting
     assert(self->shape->sizes[0] == another->shape->sizes[0]);
     assert(another->shape->sizes[1] == 1);
     
-    for (y = 0; y < self->shape->sizes[0]; y++)
+    for (unsigned y = 0; y < self->shape->sizes[0]; y++)
     {
-        for (x = 0; x < self->shape->sizes[1]; x++)
+        for (unsigned x = 0; x < self->shape->sizes[1]; x++)
         {
             /// @todo: Take stride into account
             ((float *)self->data)[y * self->stride + x] += ((float *)another->data)[y];
