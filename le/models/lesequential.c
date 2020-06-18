@@ -204,16 +204,20 @@ le_sequential_estimate_gradients(LeSequential *self, const LeTensor *x, const Le
         unsigned elements_count = le_shape_get_elements_count(param->shape);
         for (unsigned i = 0; i < elements_count; i++)
         {
-            const float param_scalar = le_tensor_at_f32(param, i);
+            const float element = le_tensor_at_f32(param, i);
             const float epsilon = 1e-5f;
-            le_tensor_set_f32(param, i, param_scalar + epsilon);
-            LeTensor *out = forward_propagation(self, x, NULL);
-            le_tensor_free(out);
-            le_tensor_set_f32(param, i, param_scalar - epsilon);
-            out = forward_propagation(self, x, NULL);
-            le_tensor_free(out);
+            le_tensor_set_f32(param, i, element + epsilon);
+            LeTensor *h = forward_propagation(self, x, NULL);
+            const float j_plus = le_loss(self->loss, h, y);
+            le_tensor_free(h);
+            le_tensor_set_f32(param, i, element - epsilon);
+            h = forward_propagation(self, x, NULL);
+            const float j_minus = le_loss(self->loss, h, y);
+            le_tensor_free(h);
+            const float element_grad_estimate = (j_plus - j_minus) / 2.0f * epsilon;
+            le_tensor_set_f32(grad_estimate, i, element_grad_estimate);
             /// @note: We need to restore initial parameter
-            le_tensor_set_f32(param, i, param_scalar);
+            le_tensor_set_f32(param, i, element);
         }
         grad_estimates = le_list_append(grad_estimates, grad_estimate);
     }
