@@ -3,6 +3,8 @@
 #include <stdbool.h>
 #include <le/le.h>
 
+#define DEFAULT_LOG_CATEGORY "gradcheck"
+
 int
 main(int argc, char *argv[])
 {
@@ -25,6 +27,26 @@ main(int argc, char *argv[])
     }
     LeList *gradients = le_model_get_gradients(LE_MODEL(nn), x, y);
     LeList *gradients_estimations = le_sequential_estimate_gradients(nn, x, y);
+    LeList *gradients_iterator, *gradients_estimations_iterator;
+    for (gradients_iterator = gradients, gradients_estimations_iterator = gradients_estimations;
+         gradients_iterator && gradients_estimations_iterator;
+         gradients_iterator = gradients_iterator->next, gradients_estimations_iterator = gradients_estimations_iterator->next)
+    {
+        LeTensor *gradient_estimate = (LeTensor *)gradients_estimations_iterator->data;
+        LeTensor *gradient = (LeTensor *)gradients_iterator->data;
+    }
+
+    if (gradients_iterator)
+    {
+        LE_ERROR("Some gradients estimations missing or extra gradients present");
+        return EXIT_FAILURE;
+    }
+
+    if (gradients_estimations_iterator)
+    {
+        LE_ERROR("Some gradients missing or extra gradients estimations present");
+        return EXIT_FAILURE;
+    }
     le_list_foreach(gradients_estimations, (LeFunction)le_tensor_free);
     le_list_foreach(gradients, (LeFunction)le_tensor_free);
     le_bgd_free(optimizer);
