@@ -21,7 +21,7 @@ category_present(const char *category)
     /// @todo: Use secure_getenv
     char *le_debug = getenv("LE_DEBUG");
     if (le_debug == NULL)
-        return true;
+        return false;
 
     static bool categories_parsed = false;
     static LeList *categories_requested = NULL;
