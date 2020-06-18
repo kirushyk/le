@@ -11,6 +11,7 @@ main(int argc, char *argv[])
     LeSequential *nn = le_sequential_new();
     le_sequential_add(nn, LE_LAYER(le_dense_layer_new("FC1", 2, 1)));
     le_sequential_add(nn, LE_LAYER(le_activation_layer_new("A1", LE_ACTIVATION_SIGMOID)));
+    le_sequential_set_loss(nn, LE_LOSS_LOGISTIC);
 
     printf("Pretraining...\n");
     LeTensor *x = le_tensor_new(LE_TYPE_FLOAT32, 2, 2, 4,
@@ -28,6 +29,7 @@ main(int argc, char *argv[])
     LeList *gradients = le_model_get_gradients(LE_MODEL(nn), x, y);
     LeList *gradients_estimations = le_sequential_estimate_gradients(nn, x, y);
     LeList *gradients_iterator, *gradients_estimations_iterator;
+    bool mismatch_found = false;
     for (gradients_iterator = gradients, gradients_estimations_iterator = gradients_estimations;
          gradients_iterator && gradients_estimations_iterator;
          gradients_iterator = gradients_iterator->next, gradients_estimations_iterator = gradients_estimations_iterator->next)
@@ -42,7 +44,7 @@ main(int argc, char *argv[])
             if (normalized_distance > 1e-7f)
             {
                 LE_ERROR("Normalized distance between gradient estimation and actual gradient to large: %f\n", normalized_distance);
-                return EXIT_FAILURE;
+                mismatch_found = true;
             }
         }
     }
@@ -54,6 +56,10 @@ main(int argc, char *argv[])
     if (gradients_estimations_iterator)
     {
         LE_ERROR("Some gradients missing or extra gradients estimations present");
+        return EXIT_FAILURE;
+    }
+    if (mismatch_found)
+    {
         return EXIT_FAILURE;
     }
     le_list_foreach(gradients_estimations, (LeFunction)le_tensor_free);
