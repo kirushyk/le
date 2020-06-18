@@ -134,6 +134,8 @@ float              le_tensor_sum_f32                       (const LeTensor *    
 float              le_tensor_sad_f32                       (const LeTensor *        a,
                                                             const LeTensor *        b);
 
+float              le_tensor_l2_f32                        (const LeTensor *        tensor);
+
 void               le_tensor_apply_sigmoid                 (LeTensor *              tensor);
 
 void               le_tensor_apply_sigmoid_prime           (LeTensor *              tensor);
