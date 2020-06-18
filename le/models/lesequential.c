@@ -193,6 +193,16 @@ le_sequential_estimate_gradients(LeSequential *self, const LeTensor *x, const Le
     assert(y);
 
     LeList *grad_estimates = NULL;
+
+    for (LeList *params_iterator = LE_MODEL(self)->parameters;
+         params_iterator;
+         params_iterator = params_iterator->next)
+    {
+        LeTensor *param = LE_TENSOR(params_iterator->data);
+        LeTensor *grad_estimate = le_tensor_new_zeros_like(param);
+        grad_estimates = le_list_prepend(grad_estimates, grad_estimate);
+    }
+
     return grad_estimates;
 }
 
