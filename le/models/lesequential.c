@@ -224,6 +224,49 @@ le_sequential_estimate_gradients(LeSequential *self, const LeTensor *x, const Le
     return grad_estimates;
 }
 
+
+float
+le_sequential_check_gradients(LeSequential *self, const LeTensor *x, const LeTensor *y, float epsilon)
+{
+    LeList *gradients = le_model_get_gradients(LE_MODEL(self), x, y);
+    LeList *gradients_estimations = le_sequential_estimate_gradients(self, x, y, epsilon);
+    LeList *gradients_iterator, *gradients_estimations_iterator;
+    float average_normalized_distance = 0.0f;
+    for (gradients_iterator = gradients, gradients_estimations_iterator = gradients_estimations;
+         gradients_iterator && gradients_estimations_iterator;
+         gradients_iterator = gradients_iterator->next, gradients_estimations_iterator = gradients_estimations_iterator->next)
+    {
+        LeTensor *gradient_estimate = (LeTensor *)gradients_estimations_iterator->data;
+        LE_INFO("gradient_estimate =\n%s", le_tensor_to_cstr(gradient_estimate));
+        LeTensor *gradient = (LeTensor *)gradients_iterator->data;
+        LE_INFO("gradient =\n%s", le_tensor_to_cstr(gradient));
+        float denominator = le_tensor_l2_f32(gradient) + le_tensor_l2_f32(gradient_estimate);
+        float normalized_distance = 1.0f;
+        if (denominator > 0.0f)
+        {
+            le_tensor_sub(gradient_estimate, gradient);
+            normalized_distance = le_tensor_l2_f32(gradient_estimate) / denominator;
+            LE_INFO("Normalized distance between gradient estimation and actual gradient: %f", normalized_distance);
+            if (normalized_distance > epsilon)
+            {
+                LE_WARNING("Normalized distance too large: %f", normalized_distance);
+            }
+        }
+        average_normalized_distance += normalized_distance;
+    }
+    if (gradients_iterator)
+    {
+        LE_WARNING("Some gradients estimations missing or extra gradients present");
+    }
+    if (gradients_estimations_iterator)
+    {
+        LE_ERROR("Some gradients missing or extra gradients estimations present");
+    }
+    le_list_foreach(gradients_estimations, (LeFunction)le_tensor_free);
+    le_list_foreach(gradients, (LeFunction)le_tensor_free);
+    return average_normalized_distance;
+}
+
 void
 le_sequential_to_dot(LeSequential *self, const char *filename)
 {
