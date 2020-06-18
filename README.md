@@ -15,8 +15,8 @@ At this moment following ML models are implemented:
 
 Optimization algorithms supported:
 * Batch Gradient Descent (BGD).
-* Sequential Minimal Optimization (SMO).
 * Stochastic Gradient Descent (SGD) with momentum.
+* Sequential Minimal Optimization (SMO).
 
 ## Installation
 
