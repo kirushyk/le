@@ -18,6 +18,7 @@ static const char *le_level_name[(size_t)LE_LOG_LEVEL_LAST] =
 bool
 category_present(const char *category)
 {
+    /// @todo: Use secure_getenv
     char *le_debug = getenv("LE_DEBUG");
     if (le_debug == NULL)
         return true;
