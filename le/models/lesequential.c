@@ -124,6 +124,16 @@ le_sequential_predict(LeSequential *self, const LeTensor *x)
     return forward_propagation(self, x, NULL);
 }
 
+float 
+le_sequential_compute_cost(LeSequential *self, const LeTensor *x, const LeTensor *y)
+{
+    /// @todo: Take regularization term into account;
+    LeTensor *h = forward_propagation(self, x, NULL);
+    const float j = le_loss(self->loss, h, y);
+    le_tensor_free(h);
+    return j;
+}
+
 LeList *
 le_sequential_get_gradients(LeSequential *self, const LeTensor *x, const LeTensor *y)
 {
@@ -206,13 +216,9 @@ le_sequential_estimate_gradients(LeSequential *self, const LeTensor *x, const Le
         {
             const float element = le_tensor_at_f32(param, i);
             le_tensor_set_f32(param, i, element + epsilon);
-            LeTensor *h = forward_propagation(self, x, NULL);
-            const float j_plus = le_loss(self->loss, h, y);
-            le_tensor_free(h);
+            const float j_plus = le_sequential_compute_cost(self, x, y);
             le_tensor_set_f32(param, i, element - epsilon);
-            h = forward_propagation(self, x, NULL);
-            const float j_minus = le_loss(self->loss, h, y);
-            le_tensor_free(h);
+            const float j_minus = le_sequential_compute_cost(self, x, y);
             const float element_grad_estimate = (j_plus - j_minus) / 2.0f * epsilon;
             le_tensor_set_f32(grad_estimate, i, element_grad_estimate);
             /// @note: We need to restore initial parameter
