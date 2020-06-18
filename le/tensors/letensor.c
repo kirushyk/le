@@ -693,7 +693,6 @@ le_tensor_l2_f32(const LeTensor *tensor)
     l2 = sqrtf(l2);
     
     return l2;
-
 }
 
 #ifndef __APPLE__
