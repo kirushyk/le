@@ -63,6 +63,7 @@ main(int argc, const char *argv[])
             LeTensor *h = le_model_predict(LE_MODEL(neural_network), x);
             LE_INFO("Training Error = %f", le_logistic_loss(h, y));
             le_tensor_free(h);
+            LE_INFO("Gradcheck. Average Normalized Euclidian Distance = %f", le_sequential_check_gradients(neural_network, x, y, 1e-3f));
         }
     }
     
