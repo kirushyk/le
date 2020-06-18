@@ -35,11 +35,9 @@ main(int argc, char *argv[])
          gradients_iterator = gradients_iterator->next, gradients_estimations_iterator = gradients_estimations_iterator->next)
     {
         LeTensor *gradient_estimate = (LeTensor *)gradients_estimations_iterator->data;
-        printf("gradient_estimate = \n");
-        le_tensor_print(gradient_estimate, stdout);
+        LE_INFO("gradient_estimate =\n%s", le_tensor_to_cstr(gradient_estimate));
         LeTensor *gradient = (LeTensor *)gradients_iterator->data;
-        printf("gradient = \n");
-        le_tensor_print(gradient, stdout);
+        LE_INFO("gradient =\n%s", le_tensor_to_cstr(gradient));
         float denominator = le_tensor_l2_f32(gradient) + le_tensor_l2_f32(gradient_estimate);
         if (denominator > 0.0f)
         {
