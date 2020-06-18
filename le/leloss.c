@@ -64,6 +64,27 @@ le_cross_entropy_loss(const LeTensor *h, const LeTensor *y)
 }
 
 float
+le_mse_loss(const LeTensor *h, const LeTensor *y)
+{
+    assert(h->shape->num_dimensions == 2);
+    assert(y->shape->num_dimensions == 2);
+    assert(le_shape_equal(h->shape, y->shape));
+    assert(h->element_type == LE_TYPE_FLOAT32);
+    assert(y->element_type == LE_TYPE_FLOAT32);
+
+    float mse = 0.0;
+    unsigned elements_count = le_shape_get_elements_count(h->shape);
+    /// @todo: Speed up this
+    for (unsigned i = 0; i < elements_count; i++)
+    {
+        float d = le_tensor_at_f32(h, i) - le_tensor_at_f32(y, i);
+        mse += d * d;
+    }
+    
+    return mse;
+}
+
+float
 le_one_hot_misclassification(const LeTensor *h, const LeTensor *y)
 {
     assert(h->shape->num_dimensions == 2);
@@ -178,6 +199,7 @@ le_loss(LeLoss loss, const LeTensor *predictions, const LeTensor *labels)
     case LE_LOSS_CROSS_ENTROPY:
         return le_cross_entropy_loss(predictions, labels);
     case LE_LOSS_MSE:
+        return le_mse_loss(predictions, labels);
     default:
         return 0.0f;
     }
