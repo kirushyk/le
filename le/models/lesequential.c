@@ -8,6 +8,7 @@
 #include <stdlib.h>
 #include <le/lelog.h>
 #include <le/leloss.h>
+#include <le/tensors/letensor-imp.h>
 #include "lelist.h"
 #include <le/tensors/lematrix.h>
 
@@ -200,6 +201,20 @@ le_sequential_estimate_gradients(LeSequential *self, const LeTensor *x, const Le
     {
         LeTensor *param = LE_TENSOR(params_iterator->data);
         LeTensor *grad_estimate = le_tensor_new_zeros_like(param);
+        unsigned elements_count = le_shape_get_elements_count(param->shape);
+        for (unsigned i = 0; i < elements_count; i++)
+        {
+            const float param_scalar = le_tensor_at_f32(param, i);
+            const float epsilon = 1e-5f;
+            le_tensor_set_f32(param, i, param_scalar + epsilon);
+            LeTensor *out = forward_propagation(self, x, NULL);
+            le_tensor_free(out);
+            le_tensor_set_f32(param, i, param_scalar - epsilon);
+            out = forward_propagation(self, x, NULL);
+            le_tensor_free(out);
+            /// @note: We need to restore initial parameter
+            le_tensor_set_f32(param, i, param_scalar);
+        }
         grad_estimates = le_list_prepend(grad_estimates, grad_estimate);
     }
 
