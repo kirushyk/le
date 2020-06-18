@@ -187,7 +187,7 @@ le_sequential_get_gradients(LeSequential *self, const LeTensor *x, const LeTenso
 }
 
 LeList *
-le_sequential_estimate_gradients(LeSequential *self, const LeTensor *x, const LeTensor *y)
+le_sequential_estimate_gradients(LeSequential *self, const LeTensor *x, const LeTensor *y, float epsilon)
 {
     assert(self);
     assert(x);
@@ -205,7 +205,6 @@ le_sequential_estimate_gradients(LeSequential *self, const LeTensor *x, const Le
         for (unsigned i = 0; i < elements_count; i++)
         {
             const float element = le_tensor_at_f32(param, i);
-            const float epsilon = 1e-5f;
             le_tensor_set_f32(param, i, element + epsilon);
             LeTensor *h = forward_propagation(self, x, NULL);
             const float j_plus = le_loss(self->loss, h, y);

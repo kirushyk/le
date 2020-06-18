@@ -27,7 +27,7 @@ main(int argc, char *argv[])
         le_optimizer_step(LE_OPTIMIZER(optimizer));
     }
     LeList *gradients = le_model_get_gradients(LE_MODEL(nn), x, y);
-    LeList *gradients_estimations = le_sequential_estimate_gradients(nn, x, y);
+    LeList *gradients_estimations = le_sequential_estimate_gradients(nn, x, y, 1e-5f);
     LeList *gradients_iterator, *gradients_estimations_iterator;
     bool mismatch_found = false;
     for (gradients_iterator = gradients, gradients_estimations_iterator = gradients_estimations;

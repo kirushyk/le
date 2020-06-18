@@ -34,7 +34,8 @@ LeList *                le_sequential_get_gradients        (LeSequential        
 
 LeList *                le_sequential_estimate_gradients   (LeSequential           *model,
                                                             const LeTensor         *x, 
-                                                            const LeTensor         *y);
+                                                            const LeTensor         *y,
+                                                            float                   epsilon);
 
 void                    le_sequential_to_dot               (LeSequential *          model,
                                                             const char *            filename);
