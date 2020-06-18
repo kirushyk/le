@@ -186,7 +186,7 @@ le_sequential_get_gradients(LeSequential *self, const LeTensor *x, const LeTenso
 }
 
 LeList *
-le_sequential_check_gradients(LeSequential *self, const LeTensor *x, const LeTensor *y)
+le_sequential_estimate_gradients(LeSequential *self, const LeTensor *x, const LeTensor *y)
 {
     assert(self);
     assert(x);

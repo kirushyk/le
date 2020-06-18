@@ -32,7 +32,7 @@ LeList *                le_sequential_get_gradients        (LeSequential        
                                                             const LeTensor         *x, 
                                                             const LeTensor         *y);
 
-LeList *                le_sequential_check_gradients      (LeSequential           *model,
+LeList *                le_sequential_estimate_gradients   (LeSequential           *model,
                                                             const LeTensor         *x, 
                                                             const LeTensor         *y);
 
