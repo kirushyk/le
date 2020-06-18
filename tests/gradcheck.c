@@ -22,6 +22,7 @@ main(int argc, char *argv[])
     le_sequential_add(nn, LE_LAYER(le_dense_layer_new("FC1", 2, 1)));
     le_sequential_add(nn, LE_LAYER(le_activation_layer_new("A1", LE_ACTIVATION_SIGMOID)));
     le_sequential_set_loss(nn, LE_LOSS_LOGISTIC);
+    LE_INFO("cost = %f", le_sequential_compute_cost(nn, x, y));
     float average_normalized_distance = le_sequential_check_gradients(nn, x, y, epsilon);
     LE_INFO("average normalized distance = %f", average_normalized_distance);
     bool failed = (average_normalized_distance < epsilon);
@@ -32,6 +33,7 @@ main(int argc, char *argv[])
     {
         le_optimizer_step(LE_OPTIMIZER(optimizer));
     }  
+    LE_INFO("cost = %f", le_sequential_compute_cost(nn, x, y));
     average_normalized_distance = le_sequential_check_gradients(nn, x, y, epsilon);
     LE_INFO("average normalized distance = %f", average_normalized_distance);
     failed |= (average_normalized_distance < epsilon);
@@ -42,6 +44,7 @@ main(int argc, char *argv[])
         le_optimizer_step(LE_OPTIMIZER(optimizer));
     }
     le_bgd_free(optimizer);
+    LE_INFO("cost = %f", le_sequential_compute_cost(nn, x, y));
     average_normalized_distance = le_sequential_check_gradients(nn, x, y, epsilon);
     LE_INFO("average normalized distance = %f", average_normalized_distance);
     failed |= (average_normalized_distance < epsilon);
