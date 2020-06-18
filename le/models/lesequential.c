@@ -215,7 +215,7 @@ le_sequential_estimate_gradients(LeSequential *self, const LeTensor *x, const Le
             /// @note: We need to restore initial parameter
             le_tensor_set_f32(param, i, param_scalar);
         }
-        grad_estimates = le_list_prepend(grad_estimates, grad_estimate);
+        grad_estimates = le_list_append(grad_estimates, grad_estimate);
     }
 
     return grad_estimates;
