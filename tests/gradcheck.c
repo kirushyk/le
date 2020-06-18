@@ -35,15 +35,20 @@ main(int argc, char *argv[])
          gradients_iterator = gradients_iterator->next, gradients_estimations_iterator = gradients_estimations_iterator->next)
     {
         LeTensor *gradient_estimate = (LeTensor *)gradients_estimations_iterator->data;
+        printf("gradient_estimate = \n");
+        le_tensor_print(gradient_estimate, stdout);
         LeTensor *gradient = (LeTensor *)gradients_iterator->data;
+        printf("gradient = \n");
+        le_tensor_print(gradient, stdout);
         float denominator = le_tensor_l2_f32(gradient) + le_tensor_l2_f32(gradient_estimate);
         if (denominator > 0.0f)
         {
             le_tensor_sub(gradient_estimate, gradient);
             float normalized_distance = le_tensor_l2_f32(gradient_estimate) / denominator;
+            LE_INFO("Normalized distance between gradient estimation and actual gradient: %f", normalized_distance);
             if (normalized_distance > 1e-7f)
             {
-                LE_ERROR("Normalized distance between gradient estimation and actual gradient to large: %f\n", normalized_distance);
+                LE_ERROR("Normalized distance too large: %f", normalized_distance);
                 mismatch_found = true;
             }
         }
