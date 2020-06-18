@@ -684,7 +684,8 @@ le_tensor_l2_f32(const LeTensor *tensor)
 
     float l2 = 0.0;
     unsigned elements_count = le_shape_get_elements_count(tensor->shape);
-        for (unsigned i = 0; i < elements_count; i++)
+    /// @todo: Speed up this
+    for (unsigned i = 0; i < elements_count; i++)
     {
         float v = le_tensor_at_f32(tensor, i);
         l2 += v * v;
