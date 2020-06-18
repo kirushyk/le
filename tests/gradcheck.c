@@ -8,6 +8,12 @@
 int
 main(int argc, char *argv[])
 {
+#ifdef __APPLE__
+    sranddev();
+#else
+    srand(time(NULL));
+#endif
+
     const float epsilon = 1e-7f;
     LeTensor *x = le_tensor_new(LE_TYPE_FLOAT32, 2, 2, 4,
         1.0, 2.0, 3.0, 4.0,
@@ -29,7 +35,7 @@ main(int argc, char *argv[])
 
     LE_INFO("Pretraining...");
     LeBGD *optimizer = le_bgd_new(LE_MODEL(nn), x, y, 1.0f);
-    for (unsigned i = 0; i <= 10; i++)
+    for (unsigned i = 0; i <= 5; i++)
     {
         le_optimizer_step(LE_OPTIMIZER(optimizer));
     }  
@@ -39,7 +45,7 @@ main(int argc, char *argv[])
     failed |= (average_normalized_distance < epsilon);
 
     LE_INFO("Training...");
-    for (unsigned i = 0; i <= 500; i++)
+    for (unsigned i = 0; i <= 50; i++)
     {
         le_optimizer_step(LE_OPTIMIZER(optimizer));
     }
