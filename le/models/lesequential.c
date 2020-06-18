@@ -232,6 +232,7 @@ le_sequential_check_gradients(LeSequential *self, const LeTensor *x, const LeTen
     LeList *gradients_estimations = le_sequential_estimate_gradients(self, x, y, epsilon);
     LeList *gradients_iterator, *gradients_estimations_iterator;
     float average_normalized_distance = 0.0f;
+    unsigned parameter_number = 0;
     for (gradients_iterator = gradients, gradients_estimations_iterator = gradients_estimations;
          gradients_iterator && gradients_estimations_iterator;
          gradients_iterator = gradients_iterator->next, gradients_estimations_iterator = gradients_estimations_iterator->next)
@@ -249,11 +250,13 @@ le_sequential_check_gradients(LeSequential *self, const LeTensor *x, const LeTen
             LE_INFO("Normalized distance between gradient estimation and actual gradient: %f", normalized_distance);
             if (normalized_distance > epsilon)
             {
-                LE_WARNING("Normalized distance too large: %f", normalized_distance);
+                LE_WARNING("Normalized distance too large for parameter #%u: %f", parameter_number, normalized_distance);
             }
         }
         average_normalized_distance += normalized_distance;
+        parameter_number++;
     }
+    average_normalized_distance /= parameter_number;
     if (gradients_iterator)
     {
         LE_WARNING("Some gradients estimations missing or extra gradients present");
