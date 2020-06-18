@@ -34,14 +34,23 @@ main(int argc, char *argv[])
     {
         LeTensor *gradient_estimate = (LeTensor *)gradients_estimations_iterator->data;
         LeTensor *gradient = (LeTensor *)gradients_iterator->data;
+        float denominator = le_tensor_l2_f32(gradient) + le_tensor_l2_f32(gradient_estimate);
+        if (denominator > 0.0f)
+        {
+            le_tensor_sub(gradient_estimate, gradient);
+            float normalized_distance = le_tensor_l2_f32(gradient_estimate) / denominator;
+            if (normalized_distance > 1e-7f)
+            {
+                LE_ERROR("Normalized distance between gradient estimation and actual gradient to large: %f\n", normalized_distance);
+                return EXIT_FAILURE;
+            }
+        }
     }
-
     if (gradients_iterator)
     {
         LE_ERROR("Some gradients estimations missing or extra gradients present");
         return EXIT_FAILURE;
     }
-
     if (gradients_estimations_iterator)
     {
         LE_ERROR("Some gradients missing or extra gradients estimations present");
