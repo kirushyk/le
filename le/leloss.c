@@ -81,7 +81,7 @@ le_mse_loss(const LeTensor *h, const LeTensor *y)
         mse += d * d;
     }
     
-    return mse;
+    return 0.5f * mse;
 }
 
 float
