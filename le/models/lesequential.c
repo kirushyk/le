@@ -8,6 +8,7 @@
 #include <stdlib.h>
 #include <le/lelog.h>
 #include <le/leloss.h>
+#include <le/models/layers/leactivationlayer.h>
 #include <le/tensors/letensor-imp.h>
 #include "lelist.h"
 #include <le/tensors/lematrix.h>
@@ -134,6 +135,14 @@ le_sequential_compute_cost(LeSequential *self, const LeTensor *x, const LeTensor
     return j;
 }
 
+bool
+sub_will_work(LeActivation activation, LeLoss loss)
+{
+    return (activation == LE_ACTIVATION_SOFTMAX && loss == LE_LOSS_CROSS_ENTROPY) ||
+        (activation == LE_ACTIVATION_SIGMOID && loss == LE_LOSS_LOGISTIC) ||
+        (activation == LE_ACTIVATION_LINEAR && loss == LE_LOSS_MSE); /// @note: Any linear layer will work
+}
+
 LeList *
 le_sequential_get_gradients(LeSequential *self, const LeTensor *x, const LeTensor *y)
 {
@@ -150,15 +159,27 @@ le_sequential_get_gradients(LeSequential *self, const LeTensor *x, const LeTenso
     LE_INFO("Output stats:\n\tmin: %f\n\tmax: %f\n\tmean: %f\n\tdeviation: %f", signal_stats.min, signal_stats.max, signal_stats.mean, signal_stats.deviation);
 
     LE_INFO("Back Propagation");
-    /// @note: Derivative of assumed cost function
-    le_apply_loss_derivative(self->loss, signal, y);
-    LE_INFO("signal =\n%s", le_tensor_to_cstr(signal));
-    signal_stats = le_tensor_get_stats(signal);
-    LE_INFO("Loss derivative stats:\n\tmin: %f\n\tmax: %f\n\tmean: %f\n\tdeviation: %f", signal_stats.min, signal_stats.max, signal_stats.mean, signal_stats.deviation);
+    LeList *current = le_list_last(self->layers);
+    inputs = le_list_last(inputs);
+    if (current && current->data && sub_will_work(LE_ACTIVATION_LAYER(current->data)->activation, self->loss))
+    {
+        /// @note: We can backprop thoru
+        le_tensor_sub(signal, y);
+        current = current->prev;
+        inputs = inputs->prev;
+    }
+    else
+    {
+        /// @note: Derivative of assumed cost function
+        le_apply_loss_derivative(self->loss, signal, y);
+        LE_INFO("signal =\n%s", le_tensor_to_cstr(signal));
+        signal_stats = le_tensor_get_stats(signal);
+        LE_INFO("Loss derivative stats:\n\tmin: %f\n\tmax: %f\n\tmean: %f\n\tdeviation: %f", signal_stats.min, signal_stats.max, signal_stats.mean, signal_stats.deviation);
+    }
 
-    LeList *current = NULL;
+    // LeList *current = NULL;
     LeList *gradients = NULL;
-    for (current = le_list_last(self->layers), inputs = le_list_last(inputs);
+    for (/* current = le_list_last(self->layers), inputs = le_list_last(inputs) */;
          current && inputs;
          current = current->prev, inputs = inputs->prev)
     {
@@ -215,11 +236,11 @@ le_sequential_estimate_gradients(LeSequential *self, const LeTensor *x, const Le
         for (unsigned i = 0; i < elements_count; i++)
         {
             const float element = le_tensor_at_f32(param, i);
-            le_tensor_set_f32(param, i, element + epsilon * element);
+            le_tensor_set_f32(param, i, element + epsilon);
             const float j_plus = le_sequential_compute_cost(self, x, y);
-            le_tensor_set_f32(param, i, element - epsilon * element);
+            le_tensor_set_f32(param, i, element - epsilon);
             const float j_minus = le_sequential_compute_cost(self, x, y);
-            const float element_grad_estimate = (j_plus - j_minus) / (2.0f * epsilon * element);
+            const float element_grad_estimate = (j_plus - j_minus) / (2.0f * epsilon);
             le_tensor_set_f32(grad_estimate, i, element_grad_estimate);
             /// @note: We need to restore initial parameter
             le_tensor_set_f32(param, i, element);
