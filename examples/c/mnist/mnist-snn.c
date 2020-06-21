@@ -54,11 +54,11 @@ main(int argc, char *argv[])
     
     LeSequential *neural_network = le_sequential_new();
     le_sequential_add(neural_network,
-                      LE_LAYER(le_dense_layer_new("FC_1", 28 * 28, 300)));
+                      LE_LAYER(le_dense_layer_new("D1", 28 * 28, 300)));
     le_sequential_add(neural_network,
-                      LE_LAYER(le_activation_layer_new("ReLU", LE_ACTIVATION_TANH)));
+                      LE_LAYER(le_activation_layer_new("A1", LE_ACTIVATION_TANH)));
     le_sequential_add(neural_network,
-                      LE_LAYER(le_dense_layer_new("FC_2", 300, 10)));
+                      LE_LAYER(le_dense_layer_new("D2", 300, 10)));
     le_sequential_add(neural_network,
                       LE_LAYER(le_activation_layer_new("Softmax", LE_ACTIVATION_SOFTMAX)));
 
@@ -68,7 +68,7 @@ main(int argc, char *argv[])
 
     LeOptimizer *optimizer = NULL;
     unsigned print_module = 1;
-    unsigned num_epochs = 2500;
+    unsigned num_epochs = 1;
     const char *filename = NULL;
 
     if (argc >= 2)
@@ -83,7 +83,7 @@ main(int argc, char *argv[])
         {
             optimizer = LE_OPTIMIZER(le_sgd_new(LE_MODEL(neural_network), train_input_f32, train_output, 0.03f, 0.9f));
             print_module = 100;
-            num_epochs = 2500;
+            num_epochs = 2;
         }
         if (argc >= 3)
         {
@@ -133,7 +133,7 @@ main(int argc, char *argv[])
     {
         for (unsigned i = 0; (i <= num_epochs) && !should_quit; i++)
         {
-            le_optimizer_step(optimizer);
+            le_optimizer_epoch(optimizer);
             
             if (i % print_module == 0) 
             {
@@ -144,12 +144,14 @@ main(int argc, char *argv[])
                 
                 LeTensor *train_prediction = le_model_predict(LE_MODEL(neural_network), train_input_f32);
                 float train_set_error = le_cross_entropy_loss(train_prediction, train_output);
-                printf("Train Set Error: %f\n", train_set_error);
+                float train_set_accuracy = 1.0f - le_one_hot_misclassification(train_prediction, train_output);
+                printf("Train Set Error: %f, Accuracy: %.1f%%\n", train_set_error, train_set_accuracy * 100.0f);
                 le_tensor_free(train_prediction);
 
                 LeTensor *test_prediction = le_model_predict(LE_MODEL(neural_network), test_input_f32);
                 float test_set_error = le_cross_entropy_loss(test_prediction, test_output);
-                printf("Test Set Error: %f\n", test_set_error);
+                float test_set_accuracy = 1.0f - le_one_hot_misclassification(test_prediction, test_output);
+                printf("Test Set Error: %f, Accuracy: %.1f%%\n", test_set_error, test_set_accuracy * 100.0f);
                 le_tensor_free(test_prediction);
             }
             else
