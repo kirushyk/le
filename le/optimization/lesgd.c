@@ -80,13 +80,13 @@ le_sgd_step(LeOptimizer *optimizer)
             momentum_iterator = momentum_iterator->next)
     {
         LeTensor *parameter = (LeTensor *)parameters_iterator->data;
-        LE_INFO("Parameter %s:\n%s", le_shape_to_cstr(parameter->shape), le_tensor_to_cstr(parameter));
-        LeTensorStats parameter_stats = le_tensor_get_stats(parameter);
-        LE_INFO("Parameter stats:\n\tmin: %f\n\tmax: %f\n\tmean: %f\n\tdeviation: %f", parameter_stats.min, parameter_stats.max, parameter_stats.mean, parameter_stats.deviation);
+        // LE_INFO("Parameter %s:\n%s", le_shape_to_cstr(parameter->shape), le_tensor_to_cstr(parameter));
+        // LeTensorStats parameter_stats = le_tensor_get_stats(parameter);
+        // LE_INFO("Parameter stats:\n\tmin: %f\n\tmax: %f\n\tmean: %f\n\tdeviation: %f", parameter_stats.min, parameter_stats.max, parameter_stats.mean, parameter_stats.deviation);
         LeTensor *gradient = (LeTensor *)gradients_iterator->data;
-        LE_INFO("Gradient %s:\n%s", le_shape_to_cstr(gradient->shape), le_tensor_to_cstr(gradient));
-        LeTensorStats gradient_stats = le_tensor_get_stats(gradient);
-        LE_INFO("Gradient stats:\n\tmin: %f\n\tmax: %f\n\tmean: %f\n\tdeviation: %f", gradient_stats.min, gradient_stats.max, gradient_stats.mean, gradient_stats.deviation);
+        // LE_INFO("Gradient %s:\n%s", le_shape_to_cstr(gradient->shape), le_tensor_to_cstr(gradient));
+        // LeTensorStats gradient_stats = le_tensor_get_stats(gradient);
+        // LE_INFO("Gradient stats:\n\tmin: %f\n\tmax: %f\n\tmean: %f\n\tdeviation: %f", gradient_stats.min, gradient_stats.max, gradient_stats.mean, gradient_stats.deviation);
         LeTensor *momentum = LE_TENSOR(momentum_iterator->data);
         le_tensor_add(momentum, gradient);
         le_tensor_sub_scaled(parameter, optimizer->learning_rate, momentum);
