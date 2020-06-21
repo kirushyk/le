@@ -24,6 +24,10 @@ LeSGD *            le_sgd_new                              (LeModel *           
                                                             float                   learning_rate,
                                                             float                   momentum);
 
+void               le_sgd_step                             (LeOptimizer *           optimizer);
+
+void               le_sgd_epoch                            (LeOptimizer *           optimizer);
+
 void               le_sgd_free                             (LeSGD *                 optimizer);
 
 LE_END_DECLS

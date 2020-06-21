@@ -44,7 +44,7 @@ le_sgd_init_momenta(LeList *gradients)
     return momentum_list;
 }
 
-static void
+void
 le_sgd_step(LeOptimizer *optimizer)
 {
     LeSGD *self = LE_SGD(optimizer);
@@ -117,7 +117,7 @@ le_sgd_step(LeOptimizer *optimizer)
     }
 }
 
-static void
+void
 le_sgd_epoch(LeOptimizer *optimizer)
 {
     LeSGD *self = LE_SGD(optimizer);

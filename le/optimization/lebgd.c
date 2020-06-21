@@ -87,6 +87,12 @@ le_bgd_step(LeOptimizer *optimizer)
 }
 
 void
+le_bgd_epoch(LeOptimizer *optimizer)
+{
+    le_bgd_step(optimizer);
+}
+
+void
 le_bgd_class_ensure_init(void)
 {
     static bool initialized = false;
@@ -96,7 +102,7 @@ le_bgd_class_ensure_init(void)
         klass.parent.step =
             (void (*)(LeOptimizer *))le_bgd_step;
         klass.parent.epoch =
-            (void (*)(LeOptimizer *))le_bgd_step; /// @note: epoch == step for BGD
+            (void (*)(LeOptimizer *))le_bgd_epoch; /// @note: epoch == step for BGD
         initialized = 1;
     }
 }
