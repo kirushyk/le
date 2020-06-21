@@ -27,6 +27,16 @@ le_optimizer_step(LeOptimizer *self)
 }
 
 void
+le_optimizer_epoch(LeOptimizer *self)
+{
+    assert(self);
+    assert(LE_OBJECT_GET_CLASS(self));
+    assert(LE_OPTIMIZER_GET_CLASS(self)->epoch);
+    
+    LE_OPTIMIZER_GET_CLASS(self)->epoch(self);
+}
+
+void
 le_optimizer_free(LeOptimizer *self)
 {
     free(self);

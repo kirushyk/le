@@ -30,6 +30,7 @@ typedef struct LeOptimizerClass
 {
     LeClass parent;
     void (*step)(LeOptimizer *optimizer);
+    void (*epoch)(LeOptimizer *optimizer);
 } LeOptimizerClass;
 
 #define LE_OPTIMIZER_CLASS(klass) ((LeOptimizerClass *)(klass))
@@ -38,6 +39,8 @@ typedef struct LeOptimizerClass
 void               le_optimizer_construct                  (LeOptimizer *           optimizer);
 
 void               le_optimizer_step                       (LeOptimizer *           optimizer);
+
+void               le_optimizer_epoch                      (LeOptimizer *           optimizer);
 
 void               le_optimizer_free                       (LeOptimizer *           optimizer);
 
