@@ -135,12 +135,28 @@ le_sequential_compute_cost(LeSequential *self, const LeTensor *x, const LeTensor
     return j;
 }
 
-bool
-sub_will_work(LeActivation activation, LeLoss loss)
+typedef void(* LeActivationAndLossBackward)(LeTensor *signal, const LeTensor *labels);
+
+static void
+softmax_xent_backward(LeTensor *signal, const LeTensor *labels)
 {
-    return (activation == LE_ACTIVATION_SOFTMAX && loss == LE_LOSS_CROSS_ENTROPY) ||
-        (activation == LE_ACTIVATION_SIGMOID && loss == LE_LOSS_LOGISTIC) ||
-        (activation == LE_ACTIVATION_LINEAR && loss == LE_LOSS_MSE); /// @note: Any linear layer will work
+    le_tensor_mul(signal, labels);
+    le_tensor_sub(signal, labels);
+}
+
+static LeActivationAndLossBackward
+activation_loss_backward_fn(LeActivation activation, LeLoss loss)
+{
+    if ((activation == LE_ACTIVATION_SOFTMAX) && (loss == LE_LOSS_CROSS_ENTROPY)) {
+        return softmax_xent_backward;
+    }
+    else if (((activation == LE_ACTIVATION_SIGMOID) && (loss == LE_LOSS_LOGISTIC)) ||
+             ((activation == LE_ACTIVATION_LINEAR) && (loss == LE_LOSS_MSE)))
+    {
+        return le_tensor_sub_tensor;
+    }
+
+    return NULL;
 }
 
 LeList *
@@ -161,10 +177,16 @@ le_sequential_get_gradients(LeSequential *self, const LeTensor *x, const LeTenso
     LE_INFO("Back Propagation");
     LeList *current = le_list_last(self->layers);
     inputs = le_list_last(inputs);
-    if (current && current->data && sub_will_work(LE_ACTIVATION_LAYER(current->data)->activation, self->loss))
+    LeActivationLayer *last_layer = NULL;
+    LeActivationAndLossBackward actiation_loss_backward = NULL;
+    if (current && current->data)
     {
-        /// @note: We can backprop thoru
-        le_tensor_sub(signal, y);
+        last_layer = LE_ACTIVATION_LAYER(current->data);
+        actiation_loss_backward = activation_loss_backward_fn(last_layer->activation, self->loss);
+    }
+    if (last_layer && actiation_loss_backward)
+    {
+        actiation_loss_backward(signal, y);
         current = current->prev;
         inputs = inputs->prev;
     }
@@ -236,11 +258,11 @@ le_sequential_estimate_gradients(LeSequential *self, const LeTensor *x, const Le
         for (unsigned i = 0; i < elements_count; i++)
         {
             const float element = le_tensor_at_f32(param, i);
-            le_tensor_set_f32(param, i, element + epsilon);
+            le_tensor_set_f32(param, i, element + element * epsilon);
             const float j_plus = le_sequential_compute_cost(self, x, y);
-            le_tensor_set_f32(param, i, element - epsilon);
+            le_tensor_set_f32(param, i, element - element * epsilon);
             const float j_minus = le_sequential_compute_cost(self, x, y);
-            const float element_grad_estimate = (j_plus - j_minus) / (2.0f * epsilon);
+            const float element_grad_estimate = (j_plus - j_minus) / (2.0f * element * epsilon);
             le_tensor_set_f32(grad_estimate, i, element_grad_estimate);
             /// @note: We need to restore initial parameter
             le_tensor_set_f32(param, i, element);
