@@ -29,7 +29,7 @@ typedef struct LeOptimizer
 typedef struct LeOptimizerClass
 {
     LeClass parent;
-    void (*step)(LeOptimizer *model);
+    void (*step)(LeOptimizer *optimizer);
 } LeOptimizerClass;
 
 #define LE_OPTIMIZER_CLASS(klass) ((LeOptimizerClass *)(klass))
