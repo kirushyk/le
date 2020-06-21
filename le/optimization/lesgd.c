@@ -117,6 +117,17 @@ le_sgd_step(LeOptimizer *optimizer)
     }
 }
 
+static void
+le_sgd_epoch(LeOptimizer *optimizer)
+{
+    LeSGD *self = LE_SGD(optimizer);
+    unsigned num_examples = le_matrix_get_width(self->input);
+    for (unsigned i = 0; i < num_examples; i++)
+    {
+        le_sgd_step(optimizer);
+    }
+}
+
 void
 le_sgd_class_ensure_init(void)
 {
@@ -126,6 +137,8 @@ le_sgd_class_ensure_init(void)
     {
         klass.parent.step =
             (void (*)(LeOptimizer *))le_sgd_step;
+        klass.parent.epoch =
+            (void (*)(LeOptimizer *))le_sgd_epoch;
         initialized = 1;
     }
 }
