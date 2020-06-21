@@ -31,6 +31,8 @@ LeBGD *            le_bgd_new                              (LeModel *           
 /// Exposed to speed-up C++ bindings.
 void               le_bgd_step                             (LeOptimizer *           optimizer);
 
+void               le_bgd_epoch                            (LeOptimizer *           optimizer);
+
 void               le_bgd_free                             (LeBGD *                 optimizer);
 
 LE_END_DECLS
