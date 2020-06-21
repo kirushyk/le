@@ -975,10 +975,10 @@ le_tensor_to_cstr(const LeTensor *self)
                     sprintf(ptr, "%d%n", (int)((int32_t *)self->data)[y * self->shape->sizes[1] + x], &written);
                     break;
                 case LE_TYPE_FLOAT32:
-                    sprintf(ptr, "%1.3f%n", ((float *)self->data)[y * self->shape->sizes[1] + x], &written);
+                    sprintf(ptr, "%f%n", ((float *)self->data)[y * self->shape->sizes[1] + x], &written);
                     break;
                 case LE_TYPE_FLOAT64:
-                    sprintf(ptr, "%1.3lf%n", ((double *)self->data)[y * self->shape->sizes[1] + x], &written);
+                    sprintf(ptr, "%lf%n", ((double *)self->data)[y * self->shape->sizes[1] + x], &written);
                     break;
                 case LE_TYPE_VOID:
                 default:
