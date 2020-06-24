@@ -28,11 +28,10 @@ category_present(const char *category)
     if (!categories_parsed)
     {
         char *sep = ",";
-        char *word, *brkt;
 
-        for (word = strtok_r(le_debug, sep, &brkt);
+        for (char *word = strtok(le_debug, sep);
              word;
-             word = strtok_r(NULL, sep, &brkt))
+             word = strtok(NULL, sep))
         {
             categories_requested = le_list_prepend(categories_requested, word);
         }
