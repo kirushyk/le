@@ -1,6 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
+#ifndef __APPLE__
+#   include <time.h>
+#endif
 #include <le/le.h>
 
 #define DEFAULT_LOG_CATEGORY "gradcheck"
