@@ -34,7 +34,7 @@ main(int argc, char *argv[])
     LE_INFO("cost = %f", le_sequential_compute_cost(nn, x, y));
     float average_normalized_distance = le_sequential_check_gradients(nn, x, y, epsilon);
     LE_INFO("average normalized distance = %f", average_normalized_distance);
-    bool failed = (average_normalized_distance < epsilon);
+    bool failed = (average_normalized_distance > epsilon);
 
     LE_INFO("Pretraining...");
     LeBGD *optimizer = le_bgd_new(LE_MODEL(nn), x, y, 1.0f);
@@ -45,7 +45,7 @@ main(int argc, char *argv[])
     LE_INFO("cost = %f", le_sequential_compute_cost(nn, x, y));
     average_normalized_distance = le_sequential_check_gradients(nn, x, y, epsilon);
     LE_INFO("average normalized distance = %f", average_normalized_distance);
-    failed |= (average_normalized_distance < epsilon);
+    failed |= (average_normalized_distance > epsilon);
 
     LE_INFO("Training...");
     for (unsigned i = 0; i <= 50; i++)
@@ -56,7 +56,7 @@ main(int argc, char *argv[])
     LE_INFO("cost = %f", le_sequential_compute_cost(nn, x, y));
     average_normalized_distance = le_sequential_check_gradients(nn, x, y, epsilon);
     LE_INFO("average normalized distance = %f", average_normalized_distance);
-    failed |= (average_normalized_distance < epsilon);
+    failed |= (average_normalized_distance > epsilon);
     le_sequential_free(nn);
 
     le_tensor_free(y);
