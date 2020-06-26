@@ -9,7 +9,7 @@ typedef enum LeDeviceType
 {
     LE_DEVICE_TYPE_CPU,
     LE_DEVICE_TYPE_CUDA,
-    LE_DEVICE_TYPE_MPS
+    LE_DEVICE_TYPE_METAL
 } LeDeviceType;
 
 LE_END_DECLS

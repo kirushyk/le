@@ -295,7 +295,7 @@ le_sequential_check_gradients(LeSequential *self, const LeTensor *x, const LeTen
         if (denominator > 0.0f)
         {
             le_tensor_sub(gradient_estimate, gradient);
-            normalized_distance = le_tensor_l2_f32(gradient_estimate) / denominator;
+            normalized_distance = le_tensor_l2_f32(gradient_estimate);// / denominator;
             LE_INFO("Normalized distance between gradient estimation and actual gradient: %f", normalized_distance);
             if (normalized_distance > epsilon)
             {
