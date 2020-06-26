@@ -5,7 +5,11 @@ le_metal_sources = [
 have_objc = add_languages('objc', required: false)
 
 metal = dependency('appleframeworks',
-    modules: 'metal',
+    modules: [
+        'foundation',
+        'metal',
+        'metalperformanceshaders'
+    ],
     required: false
 )
 

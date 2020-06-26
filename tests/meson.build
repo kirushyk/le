@@ -14,7 +14,7 @@ le_tests = [
     ['relu.c'],
     ['tensorlist.c'],
     ['subtensor.c'],
-    ['input_normalization.c'],
+    ['input_normalization.c']
     # ['gradcheck.c']
 ]
 
@@ -23,14 +23,14 @@ le_tests_deps = [
     tensorlist
 ]
 
+if have_metal
+    le_tests += ['gpu.c']
+    le_tests_deps += le_metal
+endif
+
 if have_mnist
     le_tests += ['mnist.c']
     le_tests_deps += mnist
-endif
-
-if have_metal
-    le_tests += ['metal.c']
-    le_tests_deps += le_metal
 endif
 
 foreach filenames : le_tests
