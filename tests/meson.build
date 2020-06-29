@@ -24,12 +24,12 @@ le_tests_deps = [
 ]
 
 if have_metal
-    le_tests += ['gpu.c']
+    le_tests += [['gpu_metal.c']]
     le_tests_deps += le_metal
 endif
 
 if have_mnist
-    le_tests += ['mnist.c']
+    le_tests += [['mnist.c']]
     le_tests_deps += mnist
 endif
 
