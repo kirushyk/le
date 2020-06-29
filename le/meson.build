@@ -46,6 +46,10 @@ if have_openblas
     le_libs += le_openblas
 endif
 
+if have_metal
+    le_libs += le_metal
+endif
+
 config = configuration_data()
 config.set('HAVE_OPENBLAS', have_openblas)
 configure_file(output: 'config.h', configuration: config)
