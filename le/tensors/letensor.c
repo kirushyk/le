@@ -14,12 +14,12 @@
 #include <stdarg.h>
 #include <math.h>
 #ifdef __APPLE__
-#include "../platform/accelerate/leaccelerate.h"
+#   include "../platform/accelerate/leaccelerate.h"
 #elif defined(HAVE_OPENBLAS)
-#include "../platform/openblas/leopenblas.h"
+#   include "../platform/openblas/leopenblas.h"
 #endif
 #if defined(HAVE_METAL)
-#include "../platform/metal/lemetal.h"
+#   include "../platform/metal/lemetal.h"
 #endif
 
 LeTensor *

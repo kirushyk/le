@@ -10,9 +10,12 @@
 #include <math.h>
 #include "letensor-imp.h"
 #ifdef __APPLE__
-#include "../platform/accelerate/leaccelerate.h"
+#   include "../platform/accelerate/leaccelerate.h"
 #elif defined(HAVE_OPENBLAS)
-#include "../platform/openblas/leopenblas.h"
+#   include "../platform/openblas/leopenblas.h"
+#endif
+#if defined(HAVE_METAL)
+#   include "../platform/metal/lemetal.h"
 #endif
 
 unsigned
@@ -571,54 +574,70 @@ le_matrix_new_product(const LeTensor *a, const LeTensor *b)
 LeTensor *
 le_matrix_new_product_full(const LeTensor *a, bool transpose_a, const LeTensor *b, bool transpose_b)
 {
-    /// @todo: Take stride into account
-#ifdef __APPLE__
-    return le_accelerate_matrix_new_product(a, transpose_a, b, transpose_b);
-#elif defined(HAVE_OPENBLAS)
-    return le_openblas_matrix_new_product(a, transpose_a, b, transpose_b);
-#else
-    assert(a->device_type == LE_DEVICE_TYPE_CPU);
-    assert(b->device_type == LE_DEVICE_TYPE_CPU);
-    assert(a->element_type == b->element_type);
-    assert(a->shape->num_dimensions == 2);
-    assert(b->shape->num_dimensions == 2);
+    assert(a->device_type == b->device_type);
     
-    unsigned a_width = transpose_a ? a->shape->sizes[0] : a->shape->sizes[1];
-    unsigned a_height = transpose_a ? a->shape->sizes[1] : a->shape->sizes[0];
-    unsigned b_width = transpose_b ? b->shape->sizes[0] : b->shape->sizes[1];
-    unsigned b_height = transpose_b ? b->shape->sizes[1] : b->shape->sizes[0];
-    
-    assert(a_width == b_height);
-            
-    LeTensor *self = malloc(sizeof(struct LeTensor));
-    self->device_type = LE_DEVICE_TYPE_CPU;
-    self->element_type = a->element_type;
-    self->shape = le_shape_new(2, a_height, b_width);
-    self->stride = le_shape_get_last_size(self->shape);
-    self->owns_data = true;
-    self->data = malloc(le_shape_get_elements_count(self->shape) * sizeof(float));
-    
-    for (unsigned y = 0; y < a_height; y++)
-    {
-        for (unsigned x = 0; x < b_width; x++)
-        {
-            size_t index = y * b_width + x;
-            ((float *)self->data)[index] = 0.0f;
-            for (unsigned i = 0; i < a_width; i++)
-            {
-                /// @note: Check indices
-                size_t a_index = transpose_a ? i * a_height + y : y * a_width + i;
-                float a_element = ((float *)a->data)[a_index];
-                size_t b_index = transpose_b ? x * b_height + i : i * b_width + x;
-                float b_element = ((float *)b->data)[b_index];
-                float prod = a_element * b_element;
-                ((float *)self->data)[index] += prod;
-            }
-        }
-    }
-    
-    return self;
+    switch (a->device_type) {
+#ifdef HAVE_METAL
+    case LE_DEVICE_TYPE_METAL:
+        le_metal_matrix_new_product(a, transpose_a, b, transpose_b);
+        break;
 #endif
+            
+    case LE_DEVICE_TYPE_CPU:
+        /// @todo: Take stride into account
+#ifdef __APPLE__
+        return le_accelerate_matrix_new_product(a, transpose_a, b, transpose_b);
+#elif defined(HAVE_OPENBLAS)
+        return le_openblas_matrix_new_product(a, transpose_a, b, transpose_b);
+#else
+        assert(a->element_type == b->element_type);
+        assert(a->shape->num_dimensions == 2);
+        assert(b->shape->num_dimensions == 2);
+        {
+            unsigned a_width = transpose_a ? a->shape->sizes[0] : a->shape->sizes[1];
+            unsigned a_height = transpose_a ? a->shape->sizes[1] : a->shape->sizes[0];
+            unsigned b_width = transpose_b ? b->shape->sizes[0] : b->shape->sizes[1];
+            unsigned b_height = transpose_b ? b->shape->sizes[1] : b->shape->sizes[0];
+            
+            assert(a_width == b_height);
+                    
+            LeTensor *self = malloc(sizeof(struct LeTensor));
+            self->device_type = LE_DEVICE_TYPE_CPU;
+            self->element_type = a->element_type;
+            self->shape = le_shape_new(2, a_height, b_width);
+            self->stride = le_shape_get_last_size(self->shape);
+            self->owns_data = true;
+            self->data = malloc(le_shape_get_elements_count(self->shape) * sizeof(float));
+            
+            for (unsigned y = 0; y < a_height; y++)
+            {
+                for (unsigned x = 0; x < b_width; x++)
+                {
+                    size_t index = y * b_width + x;
+                    ((float *)self->data)[index] = 0.0f;
+                    for (unsigned i = 0; i < a_width; i++)
+                    {
+                        /// @note: Check indices
+                        size_t a_index = transpose_a ? i * a_height + y : y * a_width + i;
+                        float a_element = ((float *)a->data)[a_index];
+                        size_t b_index = transpose_b ? x * b_height + i : i * b_width + x;
+                        float b_element = ((float *)b->data)[b_index];
+                        float prod = a_element * b_element;
+                        ((float *)self->data)[index] += prod;
+                    }
+                }
+            }
+            
+            return self;
+        }
+#endif
+        
+    default:
+        assert(false);
+    }
+    assert(false);
+    
+    return NULL;
 }
 
 LeTensor *
