@@ -34,6 +34,7 @@ le_metal_matrix_new_product(const LeTensor *a, bool transpose_a, const LeTensor 
     LeTensor *c = le_matrix_new_uninitialized(LE_TYPE_FLOAT32, c_height, c_width);
     
     id<MTLCommandBuffer> commandBuffer = [commandQueue commandBuffer];
+    [commandBuffer commit];
     [commandBuffer waitUntilCompleted];
 //    cblas_sgemm(CblasRowMajor,
 //                transpose_a ? CblasTrans : CblasNoTrans,
