@@ -52,6 +52,7 @@ endif
 
 config = configuration_data()
 config.set('HAVE_OPENBLAS', have_openblas)
+config.set('HAVE_METAL', have_metal)
 configure_file(output: 'config.h', configuration: config)
 
 install_headers('lepolynomia.h', subdir : 'le')

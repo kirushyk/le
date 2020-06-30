@@ -18,6 +18,9 @@
 #elif defined(HAVE_OPENBLAS)
 #include "../platform/openblas/leopenblas.h"
 #endif
+#if defined(HAVE_METAL)
+#include "../platform/metal/lemetal.h"
+#endif
 
 LeTensor *
 le_tensor_new_from_va_list(LeType element_type, unsigned num_dimensions, va_list dims_and_data)
@@ -1128,6 +1131,10 @@ le_tensor_free(LeTensor *self)
         {
         case LE_DEVICE_TYPE_CPU:
             free(self->data);
+            break;
+            
+        case LE_DEVICE_TYPE_METAL:
+            le_metal_data_free(self->data);
             break;
             
         default:

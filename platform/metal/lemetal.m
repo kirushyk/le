@@ -1,12 +1,14 @@
-#include <le/le.h>
-#include <le/tensors/letensor-imp.h>
+#import "lemetal.h"
+#import <le/le.h>
+#import <le/tensors/letensor-imp.h>
 #import <Metal/Metal.h>
 #import <MetalPerformanceShaders/MetalPerformanceShaders.h>
 
 static id<MTLDevice> _Nonnull device;
 static id<MTLCommandQueue> _Nonnull commandQueue;
 
-void le_metal_init(void)
+void
+le_metal_init(void)
 {
     device = MTLCreateSystemDefaultDevice();
     commandQueue = [device newCommandQueue];
@@ -46,7 +48,8 @@ le_metal_matrix_new_product(const LeTensor *a, bool transpose_a, const LeTensor 
     return c;
 }
 
-LeTensor * le_tensor_to_metal(const LeTensor *another)
+LeTensor *
+le_tensor_to_metal(const LeTensor *another)
 {
     assert(another);
     assert(le_tensor_contiguous(another));
@@ -64,4 +67,13 @@ LeTensor * le_tensor_to_metal(const LeTensor *another)
     tensor->data = (void *)CFBridgingRetain([device newBufferWithBytes:another->data length:data_size options:0]);
     
     return tensor;
+}
+
+void
+le_metal_data_free(void *data)
+{
+    if (data)
+    {
+        CFBridgingRelease(data);
+    }
 }
