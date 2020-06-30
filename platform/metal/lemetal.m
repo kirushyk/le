@@ -90,9 +90,11 @@ le_tensor_to_cpu(const LeTensor *another)
     tensor->shape = le_shape_copy(another->shape);
     tensor->stride = le_shape_get_last_size(tensor->shape);
     tensor->owns_data = true;
+    size_t data_size = le_shape_get_elements_count(tensor->shape) * le_type_size(tensor->element_type);
 
     id<MTLBuffer> buffer = (__bridge id<MTLBuffer>)(another->data);
-    tensor->data = [buffer contents];
+    tensor->data = malloc(data_size);
+    memcpy(tensor->data, [buffer contents], data_size);
     
     return tensor;
 }
