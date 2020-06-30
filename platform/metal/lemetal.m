@@ -38,12 +38,49 @@ le_metal_matrix_new_product(const LeTensor *a, bool transpose_a, const LeTensor 
     c->stride = le_shape_get_last_size(c->shape);
     c->owns_data = true;
     size_t data_size = le_shape_get_elements_count(c->shape) * le_type_size(c->element_type);
-
-    c->data = (void *)CFBridgingRetain([device newBufferWithLength:data_size options:0]);
+    
+    id <MTLBuffer> buff_a = (__bridge id<MTLBuffer>)a->data;
+    MPSMatrixDescriptor *desc_a = [[MPSMatrixDescriptor alloc] init];
+    [desc_a setRows: size_a];
+    [desc_a setColumns: c_width];
+    [desc_a setRowBytes: a->stride * sizeof(float)];
+    [desc_a setDataType: MPSDataTypeFloat32];
+    MPSMatrix *mxa = [[MPSMatrix alloc] initWithBuffer:buff_a descriptor:desc_a];
+    
+    id <MTLBuffer> buff_b = (__bridge id<MTLBuffer>)b->data;
+    MPSMatrixDescriptor *desc_b = [[MPSMatrixDescriptor alloc] init];
+    [desc_b setRows: c_height];
+    [desc_b setColumns: size_b];
+    [desc_b setRowBytes: b->stride * sizeof(float)];
+    [desc_b setDataType: MPSDataTypeFloat32];
+    MPSMatrix *mxb = [[MPSMatrix alloc] initWithBuffer:buff_b descriptor:desc_b];
+    
+    id <MTLBuffer> buff_c = [device newBufferWithLength:data_size options:0];
+    MPSMatrixDescriptor *desc_c = [[MPSMatrixDescriptor alloc] init];
+    [desc_c setRows: c_height];
+    [desc_c setColumns: c_width];
+    [desc_c setRowBytes: c->stride * sizeof(float)];
+    [desc_c setDataType: MPSDataTypeFloat32];
+    MPSMatrix *mxc = [[MPSMatrix alloc] initWithBuffer:buff_c descriptor:desc_c];
+    
+    MPSMatrixMultiplication *kernel = [[MPSMatrixMultiplication alloc] initWithDevice: device
+        transposeLeft: (BOOL) transpose_a
+        transposeRight: (BOOL) transpose_b
+        resultRows: (NSUInteger) c_height
+        resultColumns: (NSUInteger) c_width
+        interiorColumns: (NSUInteger) size_a
+        alpha: (double) 1
+        beta: (double) 0];
     
     id<MTLCommandBuffer> commandBuffer = [commandQueue commandBuffer];
+
+    [kernel encodeToCommandBuffer:commandBuffer leftMatrix:mxa rightMatrix:mxb resultMatrix:mxc];
+    
     [commandBuffer commit];
     [commandBuffer waitUntilCompleted];
+    
+    c->data = (void *)CFBridgingRetain(buff_c);
+    
 //    cblas_sgemm(CblasRowMajor,
 //                transpose_a ? CblasTrans : CblasNoTrans,
 //                transpose_b ? CblasTrans : CblasNoTrans,
