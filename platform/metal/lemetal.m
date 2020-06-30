@@ -71,7 +71,6 @@ le_tensor_to_metal(const LeTensor *another)
     tensor->stride = le_shape_get_last_size(tensor->shape);
     tensor->owns_data = true;
     size_t data_size = le_shape_get_elements_count(tensor->shape) * le_type_size(tensor->element_type);
-    tensor->data = malloc(data_size);
 
     tensor->data = (void *)CFBridgingRetain([device newBufferWithBytes:another->data length:data_size options:0]);
     
