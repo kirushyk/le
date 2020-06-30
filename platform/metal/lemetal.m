@@ -77,6 +77,26 @@ le_tensor_to_metal(const LeTensor *another)
     return tensor;
 }
 
+LeTensor *
+le_tensor_to_cpu(const LeTensor *another)
+{
+    assert(another);
+    assert(le_tensor_contiguous(another));
+    assert(another->device_type == LE_DEVICE_TYPE_METAL);
+    
+    LeTensor *tensor = malloc(sizeof(struct LeTensor));
+    tensor->device_type = LE_DEVICE_TYPE_CPU;
+    tensor->element_type = another->element_type;
+    tensor->shape = le_shape_copy(another->shape);
+    tensor->stride = le_shape_get_last_size(tensor->shape);
+    tensor->owns_data = true;
+
+    id<MTLBuffer> buffer = (__bridge id<MTLBuffer>)(another->data);
+    tensor->data = [buffer contents];
+    
+    return tensor;
+}
+
 void
 le_metal_data_free(void *data)
 {

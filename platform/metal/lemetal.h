@@ -11,6 +11,9 @@ le_metal_matrix_new_product(const LeTensor *a, bool transpose_a, const LeTensor 
 LeTensor *
 le_tensor_to_metal(const LeTensor *another);
 
+LeTensor *
+le_tensor_to_cpu(const LeTensor *another);
+
 void
 le_metal_data_free(void *data);
 

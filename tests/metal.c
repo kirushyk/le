@@ -1,9 +1,6 @@
 #include <stdlib.h>
 #include <le/le.h>
-
-void le_metal_init(void);
-
-LeTensor * le_tensor_to_metal(const LeTensor *another);
+#include <platform/metal/lemetal.h>
 
 int main(int argc, char *argv[])
 {
@@ -28,7 +25,10 @@ int main(int argc, char *argv[])
     LeTensor *my = le_tensor_to_metal(cx);
 
     LeTensor *gmul = le_matrix_new_product(mx, my);
-    le_tensor_print(gmul, stdout);
+    LeTensor *result = le_tensor_to_cpu(gmul);
+    le_tensor_print(result, stdout);
+    le_tensor_free(result);
+    le_tensor_free(gmul);
 
     le_tensor_free(my);
     le_tensor_free(mx);
