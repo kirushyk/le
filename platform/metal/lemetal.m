@@ -30,8 +30,16 @@ le_metal_matrix_new_product(const LeTensor *a, bool transpose_a, const LeTensor 
     
     unsigned c_height = transpose_a ? a->shape->sizes[1] : a->shape->sizes[0];
     unsigned c_width = transpose_b ? b->shape->sizes[0] : b->shape->sizes[1];
-    
-    LeTensor *c = le_matrix_new_uninitialized(LE_TYPE_FLOAT32, c_height, c_width);
+        
+    LeTensor *c = malloc(sizeof(struct LeTensor));
+    c->device_type = LE_DEVICE_TYPE_METAL;
+    c->element_type = LE_TYPE_FLOAT32;
+    c->shape = le_shape_new(2, c_height, c_width);
+    c->stride = le_shape_get_last_size(c->shape);
+    c->owns_data = true;
+    size_t data_size = le_shape_get_elements_count(c->shape) * le_type_size(c->element_type);
+
+    c->data = (void *)CFBridgingRetain([device newBufferWithLength:data_size options:0]);
     
     id<MTLCommandBuffer> commandBuffer = [commandQueue commandBuffer];
     [commandBuffer commit];
