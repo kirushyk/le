@@ -579,8 +579,7 @@ le_matrix_new_product_full(const LeTensor *a, bool transpose_a, const LeTensor *
     switch (a->device_type) {
 #ifdef HAVE_METAL
     case LE_DEVICE_TYPE_METAL:
-        le_metal_matrix_new_product(a, transpose_a, b, transpose_b);
-        break;
+        return le_metal_matrix_new_product(a, transpose_a, b, transpose_b);
 #endif
             
     case LE_DEVICE_TYPE_CPU:
