@@ -6,6 +6,14 @@ int main(int argc, char *argv[])
 {
     le_metal_init();
     
+    LeTensor *ci = le_matrix_new_identity(LE_TYPE_FLOAT32, 5);
+    LeTensor *gi = le_tensor_to_metal(ci);
+    LeTensor *ri = le_tensor_to_cpu(gi);
+    le_tensor_print(ri, stdout);
+    le_tensor_free(ri);
+    le_tensor_free(gi);
+    le_tensor_free(ci);
+    
     LeTensor *cx = le_tensor_new(LE_TYPE_FLOAT32, 2, 3, 3,   
         1.0, 2.0, 1.0,
         0.0, 0.0, 0.0,
