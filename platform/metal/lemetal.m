@@ -39,6 +39,8 @@ le_metal_matrix_new_product(const LeTensor *a, bool transpose_a, const LeTensor 
     c->owns_data = true;
     size_t data_size = le_shape_get_elements_count(c->shape) * le_type_size(c->element_type);
     
+    id<MTLCommandBuffer> commandBuffer = [commandQueue commandBuffer];
+    
     id<MTLBuffer> buff_a = (__bridge id<MTLBuffer>)a->data;
     MPSMatrixDescriptor *desc_a =
         [MPSMatrixDescriptor matrixDescriptorWithRows: c_height
@@ -57,7 +59,7 @@ le_metal_matrix_new_product(const LeTensor *a, bool transpose_a, const LeTensor 
     MPSMatrix *mxb = [[MPSMatrix alloc] initWithBuffer: buff_b
                                             descriptor: desc_b];
     
-    id<MTLBuffer> buff_c = [device newBufferWithLength:data_size options:MTLResourceStorageModeShared];
+    id<MTLBuffer> buff_c = [device newBufferWithLength:data_size options:MTLResourceStorageModeManaged];
     MPSMatrixDescriptor *desc_c =
         [MPSMatrixDescriptor matrixDescriptorWithRows: c_height
                                               columns: c_width
@@ -75,14 +77,13 @@ le_metal_matrix_new_product(const LeTensor *a, bool transpose_a, const LeTensor 
                                         interiorColumns: (NSUInteger)size_a
                                                   alpha: 1.0
                                                    beta: 0.0];
-    
-    id<MTLCommandBuffer> commandBuffer = [commandQueue commandBuffer];
 
     [kernel encodeToCommandBuffer: commandBuffer
-                       leftMatrix: mxa
-                      rightMatrix: mxb
-                     resultMatrix: mxc];
-
+                        leftMatrix: mxa
+                       rightMatrix: mxb
+                      resultMatrix: mxc];
+     
+    //[blitCommandEncoder synchronizeResource: buff_c];
     [commandBuffer commit];
     [commandBuffer waitUntilCompleted];
     
@@ -106,7 +107,7 @@ le_tensor_to_metal(const LeTensor *another)
     tensor->owns_data = true;
     size_t data_size = le_shape_get_elements_count(tensor->shape) * le_type_size(tensor->element_type);
 
-    tensor->data = (void *)CFBridgingRetain([device newBufferWithBytes:another->data length:data_size options:MTLResourceStorageModeShared]);
+    tensor->data = (void *)CFBridgingRetain([device newBufferWithBytes:another->data length:data_size options:MTLResourceStorageModeManaged]);
     
     return tensor;
 }
