@@ -40,39 +40,49 @@ le_metal_matrix_new_product(const LeTensor *a, bool transpose_a, const LeTensor 
     size_t data_size = le_shape_get_elements_count(c->shape) * le_type_size(c->element_type);
     
     id <MTLBuffer> buff_a = (__bridge id<MTLBuffer>)a->data;
-    MPSMatrixDescriptor *desc_a = [MPSMatrixDescriptor matrixDescriptorWithRows:c_height
-        columns:size_a
-        rowBytes:a->stride * le_type_size(c->element_type)
-        dataType:MPSDataTypeFloat32];
-    MPSMatrix *mxa = [[MPSMatrix alloc] initWithBuffer:buff_a descriptor:desc_a];
+    MPSMatrixDescriptor *desc_a =
+        [MPSMatrixDescriptor matrixDescriptorWithRows: c_height
+                                              columns: size_a
+                                             rowBytes: a->stride * le_type_size(c->element_type)
+                                             dataType: MPSDataTypeFloat32];
+    MPSMatrix *mxa = [[MPSMatrix alloc] initWithBuffer: buff_a
+                                            descriptor: desc_a];
     
     id <MTLBuffer> buff_b = (__bridge id<MTLBuffer>)b->data;
-    MPSMatrixDescriptor *desc_b = [MPSMatrixDescriptor matrixDescriptorWithRows:size_b
-        columns:c_width
-        rowBytes:b->stride * le_type_size(c->element_type)
-        dataType:MPSDataTypeFloat32];
-    MPSMatrix *mxb = [[MPSMatrix alloc] initWithBuffer:buff_b descriptor:desc_b];
+    MPSMatrixDescriptor *desc_b =
+        [MPSMatrixDescriptor matrixDescriptorWithRows: size_b
+                                              columns: c_width
+                                             rowBytes: b->stride * le_type_size(c->element_type)
+                                             dataType: MPSDataTypeFloat32];
+    MPSMatrix *mxb = [[MPSMatrix alloc] initWithBuffer: buff_b
+                                            descriptor: desc_b];
     
-    id <MTLBuffer> buff_c = [device newBufferWithLength:data_size options:0];
-    MPSMatrixDescriptor *desc_c = [MPSMatrixDescriptor matrixDescriptorWithRows:c_height
-        columns:c_width
-        rowBytes:c->stride * le_type_size(c->element_type)
-        dataType:MPSDataTypeFloat32];
-    MPSMatrix *mxc = [[MPSMatrix alloc] initWithBuffer:buff_c descriptor:desc_c];
+    id <MTLBuffer> buff_c = [device newBufferWithLength:data_size options:MTLResourceStorageModeShared];
+    MPSMatrixDescriptor *desc_c =
+        [MPSMatrixDescriptor matrixDescriptorWithRows: c_height
+                                              columns: c_width
+                                             rowBytes: c->stride * le_type_size(c->element_type)
+                                             dataType: MPSDataTypeFloat32];
+    MPSMatrix *mxc = [[MPSMatrix alloc] initWithBuffer: buff_c
+                                            descriptor: desc_c];
     
-    MPSMatrixMultiplication *kernel = [[MPSMatrixMultiplication alloc] initWithDevice: device
-        transposeLeft: (BOOL) transpose_a
-        transposeRight: (BOOL) transpose_b
-        resultRows: (NSUInteger) c_height
-        resultColumns: (NSUInteger) c_width
-        interiorColumns: (NSUInteger) size_a
-        alpha: (double) 1
-        beta: (double) 0];
+    MPSMatrixMultiplication *kernel =
+        [[MPSMatrixMultiplication alloc] initWithDevice: device
+                                          transposeLeft: (BOOL)transpose_a
+                                         transposeRight: (BOOL)transpose_b
+                                             resultRows: (NSUInteger)c_height
+                                          resultColumns: (NSUInteger)c_width
+                                        interiorColumns: (NSUInteger)size_a
+                                                  alpha: 1.0
+                                                   beta: 0.0];
     
-    id<MTLCommandBuffer> commandBuffer = [commandQueue commandBuffer];
+    id<MTLCommandBuffer> commandBuffer = [commandQueue commandBufferWithUnretainedReferences];
 
-    [kernel encodeToCommandBuffer:commandBuffer leftMatrix:mxa rightMatrix:mxb resultMatrix:mxc];
-    
+    [kernel encodeToCommandBuffer:commandBuffer
+                       leftMatrix:mxa
+                      rightMatrix:mxb
+                     resultMatrix:mxc];
+
     [commandBuffer commit];
     [commandBuffer waitUntilCompleted];
     
@@ -96,7 +106,7 @@ le_tensor_to_metal(const LeTensor *another)
     tensor->owns_data = true;
     size_t data_size = le_shape_get_elements_count(tensor->shape) * le_type_size(tensor->element_type);
 
-    tensor->data = (void *)CFBridgingRetain([device newBufferWithBytes:another->data length:data_size options:0]);
+    tensor->data = (void *)CFBridgingRetain([device newBufferWithBytes:another->data length:data_size options:MTLResourceStorageModeShared]);
     
     return tensor;
 }
