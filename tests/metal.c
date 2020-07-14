@@ -30,7 +30,7 @@ int main(int argc, char *argv[])
     le_tensor_print(cmul, stdout);
 
     LeTensor *mx = le_tensor_to_metal(cx);
-    LeTensor *my = le_tensor_to_metal(cx);
+    LeTensor *my = le_tensor_to_metal(cy);
 
     LeTensor *gmul = le_matrix_new_product(mx, my);
     LeTensor *result = le_tensor_to_cpu(gmul);
