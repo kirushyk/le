@@ -1,3 +1,4 @@
+#include <assert.h>
 #include <stdlib.h>
 #include <le/le.h>
 #include <platform/metal/lemetal.h>
@@ -35,6 +36,11 @@ int main(int argc, char *argv[])
     LeTensor *gmul = le_matrix_new_product(mx, my);
     LeTensor *result = le_tensor_to_cpu(gmul);
     le_tensor_print(result, stdout);
+    
+    le_tensor_sub(result, cmul);
+    float l2 = le_tensor_l2_f32(result);
+    assert(l2 < 1e-4f);
+    
     le_tensor_free(result);
     le_tensor_free(gmul);
 
