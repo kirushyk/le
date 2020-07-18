@@ -10,7 +10,12 @@ static id<MTLCommandQueue> commandQueue;
 void
 le_metal_init(void)
 {
-    device = MTLCreateSystemDefaultDevice();
+    NSArray<id<MTLDevice>> *devices = MTLCopyAllDevices();
+    if (devices && devices.count > 0)
+    {
+        device = devices[0];
+        NSLog(@"Using device: %@", device.name);
+    }
     commandQueue = [device newCommandQueue];
 }
 
