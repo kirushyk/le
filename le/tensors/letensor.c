@@ -159,32 +159,46 @@ LeTensor *
 le_tensor_new_copy(const LeTensor *another)
 {
     assert(another);
-    assert(another->device_type == LE_DEVICE_TYPE_CPU);
     
     LeTensor *self = malloc(sizeof(struct LeTensor));
-    self->device_type = LE_DEVICE_TYPE_CPU;
+    self->device_type = another->device_type;
     self->element_type = another->element_type;
     self->shape = le_shape_copy(another->shape);
     self->stride = le_shape_get_last_size(self->shape);
     self->owns_data = true;
     size_t data_size = le_shape_get_elements_count(self->shape) * le_type_size(self->element_type);
-    self->data = malloc(data_size);
-    if (another->stride == le_shape_get_last_size(another->shape))
+    switch (self->device_type)
     {
-        memcpy(self->data, another->data, data_size);
-    }
-    else
-    {
-        unsigned regions_count = le_shape_get_regions_count(another->shape);
-        size_t region_size = self->stride * le_type_size(self->element_type);
-        size_t bytes_stride = another->stride * le_type_size(another->element_type);
-        for (unsigned i = 0; i < regions_count; i++)
+    case LE_DEVICE_TYPE_METAL:
+        if (another->stride == le_shape_get_last_size(another->shape))
         {
-            memcpy((uint8_t *)self->data + i * region_size,
-                (uint8_t *)another->data + i * bytes_stride,
-                region_size);
+            self->data = le_metal_data_copy(another->data, data_size);
         }
+        break;
+    case LE_DEVICE_TYPE_CPU:
+    default:
+        {
+            self->data = malloc(data_size);
+            if (another->stride == le_shape_get_last_size(another->shape))
+            {
+                memcpy(self->data, another->data, data_size);
+            }
+            else
+            {
+                unsigned regions_count = le_shape_get_regions_count(another->shape);
+                size_t region_size = self->stride * le_type_size(self->element_type);
+                size_t bytes_stride = another->stride * le_type_size(another->element_type);
+                for (unsigned i = 0; i < regions_count; i++)
+                {
+                    memcpy((uint8_t *)self->data + i * region_size,
+                        (uint8_t *)another->data + i * bytes_stride,
+                        region_size);
+                }
+            }
+        }
+        break;
     }
+    
     return self;
 }
 
