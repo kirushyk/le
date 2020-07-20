@@ -147,3 +147,20 @@ le_metal_data_free(void *data)
         CFBridgingRelease(data);
     }
 }
+
+void *
+le_metal_data_copy(void *data, size_t bytes)
+{
+    id<MTLBuffer> buffer = (__bridge id<MTLBuffer>)(data);
+    id<MTLCommandBuffer> commandBuffer = [commandQueue commandBuffer];
+    id<MTLBlitCommandEncoder> blitCommandEncoder = [commandBuffer blitCommandEncoder];
+    id<MTLBuffer> new_buffer = [device newBufferWithLength:bytes options:MTLResourceStorageModeManaged];
+    [blitCommandEncoder copyFromBuffer:buffer
+                          sourceOffset:0
+                              toBuffer:new_buffer
+                     destinationOffset:0 size:bytes];
+    [blitCommandEncoder endEncoding];
+    [commandBuffer commit];
+    [commandBuffer waitUntilCompleted];
+    return (void *)CFBridgingRetain(new_buffer);
+}
