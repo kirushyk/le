@@ -679,18 +679,24 @@ le_tensor_mul_f32(LeTensor *self, float b)
 void        
 le_tensor_mul_tensor(LeTensor *self, const LeTensor *b)
 {
-    assert(self->device_type == LE_DEVICE_TYPE_CPU);
     assert(self->element_type == LE_TYPE_FLOAT32);
     assert(b->element_type == LE_TYPE_FLOAT32);
     assert(le_shape_equal(self->shape, b->shape));
 
     /// @todo: Take stride into account
-    unsigned i;
-    unsigned elements_count = le_shape_get_elements_count(self->shape);
-    
-    for (i = 0; i < elements_count; i++)
+    switch (self->device_type)
     {
-        ((float *)self->data)[i] *= ((float *)b->data)[i];
+    case LE_DEVICE_TYPE_METAL:
+        le_metal_tensor_mul_tensor(self, b);
+        break;
+    case LE_DEVICE_TYPE_CPU:
+    default:
+        for (unsigned i = 0, elements_count = le_shape_get_elements_count(self->shape);
+             i < elements_count; i++)
+        {
+            ((float *)self->data)[i] *= ((float *)b->data)[i];
+        }
+        break;
     }
 }
 
