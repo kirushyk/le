@@ -15,17 +15,9 @@ int main(int argc, char *argv[])
     le_tensor_free(gi);
     le_tensor_free(ci);
     
-    LeTensor *cx = le_tensor_new(LE_TYPE_FLOAT32, 2, 3, 3,   
-        1.0, 2.0, 1.0,
-        0.0, 0.0, 0.0,
-        -1.0, -2.0, -1.0
-    );
+    LeTensor *cx = le_matrix_new_rand_f32(LE_DISTRIBUTION_UNIFORM, 8, 8);
 
-    LeTensor *cy = le_tensor_new(LE_TYPE_FLOAT32, 2, 3, 3,   
-        1.0, 0.0, -1.0,
-        2.0, 0.0, -2.0,
-        1.0, 0.0, -1.0
-    );
+    LeTensor *cy = le_matrix_new_rand_f32(LE_DISTRIBUTION_UNIFORM, 8, 8);
 
     LeTensor *cmul = le_matrix_new_product(cx, cy);
     le_tensor_print(cmul, stdout);

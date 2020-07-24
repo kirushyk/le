@@ -24,7 +24,10 @@ le_tests_deps = [
 ]
 
 if have_metal
-    le_tests += [['metal.c']]
+    le_tests += [
+        ['metal/matmul.c'],
+        ['metal/hadamard.c']
+    ]
     le_tests_deps += le_metal
 endif
 
