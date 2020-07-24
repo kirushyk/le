@@ -15,6 +15,7 @@ le_sources = [
     'tensors/lescalar.c',
     'tensors/lematrix.c',
     'lepolynomia.c',
+    'models/leknn.c',
     'models/lelogistic.c',
     'models/le1layernn.c',
     'models/lemodel.c',
