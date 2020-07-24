@@ -166,10 +166,22 @@ le_metal_data_copy(void *data, size_t bytes)
 }
 
 void
-le_metal_tensor_mul_tensor(LeTensor *self, const LeTensor *b)
+le_metal_tensor_mul_tensor(LeTensor *a, const LeTensor *b)
 {
+    id<MTLLibrary> library = [device newDefaultLibrary];
+    id<MTLFunction> function = [library newFunctionWithName:@"hadamardProductKernel"];
     id<MTLCommandBuffer> commandBuffer = [commandQueue commandBuffer];
-    
+    id<MTLComputePipelineState> computePipelineState = [device newComputePipelineStateWithFunction:function error:NULL];
+    id<MTLComputeCommandEncoder> computeCommandEncoder = [commandBuffer computeCommandEncoder];
+    [computeCommandEncoder setComputePipelineState:computePipelineState];
+    id<MTLBuffer> buffer_a = (__bridge id<MTLBuffer>)(a->data);
+    [computeCommandEncoder setBuffer:buffer_a offset:0 atIndex:0];
+    id<MTLBuffer> buffer_b = (__bridge id<MTLBuffer>)(b->data);
+    [computeCommandEncoder setBuffer:buffer_b offset:0 atIndex:1];
+    MTLSize threadGroupSize = MTLSizeMake(le_shape_get_elements_count(a->shape), 1, 1);
+    MTLSize threadGroupCount = MTLSizeMake(1, 1, 1);
+    [computeCommandEncoder dispatchThreadgroups:threadGroupSize threadsPerThreadgroup:threadGroupCount];
+    [computeCommandEncoder endEncoding];
     [commandBuffer commit];
     [commandBuffer waitUntilCompleted];
 }
