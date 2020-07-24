@@ -18,6 +18,9 @@ void *
 le_metal_data_copy(void *data, size_t bytes);
 
 void
+le_metal_tensor_mul_tensor(LeTensor *self, const LeTensor *b);
+
+void
 le_metal_data_free(void *data);
 
 #endif

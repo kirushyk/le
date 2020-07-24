@@ -164,3 +164,12 @@ le_metal_data_copy(void *data, size_t bytes)
     [commandBuffer waitUntilCompleted];
     return (void *)CFBridgingRetain(new_buffer);
 }
+
+void
+le_metal_tensor_mul_tensor(LeTensor *self, const LeTensor *b)
+{
+    id<MTLCommandBuffer> commandBuffer = [commandQueue commandBuffer];
+    
+    [commandBuffer commit];
+    [commandBuffer waitUntilCompleted];
+}
