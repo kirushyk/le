@@ -12,6 +12,7 @@ At this moment following ML models are implemented:
 * Polynomial Regression.
 * Support Vector Machines (SVM).
 * Sequential Feed-forward Neural Network (Multiple Layer Perceptron, MLP).
+* k-Nearest Neighbors Algorithm (k-NN).
 
 Optimization algorithms supported:
 * Batch Gradient Descent (BGD).
