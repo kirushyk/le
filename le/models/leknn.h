@@ -14,12 +14,15 @@ typedef struct LeKNN LeKNN;
 
 #define LE_KNN(obj) ((LeKNN *)(obj))
 
-LeKNN * le_knn_new     (void);
+LeKNN *                 le_knn_new                        (void);
 
 void                    le_knn_train                      (LeKNN *                  knn,
                                                            LeTensor *               x,
                                                            LeTensor *               y,
                                                            unsigned                 k);
+
+LeTensor *              le_knn_predict                    (LeKNN *                  model,
+                                                           const LeTensor *         x);
 
 void                    le_knn_free                       (LeKNN *                  knn);
 
