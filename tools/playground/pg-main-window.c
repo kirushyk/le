@@ -83,17 +83,13 @@ draw_callback(GtkWidget *widget, cairo_t *cr, gpointer data)
         {
             double x = width * 0.5 + height * 0.5 * le_matrix_at_f32(input, 0, i);
             double y = height * 0.5 - height * 0.5 * le_matrix_at_f32(input, 1, i);
-            window->dark ? cairo_set_source_rgba(cr, 1.0, 1.0, 1.0, 1.0) : cairo_set_source_rgba(cr, 0.0, 0.0, 0.0, 1.0);
             cairo_set_line_width(cr, 0.5);
             cairo_arc(cr, x, y, 2., 0., 2 * M_PI);
-            if (le_matrix_at_f32(output, 0, i) > 0.5)
-            {
-                cairo_fill(cr);
-            }
-            else
-            {
-                cairo_stroke(cr);
-            }
+            le_matrix_at_f32(output, 0, i) > 0.5 ? cairo_set_source_rgba(cr, 1.0, 0.5, 0.0, 1.0) : cairo_set_source_rgba(cr, 0.0, 0.5, 1.0, 1.0);
+            cairo_fill(cr);
+            cairo_arc(cr, x, y, 2., 0., 2 * M_PI);
+            window->dark ? cairo_set_source_rgba(cr, 1.0, 1.0, 1.0, 1.0) : cairo_set_source_rgba(cr, 0.0, 0.0, 0.0, 1.0);
+            cairo_stroke(cr);
         }
     }
     
@@ -109,14 +105,8 @@ draw_callback(GtkWidget *widget, cairo_t *cr, gpointer data)
             window->dark ? cairo_set_source_rgba(cr, 0.0, 1.0, 0.0, 1.0) : cairo_set_source_rgba(cr, 0.0, 0.5, 0.0, 1.0);
             cairo_set_line_width(cr, 0.5);
             cairo_arc(cr, x, y, 2., 0., 2 * M_PI);
-            if (le_matrix_at_f32(output, 0, i) > 0.5)
-            {
-                cairo_fill(cr);
-            }
-            else
-            {
-                cairo_stroke(cr);
-            }
+            le_matrix_at_f32(output, 0, i) > 0.5 ? cairo_set_source_rgba(cr, 1.0, 0.5, 0.0, 1.0) : cairo_set_source_rgba(cr, 0.0, 0.5, 1.0, 1.0);
+            cairo_stroke(cr);
         }
     }
     
