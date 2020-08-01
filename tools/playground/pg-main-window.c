@@ -240,6 +240,16 @@ train_current_model(LEMainWindow *self)
             /// le_tensor_free(labels);
         }
         break;
+    
+    case PREFERRED_MODEL_TYPE_KNN:
+        {
+            unsigned k = atoi(gtk_combo_box_text_get_active_text(GTK_COMBO_BOX_TEXT(self->knn_k_combo)));
+            le_knn_train(LE_KNN(self->model),
+                le_data_set_get_input(self->train_data), 
+                le_data_set_get_output(self->train_data),
+                k);
+        }
+        break;
         
     case PREFERRED_MODEL_TYPE_POLYNOMIAL_REGRESSION:
     default:
@@ -308,6 +318,10 @@ create_model(LEMainWindow *self)
         le_sequential_add(LE_SEQUENTIAL(self->model),
                             LE_LAYER(le_activation_layer_new("A4", LE_ACTIVATION_SIGMOID)));
         le_sequential_set_loss(LE_SEQUENTIAL(self->model), LE_LOSS_LOGISTIC);
+        break;
+
+    case PREFERRED_MODEL_TYPE_KNN:
+        self->model = (LeModel *)le_knn_new();
         break;
         
     case PREFERRED_MODEL_TYPE_POLYNOMIAL_REGRESSION:
@@ -643,7 +657,7 @@ le_main_window_init(LEMainWindow *self)
     gtk_box_pack_start(GTK_BOX(model_vbox), self->svm_vbox, FALSE, FALSE, 2);
 
     self->knn_vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
-    gtk_box_pack_start(GTK_BOX(self->knn_vbox), gtk_label_new("k - Number of Nearest Neighbors"), FALSE, FALSE, 2);
+    gtk_box_pack_start(GTK_BOX(self->knn_vbox), gtk_label_new("Number of Nearest Neighbors k"), FALSE, FALSE, 2);
     self->knn_k_combo = gtk_combo_box_text_new();
     gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(self->knn_k_combo), "1");
     gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(self->knn_k_combo), "3");
