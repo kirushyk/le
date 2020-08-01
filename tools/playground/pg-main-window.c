@@ -42,8 +42,10 @@ struct _LEMainWindow
     GtkWidget *gd_vbox;
     GtkWidget *pr_vbox;
     GtkWidget *svm_vbox;
+    GtkWidget *knn_vbox;
     GtkWidget *svm_kernel_combo;
     GtkWidget *svm_c_combo;
+    GtkWidget *knn_k_combo;
     
     GtkWidget *polynomia_degree_combo;
     GtkWidget *alpha_combo;
@@ -409,12 +411,21 @@ le_main_window_set_preffered_model(GtkWidget *window, PreferredModelType model_t
         gtk_widget_show_all(self->svm_vbox);
         gtk_widget_hide(self->pr_vbox);
         gtk_widget_hide(self->gd_vbox);
+        gtk_widget_hide(self->knn_vbox);
         break;
         
     case 2:
         gtk_widget_hide(self->svm_vbox);
         gtk_widget_hide(self->pr_vbox);
         gtk_widget_show_all(self->gd_vbox);
+        gtk_widget_hide(self->knn_vbox);
+        break;
+
+    case 3:
+        gtk_widget_hide(self->svm_vbox);
+        gtk_widget_hide(self->pr_vbox);
+        gtk_widget_hide(self->gd_vbox);
+        gtk_widget_show_all(self->knn_vbox);
         break;
         
     case 0:
@@ -422,6 +433,7 @@ le_main_window_set_preffered_model(GtkWidget *window, PreferredModelType model_t
         gtk_widget_hide(self->svm_vbox);
         gtk_widget_show_all(self->pr_vbox);
         gtk_widget_show_all(self->gd_vbox);
+        gtk_widget_hide(self->knn_vbox);
         break;
     }
 
@@ -441,6 +453,10 @@ model_combo_changed(GtkComboBox *widget, gpointer user_data)
             
     case 2:
         le_main_window_set_preffered_model((GtkWidget *)self, PREFERRED_MODEL_TYPE_NEURAL_NETWORK);
+        break;
+
+    case 3:
+        le_main_window_set_preffered_model((GtkWidget *)self, PREFERRED_MODEL_TYPE_KNN);
         break;
             
     case 0:
@@ -552,6 +568,7 @@ le_main_window_init(LEMainWindow *self)
     gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(model_combo), "Polynomial Regression");
     gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(model_combo), "Support Vector Machine");
     gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(model_combo), "Shallow Neural Network");
+    gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(model_combo), "k Nearest Neighbors");
     gtk_combo_box_set_active(GTK_COMBO_BOX(model_combo), 2);
     g_signal_connect(G_OBJECT(model_combo), "changed", G_CALLBACK(model_combo_changed), self);
     gtk_box_pack_start(GTK_BOX(model_vbox), model_combo, FALSE, FALSE, 2);
@@ -624,6 +641,16 @@ le_main_window_init(LEMainWindow *self)
     gtk_combo_box_set_active(GTK_COMBO_BOX(self->svm_c_combo), 2);
     gtk_box_pack_start(GTK_BOX(self->svm_vbox), self->svm_c_combo, FALSE, FALSE, 2);
     gtk_box_pack_start(GTK_BOX(model_vbox), self->svm_vbox, FALSE, FALSE, 2);
+
+    self->knn_vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
+    gtk_box_pack_start(GTK_BOX(self->knn_vbox), gtk_label_new("k - Number of Nearest Neighbors"), FALSE, FALSE, 2);
+    self->knn_k_combo = gtk_combo_box_text_new();
+    gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(self->knn_k_combo), "1");
+    gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(self->knn_k_combo), "3");
+    gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(self->knn_k_combo), "10");
+    gtk_combo_box_set_active(GTK_COMBO_BOX(self->knn_k_combo), 0);
+    gtk_box_pack_start(GTK_BOX(self->knn_vbox), self->knn_k_combo, FALSE, FALSE, 2);
+    gtk_box_pack_start(GTK_BOX(model_vbox), self->knn_vbox, FALSE, FALSE, 2);
 
     self->drawing_area = gtk_drawing_area_new();
     gtk_widget_set_size_request(self->drawing_area, 256, 256);
