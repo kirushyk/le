@@ -76,9 +76,10 @@ le_knn_predict(LeKNN *self, const LeTensor *x)
     unsigned features_count = le_matrix_get_height(x);
     assert(le_matrix_get_height(self->x) == features_count);
     LeTensor *h = le_matrix_new_uninitialized(LE_TYPE_FLOAT32, 1, test_examples_count);
+    float *squared_distances = (float *)malloc(train_examples_count * sizeof(float));
+    unsigned *indices = (unsigned *)malloc(self->k * sizeof(unsigned));
     for (unsigned i = 0; i < test_examples_count; i++)
     {
-        float min_squared_distance = HUGE_VALF;
         for (unsigned j = 0; j < train_examples_count; j++)
         {
             float squared_distance = 0.0f;
@@ -87,13 +88,34 @@ le_knn_predict(LeKNN *self, const LeTensor *x)
                 float distance = le_matrix_at_f32(self->x, dim, j) - le_matrix_at_f32(x, dim, i);
                 squared_distance += distance * distance;
             }
-            if (squared_distance < min_squared_distance)
-            {
-                min_squared_distance = squared_distance;
-                le_matrix_set_f32(h, 0, i, le_matrix_at_f32(self->y, 0, j));
-            }
+            squared_distances[j] = squared_distance;
         }
+
+        for (unsigned n = 0; n < self->k; n++)
+        {
+            indices[n] = 0;
+            for (unsigned j = 1; j < train_examples_count; j++)
+            {
+                if (j == indices[n])
+                    continue;
+                if (squared_distances[j] < squared_distances[indices[n]])
+                {
+                    indices[n] = j;
+                }
+            }
+            squared_distances[indices[n]] = HUGE_VALF;
+        }
+
+        float prediction = 0.0f;
+        for (unsigned n = 0; n < self->k; n++)
+        {
+            prediction += le_matrix_at_f32(self->y, 0, indices[n]);
+        }
+        prediction /= self->k;
+        le_matrix_set_f32(h, 0, i, prediction);
     }
+    free(indices);
+    free(squared_distances);
     return h;
 }
 
