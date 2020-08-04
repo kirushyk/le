@@ -204,7 +204,7 @@ train_current_model(LEMainWindow *self)
             sscanf(gtk_combo_box_text_get_active_text(GTK_COMBO_BOX_TEXT(self->svm_c_combo)), "%f", &options.c);
             LeTensor *labels = le_tensor_new_copy(le_data_set_get_output(self->train_data));
             le_tensor_apply_sgn(labels);
-            le_svm_train((LeSVM *)self->model,
+            le_svm_train(LE_SVM(self->model),
                 le_data_set_get_input(self->train_data),
                 labels,
                 options);
@@ -261,7 +261,7 @@ train_current_model(LEMainWindow *self)
                 break;
             }
             sscanf(gtk_combo_box_text_get_active_text(GTK_COMBO_BOX_TEXT(self->lambda_combo)), "%f", &options.lambda);
-            le_logistic_classifier_train((LeLogisticClassifier *)self->model,
+            le_logistic_classifier_train(LE_LOGISTIC_CLASSIFIER(self->model),
                 le_data_set_get_input(self->train_data),
                 le_data_set_get_output(self->train_data),
                 options);
