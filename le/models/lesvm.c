@@ -28,15 +28,14 @@ typedef struct LeSVMClass
     LeModelClass parent;
 } LeSVMClass;
 
-static LeSVMClass klass;
-
 LeTensor *
 le_svm_predict(LeSVM *self, const LeTensor *x);
 
-void
+LeSVMClass *
 le_svm_class_ensure_init(void)
 {
     static bool initialized = false;
+    static LeSVMClass klass;
     
     if (!initialized)
     {
@@ -44,14 +43,15 @@ le_svm_class_ensure_init(void)
             (LeTensor *(*)(LeModel *, const LeTensor *))le_svm_predict;
         initialized = 1;
     }
+
+    return &klass;
 }
 
 void
 le_svm_construct(LeSVM *self)
 {
-    le_model_construct((LeModel *)self);
-    le_svm_class_ensure_init();
-    ((LeObject *)self)->klass = (LeClass *)&klass;
+    le_model_construct(LE_MODEL(self));
+    LE_OBJECT_GET_CLASS(self) = LE_CLASS(le_svm_class_ensure_init());
     self->bias = 0.0f;
     self->alphas = NULL;
     self->weights = NULL;

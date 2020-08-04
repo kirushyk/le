@@ -25,18 +25,17 @@ typedef struct LeSequentialClass
     LeModelClass parent;
 } LeSequentialClass;
 
-static LeSequentialClass klass;
-
 LeTensor *
 le_sequential_predict(LeSequential *self, const LeTensor *x);
 
 LeList *
 le_sequential_get_gradients(LeSequential *self, const LeTensor *x, const LeTensor *y);
 
-static void
+LeSequentialClass *
 le_sequential_class_ensure_init()
 {
     static bool initialized = false;
+    static LeSequentialClass klass;
     
     if (!initialized)
     {
@@ -46,14 +45,15 @@ le_sequential_class_ensure_init()
             (LeList *(*)(LeModel *, const LeTensor *, const LeTensor *))le_sequential_get_gradients;
         initialized = 1;
     }
+
+    return &klass;
 }
 
 void
 le_sequential_construct(LeSequential *self)
 {
-    le_model_construct((LeModel *)self);
-    le_sequential_class_ensure_init();
-    ((LeObject *)self)->klass = (LeClass *)&klass;
+    le_model_construct(LE_MODEL(self));
+    LE_OBJECT_GET_CLASS(self) = LE_CLASS(le_sequential_class_ensure_init());
     
     self->layers = NULL;
     self->loss = LE_LOSS_MSE;
