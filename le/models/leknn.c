@@ -44,9 +44,8 @@ le_knn_class_ensure_init(void)
 void
 le_knn_construct(LeKNN *self)
 {
-    le_model_construct((LeModel *)self);
-    ;
-    ((LeObject *)self)->klass = (LeClass *)le_knn_class_ensure_init();
+    le_model_construct(LE_MODEL(self));
+    LE_OBJECT_GET_CLASS(self) = LE_CLASS(le_knn_class_ensure_init());
     self->x = NULL;
     self->y= NULL;
     self->k = 1;
@@ -63,8 +62,14 @@ le_knn_new(void)
 void                    
 le_knn_train(LeKNN *self, LeTensor *x, LeTensor *y, unsigned k)
 {
+    assert(x);
+    assert(y);
+    assert(k > 0);
     self->x = x;
     self->y = y;
+    unsigned examples_count = le_matrix_get_width(x);
+    assert(examples_count == le_matrix_get_width(y));
+    assert(examples_count >= k);
     self->k = k;
 }
 
