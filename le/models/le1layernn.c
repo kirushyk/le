@@ -24,35 +24,35 @@ typedef struct Le1LayerNNClass
     LeModelClass parent;
 } Le1LayerNNClass;
 
-Le1LayerNNClass le_1_layer_nn_class;
-
 LeTensor *
 le_1_layer_nn_predict(Le1LayerNN *self, const LeTensor *x);
 
 LeList *
 le_1_layer_nn_get_gradients(Le1LayerNN *self, const LeTensor *x, const LeTensor *y);
 
-void
+Le1LayerNNClass *
 le_1_layer_nn_class_ensure_init(void)
 {
     static int le_1_layer_nn_class_initialized = 0;
+    static Le1LayerNNClass klass;
 
     if (!le_1_layer_nn_class_initialized)
     {
-        le_1_layer_nn_class.parent.predict =
+        klass.parent.predict =
             (LeTensor *(*)(LeModel *, const LeTensor *))le_1_layer_nn_predict;
-        le_1_layer_nn_class.parent.get_gradients =
+        klass.parent.get_gradients =
             (LeList *(*)(LeModel *, const LeTensor *, const LeTensor *))le_1_layer_nn_get_gradients;
         le_1_layer_nn_class_initialized = 1;
     }
+
+    return &klass;
 }
 
 void
 le_1_layer_nn_construct(Le1LayerNN *self)
 {
     le_model_construct((LeModel *)self);
-    le_1_layer_nn_class_ensure_init();
-    ((LeObject *)self)->klass = (LeClass *)&le_1_layer_nn_class;
+    LE_OBJECT_GET_CLASS(self) = LE_CLASS(le_1_layer_nn_class_ensure_init());
     self->weights = NULL;
     self->bias = 0;
 }
