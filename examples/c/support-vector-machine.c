@@ -29,7 +29,7 @@ main(int argc, const char *argv[])
     options.c = 1.0f;
     le_svm_train(svm, x, y, options);
     
-    LeTensor *h = le_model_predict((LeModel *)svm, x);
+    LeTensor *h = le_model_predict(LE_MODEL(svm), x);
     printf("Predicted value =\n");
     le_tensor_print(h, stdout);
     
