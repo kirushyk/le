@@ -77,7 +77,7 @@ le_sequential_add(LeSequential *self, LeLayer *layer)
     
     for (LeList *current = parameters; current != NULL; current = current->next)
     {
-        LeTensor *parameter = (LeTensor *)current->data;
+        LeTensor *parameter = LE_TENSOR(current->data);
         le_model_append_parameter(LE_MODEL(self), parameter);
     }
 }
@@ -104,7 +104,7 @@ forward_propagation(LeSequential *self, const LeTensor *x, LeList **inputs)
          current != NULL;
          current = current->next)
     {
-        LeLayer *current_layer = (LeLayer *)current->data;
+        LeLayer *current_layer = LE_LAYER(current->data);
         if (inputs)
         {
             *inputs = le_list_append(*inputs, le_tensor_new_copy(signal));
@@ -286,9 +286,9 @@ le_sequential_check_gradients(LeSequential *self, const LeTensor *x, const LeTen
          gradients_iterator && gradients_estimations_iterator;
          gradients_iterator = gradients_iterator->next, gradients_estimations_iterator = gradients_estimations_iterator->next)
     {
-        LeTensor *gradient_estimate = (LeTensor *)gradients_estimations_iterator->data;
+        LeTensor *gradient_estimate = LE_TENSOR(gradients_estimations_iterator->data);
         LE_INFO("gradient_estimate =\n%s", le_tensor_to_cstr(gradient_estimate));
-        LeTensor *gradient = (LeTensor *)gradients_iterator->data;
+        LeTensor *gradient = LE_TENSOR(gradients_iterator->data);
         LE_INFO("gradient =\n%s", le_tensor_to_cstr(gradient));
         float denominator = le_tensor_l2_f32(gradient) + le_tensor_l2_f32(gradient_estimate);
         float normalized_distance = 1.0f;

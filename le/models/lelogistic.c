@@ -24,15 +24,14 @@ typedef struct LeLogisticClassifierClass
     LeModelClass parent;
 } LeLogisticClassifierClass;
 
-static LeLogisticClassifierClass klass;
-
 LeTensor *
 le_logistic_classifier_predict(LeLogisticClassifier *self, const LeTensor *x);
 
-void
+LeLogisticClassifierClass *
 le_logistic_classifier_class_ensure_init(void)
 {
     static bool initialized = false;
+    static LeLogisticClassifierClass klass;
 
     if (!initialized)
     {
@@ -40,14 +39,15 @@ le_logistic_classifier_class_ensure_init(void)
             (LeTensor *(*)(LeModel *, const LeTensor *))le_logistic_classifier_predict;
         initialized = 1;
     }
+
+    return &klass;
 }
 
 void
 le_logistic_classifier_construct(LeLogisticClassifier *self)
 {
-    le_model_construct((LeModel *)self);
-    le_logistic_classifier_class_ensure_init();
-    ((LeObject *)self)->klass = (LeClass *)&klass;
+    le_model_construct(LE_MODEL(self));
+    LE_OBJECT_GET_CLASS(self) = LE_CLASS(le_logistic_classifier_class_ensure_init());
     self->weights = NULL;
     self->bias = 0;
     self->polynomia_degree = 0;
@@ -103,7 +103,7 @@ le_logistic_classifier_train(LeLogisticClassifier *self, const LeTensor *x_train
         x = le_matrix_new_polynomia(x_prev);
         if (x_prev != x_train)
         {
-            le_tensor_free((LeTensor *)x_prev);
+            le_tensor_free(LE_TENSOR(x_prev));
         }
         x_prev = x;
     }
