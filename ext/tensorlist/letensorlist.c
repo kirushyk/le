@@ -13,6 +13,7 @@
 static void
 le_tensor_serialize(LeTensor *tensor, FILE *fout)
 {
+    assert(tensor->device_type == LE_DEVICE_TYPE_CPU);
     assert(tensor);
     assert(fout);
 
