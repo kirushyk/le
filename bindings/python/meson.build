@@ -6,9 +6,13 @@ py3 = py_mod.find_installation('python3',
     required: false
 )
 
-py_dep = py3.dependency(required: false)
-
-have_python = py3.found() and have_cpp and py_dep.found()
+have_python = false
+if py3.found()
+    py_dep = py3.dependency(required: false)
+    if have_cpp and py_dep.found()
+        have_python = true
+    endif
+endif
 
 if have_python
     py_purelib = py3.get_path('purelib')
