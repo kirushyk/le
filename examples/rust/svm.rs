@@ -14,7 +14,7 @@ fn main() {
     print!("x = {}", y);
 
     let svm = SVM::new();
-    let mut options = SVM::TrainingOptions {
+    let options = SVM::TrainingOptions {
         kernel: 0.9,
         c: 1.0
     }
