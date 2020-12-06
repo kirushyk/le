@@ -63,6 +63,7 @@ le_tensor_deserialize(FILE *fin)
     else
         self->stride = 0;
     self->owns_data = true;
+    self->device_type = LE_DEVICE_TYPE_CPU;
     unsigned elements_count = le_shape_get_elements_count(self->shape);
     self->data = malloc(elements_count * le_type_size(self->element_type));
     fread(self->data, le_type_size(self->element_type), elements_count, fin);
