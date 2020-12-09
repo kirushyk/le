@@ -13,6 +13,9 @@ typedef struct LeConv2D
 {
     LeLayer parent;
     
+    unsigned int padding;
+    unsigned int stride;
+
     LeTensor *w;
     LeTensor *b;
 } LeConv2D;
