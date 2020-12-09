@@ -11,7 +11,7 @@ main(int argc, char *argv[])
     le_sequential_add(nn, LE_LAYER(le_conv2d_new("C1", 3, 1, 1, 0, 1)));
     le_sequential_free(nn);
 
-    LeTensor *input = le_tensor_new(LE_TYPE_FLOAT32, 4, 1, 1, 6, 6,
+    LeTensor *input = le_tensor_new(LE_TYPE_FLOAT32, 4, 1, 6, 6, 1,
         1.0, 1.0, 1.0, 0.0, 0.0, 0.0,
         1.0, 1.0, 1.0, 0.0, 0.0, 0.0,
         1.0, 1.0, 1.0, 0.0, 0.0, 0.0,

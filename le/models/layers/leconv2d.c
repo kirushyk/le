@@ -26,7 +26,7 @@ le_conv2d_forward_prop(LeLayer *layer, LeTensor *input)
 
     assert(self->w);
     assert(self->w->shape);
-    assert(le_shape_get_elements_count(self->w->shape) == 4);
+    assert(self->w->shape->num_dimensions == 4);
 
     unsigned int filter_size_h = self->w->shape->sizes[0];
     unsigned int filter_size_w = self->w->shape->sizes[1];
@@ -34,7 +34,7 @@ le_conv2d_forward_prop(LeLayer *layer, LeTensor *input)
     unsigned int num_filters = self->w->shape->sizes[3];
 
     assert(input->shape);
-    assert(le_shape_get_elements_count(input->shape) == 4);
+    assert(input->shape->num_dimensions == 4);
 
     unsigned int batch_size = input->shape->sizes[0];
     unsigned int input_h = input->shape->sizes[1];
