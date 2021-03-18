@@ -57,11 +57,9 @@ struct _LEMainWindow
 
 G_DEFINE_TYPE(LEMainWindow, le_main_window, GTK_TYPE_APPLICATION_WINDOW);
 
-static gboolean
-draw_callback(GtkWidget *widget, cairo_t *cr, gpointer data)
-{   
-    guint width = gtk_widget_get_allocated_width(widget);
-    guint height = gtk_widget_get_allocated_height(widget);
+static void
+draw_callback(GtkDrawingArea *drawing_area, cairo_t *cr, int width, int height, gpointer data)
+{
     LEMainWindow *window = LE_MAIN_WINDOW(data);
     
     window->dark ? cairo_set_source_rgba(cr, 0.0, 0.0, 0.0, 1.0) : cairo_set_source_rgba(cr, 1.0, 1.0, 1.0, 1.0);
@@ -109,8 +107,6 @@ draw_callback(GtkWidget *widget, cairo_t *cr, gpointer data)
             cairo_stroke(cr);
         }
     }
-    
-    return FALSE;
 }
 
 static cairo_surface_t *
@@ -412,7 +408,7 @@ le_main_window_set_preffered_model(GtkWidget *window, PreferredModelType model_t
     switch (self->preferred_model_type)
     {
     case 1:
-        gtk_widget_show_all(self->svm_vbox);
+        gtk_widget_show(self->svm_vbox);
         gtk_widget_hide(self->pr_vbox);
         gtk_widget_hide(self->gd_vbox);
         gtk_widget_hide(self->knn_vbox);
@@ -421,7 +417,7 @@ le_main_window_set_preffered_model(GtkWidget *window, PreferredModelType model_t
     case 2:
         gtk_widget_hide(self->svm_vbox);
         gtk_widget_hide(self->pr_vbox);
-        gtk_widget_show_all(self->gd_vbox);
+        gtk_widget_show(self->gd_vbox);
         gtk_widget_hide(self->knn_vbox);
         break;
 
@@ -429,14 +425,14 @@ le_main_window_set_preffered_model(GtkWidget *window, PreferredModelType model_t
         gtk_widget_hide(self->svm_vbox);
         gtk_widget_hide(self->pr_vbox);
         gtk_widget_hide(self->gd_vbox);
-        gtk_widget_show_all(self->knn_vbox);
+        gtk_widget_show(self->knn_vbox);
         break;
         
     case 0:
     default:
         gtk_widget_hide(self->svm_vbox);
-        gtk_widget_show_all(self->pr_vbox);
-        gtk_widget_show_all(self->gd_vbox);
+        gtk_widget_show(self->pr_vbox);
+        gtk_widget_show(self->gd_vbox);
         gtk_widget_hide(self->knn_vbox);
         break;
     }
@@ -505,34 +501,39 @@ le_main_window_init(LEMainWindow *self)
     self->classifier_visualisation = NULL;
     self->preferred_model_type = PREFERRED_MODEL_TYPE_POLYNOMIAL_REGRESSION;
     
-    GtkWidget *reset = gtk_button_new_from_icon_name("go-first", GTK_ICON_SIZE_LARGE_TOOLBAR);
+    GtkWidget *reset = gtk_button_new_from_icon_name("go-first");
     g_signal_connect(G_OBJECT(reset), "clicked", G_CALLBACK(reset_button_clicked), self);
-    GtkWidget *start = gtk_button_new_from_icon_name("media-playback-start", GTK_ICON_SIZE_LARGE_TOOLBAR);
+    GtkWidget *start = gtk_button_new_from_icon_name("media-playback-start");
     g_signal_connect(G_OBJECT(start), "clicked", G_CALLBACK(start_button_clicked), self);
-    GtkWidget *stop = gtk_button_new_from_icon_name("media-playback-stop", GTK_ICON_SIZE_LARGE_TOOLBAR);
-    GtkWidget *step = gtk_button_new_from_icon_name("go-next", GTK_ICON_SIZE_LARGE_TOOLBAR);
+    GtkWidget *stop = gtk_button_new_from_icon_name("media-playback-stop");
+    GtkWidget *step = gtk_button_new_from_icon_name("go-next");
 
     GtkWidget *learning_hbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 2);
-    gtk_box_pack_start(GTK_BOX(learning_hbox), reset, FALSE, FALSE, 2);
-    gtk_box_pack_start(GTK_BOX(learning_hbox), start, FALSE, FALSE, 2);
-    gtk_box_pack_start(GTK_BOX(learning_hbox), stop, FALSE, FALSE, 2);
-    gtk_box_pack_start(GTK_BOX(learning_hbox), step, FALSE, FALSE, 2);
+    gtk_box_append(GTK_BOX(learning_hbox), reset);
+    gtk_box_append(GTK_BOX(learning_hbox), start);
+    gtk_box_append(GTK_BOX(learning_hbox), stop);
+    gtk_box_append(GTK_BOX(learning_hbox), step);
     GtkWidget *learning_grid = gtk_grid_new();
     gtk_grid_set_column_spacing(GTK_GRID(learning_grid), 8);
     gtk_grid_attach(GTK_GRID(learning_grid), gtk_label_new("Epoch"), 0, 0, 1, 1);
     self->epoch_label = gtk_label_new("<big>0</big>");
     gtk_label_set_use_markup(GTK_LABEL(self->epoch_label), TRUE);
     gtk_grid_attach(GTK_GRID(learning_grid), self->epoch_label, 0, 1, 1, 1);
-    gtk_box_pack_start(GTK_BOX(learning_hbox), learning_grid, FALSE, FALSE, 2);
+    gtk_box_append(GTK_BOX(learning_hbox), learning_grid);
     
     GtkWidget *data_vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 2);
     GtkWidget *label = gtk_label_new("<b>DATA</b>");
     gtk_label_set_use_markup(GTK_LABEL(label), TRUE);
-    self->svb_rb = gtk_radio_button_new_with_label(NULL, "Support Vectors");
-    self->linsep_rb = gtk_radio_button_new_with_label_from_widget(GTK_RADIO_BUTTON(self->svb_rb), "Linearly Separable");
-    self->nested_rb = gtk_radio_button_new_with_label_from_widget(GTK_RADIO_BUTTON(self->svb_rb), "Nested Circles");
-    self->spiral_rb = gtk_radio_button_new_with_label_from_widget(GTK_RADIO_BUTTON(self->svb_rb), "Spiral");
-    self->rand_rb = gtk_radio_button_new_with_label_from_widget(GTK_RADIO_BUTTON(self->svb_rb), "Random");
+
+    self->svb_rb = gtk_check_button_new_with_label("Support Vectors");
+    self->linsep_rb = gtk_check_button_new_with_label("Linearly Separable");
+    gtk_check_button_set_group(self->linsep_rb, self->svb_rb);
+    self->nested_rb = gtk_check_button_new_with_label("Nested Circles");
+    gtk_check_button_set_group(self->nested_rb, self->svb_rb);
+    self->spiral_rb = gtk_check_button_new_with_label("Spiral");
+    gtk_check_button_set_group(self->spiral_rb, self->svb_rb);
+    self->rand_rb = gtk_check_button_new_with_label("Random");
+    gtk_check_button_set_group(self->rand_rb, self->svb_rb);
     
     self->train_set_combo = gtk_combo_box_text_new();
     gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(self->train_set_combo), "256");
@@ -552,22 +553,22 @@ le_main_window_init(LEMainWindow *self)
     
     GtkWidget *generate = gtk_button_new_with_label("Generate");
     g_signal_connect(G_OBJECT(generate), "clicked", G_CALLBACK(generate_button_clicked), self);
-    gtk_box_pack_start(GTK_BOX(data_vbox), label, FALSE, FALSE, 2);
-    gtk_box_pack_start(GTK_BOX(data_vbox), self->svb_rb, FALSE, FALSE, 2);
-    gtk_box_pack_start(GTK_BOX(data_vbox), self->linsep_rb, FALSE, FALSE, 2);
-    gtk_box_pack_start(GTK_BOX(data_vbox), self->nested_rb, FALSE, FALSE, 2);
-    gtk_box_pack_start(GTK_BOX(data_vbox), self->spiral_rb, FALSE, FALSE, 2);
-    gtk_box_pack_start(GTK_BOX(data_vbox), self->rand_rb, FALSE, FALSE, 2);
-    gtk_box_pack_start(GTK_BOX(data_vbox), gtk_label_new("Train Set Size"), FALSE, FALSE, 2);
-    gtk_box_pack_start(GTK_BOX(data_vbox), self->train_set_combo, FALSE, FALSE, 2);
-    gtk_box_pack_start(GTK_BOX(data_vbox), gtk_label_new("Test Set Size"), FALSE, FALSE, 2);
-    gtk_box_pack_start(GTK_BOX(data_vbox), self->test_set_combo, FALSE, FALSE, 2);
-    gtk_box_pack_start(GTK_BOX(data_vbox), generate, FALSE, FALSE, 2);
+    gtk_box_append(GTK_BOX(data_vbox), label);
+    gtk_box_append(GTK_BOX(data_vbox), self->svb_rb);
+    gtk_box_append(GTK_BOX(data_vbox), self->linsep_rb);
+    gtk_box_append(GTK_BOX(data_vbox), self->nested_rb);
+    gtk_box_append(GTK_BOX(data_vbox), self->spiral_rb);
+    gtk_box_append(GTK_BOX(data_vbox), self->rand_rb);
+    gtk_box_append(GTK_BOX(data_vbox), gtk_label_new("Train Set Size"));
+    gtk_box_append(GTK_BOX(data_vbox), self->train_set_combo);
+    gtk_box_append(GTK_BOX(data_vbox), gtk_label_new("Test Set Size"));
+    gtk_box_append(GTK_BOX(data_vbox), self->test_set_combo);
+    gtk_box_append(GTK_BOX(data_vbox), generate);
     
     GtkWidget *model_vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 2);
     label = gtk_label_new("<b>MODEL</b>");
     gtk_label_set_use_markup(GTK_LABEL(label), TRUE);
-    gtk_box_pack_start(GTK_BOX(model_vbox), label, FALSE, FALSE, 2);
+    gtk_box_append(GTK_BOX(model_vbox), label);
     GtkWidget *model_combo = gtk_combo_box_text_new();
     gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(model_combo), "Polynomial Regression");
     gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(model_combo), "Support Vector Machine");
@@ -575,16 +576,16 @@ le_main_window_init(LEMainWindow *self)
     gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(model_combo), "k Nearest Neighbors");
     gtk_combo_box_set_active(GTK_COMBO_BOX(model_combo), 2);
     g_signal_connect(G_OBJECT(model_combo), "changed", G_CALLBACK(model_combo_changed), self);
-    gtk_box_pack_start(GTK_BOX(model_vbox), model_combo, FALSE, FALSE, 2);
+    gtk_box_append(GTK_BOX(model_vbox), model_combo);
     
-    gtk_box_pack_start(GTK_BOX(model_vbox), gtk_separator_new(GTK_ORIENTATION_HORIZONTAL), FALSE, FALSE, 2);
+    gtk_box_append(GTK_BOX(model_vbox), gtk_separator_new(GTK_ORIENTATION_HORIZONTAL));
     
     label = gtk_label_new("<b>HYPERPARAMETERS</b>");
     gtk_label_set_use_markup(GTK_LABEL(label), TRUE);
-    gtk_box_pack_start(GTK_BOX(model_vbox), label, FALSE, FALSE, 2);
+    gtk_box_append(GTK_BOX(model_vbox), label);
     
     self->gd_vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
-    gtk_box_pack_start(GTK_BOX(self->gd_vbox), gtk_label_new("Learning Rate α"), FALSE, FALSE, 2);
+    gtk_box_append(GTK_BOX(self->gd_vbox), gtk_label_new("Learning Rate α"));
     self->alpha_combo = gtk_combo_box_text_new();
     gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(self->alpha_combo), "0.01");
     gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(self->alpha_combo), "0.03");
@@ -595,25 +596,25 @@ le_main_window_init(LEMainWindow *self)
     gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(self->alpha_combo), "10");
     gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(self->alpha_combo), "30");
     gtk_combo_box_set_active(GTK_COMBO_BOX(self->alpha_combo), 4);
-    gtk_box_pack_start(GTK_BOX(self->gd_vbox), self->alpha_combo, FALSE, FALSE, 2);
-    gtk_box_pack_start(GTK_BOX(model_vbox), self->gd_vbox, FALSE, FALSE, 2);
+    gtk_box_append(GTK_BOX(self->gd_vbox), self->alpha_combo);
+    gtk_box_append(GTK_BOX(model_vbox), self->gd_vbox);
 
     self->pr_vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
-    gtk_box_pack_start(GTK_BOX(self->pr_vbox), gtk_label_new("Polynomia Degree"), FALSE, FALSE, 2);
+    gtk_box_append(GTK_BOX(self->pr_vbox), gtk_label_new("Polynomia Degree"));
     self->polynomia_degree_combo = gtk_combo_box_text_new();
     gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(self->polynomia_degree_combo), "0");
     gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(self->polynomia_degree_combo), "1");
     gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(self->polynomia_degree_combo), "2");
     gtk_combo_box_set_active(GTK_COMBO_BOX(self->polynomia_degree_combo), 1);
-    gtk_box_pack_start(GTK_BOX(self->pr_vbox), self->polynomia_degree_combo, FALSE, FALSE, 2);
-    gtk_box_pack_start(GTK_BOX(self->pr_vbox), gtk_label_new("Regularization"), FALSE, FALSE, 2);
+    gtk_box_append(GTK_BOX(self->pr_vbox), self->polynomia_degree_combo);
+    gtk_box_append(GTK_BOX(self->pr_vbox), gtk_label_new("Regularization"));
     self->regularization_combo = gtk_combo_box_text_new();
     gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(self->regularization_combo), "None");
     gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(self->regularization_combo), "L1");
     gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(self->regularization_combo), "L2");
     gtk_combo_box_set_active(GTK_COMBO_BOX(self->regularization_combo), 0);
-    gtk_box_pack_start(GTK_BOX(self->pr_vbox), self->regularization_combo, FALSE, FALSE, 2);
-    gtk_box_pack_start(GTK_BOX(self->pr_vbox), gtk_label_new("Regularization Rate λ"), FALSE, FALSE, 2);
+    gtk_box_append(GTK_BOX(self->pr_vbox), self->regularization_combo);
+    gtk_box_append(GTK_BOX(self->pr_vbox), gtk_label_new("Regularization Rate λ"));
     self->lambda_combo = gtk_combo_box_text_new();
     gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(self->lambda_combo), "0");
     gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(self->lambda_combo), "0.001");
@@ -625,17 +626,17 @@ le_main_window_init(LEMainWindow *self)
     gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(self->lambda_combo), "1");
     gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(self->lambda_combo), "3");
     gtk_combo_box_set_active(GTK_COMBO_BOX(self->lambda_combo), 0);
-    gtk_box_pack_start(GTK_BOX(self->pr_vbox), self->lambda_combo, FALSE, FALSE, 2);
-    gtk_box_pack_start(GTK_BOX(model_vbox), self->pr_vbox, FALSE, FALSE, 2);
+    gtk_box_append(GTK_BOX(self->pr_vbox), self->lambda_combo);
+    gtk_box_append(GTK_BOX(model_vbox), self->pr_vbox);
 
     self->svm_vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
-    gtk_box_pack_start(GTK_BOX(self->svm_vbox), gtk_label_new("Kernel"), FALSE, FALSE, 2);
+    gtk_box_append(GTK_BOX(self->svm_vbox), gtk_label_new("Kernel"));
     self->svm_kernel_combo = gtk_combo_box_text_new();
     gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(self->svm_kernel_combo), "Linear");
     gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(self->svm_kernel_combo), "Radial Basis Function");
     gtk_combo_box_set_active(GTK_COMBO_BOX(self->svm_kernel_combo), 1);
-    gtk_box_pack_start(GTK_BOX(self->svm_vbox), self->svm_kernel_combo, FALSE, FALSE, 2);
-    gtk_box_pack_start(GTK_BOX(self->svm_vbox), gtk_label_new("Regularization Parameter C"), FALSE, FALSE, 2);
+    gtk_box_append(GTK_BOX(self->svm_vbox), self->svm_kernel_combo);
+    gtk_box_append(GTK_BOX(self->svm_vbox), gtk_label_new("Regularization Parameter C"));
     self->svm_c_combo = gtk_combo_box_text_new();
     gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(self->svm_c_combo), "1");
     gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(self->svm_c_combo), "3");
@@ -643,46 +644,46 @@ le_main_window_init(LEMainWindow *self)
     gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(self->svm_c_combo), "30");
     gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(self->svm_c_combo), "100");
     gtk_combo_box_set_active(GTK_COMBO_BOX(self->svm_c_combo), 2);
-    gtk_box_pack_start(GTK_BOX(self->svm_vbox), self->svm_c_combo, FALSE, FALSE, 2);
-    gtk_box_pack_start(GTK_BOX(model_vbox), self->svm_vbox, FALSE, FALSE, 2);
+    gtk_box_append(GTK_BOX(self->svm_vbox), self->svm_c_combo);
+    gtk_box_append(GTK_BOX(model_vbox), self->svm_vbox);
 
     self->knn_vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
-    gtk_box_pack_start(GTK_BOX(self->knn_vbox), gtk_label_new("Number of Nearest Neighbors k"), FALSE, FALSE, 2);
+    gtk_box_append(GTK_BOX(self->knn_vbox), gtk_label_new("Number of Nearest Neighbors k"));
     self->knn_k_combo = gtk_combo_box_text_new();
     gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(self->knn_k_combo), "1");
     gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(self->knn_k_combo), "3");
     gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(self->knn_k_combo), "10");
     gtk_combo_box_set_active(GTK_COMBO_BOX(self->knn_k_combo), 0);
-    gtk_box_pack_start(GTK_BOX(self->knn_vbox), self->knn_k_combo, FALSE, FALSE, 2);
-    gtk_box_pack_start(GTK_BOX(model_vbox), self->knn_vbox, FALSE, FALSE, 2);
+    gtk_box_append(GTK_BOX(self->knn_vbox), self->knn_k_combo);
+    gtk_box_append(GTK_BOX(model_vbox), self->knn_vbox);
 
     self->drawing_area = gtk_drawing_area_new();
     gtk_widget_set_size_request(self->drawing_area, 256, 256);
-    g_signal_connect(G_OBJECT(self->drawing_area), "draw", G_CALLBACK(draw_callback), self);
+    gtk_drawing_area_set_draw_func(self->drawing_area, draw_callback, self, NULL);
     
     GtkWidget *output_vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 2);
     label = gtk_label_new("<b>OUTPUT</b>");
     gtk_label_set_use_markup(GTK_LABEL(label), TRUE);
-    gtk_box_pack_start(GTK_BOX(output_vbox), label, FALSE, FALSE, 2);
-    gtk_box_pack_start(GTK_BOX(output_vbox), self->drawing_area, FALSE, FALSE, 2);
-    gtk_box_pack_start(GTK_BOX(output_vbox), gtk_separator_new(GTK_ORIENTATION_HORIZONTAL), FALSE, FALSE, 2);
+    gtk_box_append(GTK_BOX(output_vbox), label);
+    gtk_box_append(GTK_BOX(output_vbox), self->drawing_area);
+    gtk_box_append(GTK_BOX(output_vbox), gtk_separator_new(GTK_ORIENTATION_HORIZONTAL));
     label = gtk_label_new("<b>LEARNING CURVES</b>");
     gtk_label_set_use_markup(GTK_LABEL(label), TRUE);
-    gtk_box_pack_start(GTK_BOX(output_vbox), label, FALSE, FALSE, 2);
+    gtk_box_append(GTK_BOX(output_vbox), label);
     
     GtkWidget *main_hbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 2);
-    gtk_box_pack_start(GTK_BOX(main_hbox), data_vbox, FALSE, FALSE, 2);
-    gtk_box_pack_start(GTK_BOX(main_hbox), gtk_separator_new(GTK_ORIENTATION_VERTICAL), FALSE, FALSE, 2);
-    gtk_box_pack_start(GTK_BOX(main_hbox), model_vbox, TRUE, FALSE, 2);
-    gtk_box_pack_start(GTK_BOX(main_hbox), gtk_separator_new(GTK_ORIENTATION_VERTICAL), FALSE, FALSE, 2);
-    gtk_box_pack_start(GTK_BOX(main_hbox), output_vbox, FALSE, FALSE, 2);
+    gtk_box_append(GTK_BOX(main_hbox), data_vbox);
+    gtk_box_append(GTK_BOX(main_hbox), gtk_separator_new(GTK_ORIENTATION_VERTICAL));
+    gtk_box_append(GTK_BOX(main_hbox), model_vbox);
+    gtk_box_append(GTK_BOX(main_hbox), gtk_separator_new(GTK_ORIENTATION_VERTICAL));
+    gtk_box_append(GTK_BOX(main_hbox), output_vbox);
 
     GtkWidget *vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 2);
-    gtk_box_pack_start(GTK_BOX(vbox), learning_hbox, FALSE, FALSE, 2);
-    gtk_box_pack_start(GTK_BOX(vbox), gtk_separator_new(GTK_ORIENTATION_HORIZONTAL), FALSE, FALSE, 2);
-    gtk_box_pack_start(GTK_BOX(vbox), main_hbox, FALSE, FALSE, 2);
+    gtk_box_append(GTK_BOX(vbox), learning_hbox);
+    gtk_box_append(GTK_BOX(vbox), gtk_separator_new(GTK_ORIENTATION_HORIZONTAL));
+    gtk_box_append(GTK_BOX(vbox), main_hbox);
     
-    gtk_container_add(GTK_CONTAINER(self), vbox);
+    gtk_window_set_child(GTK_WINDOW(self), vbox);
     g_action_map_add_action_entries(G_ACTION_MAP(self), win_entries, G_N_ELEMENTS(win_entries), self);
 }
 

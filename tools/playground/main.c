@@ -24,14 +24,14 @@ le_activate(GtkApplication *application, gpointer user_data)
 {
     GtkWidget *window;
     window = le_main_window_new(application);
-    gtk_widget_show_all(window);
+    gtk_window_present(GTK_WINDOW(window));
     le_main_window_set_preffered_model(window, PREFERRED_MODEL_TYPE_NEURAL_NETWORK);
 }
 
 static void
 le_startup(GApplication *application, gpointer user_data)
 {
-    gtk_application_set_app_menu(GTK_APPLICATION(application), le_app_menu_new());
+    // gtk_application_set_app_menu(GTK_APPLICATION(application), le_app_menu_new());
     gtk_application_set_menubar(GTK_APPLICATION(application), le_menubar_new());
     
     g_action_map_add_action_entries(G_ACTION_MAP(application), app_entries, G_N_ELEMENTS(app_entries), application);
