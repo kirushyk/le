@@ -20,6 +20,12 @@ main(int argc, char *argv[])
         0.0, 0.0, 0.0, 1.0, 1.0, 1.0,
         0.0, 0.0, 0.0, 1.0, 1.0, 1.0
     );
+    LeTensor *expected_output = le_tensor_new(LE_TYPE_FLOAT32, 4, 1, 4, 4, 1,
+        0.0, 0.0, 0.0, 0.0,
+        4.0, 2.0, -2.0, -4.0,
+        4.0, 2.0, -2.0, -4.0,
+        0.0, 0.0, 0.0, 0.0
+    );
     LeTensor *output = le_model_predict(LE_MODEL(nn), input);
     LeShape *expected_shape = le_shape_new(4, 1, 4, 4, 1);
     assert(le_shape_equal(output->shape, expected_shape));
