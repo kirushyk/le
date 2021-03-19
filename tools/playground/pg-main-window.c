@@ -386,13 +386,13 @@ static void
 generate_button_clicked(GtkButton *button, gpointer user_data)
 {
     LEMainWindow *window = LE_MAIN_WINDOW(user_data);
-    if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(window->rand_rb)))
+    if (gtk_check_button_get_active(GTK_CHECK_BUTTON(window->rand_rb)))
         generate_data(window, "rand");
-    else if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(window->linsep_rb)))
+    else if (gtk_check_button_get_active(GTK_CHECK_BUTTON(window->linsep_rb)))
         generate_data(window, "linsep");
-    else if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(window->nested_rb)))
+    else if (gtk_check_button_get_active(GTK_CHECK_BUTTON(window->nested_rb)))
         generate_data(window, "nested");
-    else if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(window->svb_rb)))
+    else if (gtk_check_button_get_active(GTK_CHECK_BUTTON(window->svb_rb)))
         generate_data(window, "svb");
     else
         generate_data(window, "spiral");
