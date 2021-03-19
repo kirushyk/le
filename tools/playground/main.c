@@ -1,7 +1,6 @@
 /* Copyright (c) Kyrylo Polezhaiev and contributors. All rights reserved.
    Released under the MIT license. See LICENSE file in the project root for full license information. */
 
-#include <locale.h>
 #include <stdlib.h>
 #include <gtk/gtk.h>
 #include <le/le.h>
@@ -45,7 +44,6 @@ main(int argc, char *argv[])
 #else
     srand(time(NULL));
 #endif
-    setlocale(LC_NUMERIC, "C");
     
     g_set_prgname("le-gtk-demo");
     g_set_application_name("Le Playground");

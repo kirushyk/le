@@ -2,6 +2,7 @@
    Released under the MIT license. See LICENSE file in the project root for full license information. */
 
 #include "pg-main-window.h"
+#include <locale.h>
 #include <stdlib.h>
 #include <le/le.h>
 #include <math.h>
@@ -181,7 +182,9 @@ train_current_model(LEMainWindow *self)
         return;
 
     float learning_rate = 1.0f;
-    sscanf(gtk_combo_box_text_get_active_text(GTK_COMBO_BOX_TEXT(self->alpha_combo)), "%f", &learning_rate);
+    char *learning_rate_str = gtk_combo_box_text_get_active_text(GTK_COMBO_BOX_TEXT(self->alpha_combo));
+    setlocale(LC_NUMERIC, "C");
+    sscanf(learning_rate_str, "%f", &learning_rate);
     
     switch (self->preferred_model_type)
     {
