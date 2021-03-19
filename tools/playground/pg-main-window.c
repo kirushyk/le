@@ -526,6 +526,7 @@ le_main_window_init(LEMainWindow *self)
     gtk_label_set_use_markup(GTK_LABEL(label), TRUE);
 
     self->svb_rb = gtk_check_button_new_with_label("Support Vectors");
+    gtk_check_button_set_active(self->svb_rb, TRUE);
     self->linsep_rb = gtk_check_button_new_with_label("Linearly Separable");
     gtk_check_button_set_group(self->linsep_rb, self->svb_rb);
     self->nested_rb = gtk_check_button_new_with_label("Nested Circles");
