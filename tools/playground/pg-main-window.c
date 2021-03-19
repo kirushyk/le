@@ -269,7 +269,7 @@ train_current_model(LEMainWindow *self)
         gtk_widget_get_allocated_width(GTK_WIDGET(self->drawing_area)),
         gtk_widget_get_allocated_height(GTK_WIDGET(self->drawing_area)));
     
-    gtk_widget_queue_draw(GTK_WIDGET(self));
+    gtk_widget_queue_draw(GTK_WIDGET(self->drawing_area));
     
     update_epoch_label(self);
 }
@@ -325,7 +325,7 @@ generate_data(LEMainWindow *self, const gchar *pattern)
     examples_count = atoi(gtk_combo_box_text_get_active_text(GTK_COMBO_BOX_TEXT(self->test_set_combo)));
     self->test_data = pg_generate_data(pattern, examples_count);
     
-    gtk_widget_queue_draw(GTK_WIDGET(self));
+    gtk_widget_queue_draw(GTK_WIDGET(self->drawing_area));
 }
 
 static void
@@ -342,7 +342,7 @@ style_activated(GSimpleAction *action, GVariant *parameter, gpointer data)
     g_assert(LE_IS_MAIN_WINDOW(window));
     const gchar *style = g_variant_get_string(parameter, NULL);
     window->dark = 0 == g_strcmp0(style, "dark");
-    gtk_widget_queue_draw(GTK_WIDGET(window));
+    gtk_widget_queue_draw(GTK_WIDGET(window->drawing_area));
 }
 
 static void
@@ -350,7 +350,7 @@ view_activated(GSimpleAction *action, GVariant *parameter, gpointer data)
 {
     LEMainWindow *window = LE_MAIN_WINDOW(data);
     g_assert(LE_IS_MAIN_WINDOW(window));
-    gtk_widget_queue_draw(GTK_WIDGET(window));
+    gtk_widget_queue_draw(GTK_WIDGET(window->drawing_area));
 }
 
 static void
@@ -477,7 +477,7 @@ reset_button_clicked(GtkButton *button, gpointer user_data)
         le_optimizer_free(self->optimizer);
         self->optimizer = NULL;
     }
-    gtk_widget_queue_draw(GTK_WIDGET(self));
+    gtk_widget_queue_draw(GTK_WIDGET(self->drawing_area));
 
     update_epoch_label(self);
 }
