@@ -123,7 +123,10 @@ set_changed(GtkComboBox *combo_box, gpointer data)
 {
     LEMainWindow *window = LE_MAIN_WINDOW(data);
     
-    if (!window->data_set)
+    if (window->data_set == NULL)
+        return;
+
+    if (window->data_set->train == NULL || window->data_set->test == NULL)
         return;
     
     if (gtk_combo_box_get_active(combo_box)) {
@@ -133,6 +136,9 @@ set_changed(GtkComboBox *combo_box, gpointer data)
         window->input = le_data_set_get_input(window->data_set->train);
         window->output = le_data_set_get_output(window->data_set->train);
     }
+
+    if (window->output == NULL)
+        return;
 
     int test_examples_count = le_shape_get_elements_count(window->output->shape);
     if (window->index >= test_examples_count) {
