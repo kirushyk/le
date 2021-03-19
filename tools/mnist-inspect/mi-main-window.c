@@ -115,7 +115,7 @@ update_image(LEMainWindow *window)
         gtk_entry_set_buffer(GTK_ENTRY(window->label_entry), entry_buffer);
     }
 
-    gtk_widget_queue_draw(GTK_WIDGET(window));
+    gtk_widget_queue_draw(GTK_WIDGET(window->drawing_area));
 }
 
 static void
