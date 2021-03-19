@@ -9,19 +9,17 @@ fn main() {
 
     let y = Tensor::new([[-1.0, -1.0, 1.0, 1.0]]);
     
-    print!("Train set:");
-    print!("x = {}", x);
-    print!("x = {}", y);
+    println!("Train set:");
+    println!("x = {}", x);
+    println!("y = {}", y);
 
-    let svm = SVM::new();
+    let mut svm = SVM::new();
     let options = SVM::TrainingOptions {
         kernel: 0.9,
         c: 1.0
     }
-    svm.train(x, y, options);
+    svm.train(&x, &y, options);
     
     let h = svm.predict(x);
-    print!("Predicted value = {}", h);
-    
-    return 0;
+    println!("Predicted value = {}", h);
 }
