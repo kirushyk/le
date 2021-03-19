@@ -164,7 +164,7 @@ static void
 le_main_window_init(LEMainWindow *self)
 {
     self->drawing_area = gtk_drawing_area_new();
-    gtk_drawing_area_set_draw_func(self->drawing_area, draw_callback, self, NULL);
+    gtk_drawing_area_set_draw_func(GTK_DRAWING_AREA(self->drawing_area), draw_callback, self, NULL);
     gtk_widget_set_size_request(self->drawing_area, 112, 112);
 
     GtkWidget *grid = gtk_grid_new();

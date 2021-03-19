@@ -526,15 +526,15 @@ le_main_window_init(LEMainWindow *self)
     gtk_label_set_use_markup(GTK_LABEL(label), TRUE);
 
     self->svb_rb = gtk_check_button_new_with_label("Support Vectors");
-    gtk_check_button_set_active(self->svb_rb, TRUE);
+    gtk_check_button_set_active(GTK_CHECK_BUTTON(self->svb_rb), TRUE);
     self->linsep_rb = gtk_check_button_new_with_label("Linearly Separable");
-    gtk_check_button_set_group(self->linsep_rb, self->svb_rb);
+    gtk_check_button_set_group(GTK_CHECK_BUTTON(self->linsep_rb), GTK_CHECK_BUTTON(self->svb_rb));
     self->nested_rb = gtk_check_button_new_with_label("Nested Circles");
-    gtk_check_button_set_group(self->nested_rb, self->svb_rb);
+    gtk_check_button_set_group(GTK_CHECK_BUTTON(self->nested_rb), GTK_CHECK_BUTTON(self->svb_rb));
     self->spiral_rb = gtk_check_button_new_with_label("Spiral");
-    gtk_check_button_set_group(self->spiral_rb, self->svb_rb);
+    gtk_check_button_set_group(GTK_CHECK_BUTTON(self->spiral_rb), GTK_CHECK_BUTTON(self->svb_rb));
     self->rand_rb = gtk_check_button_new_with_label("Random");
-    gtk_check_button_set_group(self->rand_rb, self->svb_rb);
+    gtk_check_button_set_group(GTK_CHECK_BUTTON(self->rand_rb), GTK_CHECK_BUTTON(self->svb_rb));
     
     self->train_set_combo = gtk_combo_box_text_new();
     gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(self->train_set_combo), "256");
@@ -660,7 +660,7 @@ le_main_window_init(LEMainWindow *self)
 
     self->drawing_area = gtk_drawing_area_new();
     gtk_widget_set_size_request(self->drawing_area, 256, 256);
-    gtk_drawing_area_set_draw_func(self->drawing_area, draw_callback, self, NULL);
+    gtk_drawing_area_set_draw_func(GTK_DRAWING_AREA(self->drawing_area), draw_callback, self, NULL);
     
     GtkWidget *output_vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 2);
     label = gtk_label_new("<b>OUTPUT</b>");
