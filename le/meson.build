@@ -86,7 +86,7 @@ install_headers('tensors/letensor-cast.h', subdir : 'le/tensors')
 install_headers('tensors/lescalar.h', subdir : 'le/tensors')
 install_headers('lelog.h', subdir : 'le')
 
-le = static_library('le', le_sources,
+le = library('le', le_sources,
     include_directories: incdir,
     link_with: le_libs,
     dependencies: le_deps,
