@@ -48,4 +48,5 @@ foreach filenames : le_tests
     test(test_name, exe, timeout : 3 * 60)
 endforeach
 
+subdir('cpp')
 subdir('python')
