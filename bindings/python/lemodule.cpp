@@ -16,9 +16,8 @@ static py::object tensor(py::array_t<float> elements)
         s[i] = r.shape(i);
     }
     unsigned numElements = le_shape_get_elements_count(s.c_shape());
-    float *tensorData = (float *)std::malloc(numElements * sizeof(float));
-    std::memcpy(tensorData, r.data(0), numElements * sizeof(float));
-    le::Tensor t(le::Type::FLOAT32, s, tensorData);
+    le::Tensor t(le::Type::FLOAT32, s);
+    std::memcpy(t.data(), r.data(0), numElements * sizeof(float));
     return py::cast(t);
 }
 

@@ -35,7 +35,7 @@ le_idx_read(const char *filename)
         if (header.zeros == 0)
         {
             LeShape *shape = le_shape_new_uninitialized(header.dimensionality);
-            gzread(fin, le_shape_get_data(shape), sizeof(uint32_t) * header.dimensionality);
+            fread(le_shape_get_data(shape), sizeof(uint32_t), header.dimensionality, fin);
             for (uint8_t i = 0; i < header.dimensionality; i++)
             {
                 le_shape_set_size(shape, i, le_shape_get_size(shape, i));
@@ -82,10 +82,9 @@ le_idx_read(const char *filename)
             }
 
             size_t element_size = le_type_size(type);
-            uint8_t *data = malloc(element_size * elements_count);
-            fread(data, element_size, elements_count, fin);
                         
-            tensor = le_tensor_new_from_data(type, shape, data);
+            tensor = le_tensor_new_uninitialized(type, shape);
+            fread(le_tensor_get_data(tensor), element_size, elements_count, fin);
         }
         else
         {
@@ -160,10 +159,9 @@ le_idx_gz_read(const char *filename)
             }
 
             size_t element_size = le_type_size(type);
-            uint8_t *data = malloc(element_size * elements_count);
-            gzread(fin, data, (unsigned)(element_size * elements_count));
             
-            tensor = le_tensor_new_from_data(type, shape, data);
+            tensor = le_tensor_new_uninitialized(type, shape);
+            gzread(fin, le_tensor_get_data(tensor), (unsigned)(element_size * elements_count));
         }
         else
         {

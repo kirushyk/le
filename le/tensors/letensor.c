@@ -142,7 +142,7 @@ le_tensor_new_rand_f32(LeShape *shape)
 }
 
 LeTensor *
-le_tensor_new_from_data(LeType element_type, LeShape *shape, void *data)
+le_tensor_new_uninitialized(LeType element_type, LeShape *shape)
 {
     LeTensor *self = malloc(sizeof(struct LeTensor));
     self->device_type = LE_DEVICE_TYPE_CPU;
@@ -150,8 +150,16 @@ le_tensor_new_from_data(LeType element_type, LeShape *shape, void *data)
     self->shape = shape;
     self->stride = le_shape_get_last_size(self->shape);
     self->owns_data = true;
-    self->data = data;
+    size_t element_size = le_type_size(element_type);
+    unsigned elements_count = le_shape_get_elements_count(shape);
+    self->data = malloc(element_size * elements_count);
     return self;
+}
+
+void *
+le_tensor_get_data(const LeTensor *self)
+{
+    return self->data;
 }
 
 LeTensor *

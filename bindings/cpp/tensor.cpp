@@ -21,10 +21,10 @@ Tensor::Tensor(Type t, unsigned num_dimensions, ...):
     va_end(args);
 }
 
-Tensor::Tensor(Type t, Shape s, void *data):
+Tensor::Tensor(Type t, Shape s):
     priv(std::make_shared<Private>())
 {
-    priv->tensor = le_tensor_new_from_data((LeType)t, s.c_shape(), data);
+    priv->tensor = le_tensor_new_uninitialized((LeType)t, s.c_shape());
 }
 
 Tensor::Tensor(const Tensor &tensor):
@@ -54,6 +54,11 @@ Tensor::~Tensor()
 const LeTensor *Tensor::c_tensor() const
 {
     return priv->tensor;
+}
+
+void * Tensor::data() const
+{
+    return priv->tensor->data;
 }
 
 #define TENSOR_PRINT_MAX_SIZE 10

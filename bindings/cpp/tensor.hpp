@@ -11,13 +11,14 @@ class Tensor
 {
 public:
     Tensor(Type t, unsigned num_dimensions, ...);
-    Tensor(Type t, Shape s, void *data);
+    Tensor(Type t, Shape s);
     Tensor(const Tensor &tensor);
     Tensor(Tensor &&tensor);
     Tensor(LeTensor *c_tensor);
     ~Tensor();
 
-    const LeTensor *c_tensor() const;
+    const LeTensor * c_tensor() const;
+    void * data() const;
 
     friend std::ostream & operator << (std::ostream &out, const Tensor &tensor);
 

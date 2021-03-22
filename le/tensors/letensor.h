@@ -25,10 +25,11 @@ LeTensor *         le_tensor_new_from_va_list              (LeType              
                                                             unsigned                num_dimensions,
                                                             va_list                 dims_and_data);
 
-/// @note: Takes ownership of shape and data
-LeTensor *         le_tensor_new_from_data                 (LeType                  element_type,
-                                                            LeShape *               shape,
-                                                            void *                  data);
+/// @note: Takes ownership of shape
+LeTensor *         le_tensor_new_uninitialized             (LeType                  element_type,
+                                                            LeShape *               shape);
+
+void *             le_tensor_get_data                      (const LeTensor *        another);
 
 LeTensor *         le_tensor_new_copy                      (const LeTensor *        another);
 
