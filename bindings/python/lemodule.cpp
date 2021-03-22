@@ -10,12 +10,11 @@ namespace py = pybind11;
 static py::object tensor(py::array_t<float> elements)
 {
     auto r = elements.unchecked<>();
-    unsigned *shapeData = (unsigned *)std::malloc(elements.ndim() * sizeof(unsigned));
+    le::Shape s(elements.ndim());
     for (int i = 0; i < elements.ndim(); i++) 
     {
-        shapeData[i] = r.shape(i);
+        s[i] = r.shape(i);
     }
-    le::Shape s(elements.ndim(), shapeData);
     unsigned numElements = le_shape_get_elements_count(s.c_shape());
     float *tensorData = (float *)std::malloc(numElements * sizeof(float));
     std::memcpy(tensorData, r.data(0), numElements * sizeof(float));

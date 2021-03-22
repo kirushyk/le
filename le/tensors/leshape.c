@@ -12,9 +12,7 @@
 LeShape *
 le_shape_new(unsigned num_dimensions, ...)
 {
-    LeShape *self = malloc(sizeof(LeShape));
-    self->num_dimensions = num_dimensions;
-    self->sizes = malloc(num_dimensions * sizeof(uint32_t));
+    LeShape *self = le_shape_new_uninitialized(num_dimensions);
     
     va_list args;
     va_start(args, num_dimensions);
@@ -31,13 +29,35 @@ le_shape_new(unsigned num_dimensions, ...)
 }
 
 LeShape *
-le_shape_new_from_data(unsigned num_dimensions, uint32_t *sizes)
+le_shape_new_uninitialized(unsigned num_dimensions)
 {
     LeShape *self = malloc(sizeof(LeShape));
     self->num_dimensions = num_dimensions;
-    self->sizes = sizes;
+    self->sizes = malloc(num_dimensions * sizeof(uint32_t));
     
     return self;
+}
+
+uint32_t *
+le_shape_get_data(LeShape *shape)
+{
+    return shape->sizes;
+}
+
+uint32_t
+le_shape_get_size(LeShape *shape, unsigned dimension)
+{
+    assert(shape);
+    assert(dimension < shape->num_dimensions);
+    return shape->sizes[dimension];
+}
+
+void
+le_shape_set_size(LeShape *shape, unsigned dimension, uint32_t size)
+{
+    assert(shape);
+    assert(dimension < shape->num_dimensions);
+    shape->sizes[dimension] = size;
 }
 
 LeShape *

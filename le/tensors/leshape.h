@@ -16,12 +16,19 @@ typedef struct LeShape
     uint32_t *sizes;
 } LeShape;
 
+LeShape *    le_shape_new_uninitialized  (unsigned  num_dimensions);
+
 LeShape *    le_shape_new                (unsigned  num_dimensions,
                                           ...);
 
-/// @note: Takes ownership of sizes array
-LeShape *    le_shape_new_from_data      (unsigned  num_dimensions,
-                                          uint32_t *sizes);
+uint32_t *   le_shape_get_data           (LeShape  *shape);
+
+uint32_t     le_shape_get_size           (LeShape  *shape,
+                                          unsigned  dimension);
+
+void         le_shape_set_size           (LeShape  *shape,
+                                          unsigned  dimension,
+                                          uint32_t  size);
 
 LeShape *    le_shape_copy               (LeShape  *shape);
 

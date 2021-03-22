@@ -29,13 +29,12 @@ le_tensor_new_from_va_list(LeType element_type, unsigned num_dimensions, va_list
     self->device_type = LE_DEVICE_TYPE_CPU;
     self->element_type = element_type;
         
-    uint32_t *sizes = malloc(num_dimensions * sizeof(uint32_t));
+    self->shape = le_shape_new_uninitialized(num_dimensions);
     for (unsigned i = 0; i < num_dimensions; i++)
     {
         int size = va_arg(dims_and_data, int);
-        sizes[i] = size;
+        le_shape_set_size(self->shape, i, size);
     }
-    self->shape = le_shape_new_from_data(num_dimensions, sizes);
     self->stride = le_shape_get_last_size(self->shape);
     
     self->owns_data = true;
@@ -363,20 +362,18 @@ le_tensor_reshape(LeTensor *self, unsigned num_dimensions, ...)
     /// @todo: Take stride into account
     /// @todo: Add more assertions
 
-    uint32_t *sizes = malloc(num_dimensions * sizeof(uint32_t));
     va_list args;
     va_start(args, num_dimensions);
     
-    for (uint8_t i = 0; i < num_dimensions; i++)
+    LeShape *new_shape = le_shape_new_uninitialized(num_dimensions);
+    for (unsigned i = 0; i < num_dimensions; i++)
     {
         int size = va_arg(args, int);
-        sizes[i] = size;
+        le_shape_set_size(self->shape, i, size);
     }
-    
+
     va_end(args);
     
-    LeShape *new_shape = le_shape_new_from_data(num_dimensions, sizes);
-
     if (le_shape_get_elements_count(new_shape) == le_shape_get_elements_count(self->shape))
     {
         le_shape_free(self->shape);

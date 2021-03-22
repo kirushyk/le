@@ -8,10 +8,11 @@ namespace le
 class Shape
 {
 public:
-    Shape(unsigned numDimensions, std::uint32_t *sizes);
+    Shape(unsigned numDimensions);
     ~Shape();
 
     LeShape *c_shape();
+    std::uint32_t & operator [](std::size_t index);
 
 private:
     struct Private;
