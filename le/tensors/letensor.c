@@ -35,7 +35,7 @@ le_tensor_new_from_va_list(LeType element_type, unsigned num_dimensions, va_list
         int size = va_arg(dims_and_data, int);
         le_shape_set_size(self->shape, i, size);
     }
-    self->stride = le_shape_get_last_size(self->shape);
+    self->stride = le_shape_get_size(self->shape, -1);
     
     self->owns_data = true;
     unsigned elements_count = le_shape_get_elements_count(self->shape);
@@ -128,7 +128,7 @@ le_tensor_new_rand_f32(LeShape *shape)
     self->device_type = LE_DEVICE_TYPE_CPU;
     self->element_type = LE_TYPE_FLOAT32;
     self->shape = shape;
-    self->stride = le_shape_get_last_size(self->shape);
+    self->stride = le_shape_get_size(self->shape, -1);
     self->owns_data = true;
     elements_count = le_shape_get_elements_count(shape);
     self->data = malloc(elements_count * sizeof(float));
@@ -148,7 +148,7 @@ le_tensor_new_uninitialized(LeType element_type, LeShape *shape)
     self->device_type = LE_DEVICE_TYPE_CPU;
     self->element_type = element_type;
     self->shape = shape;
-    self->stride = le_shape_get_last_size(self->shape);
+    self->stride = le_shape_get_size(self->shape, -1);
     self->owns_data = true;
     size_t element_size = le_type_size(element_type);
     unsigned elements_count = le_shape_get_elements_count(shape);
@@ -171,13 +171,13 @@ le_tensor_new_copy(const LeTensor *another)
     self->device_type = another->device_type;
     self->element_type = another->element_type;
     self->shape = le_shape_copy(another->shape);
-    self->stride = le_shape_get_last_size(self->shape);
+    self->stride = le_shape_get_size(self->shape, -1);
     self->owns_data = true;
     size_t data_size = le_shape_get_elements_count(self->shape) * le_type_size(self->element_type);
     switch (self->device_type)
     {
     case LE_DEVICE_TYPE_METAL:
-        if (another->stride == le_shape_get_last_size(another->shape))
+        if (another->stride == le_shape_get_size(another->shape, -1))
         {
             self->data = le_metal_data_copy(another->data, data_size);
         }
@@ -186,7 +186,7 @@ le_tensor_new_copy(const LeTensor *another)
     default:
         {
             self->data = malloc(data_size);
-            if (another->stride == le_shape_get_last_size(another->shape))
+            if (another->stride == le_shape_get_size(another->shape, -1))
             {
                 memcpy(self->data, another->data, data_size);
             }
@@ -317,7 +317,7 @@ le_tensor_new_equal_u8(LeType type, LeTensor *another, uint8_t scalar)
 bool
 le_tensor_contiguous(const LeTensor *tensor)
 {
-    return tensor->stride == le_shape_get_last_size(tensor->shape);
+    return tensor->stride == le_shape_get_size(tensor->shape, -1);
 }
 
 bool
@@ -410,7 +410,7 @@ le_tensor_pick(LeTensor *another, uint32_t index)
     self->device_type = LE_DEVICE_TYPE_CPU;
     self->element_type = another->element_type;
     self->shape = le_shape_lower_dimension(another->shape);
-    self->stride = le_shape_get_last_size(self->shape);
+    self->stride = le_shape_get_size(self->shape, -1);
 
     size_t data_size = le_shape_get_elements_count(self->shape) * le_type_size(self->element_type);
     self->owns_data = false;
@@ -432,7 +432,7 @@ le_tensor_pick_copy(const LeTensor *another, uint32_t index)
     self->device_type = LE_DEVICE_TYPE_CPU;
     self->element_type = another->element_type;
     self->shape = le_shape_lower_dimension(another->shape);
-    self->stride = le_shape_get_last_size(self->shape);
+    self->stride = le_shape_get_size(self->shape, -1);
     
     size_t data_size = le_shape_get_elements_count(self->shape) * le_type_size(self->element_type);
     self->owns_data = true;
@@ -454,7 +454,7 @@ le_tensor_at(const LeTensor *tensor, uint32_t index)
 {
     assert(tensor->device_type == LE_DEVICE_TYPE_CPU);
     
-    return (uint8_t *)tensor->data + le_type_size(tensor->element_type) * virtual_index(index, le_shape_get_last_size(tensor->shape), tensor->stride);
+    return (uint8_t *)tensor->data + le_type_size(tensor->element_type) * virtual_index(index, le_shape_get_size(tensor->shape, -1), tensor->stride);
 }
 
 uint8_t
@@ -463,7 +463,7 @@ le_tensor_at_u8(const LeTensor *tensor, uint32_t index)
     assert(tensor->element_type == LE_TYPE_UINT8);
     assert(tensor->device_type == LE_DEVICE_TYPE_CPU);
 
-    return ((uint8_t *)tensor->data)[virtual_index(index, le_shape_get_last_size(tensor->shape), tensor->stride)];
+    return ((uint8_t *)tensor->data)[virtual_index(index, le_shape_get_size(tensor->shape, -1), tensor->stride)];
 }
 
 uint32_t
@@ -472,7 +472,7 @@ le_tensor_at_u32(const LeTensor *tensor, uint32_t index)
     assert(tensor->element_type == LE_TYPE_UINT32);
     assert(tensor->device_type == LE_DEVICE_TYPE_CPU);
 
-    return ((uint32_t *)tensor->data)[virtual_index(index, le_shape_get_last_size(tensor->shape), tensor->stride)];
+    return ((uint32_t *)tensor->data)[virtual_index(index, le_shape_get_size(tensor->shape, -1), tensor->stride)];
 }
 
 float
@@ -481,7 +481,7 @@ le_tensor_at_f32(const LeTensor *tensor, uint32_t index)
     assert(tensor->element_type == LE_TYPE_FLOAT32);
     assert(tensor->device_type == LE_DEVICE_TYPE_CPU);
     
-    return ((float *)tensor->data)[virtual_index(index, le_shape_get_last_size(tensor->shape), tensor->stride)];
+    return ((float *)tensor->data)[virtual_index(index, le_shape_get_size(tensor->shape, -1), tensor->stride)];
 }
 
 void
@@ -491,8 +491,8 @@ le_tensor_assign(LeTensor *tensor, const LeTensor *another)
     assert(another->device_type == LE_DEVICE_TYPE_CPU);
     
     if ((tensor->element_type == another->element_type)
-        && (tensor->stride == le_shape_get_last_size(tensor->shape))
-        && (another->stride == le_shape_get_last_size(another->shape))
+        && (tensor->stride == le_shape_get_size(tensor->shape, -1))
+        && (another->stride == le_shape_get_size(another->shape, -1))
         && le_shape_equal(tensor->shape, another->shape))
     {
         size_t data_size = le_shape_get_elements_count(another->shape) * le_type_size(another->element_type);
@@ -506,7 +506,7 @@ le_tensor_set_f32(LeTensor *tensor, uint32_t index, float value)
     assert(tensor->element_type == LE_TYPE_FLOAT32);
     assert(tensor->device_type == LE_DEVICE_TYPE_CPU);
     
-    ((float *)tensor->data)[virtual_index(index, le_shape_get_last_size(tensor->shape), tensor->stride)] = value;
+    ((float *)tensor->data)[virtual_index(index, le_shape_get_size(tensor->shape, -1), tensor->stride)] = value;
 }
 
 void
@@ -1185,7 +1185,7 @@ le_tensor_get_stats(LeTensor *self)
 
     /// @todo: Take stride into account
     unsigned elements_count = le_shape_get_elements_count(self->shape);
-    uint32_t last_size = le_shape_get_last_size(self->shape);
+    uint32_t last_size = le_shape_get_size(self->shape, -1);
 
     if (elements_count >= 1)
     {

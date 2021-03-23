@@ -40,7 +40,7 @@ le_metal_matrix_new_product(const LeTensor *a, bool transpose_a, const LeTensor 
     c->device_type = LE_DEVICE_TYPE_METAL;
     c->element_type = LE_TYPE_FLOAT32;
     c->shape = le_shape_new(2, c_height, c_width);
-    c->stride = le_shape_get_last_size(c->shape);
+    c->stride = le_shape_get_size(c->shape, -1);
     c->owns_data = true;
     size_t data_size = le_shape_get_elements_count(c->shape) * le_type_size(c->element_type);
     
@@ -108,7 +108,7 @@ le_tensor_to_metal(const LeTensor *another)
     tensor->device_type = LE_DEVICE_TYPE_METAL;
     tensor->element_type = another->element_type;
     tensor->shape = le_shape_copy(another->shape);
-    tensor->stride = le_shape_get_last_size(tensor->shape);
+    tensor->stride = le_shape_get_size(tensor->shape, -1);
     tensor->owns_data = true;
     size_t data_size = le_shape_get_elements_count(tensor->shape) * le_type_size(tensor->element_type);
 
@@ -128,7 +128,7 @@ le_tensor_to_cpu(const LeTensor *another)
     tensor->device_type = LE_DEVICE_TYPE_CPU;
     tensor->element_type = another->element_type;
     tensor->shape = le_shape_copy(another->shape);
-    tensor->stride = le_shape_get_last_size(tensor->shape);
+    tensor->stride = le_shape_get_size(tensor->shape, -1);
     tensor->owns_data = true;
     size_t data_size = le_shape_get_elements_count(tensor->shape) * le_type_size(tensor->element_type);
 

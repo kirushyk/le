@@ -111,8 +111,8 @@ le_matrix_add(LeTensor *self, const LeTensor *another)
 {
     assert(self->device_type == LE_DEVICE_TYPE_CPU);
     assert(another->device_type == LE_DEVICE_TYPE_CPU);
-    assert(self->stride == le_shape_get_last_size(self->shape));
-    assert(another->stride == le_shape_get_last_size(another->shape));
+    assert(self->stride == le_shape_get_size(self->shape, -1));
+    assert(another->stride == le_shape_get_size(another->shape, -1));
     assert(self->shape->num_dimensions == 2);
     
     /// @note: Add horizontal broadcasting
@@ -441,7 +441,7 @@ le_matrix_new_transpose(LeTensor *a)
     self->device_type = LE_DEVICE_TYPE_CPU;
     self->element_type = a->element_type;
     self->shape = le_shape_new(2, a->shape->sizes[1], a->shape->sizes[0]);
-    self->stride = le_shape_get_last_size(self->shape);
+    self->stride = le_shape_get_size(self->shape, -1);
     self->owns_data = true;
     self->data = malloc(le_shape_get_elements_count(self->shape) * le_type_size(self->element_type));
     
@@ -485,7 +485,7 @@ le_matrix_new_sum(const LeTensor *a, unsigned dimension)
     self->device_type = LE_DEVICE_TYPE_CPU;
     self->element_type = LE_TYPE_FLOAT32;
     self->shape = le_shape_new(2, a->shape->sizes[0], 1/*a->shape->sizes[1]*/);
-    self->stride = le_shape_get_last_size(self->shape);
+    self->stride = le_shape_get_size(self->shape, -1);
     self->owns_data = true;
     self->data = malloc(le_shape_get_elements_count(self->shape) * le_type_size(self->element_type));
     
@@ -517,7 +517,7 @@ le_matrix_new_one_hot(LeType type, const LeTensor *a, unsigned num_classes)
     self->device_type = LE_DEVICE_TYPE_CPU;
     self->element_type = type;
     self->shape = le_shape_new(2, num_classes, a->shape->sizes[1]);
-    self->stride = le_shape_get_last_size(self->shape);
+    self->stride = le_shape_get_size(self->shape, -1);
     self->owns_data = true;
     self->data = malloc(le_shape_get_elements_count(self->shape) * le_type_size(self->element_type));
     
@@ -604,7 +604,7 @@ le_matrix_new_product_full(const LeTensor *a, bool transpose_a, const LeTensor *
             self->device_type = LE_DEVICE_TYPE_CPU;
             self->element_type = a->element_type;
             self->shape = le_shape_new(2, a_height, b_width);
-            self->stride = le_shape_get_last_size(self->shape);
+            self->stride = le_shape_get_size(self->shape, -1);
             self->owns_data = true;
             self->data = malloc(le_shape_get_elements_count(self->shape) * sizeof(float));
             
@@ -661,7 +661,7 @@ le_matrix_new_conv2d(const LeTensor *image, const LeTensor *filter)
     self->device_type = LE_DEVICE_TYPE_CPU;
     self->element_type = image->element_type;
     self->shape = le_shape_new(2, height, width);
-    self->stride = le_shape_get_last_size(self->shape);
+    self->stride = le_shape_get_size(self->shape, -1);
     self->owns_data = true;
     self->data = malloc(le_shape_get_elements_count(self->shape) * sizeof(float));
 

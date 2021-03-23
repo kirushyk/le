@@ -24,7 +24,7 @@ LeShape *    le_shape_new                (unsigned  num_dimensions,
 uint32_t *   le_shape_get_data           (LeShape  *shape);
 
 uint32_t     le_shape_get_size           (LeShape  *shape,
-                                          unsigned  dimension);
+                                          int       dimension);
 
 void         le_shape_set_size           (LeShape  *shape,
                                           unsigned  dimension,
@@ -33,9 +33,6 @@ void         le_shape_set_size           (LeShape  *shape,
 LeShape *    le_shape_copy               (LeShape  *shape);
 
 LeShape *    le_shape_lower_dimension    (LeShape  *shape);
-
-/// @note: Retrieves size in lowest order dimension
-uint32_t     le_shape_get_last_size      (LeShape  *shape);
 
 void         le_shape_free               (LeShape  *shape);
 

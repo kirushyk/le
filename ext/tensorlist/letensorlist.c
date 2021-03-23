@@ -59,7 +59,7 @@ le_tensor_deserialize(FILE *fin)
     fread(self->shape->sizes, sizeof(uint32_t), self->shape->num_dimensions, fin);
 
     if (self->shape->num_dimensions > 0)
-        self->stride = le_shape_get_last_size(self->shape);
+        self->stride = le_shape_get_size(self->shape, -1);
     else
         self->stride = 0;
     self->owns_data = true;

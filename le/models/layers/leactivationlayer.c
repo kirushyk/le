@@ -27,7 +27,7 @@ le_tensor_new_softmax_jacobians_stacked(LeTensor *softmax_output)
     unsigned num_classes = le_matrix_get_height(softmax_output);
     unsigned num_examples = le_matrix_get_width(softmax_output);
     self->shape = le_shape_new(3, num_examples, num_classes, num_classes);
-    self->stride = le_shape_get_last_size(self->shape);
+    self->stride = le_shape_get_size(self->shape, -1);
     self->owns_data = true;
     self->data = malloc(le_shape_get_elements_count(self->shape) * sizeof(float));
     

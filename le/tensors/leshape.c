@@ -45,11 +45,12 @@ le_shape_get_data(LeShape *shape)
 }
 
 uint32_t
-le_shape_get_size(LeShape *shape, unsigned dimension)
+le_shape_get_size(LeShape *shape, int dimension)
 {
     assert(shape);
-    assert(dimension < shape->num_dimensions);
-    return shape->sizes[dimension];
+    assert(dimension < (int)shape->num_dimensions);
+    assert(dimension > -(int)shape->num_dimensions);
+    return shape->sizes[(dimension < 0) ? (shape->num_dimensions + dimension) : dimension];
 }
 
 void
@@ -82,16 +83,6 @@ le_shape_lower_dimension(LeShape *another)
     self->sizes = malloc(size);
     memcpy(self->sizes, another->sizes + 1, size);
     return self;
-}
-
-uint32_t
-le_shape_get_last_size(LeShape *shape)
-{
-    assert(shape);
-    assert(shape->sizes);
-    assert(shape->num_dimensions >= 1);
-    
-    return shape->sizes[shape->num_dimensions - 1];
 }
 
 void
