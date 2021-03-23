@@ -49,7 +49,7 @@ le_shape_get_size(LeShape *shape, int dimension)
 {
     assert(shape);
     assert(dimension < (int)shape->num_dimensions);
-    assert(dimension > -(int)shape->num_dimensions);
+    assert(dimension >= -(int)shape->num_dimensions);
     return shape->sizes[(dimension < 0) ? (shape->num_dimensions + dimension) : dimension];
 }
 
