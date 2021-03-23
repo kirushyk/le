@@ -1,42 +1,18 @@
 #include <cstdlib>
 #include <cstring>
 #include <string>
+#include <le.hpp>
 #include <pybind11/pybind11.h>
 #include <pybind11/numpy.h>
-#include <le.hpp>
+#include "tensor.hpp"
+#include "svm.hpp"
 
 namespace py = pybind11;
-
-static py::object tensor(py::array_t<float> elements)
-{
-    auto r = elements.unchecked<>();
-    le::Shape s(elements.ndim());
-    for (int i = 0; i < elements.ndim(); i++) 
-    {
-        s[i] = r.shape(i);
-    }
-    unsigned numElements = le_shape_get_elements_count(s.c_shape());
-    le::Tensor t(le::Type::FLOAT32, s);
-    std::memcpy(t.data(), r.data(0), numElements * sizeof(float));
-    return py::cast(t);
-}
 
 static float logistic_loss(const le::Tensor &h, const le::Tensor &y)
 {
     return le_logistic_loss(h.c_tensor(), y.c_tensor());
 }
-
-class PySVM: public le::SVM
-{
-public: 
-    void pyTrain(const le::Tensor &x_train, const le::Tensor &y_train, const le::Kernel kernel, const float c)
-    {
-        le::SVM::TrainingOptions options;
-        options.kernel = le::Kernel::LINEAR;
-        options.c = 1.0f;
-        train(x_train, y_train, options);
-    }
-};
 
 class PyLogisticClassifier: public le::LogisticClassifier
 {

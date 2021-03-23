@@ -1,3 +1,9 @@
+pylib_sources = [
+    'tensor.cpp',
+    'svm.cpp',
+    'lemodule.cpp'
+]
+
 py_mod = import('python')
 py3 = py_mod.find_installation('python3',
     modules: [
@@ -28,7 +34,7 @@ if have_python
     incdir = include_directories('../..', '../../bindings/cpp')
 
     pylib = py3.extension_module('le',
-        'lemodule.cpp',
+        pylib_sources,
         link_with: [
             le,
             le_cpp
