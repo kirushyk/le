@@ -176,14 +176,15 @@ le_tensor_new_copy(const LeTensor *another)
     size_t data_size = le_shape_get_elements_count(self->shape) * le_type_size(self->element_type);
     switch (self->device_type)
     {
+#ifdef HAVE_METAL
     case LE_DEVICE_TYPE_METAL:
         if (another->stride == le_shape_get_size(another->shape, -1))
         {
             self->data = le_metal_data_copy(another->data, data_size);
         }
         break;
+#endif
     case LE_DEVICE_TYPE_CPU:
-    default:
         {
             self->data = malloc(data_size);
             if (another->stride == le_shape_get_size(another->shape, -1))
@@ -203,6 +204,8 @@ le_tensor_new_copy(const LeTensor *another)
                 }
             }
         }
+        break;
+    default:
         break;
     }
     
@@ -691,16 +694,19 @@ le_tensor_mul_tensor(LeTensor *self, const LeTensor *b)
     /// @todo: Take stride into account
     switch (self->device_type)
     {
+#ifdef HAVE_METAL
     case LE_DEVICE_TYPE_METAL:
         le_metal_tensor_mul_tensor(self, b);
         break;
+#endif
     case LE_DEVICE_TYPE_CPU:
-    default:
         for (unsigned i = 0, elements_count = le_shape_get_elements_count(self->shape);
              i < elements_count; i++)
         {
             ((float *)self->data)[i] *= ((float *)b->data)[i];
         }
+        break;
+    default:
         break;
     }
 }
@@ -1157,10 +1163,12 @@ le_tensor_free(LeTensor *self)
         case LE_DEVICE_TYPE_CPU:
             free(self->data);
             break;
-            
+
+#ifdef HAVE_METAL
         case LE_DEVICE_TYPE_METAL:
             le_metal_data_free(self->data);
             break;
+#endif
             
         default:
             assert(false);
