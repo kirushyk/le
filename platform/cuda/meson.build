@@ -4,7 +4,7 @@
 incdir = include_directories('../../')
 
 le_cuda_sources = [
-    'lecuda.c'
+    'lecuda.cpp'
 ]
 
 cublas = dependency('cuda', version: '>=10', modules: ['cublas'], required: false)

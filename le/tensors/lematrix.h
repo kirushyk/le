@@ -77,7 +77,7 @@ void               le_matrix_set_u32                       (LeTensor *          
 void               le_matrix_set_f16                       (LeTensor *              matrix,
                                                             unsigned                y,
                                                             unsigned                x,
-                                                            half                    value);
+                                                            lehalf                  value);
 
 void               le_matrix_set_f32                       (LeTensor *              matrix,
                                                             unsigned                y,

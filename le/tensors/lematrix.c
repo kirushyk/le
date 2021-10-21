@@ -220,7 +220,7 @@ le_matrix_set_u32(LeTensor *self, unsigned y, unsigned x, uint32_t value)
 }
 
 void
-le_matrix_set_f16(LeTensor *self, unsigned y, unsigned x, half value)
+le_matrix_set_f16(LeTensor *self, unsigned y, unsigned x, lehalf value)
 {
     assert(self->device_type == LE_DEVICE_TYPE_CPU);
     assert(self->element_type == LE_TYPE_FLOAT16);
@@ -231,7 +231,7 @@ le_matrix_set_f16(LeTensor *self, unsigned y, unsigned x, half value)
     assert(x < self->stride);
     
     /// @todo: Take stride into account
-    ((half *)self->data)[y * self->stride + x] = value;
+    ((lehalf *)self->data)[y * self->stride + x] = value;
 }
 
 void

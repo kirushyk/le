@@ -12,9 +12,7 @@ LE_BEGIN_DECLS
 
 #define F16_0 (uint16_t)0
 #define F16_1 (uint16_t)15360
-#ifndef half
-typedef uint16_t half;
-#endif
+typedef uint16_t lehalf;
 
 typedef enum LeType
 {

@@ -1,11 +1,11 @@
 /* Copyright (c) Kyrylo Polezhaiev and contributors. All rights reserved.
    Released under the MIT license. See LICENSE file in the project root for full license information. */
 
+#include <cublasLt.h>
 #include "lecuda.h"
 #include <assert.h>
 #include <le/le.h>
 #include <le/tensors/letensor-imp.h>
-#include <cuda_runtime.h>
 
 LeTensor *
 le_cuda_matrix_new_product(LeTensor *a, LeTensor *b)
