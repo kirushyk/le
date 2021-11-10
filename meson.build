@@ -20,5 +20,8 @@ subdir('ext')
 subdir('bindings')
 subdir('tests')
 subdir('benchmarks')
+
+gtk = dependency('gtk4', required: false)
+
 subdir('examples')
 subdir('tools')

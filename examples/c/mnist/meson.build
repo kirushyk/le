@@ -22,4 +22,6 @@ if have_mnist
         link_with: mnist_example_deps,
         install: false
     )
+
+    subdir('mean-classes')
 endif
