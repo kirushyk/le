@@ -30,6 +30,10 @@ if have_python
         include_directories('../..', '../../bindings/cpp')
     ]
 
+    pip3_pybind11_path = py3.get_install_dir() / 'pybind11' / 'include'
+    if run_command('[', '-d', pip3_pybind11_path, ']').returncode() == 0
+        pylib_inc += pip3_pybind11_path
+    endif
     pip3_pybind11_path = py3.get_install_dir().replace('site-packages', 'dist-packages') / 'pybind11' / 'include'
     if run_command('[', '-d', pip3_pybind11_path, ']').returncode() == 0
         pylib_inc += pip3_pybind11_path
