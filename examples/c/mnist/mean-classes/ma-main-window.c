@@ -1,7 +1,7 @@
 /* Copyright (c) Kyrylo Polezhaiev and contributors. All rights reserved.
    Released under the MIT license. See LICENSE file in the project root for full license information. */
 
-#include "mi-main-window.h"
+#include "ma-main-window.h"
 #include <assert.h>
 #include <stdlib.h>
 #include <le/le.h>
