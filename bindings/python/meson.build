@@ -9,12 +9,12 @@ py3 = py_mod.find_installation('python3',
     modules: [
         'pybind11'
     ],
-    required: false
+    required: get_option('python')
 )
 
 have_python = false
 if py3.found()
-    py_dep = py3.dependency(required: false)
+    py_dep = py3.dependency(required: get_option('python'))
     if have_cpp and py_dep.found()
         have_python = true
     endif

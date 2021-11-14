@@ -1,0 +1,5 @@
+option('python',
+   type: 'feature',
+   value: 'auto',
+   description: 'Enable Python bindings'
+)
