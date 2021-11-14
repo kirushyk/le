@@ -19,7 +19,6 @@ struct _LEMainWindow
     GtkWidget *drawing_area;
     GtkWidget *set_selection_combo;
     GtkWidget *index_spin_button;
-    GtkWidget *label_entry;
     
     MNIST *data_set;
     LeTensor *input, *output;
@@ -111,8 +110,6 @@ update_image(LEMainWindow *window)
         int label = le_tensor_at_u8(window->output, window->index);
         char buffer[8];
         sprintf(buffer, "%d", label);
-        GtkEntryBuffer *entry_buffer = gtk_entry_buffer_new(buffer, -1);
-        gtk_entry_set_buffer(GTK_ENTRY(window->label_entry), entry_buffer);
     }
 
     gtk_widget_queue_draw(GTK_WIDGET(window->drawing_area));
@@ -177,14 +174,10 @@ le_main_window_init(LEMainWindow *self)
     gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(self->set_selection_combo), "Test");
     gtk_combo_box_set_active(GTK_COMBO_BOX(self->set_selection_combo), 0);
     gtk_grid_attach(GTK_GRID(grid), self->set_selection_combo, 1, 0, 1, 1);
-    gtk_grid_attach(GTK_GRID(grid), gtk_label_new("Index:"), 0, 1, 1, 1);
-    self->index_spin_button = gtk_spin_button_new_with_range(0, 59999, 1);
+    gtk_grid_attach(GTK_GRID(grid), gtk_label_new("Class:"), 0, 1, 1, 1);
+    self->index_spin_button = gtk_spin_button_new_with_range(0, 9, 1);
     g_signal_connect(G_OBJECT(self->index_spin_button), "value-changed", G_CALLBACK(index_changed), self);
     gtk_grid_attach(GTK_GRID(grid), self->index_spin_button, 1, 1, 1, 1);
-    gtk_grid_attach(GTK_GRID(grid), gtk_label_new("Label:"), 0, 2, 1, 1);
-    self->label_entry = gtk_entry_new();
-    g_object_set(self->label_entry, "editable", FALSE, NULL);
-    gtk_grid_attach(GTK_GRID(grid), self->label_entry, 1, 2, 1, 1);
 
     GtkWidget *hbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 2);
     gtk_box_append(GTK_BOX(hbox), self->drawing_area);
