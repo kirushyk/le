@@ -35,22 +35,12 @@ G_DEFINE_TYPE(LEMainWindow, le_main_window, GTK_TYPE_APPLICATION_WINDOW);
 static cairo_surface_t *
 render_image(uint8_t *data)
 {
-    cairo_surface_t *surface = cairo_image_surface_create(CAIRO_FORMAT_A8, 28, 28);
-    
     if (data == NULL)
     {
-        return surface;
+        return cairo_image_surface_create(CAIRO_FORMAT_A8, 28, 28);
     }
-    
-    cairo_surface_flush(surface);
-    guint8 *pixmap = cairo_image_surface_get_data(surface);
-    int stride = cairo_image_surface_get_stride(surface);
-    for (uint32_t y = 0; y < 28; y++) {
-        memcpy(pixmap + y * stride, data + y * 28, 28);
-    }
-    
-    cairo_surface_mark_dirty(surface);
-    return surface;
+
+    return cairo_image_surface_create_for_data(data, CAIRO_FORMAT_A8, 28, 28, 28);
 }
 
 static void
@@ -101,6 +91,7 @@ update_image(LEMainWindow *window)
     
     if (window->input) {
         LeTensor *image = le_tensor_pick(window->input, window->index);
+        printf("index: %u\n", window->index);
         if (image) {
             window->image_visualisation = render_image(image->data);
         }
