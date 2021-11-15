@@ -21,14 +21,11 @@ struct _LEMainWindow
     GtkWidget *index_spin_button;
     
     MNIST *data_set;
-    LeTensor *input, *output;
+    LeTensor *mean_inputs;
     uint32_t index;
     
     cairo_surface_t *image_visualisation;
 };
-
-//if (self->image_visualisation)
-//    cairo_surface_destroy(self->image_visualisation);
 
 G_DEFINE_TYPE(LEMainWindow, le_main_window, GTK_TYPE_APPLICATION_WINDOW);
 
@@ -89,53 +86,15 @@ update_image(LEMainWindow *window)
         window->image_visualisation = NULL;
     }
     
-    if (window->input) {
-        LeTensor *image = le_tensor_pick(window->input, window->index);
+    if (window->mean_inputs) {
+        LeTensor *image = le_tensor_pick(window->mean_inputs, window->index);
         printf("index: %u\n", window->index);
         if (image) {
             window->image_visualisation = render_image(image->data);
         }
     }
-    
-    if (window->output) {
-        int label = le_tensor_at_u8(window->output, window->index);
-        char buffer[8];
-        sprintf(buffer, "%d", label);
-    }
 
     gtk_widget_queue_draw(GTK_WIDGET(window->drawing_area));
-}
-
-static void
-set_changed(GtkComboBox *combo_box, gpointer data)
-{
-    LEMainWindow *window = LE_MAIN_WINDOW(data);
-    
-    if (window->data_set == NULL)
-        return;
-
-    if (window->data_set->train == NULL || window->data_set->test == NULL)
-        return;
-    
-    if (gtk_combo_box_get_active(combo_box)) {
-        window->input = le_data_set_get_input(window->data_set->test);
-        window->output = le_data_set_get_output(window->data_set->test);
-    } else {
-        window->input = le_data_set_get_input(window->data_set->train);
-        window->output = le_data_set_get_output(window->data_set->train);
-    }
-
-    if (window->output == NULL)
-        return;
-
-    int test_examples_count = le_shape_get_elements_count(window->output->shape);
-    if (window->index >= test_examples_count) {
-        window->index = test_examples_count - 1;
-    }
-
-    gtk_spin_button_set_range(GTK_SPIN_BUTTON(window->index_spin_button), 0, test_examples_count - 1);
-    
-    update_image(window);
 }
 
 static void
@@ -158,13 +117,6 @@ le_main_window_init(LEMainWindow *self)
     GtkWidget *grid = gtk_grid_new();
     gtk_grid_set_row_spacing(GTK_GRID(grid), 2);
     gtk_grid_set_column_spacing(GTK_GRID(grid), 2);
-    gtk_grid_attach(GTK_GRID(grid), gtk_label_new("Set:"), 0, 0, 1, 1);
-    self->set_selection_combo = gtk_combo_box_text_new();
-    g_signal_connect(G_OBJECT(self->set_selection_combo), "changed", G_CALLBACK(set_changed), self);
-    gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(self->set_selection_combo), "Train");
-    gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(self->set_selection_combo), "Test");
-    gtk_combo_box_set_active(GTK_COMBO_BOX(self->set_selection_combo), 0);
-    gtk_grid_attach(GTK_GRID(grid), self->set_selection_combo, 1, 0, 1, 1);
     gtk_grid_attach(GTK_GRID(grid), gtk_label_new("Class:"), 0, 1, 1, 1);
     self->index_spin_button = gtk_spin_button_new_with_range(0, 9, 1);
     g_signal_connect(G_OBJECT(self->index_spin_button), "value-changed", G_CALLBACK(index_changed), self);
@@ -179,10 +131,7 @@ le_main_window_init(LEMainWindow *self)
     
     self->data_set = le_mnist_load(NULL);
     self->image_visualisation = NULL;
-    self->input = NULL;
-    self->output = NULL;
     index_changed(GTK_SPIN_BUTTON(self->index_spin_button), self);
-    set_changed(GTK_COMBO_BOX(self->set_selection_combo), self);
 
     g_action_map_add_action_entries(G_ACTION_MAP(self), win_entries, G_N_ELEMENTS(win_entries), self);
 }
