@@ -29,22 +29,11 @@ le_idx_read(const char *filename)
     if (fin)
     {
         struct IDXHeader header;
-        
         fread(&header, sizeof(struct IDXHeader), 1, fin);
         
         if (header.zeros == 0)
-        {
-            LeShape *shape = le_shape_new_uninitialized(header.dimensionality);
-            fread(le_shape_get_data(shape), sizeof(uint32_t), header.dimensionality, fin);
-            for (uint8_t i = 0; i < header.dimensionality; i++)
-            {
-                le_shape_set_size(shape, i, le_shape_get_size(shape, i));
-            }
-            
-            size_t elements_count = 1;
-            
+        {   
             LeType type = LE_TYPE_VOID;
-            
             switch (header.type) {
             case 0x08:
                 type = LE_TYPE_UINT8;
@@ -75,7 +64,17 @@ le_idx_read(const char *filename)
                 type = LE_TYPE_VOID;
                 break;
             }
+
+            int32_t shape_bytes[header.dimensionality];
+            fread(shape_bytes, sizeof(int32_t), header.dimensionality, fin);
+
+            LeShape *shape = le_shape_new_uninitialized(header.dimensionality);
+            for (uint8_t i = 0; i < header.dimensionality; i++)
+            {
+                le_shape_set_size(shape, i, bswap_32(shape_bytes[i]));
+            }
             
+            size_t elements_count = 1;
             for (uint8_t i = 0; i < header.dimensionality; i++)
             {
                 elements_count = elements_count * le_shape_get_size(shape, i);
@@ -106,22 +105,11 @@ le_idx_gz_read(const char *filename)
     if (fin)
     {
         struct IDXHeader header;
-        
         gzread(fin, &header, sizeof(struct IDXHeader));
         
         if (header.zeros == 0)
-        {
-            LeShape *shape = le_shape_new_uninitialized(header.dimensionality);
-            gzread(fin, le_shape_get_data(shape), sizeof(uint32_t) * header.dimensionality);
-            for (uint8_t i = 0; i < header.dimensionality; i++)
-            {
-                le_shape_set_size(shape, i, le_shape_get_size(shape, i));
-            }
-            
-            size_t elements_count = 1;
-            
-            LeType type = LE_TYPE_VOID;
-            
+        {   
+            LeType type = LE_TYPE_VOID;   
             switch (header.type) {
             case 0x08:
                 type = LE_TYPE_UINT8;
@@ -153,6 +141,16 @@ le_idx_gz_read(const char *filename)
                 break;
             }
             
+            int32_t shape_bytes[header.dimensionality];
+            gzread(fin, shape_bytes, sizeof(int32_t) * header.dimensionality);
+
+            LeShape *shape = le_shape_new_uninitialized(header.dimensionality);
+            for (uint8_t i = 0; i < header.dimensionality; i++)
+            {
+                le_shape_set_size(shape, i, bswap_32(shape_bytes[i]));
+            }
+
+            size_t elements_count = 1;
             for (uint8_t i = 0; i < header.dimensionality; i++)
             {
                 elements_count = elements_count * le_shape_get_size(shape, i);
