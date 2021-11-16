@@ -9,6 +9,8 @@
 #include <ext/mnist/lemnist.h>
 #include <math.h>
 
+#define CLASSES_COUNT 10
+
 #define LE_TYPE_MAIN_WINDOW le_main_window_get_type()
 G_DECLARE_FINAL_TYPE(LEMainWindow, le_main_window, LE, MAIN_WINDOW, GtkApplicationWindow);
 
@@ -20,7 +22,7 @@ struct _LEMainWindow
     GtkWidget *set_selection_combo;
     GtkWidget *index_spin_button;
     
-    MNIST *data_set;
+    MNIST *mnist;
     LeTensor *mean_inputs;
     uint32_t index;
     
@@ -88,7 +90,6 @@ update_image(LEMainWindow *window)
     
     if (window->mean_inputs) {
         LeTensor *image = le_tensor_pick(window->mean_inputs, window->index);
-        printf("index: %u\n", window->index);
         if (image) {
             window->image_visualisation = render_image(image->data);
         }
@@ -118,7 +119,7 @@ le_main_window_init(LEMainWindow *self)
     gtk_grid_set_row_spacing(GTK_GRID(grid), 2);
     gtk_grid_set_column_spacing(GTK_GRID(grid), 2);
     gtk_grid_attach(GTK_GRID(grid), gtk_label_new("Class:"), 0, 1, 1, 1);
-    self->index_spin_button = gtk_spin_button_new_with_range(0, 9, 1);
+    self->index_spin_button = gtk_spin_button_new_with_range(0, CLASSES_COUNT - 1, 1);
     g_signal_connect(G_OBJECT(self->index_spin_button), "value-changed", G_CALLBACK(index_changed), self);
     gtk_grid_attach(GTK_GRID(grid), self->index_spin_button, 1, 1, 1, 1);
 
@@ -129,9 +130,29 @@ le_main_window_init(LEMainWindow *self)
     
     gtk_window_set_child(GTK_WINDOW(self), hbox);
     
-    self->data_set = le_mnist_load(NULL);
+    self->mnist = le_mnist_load(NULL);
     self->image_visualisation = NULL;
     index_changed(GTK_SPIN_BUTTON(self->index_spin_button), self);
+
+    LeShape *shape = le_shape_new (3, CLASSES_COUNT, 28, 28);
+    LeTensor *mean_inputs_u32 = le_tensor_new_zeros (LE_TYPE_UINT32, shape);
+    for (int i = 0; i < 10000; i++) {
+        LeTensor *current_image = le_tensor_pick(le_data_set_get_input(self->mnist->test), i);
+        LeTensor *current_image_u32 = le_tensor_new_cast(current_image, LE_TYPE_UINT32);
+        uint8_t label = le_tensor_at_u8(le_data_set_get_output(self->mnist->test), i);
+        LeTensor *mean_image_u32 = le_tensor_pick(mean_inputs_u32, label);
+        le_tensor_add_tensor(mean_image_u32, current_image_u32);
+        le_tensor_free(current_image_u32);
+    }
+    self->mean_inputs = le_tensor_new_uninitialized (LE_TYPE_UINT8, shape);
+    for (int i = 0; i < 10; i++) {
+        LeTensor *current_mean_image_u32 = le_tensor_pick(mean_inputs_u32, i);
+        le_tensor_div_u32(current_mean_image_u32, 10000);
+        LeTensor *mean_image_u8 = le_tensor_new_cast(current_mean_image_u32, LE_TYPE_UINT8);
+        LeTensor *current_mean_image_u8 = le_tensor_pick(self->mean_inputs, i);
+        le_tensor_assign(current_mean_image_u8, mean_image_u8);
+    }
+    le_tensor_free(mean_inputs_u32);
 
     g_action_map_add_action_entries(G_ACTION_MAP(self), win_entries, G_N_ELEMENTS(win_entries), self);
 }
