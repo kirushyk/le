@@ -33,6 +33,9 @@ void *             le_tensor_get_data                      (const LeTensor *    
 
 LeTensor *         le_tensor_new_copy                      (const LeTensor *        another);
 
+LeTensor *         le_tensor_new_zeros                     (LeType                  element_type,
+                                                            LeShape *               shape);
+
 LeTensor *         le_tensor_new_zeros_like                (const LeTensor *        another);
 
 /// @note: Takes ownership of shape
@@ -129,6 +132,9 @@ void               le_tensor_mul_tensor                    (LeTensor *          
    LeTensor *: le_tensor_mul_tensor, \
    const LeTensor *: le_tensor_mul_tensor \
 )(a, b)
+
+void               le_tensor_div_u32                       (LeTensor *              a,
+                                                            uint32_t                b);
 
 float              le_tensor_sum_f32                       (const LeTensor *        tensor);
 

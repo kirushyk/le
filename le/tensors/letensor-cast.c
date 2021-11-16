@@ -9,6 +9,8 @@ dsttype_name ## _ ## srctype_name(void *dst, void *src, size_t index) \
 }
 
 DEFINE_SIMPLE_CAST_FN(float, f32, uint8_t, u8)
+DEFINE_SIMPLE_CAST_FN(uint32_t, u32, uint8_t, u8)
+DEFINE_SIMPLE_CAST_FN(uint8_t, u8, uint32_t, u32)
 
 bool le_cast_rawcpy[LE_TYPE_COUNT][LE_TYPE_COUNT] =
 {
@@ -30,11 +32,11 @@ LeCast le_cast_fn[LE_TYPE_COUNT][LE_TYPE_COUNT] =
     /* to\from  void     i8       u8       i16      u16      i32      u32      f16      f32      f64 */
     /* void */ {NULL,    NULL,    NULL,    NULL,    NULL,    NULL,    NULL,    NULL,    NULL,    NULL},
     /* i8   */ {NULL,    NULL,    NULL,    NULL,    NULL,    NULL,    NULL,    NULL,    NULL,    NULL},
-    /* u8   */ {NULL,    NULL,    NULL,    NULL,    NULL,    NULL,    NULL,    NULL,    NULL,    NULL},
+    /* u8   */ {NULL,    NULL,    NULL,    NULL,    NULL,    NULL,    u8_u32,  NULL,    NULL,    NULL},
     /* i16  */ {NULL,    NULL,    NULL,    NULL,    NULL,    NULL,    NULL,    NULL,    NULL,    NULL},
     /* u16  */ {NULL,    NULL,    NULL,    NULL,    NULL,    NULL,    NULL,    NULL,    NULL,    NULL},
     /* i32  */ {NULL,    NULL,    NULL,    NULL,    NULL,    NULL,    NULL,    NULL,    NULL,    NULL},
-    /* u32  */ {NULL,    NULL,    NULL,    NULL,    NULL,    NULL,    NULL,    NULL,    NULL,    NULL},
+    /* u32  */ {NULL,    NULL,    u32_u8,  NULL,    NULL,    NULL,    NULL,    NULL,    NULL,    NULL},
     /* f16  */ {NULL,    NULL,    NULL,    NULL,    NULL,    NULL,    NULL,    NULL,    NULL,    NULL},
     /* f32  */ {NULL,    NULL,    f32_u8,  NULL,    NULL,    NULL,    NULL,    NULL,    NULL,    NULL},
     /* f64  */ {NULL,    NULL,    NULL,    NULL,    NULL,    NULL,    NULL,    NULL,    NULL,    NULL}
