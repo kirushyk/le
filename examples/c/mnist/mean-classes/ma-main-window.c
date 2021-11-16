@@ -10,6 +10,7 @@
 #include <math.h>
 
 #define CLASSES_COUNT 10
+#define SCALE 8
 
 #define LE_TYPE_MAIN_WINDOW le_main_window_get_type()
 G_DECLARE_FINAL_TYPE(LEMainWindow, le_main_window, LE, MAIN_WINDOW, GtkApplicationWindow);
@@ -46,11 +47,15 @@ static void
 draw_callback(GtkDrawingArea *drawing_area, cairo_t *cr, int width, int height, gpointer data)
 {
     LEMainWindow *window = LE_MAIN_WINDOW(data);
-    
-    if (window->image_visualisation)
-    {
-        cairo_scale(cr, 4.0, 4.0);
-        cairo_set_source_surface(cr, window->image_visualisation, 0, 0);
+
+    cairo_scale(cr, SCALE, SCALE);
+    for (uint8_t i = 0; i < 10; i++) {
+        LeTensor *image = le_tensor_pick(window->mean_inputs, i);
+        cairo_surface_t *image_visualisation = render_image(image->data);
+        double x = ((i < 5) ? i : (i - 5)) * 28;
+        double y = i < 5 ? 0 : 28;
+        cairo_set_source_surface(cr, image_visualisation, x, y);
+        cairo_surface_destroy(image_visualisation);
         cairo_paint(cr);
     }
 }
@@ -113,7 +118,7 @@ le_main_window_init(LEMainWindow *self)
 {
     self->drawing_area = gtk_drawing_area_new();
     gtk_drawing_area_set_draw_func(GTK_DRAWING_AREA(self->drawing_area), draw_callback, self, NULL);
-    gtk_widget_set_size_request(self->drawing_area, 112, 112);
+    gtk_widget_set_size_request(self->drawing_area, SCALE * 28 * 5, SCALE * 28 * 2);
 
     GtkWidget *grid = gtk_grid_new();
     gtk_grid_set_row_spacing(GTK_GRID(grid), 2);
@@ -125,8 +130,8 @@ le_main_window_init(LEMainWindow *self)
 
     GtkWidget *hbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 2);
     gtk_box_append(GTK_BOX(hbox), self->drawing_area);
-    gtk_box_append(GTK_BOX(hbox), gtk_separator_new(GTK_ORIENTATION_VERTICAL));
-    gtk_box_append(GTK_BOX(hbox), grid);
+    // gtk_box_append(GTK_BOX(hbox), gtk_separator_new(GTK_ORIENTATION_VERTICAL));
+    // gtk_box_append(GTK_BOX(hbox), grid);
     
     gtk_window_set_child(GTK_WINDOW(self), hbox);
     
@@ -134,20 +139,21 @@ le_main_window_init(LEMainWindow *self)
     self->image_visualisation = NULL;
     index_changed(GTK_SPIN_BUTTON(self->index_spin_button), self);
 
-    LeShape *shape = le_shape_new (3, CLASSES_COUNT, 28, 28);
-    LeTensor *mean_inputs_u32 = le_tensor_new_zeros (LE_TYPE_UINT32, shape);
-    for (int i = 0; i < 10000; i++) {
-        LeTensor *current_image = le_tensor_pick(le_data_set_get_input(self->mnist->test), i);
+    LeTensor *mean_inputs_u32 = le_tensor_new_zeros (LE_TYPE_UINT32, le_shape_new(3, CLASSES_COUNT, 28, 28));
+    uint32_t examples_count = 60000;
+    uint32_t contrast = 5;
+    for (uint32_t i = 0; i < examples_count; i++) {
+        LeTensor *current_image = le_tensor_pick(le_data_set_get_input(self->mnist->train), i);
         LeTensor *current_image_u32 = le_tensor_new_cast(current_image, LE_TYPE_UINT32);
-        uint8_t label = le_tensor_at_u8(le_data_set_get_output(self->mnist->test), i);
+        uint8_t label = le_tensor_at_u8(le_data_set_get_output(self->mnist->train), i);
         LeTensor *mean_image_u32 = le_tensor_pick(mean_inputs_u32, label);
         le_tensor_add_tensor(mean_image_u32, current_image_u32);
         le_tensor_free(current_image_u32);
     }
-    self->mean_inputs = le_tensor_new_uninitialized (LE_TYPE_UINT8, shape);
-    for (int i = 0; i < 10; i++) {
+    self->mean_inputs = le_tensor_new_uninitialized (LE_TYPE_UINT8, le_shape_new(3, CLASSES_COUNT, 28, 28));
+    for (uint32_t i = 0; i < 10; i++) {
         LeTensor *current_mean_image_u32 = le_tensor_pick(mean_inputs_u32, i);
-        le_tensor_div_u32(current_mean_image_u32, 10000);
+        le_tensor_div_u32(current_mean_image_u32, examples_count / contrast);
         LeTensor *mean_image_u8 = le_tensor_new_cast(current_mean_image_u32, LE_TYPE_UINT8);
         LeTensor *current_mean_image_u8 = le_tensor_pick(self->mean_inputs, i);
         le_tensor_assign(current_mean_image_u8, mean_image_u8);
