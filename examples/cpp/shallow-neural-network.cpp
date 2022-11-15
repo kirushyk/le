@@ -38,8 +38,11 @@ int main(int argc, const char *argv[])
         }
     }
 
+    std::cout << "Test set:" << std::endl;
+    std::cout << "x =" << std::endl << x << std::endl;
     le::Tensor h = nn.predict(x);
-    std::cout << "Predicted value =" << std::endl << h << std::endl;
+    std::cout << "Predicted output:" << std::endl;
+    std::cout << "y =" << std::endl << h << std::endl;
     
     return 0;
 }
