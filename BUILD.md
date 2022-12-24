@@ -8,7 +8,8 @@ You will need C11 compiler. If you want Python bindings you should have C++14 co
 
 Use APT package manager to install dependencies:
 
-    sudo apt install meson gcc g++ zlib1g-dev libpython3-dev python3-pybind11 libgtk-3-dev
+    sudo apt install g++ python3-pip ninja-build
+    sudo -H pip3 install meson pybind11
 
 ### macOS
 
