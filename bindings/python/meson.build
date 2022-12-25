@@ -24,11 +24,6 @@ if py3.found()
 endif
 
 if have_python
-    py_purelib = py3.get_path('purelib')
-    if not py_purelib.endswith('site-packages')
-        error('Python3 purelib path seems invalid? ' + py_purelib)
-    endif
-
     pylib_inc = [
         include_directories('../..', '../../bindings/cpp')
     ]
@@ -43,13 +38,14 @@ if have_python
         pylib_inc += pip3_pybind11_path
         pybind11_found = true
     endif
+    ## @note: Temporary fix
+    pip3_pybind11_path = py3.get_install_dir().replace('python3', 'python3.8') / 'pybind11' / 'include'
+    if not pybind11_found and run_command('[', '-d', pip3_pybind11_path, ']').returncode() == 0
+        pylib_inc += pip3_pybind11_path
+        pybind11_found = true
+    endif
     if not pybind11_found
         py_deps += dependency('pybind11')
-    endif
-
-    py_platlib = py3.get_path('platlib')
-    if not py_platlib.endswith('site-packages')
-        error('Python3 platlib path seems invalid? ' + py_platlib)
     endif
     
     pylib = py3.extension_module('le',
