@@ -6,7 +6,9 @@
 #ifndef __LECUDA_H__
 #define __LECUDA_H__
 
-LeTensor * le_cuda_matrix_new_product (LeTensor *a,
-                                       LeTensor *b);
+LeTensor * le_cuda_matrix_new_product (const LeTensor * a,
+                                       bool             transpose_a,
+                                       const LeTensor * b,
+                                       bool             transpose_b);
 
 #endif

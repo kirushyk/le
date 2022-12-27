@@ -4,7 +4,7 @@
 incdir = include_directories('../../')
 
 le_cuda_sources = [
-    'lecuda.cpp'
+    'lecuda.c'
 ]
 
 cublas = dependency('cuda', version: '>=10', modules: ['cublas'], required: false)
@@ -13,8 +13,10 @@ le_cuda_deps = [
     cublas
 ]
 
-if cublas.found()
-    le_accelerate = static_library('le_accelerate', le_cuda_sources,
+have_cuda = cublas.found()
+
+if have_cuda
+    le_cuda = static_library('le_cuda', le_cuda_sources,
         dependencies: le_cuda_deps,
         include_directories: incdir,
     )

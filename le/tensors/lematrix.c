@@ -14,6 +14,9 @@
 #elif defined(HAVE_OPENBLAS)
 #   include "../platform/openblas/leopenblas.h"
 #endif
+#if defined(HAVE_CUDA)
+#   include "../platform/cuda/lecuda.h"
+#endif
 #if defined(HAVE_METAL)
 #   include "../platform/metal/lemetal.h"
 #endif
@@ -586,6 +589,8 @@ le_matrix_new_product_full(const LeTensor *a, bool transpose_a, const LeTensor *
         /// @todo: Take stride into account
 #ifdef __APPLE__
         return le_accelerate_matrix_new_product(a, transpose_a, b, transpose_b);
+#elif defined(HAVE_CUDA)
+        return le_cuda_matrix_new_product(a, transpose_a, b, transpose_b);
 #elif defined(HAVE_OPENBLAS)
         return le_openblas_matrix_new_product(a, transpose_a, b, transpose_b);
 #else
