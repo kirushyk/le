@@ -50,17 +50,24 @@ le_cuda_matrix_new_product(const LeTensor *a, bool transpose_a, const LeTensor *
     
     cudaStat = cudaMalloc((void**)&dev_c, c_height * c_width * sizeof(float));
     assert(cudaStat == cudaSuccess);
+    cudaStat = cudaMemset(dev_c, 0, c_height * c_width * sizeof(float));
+    assert(cudaStat == cudaSuccess);
 
     float alpha = 1.0f, beta = 0.0f;
     cublasSgemm(handle,
         transpose_a ? CUBLAS_OP_T : CUBLAS_OP_N,
         transpose_b ? CUBLAS_OP_T : CUBLAS_OP_N,
-        c_height, c_width, size_a,
+        c_height,
+        c_width,
+        size_a,
         &alpha,
-        dev_a, a->shape->sizes[1],
-        dev_b, b->shape->sizes[1],
+        dev_a,
+        transpose_a ? a->shape->sizes[0] : a->shape->sizes[0],
+        dev_b,
+        transpose_b ? b->shape->sizes[0] : b->shape->sizes[0],
         &beta,
-        dev_c, c->shape->sizes[1]);
+        dev_c,
+        c->shape->sizes[0]);
 
     stat = cublasGetMatrix(c->shape->sizes[0], c->shape->sizes[1], sizeof(float), dev_c, c->shape->sizes[0], c->data, c->shape->sizes[0]);
     assert(stat == CUBLAS_STATUS_SUCCESS);

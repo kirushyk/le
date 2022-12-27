@@ -75,6 +75,10 @@ main()
     LeTensor *at = le_matrix_new_transpose(a);
     c = le_matrix_new_product(at, b);
     LeTensor *d = le_matrix_new_product_full(a, true, b, false);
+    printf("c = ");
+    le_tensor_print(c, stdout);
+    printf("d = ");
+    le_tensor_print(d, stdout);
     assert(le_tensor_equal(c, d));
     le_tensor_free(d);
     le_tensor_free(c);
