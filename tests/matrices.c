@@ -38,10 +38,41 @@ main()
     unsigned height;
     unsigned second_width;
     
-    LeTensor *a;
-    LeTensor *b;
-    LeTensor *c;
-    
+    LeTensor *a, *b, *c, *d, *ab, *ab_check, *ba, *ba_check;
+
+    a = le_tensor_new(LE_TYPE_FLOAT32, 2, 3, 2,
+        1.0, 2.0,
+        3.0, 4.0,
+        5.0, 6.0
+    );
+
+    b = le_tensor_new(LE_TYPE_FLOAT32, 2, 2, 3,
+        1.0, 2.0, 3.0,
+        4.0, 5.0, 6.0
+    );
+
+    ab = le_matrix_new_product(a, b);
+    ab_check = le_tensor_new(LE_TYPE_FLOAT32, 2, 3, 3,
+        9.0,  12.0, 15.0,
+        19.0, 26.0, 33.0,
+        29.0, 40.0, 51.0
+    );
+    assert(le_tensor_equal(ab, ab_check));
+    le_tensor_free(ab_check);
+    le_tensor_free(ab);
+
+    ba = le_matrix_new_product(b, a);
+    ba_check = le_tensor_new(LE_TYPE_FLOAT32, 2, 2, 2,
+        22.0, 28.0,
+        49.0, 64.0
+    );
+    assert(le_tensor_equal(ba, ba_check));
+    le_tensor_free(ba_check);
+    le_tensor_free(ba);
+
+    le_tensor_free(b);
+    le_tensor_free(a);
+
     for (height = 1; height < MAX_DIMENSION; height++)
     {
         a = le_matrix_new_identity(LE_TYPE_FLOAT32, height);
@@ -74,7 +105,7 @@ main()
     b = le_matrix_new_rand_f32(LE_DISTRIBUTION_UNIFORM, 10, 5);
     LeTensor *at = le_matrix_new_transpose(a);
     c = le_matrix_new_product(at, b);
-    LeTensor *d = le_matrix_new_product_full(a, true, b, false);
+    d = le_matrix_new_product_full(a, true, b, false);
     printf("c = ");
     le_tensor_print(c, stdout);
     printf("d = ");
