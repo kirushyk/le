@@ -36,26 +36,26 @@ if xcrun.found()
     endif
 endif
 
-have_metal = have_objc and metal.found() and metalc.found() and metallib.found()
+have_metal = have_objc and metal.found() # and metalc.found() and metallib.found()
 
 if have_metal
-    compiled_shaders = []
-    foreach shader : le_metal_shaders
-        air_filename = shader.split('.')[0] + '.air'
-        air = custom_target(air_filename,
-            output : air_filename,
-            input : shader,
-            command : [metalc, '@INPUT@', '-o', '@OUTPUT@']
-        )
-        message(air_filename)
-        linked_shader_filename = shader.split('.')[0] + '.metallib'
-        linked_shader = custom_target(linked_shader_filename,
-            output : linked_shader_filename,
-            input : air,
-            command : [metallib, '@INPUT@', '-o', '@OUTPUT@']
-        )
-        compiled_shaders += [linked_shader]
-    endforeach
+    # compiled_shaders = []
+    # foreach shader : le_metal_shaders
+    #     air_filename = shader.split('.')[0] + '.air'
+    #     air = custom_target(air_filename,
+    #         output : air_filename,
+    #         input : shader,
+    #         command : [metalc, '@INPUT@', '-o', '@OUTPUT@']
+    #     )
+    #     message(air_filename)
+    #     linked_shader_filename = shader.split('.')[0] + '.metallib'
+    #     linked_shader = custom_target(linked_shader_filename,
+    #         output : linked_shader_filename,
+    #         input : air,
+    #         command : [metallib, '@INPUT@', '-o', '@OUTPUT@']
+    #     )
+    #     compiled_shaders += [linked_shader]
+    # endforeach
 
     le_metal = static_library('le_metal', le_metal_sources,
         dependencies: [
