@@ -38,7 +38,7 @@ main()
     unsigned height;
     unsigned second_width;
     
-    LeTensor *a, *b, *c, *d, *ab, *ab_check, *ba, *ba_check;
+    LeTensor *a, *at, *b, *bt, *c, *d, *ab, *ab_check, *ba, *ba_check;
 
     a = le_tensor_new(LE_TYPE_FLOAT32, 2, 3, 2,
         1.0, 2.0,
@@ -51,15 +51,29 @@ main()
         4.0, 5.0, 6.0
     );
 
-    ab = le_matrix_new_product(a, b);
     ab_check = le_tensor_new(LE_TYPE_FLOAT32, 2, 3, 3,
         9.0,  12.0, 15.0,
         19.0, 26.0, 33.0,
         29.0, 40.0, 51.0
     );
+
+    ab = le_matrix_new_product(a, b);
     assert(le_tensor_equal(ab, ab_check));
-    le_tensor_free(ab_check);
     le_tensor_free(ab);
+
+    bt = le_matrix_new_transpose(b);
+    ab = le_matrix_new_product_full(a, false, bt, true);
+    assert(le_tensor_sad_f32(ab, ab_check) < 1e-3f);
+    le_tensor_free(ab);
+    le_tensor_free(bt);
+
+    at = le_matrix_new_transpose(a);
+    ab = le_matrix_new_product_full(at, true, b, false);
+    assert(le_tensor_sad_f32(ab, ab_check) < 1e-3f);
+    le_tensor_free(ab);
+    le_tensor_free(at);
+
+    le_tensor_free(ab_check);
 
     ba = le_matrix_new_product(b, a);
     ba_check = le_tensor_new(LE_TYPE_FLOAT32, 2, 2, 2,
@@ -103,22 +117,21 @@ main()
 
     a = le_matrix_new_rand_f32(LE_DISTRIBUTION_UNIFORM, 10, 5);
     b = le_matrix_new_rand_f32(LE_DISTRIBUTION_UNIFORM, 10, 5);
-    LeTensor *at = le_matrix_new_transpose(a);
+    at = le_matrix_new_transpose(a);
     c = le_matrix_new_product(at, b);
     d = le_matrix_new_product_full(a, true, b, false);
     printf("c = ");
     le_tensor_print(c, stdout);
     printf("d = ");
     le_tensor_print(d, stdout);
-    assert(le_tensor_equal(c, d));
+    assert(le_tensor_sad_f32(c, d) < 1e-3f);
     le_tensor_free(d);
     le_tensor_free(c);
     le_tensor_free(at);
-    LeTensor *bt = le_matrix_new_transpose(b);
+    bt = le_matrix_new_transpose(b);
     c = le_matrix_new_product(a, bt);
     d = le_matrix_new_product_full(a, false, b, true);
-    float sad = le_tensor_sad_f32(c, d);
-    assert(sad < 1e-3f);
+    assert(le_tensor_sad_f32(c, d) < 1e-3f);
     le_tensor_free(bt);
     le_tensor_free(b);
     le_tensor_free(a);
