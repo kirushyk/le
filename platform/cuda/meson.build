@@ -7,7 +7,7 @@ le_cuda_sources = [
     'lecuda.c'
 ]
 
-cublas = dependency('cuda', version: '>=10', modules: ['cublas'], required: false)
+cublas = dependency('cuda', version: '>=10', modules: ['cublas'], required: get_option('cuda'))
 
 le_cuda_deps = [
     cublas

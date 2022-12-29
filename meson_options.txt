@@ -3,3 +3,9 @@ option('python',
    value: 'auto',
    description: 'Enable Python bindings'
 )
+
+option('cuda',
+   type: 'feature',
+   value: 'auto',
+   description: 'Enable CUDA backend'
+)
