@@ -63,12 +63,18 @@ main()
 
     bt = le_matrix_new_transpose(b);
     ab = le_matrix_new_product_full(a, false, bt, true);
+    printf("ab (of t) = ");
+    le_tensor_print(ab, stdout);
+    printf("ab_check = ");
+    le_tensor_print(ab_check, stdout);
+    printf ("sad afbt %f\n", le_tensor_sad_f32(ab, ab_check));
     assert(le_tensor_sad_f32(ab, ab_check) < 1e-3f);
     le_tensor_free(ab);
     le_tensor_free(bt);
 
     at = le_matrix_new_transpose(a);
     ab = le_matrix_new_product_full(at, true, b, false);
+    printf ("sad atbf %f\n", le_tensor_sad_f32(ab, ab_check));
     assert(le_tensor_sad_f32(ab, ab_check) < 1e-3f);
     le_tensor_free(ab);
     le_tensor_free(at);
@@ -124,6 +130,7 @@ main()
     le_tensor_print(c, stdout);
     printf("d = ");
     le_tensor_print(d, stdout);
+    printf ("sad atbf %f\n", le_tensor_sad_f32(c, d));
     assert(le_tensor_sad_f32(c, d) < 1e-3f);
     le_tensor_free(d);
     le_tensor_free(c);
@@ -131,6 +138,7 @@ main()
     bt = le_matrix_new_transpose(b);
     c = le_matrix_new_product(a, bt);
     d = le_matrix_new_product_full(a, false, b, true);
+    printf ("sad afbt %f\n", le_tensor_sad_f32(c, d));
     assert(le_tensor_sad_f32(c, d) < 1e-3f);
     le_tensor_free(bt);
     le_tensor_free(b);
