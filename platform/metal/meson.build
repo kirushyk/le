@@ -25,10 +25,14 @@ if xcrun.found()
     if r.returncode() == 0
         ## @todo: Prettify using dirs: argument
         metalc = find_program(r.stdout().strip(), required: false)
+    else
+        warning('unable to find metal utility')
     endif
     r = run_command(xcrun, '--sdk', 'macosx', '-f', 'metallib')
     if r.returncode() == 0
         metallib = find_program(r.stdout().strip(), required: false)
+    else
+        warning('unable to find metallib utility')
     endif
 endif
 
