@@ -11,6 +11,7 @@ int main(int argc, char *argv[])
     LeTensor *gi = le_tensor_to_metal(ci);
     LeTensor *ri = le_tensor_to_cpu(gi);
     le_tensor_print(ri, stdout);
+    assert(le_tensor_equal(ci, ri));
     le_tensor_free(ri);
     le_tensor_free(gi);
     le_tensor_free(ci);
