@@ -19,6 +19,10 @@ Optimization algorithms supported:
 * Stochastic Gradient Descent (SGD) with momentum.
 * Sequential Minimal Optimization (SMO).
 
+Supported backends:
+* NVIDIA CUDA.
+* Apple Metal.
+
 ## Installation
 
 * [From Source](BUILD.md)
