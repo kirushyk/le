@@ -55,16 +55,16 @@ le_cuda_matrix_new_product(const LeTensor *a, bool transpose_a, const LeTensor *
 
     float alpha = 1.0f, beta = 0.0f;
     cublasSgemm(handle,
-        transpose_a ? CUBLAS_OP_T : CUBLAS_OP_N,
-        transpose_b ? CUBLAS_OP_T : CUBLAS_OP_N,
-        c_height,
+        transpose_b ? CUBLAS_OP_N : CUBLAS_OP_T,
+        transpose_a ? CUBLAS_OP_N : CUBLAS_OP_T,
         c_width,
+        c_height,
         size_a,
         &alpha,
-        dev_a,
-        transpose_a ? a->shape->sizes[0] : a->shape->sizes[0],
         dev_b,
-        transpose_b ? b->shape->sizes[0] : b->shape->sizes[0],
+        transpose_b ? b->shape->sizes[0] : b->shape->sizes[1],
+        dev_a,
+        transpose_a ? a->shape->sizes[0] : a->shape->sizes[1],
         &beta,
         dev_c,
         c->shape->sizes[0]);
