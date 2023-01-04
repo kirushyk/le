@@ -58,6 +58,10 @@ main()
     );
 
     ab = le_matrix_new_product(a, b);
+    printf("ab = ");
+    le_tensor_print(ab, stdout);
+    printf("ab_check = ");
+    le_tensor_print(ab_check, stdout);
     assert(le_tensor_equal(ab, ab_check));
     le_tensor_free(ab);
 
