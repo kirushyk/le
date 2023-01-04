@@ -24,57 +24,57 @@ le_cuda_matrix_new_product(const LeTensor *a, bool transpose_a, const LeTensor *
     
     unsigned c_height = transpose_a ? a->shape->sizes[1] : a->shape->sizes[0];
     unsigned c_width = transpose_b ? b->shape->sizes[0] : b->shape->sizes[1];
-    
-    LeTensor *c = le_matrix_new_uninitialized(LE_TYPE_FLOAT32, c_height, c_width);
 
-    cudaError_t cudaStat;
-    cublasStatus_t stat;
+    cudaError_t cuda_res;
+    cublasStatus_t cublas_status;
     cublasHandle_t handle;
 
-    stat = cublasCreate(&handle);
-    assert(stat == CUBLAS_STATUS_SUCCESS);
+    cublas_status = cublasCreate(&handle);
+    assert(cublas_status == CUBLAS_STATUS_SUCCESS);
 
-    float *dev_a = NULL, *dev_b = NULL, *dev_c = NULL;
+    float *dev_at = NULL, *dev_bt = NULL, *dev_ct = NULL;
 
-    cudaStat = cudaMalloc((void**)&dev_a, a->shape->sizes[0] * a->shape->sizes[1] * sizeof(float));
-    assert(cudaStat == cudaSuccess);
+    cuda_res = cudaMalloc((void**)&dev_at, a->shape->sizes[1] * a->shape->sizes[0] * sizeof(float));
+    assert(cuda_res == cudaSuccess);
     
-    stat = cublasSetMatrix(a->shape->sizes[0], a->shape->sizes[1], sizeof(float), a->data, a->shape->sizes[0], dev_a, a->shape->sizes[0]);
-    assert(stat == CUBLAS_STATUS_SUCCESS);
+    cublas_status = cublasSetMatrix(a->shape->sizes[1], a->shape->sizes[0], sizeof(float), a->data, a->shape->sizes[1], dev_at, a->shape->sizes[1]);
+    assert(cublas_status == CUBLAS_STATUS_SUCCESS);
 
-    cudaStat = cudaMalloc((void**)&dev_b, b->shape->sizes[0] * b->shape->sizes[1] * sizeof(float));
-    assert(cudaStat == cudaSuccess);
+    cuda_res = cudaMalloc((void**)&dev_bt, b->shape->sizes[1] * b->shape->sizes[0] * sizeof(float));
+    assert(cuda_res == cudaSuccess);
 
-    stat = cublasSetMatrix(b->shape->sizes[0], b->shape->sizes[1], sizeof(float), b->data, b->shape->sizes[0], dev_b, b->shape->sizes[0]);
-    assert(stat == CUBLAS_STATUS_SUCCESS);
+    cublas_status = cublasSetMatrix(b->shape->sizes[1], b->shape->sizes[0], sizeof(float), b->data, b->shape->sizes[1], dev_bt, b->shape->sizes[1]);
+    assert(cublas_status == CUBLAS_STATUS_SUCCESS);
     
-    cudaStat = cudaMalloc((void**)&dev_c, c_height * c_width * sizeof(float));
-    assert(cudaStat == cudaSuccess);
-    cudaStat = cudaMemset(dev_c, 0, c_height * c_width * sizeof(float));
-    assert(cudaStat == cudaSuccess);
+    cuda_res = cudaMalloc((void**)&dev_ct, c_height * c_width * sizeof(float));
+    assert(cuda_res == cudaSuccess);
+    cuda_res = cudaMemset(dev_ct, 0, c_height * c_width * sizeof(float));
+    assert(cuda_res == cudaSuccess);
 
     float alpha = 1.0f, beta = 0.0f;
     cublasSgemm(handle,
-        transpose_b ? CUBLAS_OP_N : CUBLAS_OP_T,
-        transpose_a ? CUBLAS_OP_N : CUBLAS_OP_T,
+        transpose_b ? CUBLAS_OP_T : CUBLAS_OP_N,
+        transpose_a ? CUBLAS_OP_T : CUBLAS_OP_N,
         c_width,
         c_height,
         size_a,
         &alpha,
-        dev_b,
+        dev_bt,
         transpose_b ? b->shape->sizes[0] : b->shape->sizes[1],
-        dev_a,
+        dev_at,
         transpose_a ? a->shape->sizes[0] : a->shape->sizes[1],
         &beta,
-        dev_c,
-        c->shape->sizes[0]);
-
-    stat = cublasGetMatrix(c->shape->sizes[0], c->shape->sizes[1], sizeof(float), dev_c, c->shape->sizes[0], c->data, c->shape->sizes[0]);
-    assert(stat == CUBLAS_STATUS_SUCCESS);
+        dev_ct,
+        c_height
+    );
+    
+    LeTensor *c = le_matrix_new_uninitialized(LE_TYPE_FLOAT32, c_height, c_width);
+    cublas_status = cublasGetMatrix(c->shape->sizes[1], c->shape->sizes[0], sizeof(float), dev_ct, c->shape->sizes[1], c->data, c->shape->sizes[1]);
+    assert(cublas_status == CUBLAS_STATUS_SUCCESS);
         
-    cudaFree(dev_c);
-    cudaFree(dev_b);
-    cudaFree(dev_a);
+    cudaFree(dev_ct);
+    cudaFree(dev_bt);
+    cudaFree(dev_at);
     cublasDestroy(handle);
 
     return c;
