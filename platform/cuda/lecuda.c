@@ -60,9 +60,9 @@ le_cuda_matrix_new_product(const LeTensor *a, bool transpose_a, const LeTensor *
         size_a,
         &alpha,
         dev_bt,
-        transpose_b ? b->shape->sizes[0] : b->shape->sizes[1],
+        transpose_b ? b->shape->sizes[1] : b->shape->sizes[1],
         dev_at,
-        transpose_a ? a->shape->sizes[0] : a->shape->sizes[1],
+        transpose_a ? a->shape->sizes[1] : a->shape->sizes[1],
         &beta,
         dev_ct,
         c_height
