@@ -60,15 +60,16 @@ le_cuda_matrix_new_product(const LeTensor *a, bool transpose_a, const LeTensor *
         size_a,
         &alpha,
         dev_bt,
-        transpose_b ? b->shape->sizes[1] : b->shape->sizes[1],
+        b->shape->sizes[1],
         dev_at,
-        transpose_a ? a->shape->sizes[1] : a->shape->sizes[1],
+        a->shape->sizes[1],
         &beta,
         dev_ct,
-        c_height
+        c_width
     );
     
     LeTensor *c = le_matrix_new_uninitialized(LE_TYPE_FLOAT32, c_height, c_width);
+
     cublas_status = cublasGetMatrix(c->shape->sizes[1], c->shape->sizes[0], sizeof(float), dev_ct, c->shape->sizes[1], c->data, c->shape->sizes[1]);
     assert(cublas_status == CUBLAS_STATUS_SUCCESS);
         
