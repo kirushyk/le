@@ -78,6 +78,10 @@ main()
 
     at = le_matrix_new_transpose(a);
     ab = le_matrix_new_product_full(at, true, b, false);
+    printf("ab (of t) = ");
+    le_tensor_print(ab, stdout);
+    printf("ab_check = ");
+    le_tensor_print(ab_check, stdout);
     printf ("sad atbf %f\n", le_tensor_sad_f32(ab, ab_check));
     assert(le_tensor_sad_f32(ab, ab_check) < 1e-3f);
     le_tensor_free(ab);
