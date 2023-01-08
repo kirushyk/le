@@ -36,26 +36,33 @@ if xcrun.found()
     endif
 endif
 
-have_metal = have_objc and metal.found() # and metalc.found() and metallib.found()
+have_metal = have_objc and metal.found()
 
 if have_metal
-    # compiled_shaders = []
-    # foreach shader : le_metal_shaders
-    #     air_filename = shader.split('.')[0] + '.air'
-    #     air = custom_target(air_filename,
-    #         output : air_filename,
-    #         input : shader,
-    #         command : [metalc, '@INPUT@', '-o', '@OUTPUT@']
-    #     )
-    #     message(air_filename)
-    #     linked_shader_filename = shader.split('.')[0] + '.metallib'
-    #     linked_shader = custom_target(linked_shader_filename,
-    #         output : linked_shader_filename,
-    #         input : air,
-    #         command : [metallib, '@INPUT@', '-o', '@OUTPUT@']
-    #     )
-    #     compiled_shaders += [linked_shader]
-    # endforeach
+    if metalc.found() and metallib.found()
+        compiled_shaders = []
+        foreach shader : le_metal_shaders
+            air_filename = shader.split('.')[0] + '.air'
+            air = custom_target(air_filename,
+                output : air_filename,
+                input : shader,
+                command : [metalc, '@INPUT@', '-o', '@OUTPUT@']
+            )
+            message(air_filename)
+            linked_shader_filename = shader.split('.')[0] + '.metallib'
+            linked_shader = custom_target(linked_shader_filename,
+                output : linked_shader_filename,
+                input : air,
+                command : [metallib, '@INPUT@', '-o', '@OUTPUT@']
+            )
+            compiled_shaders += [linked_shader]
+        endforeach
+    else
+        # Even if you have the command line tools installed, you still need Xcode.
+        # You might have installed the command line tools before installing Xcode. For instance, you might have set up Homebrew first.
+        # The command line tools are pointing to an incomplete SDK, rather than the one you installed with Xcode.
+        # sudo xcode-select --switch /Applications/Xcode.app/Contents/Developer
+    endif
 
     le_metal = static_library('le_metal', le_metal_sources,
         dependencies: [
