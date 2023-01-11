@@ -41,19 +41,18 @@ have_metal = have_objc and metal.found()
 if have_metal
     if metalc.found() and metallib.found()
         compiled_shaders = []
-        foreach shader : le_metal_shaders
+        foreach shader: le_metal_shaders
             air_filename = shader.split('.')[0] + '.air'
             air = custom_target(air_filename,
-                output : air_filename,
-                input : shader,
-                command : [metalc, '@INPUT@', '-o', '@OUTPUT@']
+                output: air_filename,
+                input: shader,
+                command: [metalc, '@INPUT@', '-c', '-o', '@OUTPUT@']
             )
-            message(air_filename)
             linked_shader_filename = shader.split('.')[0] + '.metallib'
             linked_shader = custom_target(linked_shader_filename,
-                output : linked_shader_filename,
-                input : air,
-                command : [metallib, '@INPUT@', '-o', '@OUTPUT@']
+                output: linked_shader_filename,
+                input: air,
+                command: [metallib, '@INPUT@', '-o', '@OUTPUT@']
             )
             compiled_shaders += [linked_shader]
         endforeach
@@ -64,7 +63,7 @@ if have_metal
         # sudo xcode-select --switch /Applications/Xcode.app/Contents/Developer
     endif
 
-    le_metal = static_library('le_metal', le_metal_sources,
+    le_metal = static_library('le_metal', le_metal_sources + linked_shader,
         dependencies: [
             metal
         ],
