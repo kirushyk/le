@@ -585,16 +585,15 @@ le_matrix_new_product_full(const LeTensor *a, bool transpose_a, const LeTensor *
         return le_metal_matrix_new_product(a, transpose_a, b, transpose_b);
 #endif
             
+#if defined(HAVE_CUDA)
+    case LE_DEVICE_TYPE_CUDA:
+        return le_cuda_matrix_new_product(a, transpose_a, b, transpose_b);
+#endif
+
     case LE_DEVICE_TYPE_CPU:
         /// @todo: Take stride into account
 #ifdef __APPLE__
-// #   ifdef HAVE_METAL
-//         return le_metal_matrix_new_product(a, transpose_a, b, transpose_b);
-// #   else
         return le_accelerate_matrix_new_product(a, transpose_a, b, transpose_b);
-// #   endif
-#elif defined(HAVE_CUDA)
-        return le_cuda_matrix_new_product(a, transpose_a, b, transpose_b);
 #elif defined(HAVE_OPENBLAS)
         return le_openblas_matrix_new_product(a, transpose_a, b, transpose_b);
 #else
