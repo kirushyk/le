@@ -21,6 +21,9 @@
 #if defined(HAVE_METAL)
 #   include "../platform/metal/lemetal.h"
 #endif
+#if defined(HAVE_CUDA)
+#   include "../platform/cuda/lecuda.h"
+#endif
 
 LeTensor *
 le_tensor_new_from_va_list(LeType element_type, unsigned num_dimensions, va_list dims_and_data)
@@ -1241,6 +1244,12 @@ le_tensor_free(LeTensor *self)
 #ifdef HAVE_METAL
         case LE_DEVICE_TYPE_METAL:
             le_metal_data_free(self->data);
+            break;
+#endif
+            
+#ifdef HAVE_CUDA
+        case LE_DEVICE_TYPE_CUDA:
+            le_cuda_data_free(self->data);
             break;
 #endif
             

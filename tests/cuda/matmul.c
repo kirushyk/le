@@ -4,9 +4,7 @@
 #include <platform/cuda/lecuda.h>
 
 int main(int argc, char *argv[])
-{
-    le_metal_init();
-    
+{    
     LeTensor *ci = le_matrix_new_identity(LE_TYPE_FLOAT32, 5);
     LeTensor *gi = le_tensor_to_cuda(ci);
     LeTensor *ri = le_cuda_tensor_to_cpu(gi);
