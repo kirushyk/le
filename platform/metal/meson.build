@@ -48,14 +48,13 @@ if have_metal
                 input: shader,
                 command: [metalc, '@INPUT@', '-c', '-o', '@OUTPUT@']
             )
-            linked_shader_filename = shader.split('.')[0] + '.metallib'
-            linked_shader = custom_target(linked_shader_filename,
-                output: linked_shader_filename,
-                input: air,
-                command: [metallib, '@INPUT@', '-o', '@OUTPUT@']
-            )
-            compiled_shaders += [linked_shader]
+            compiled_shaders += [air]
         endforeach
+        linked_shader = custom_target('le.metallib',
+            output: 'le.metallib',
+            input: compiled_shaders,
+            command: [metallib, '@INPUT@', '-o', '@OUTPUT@']
+        )
     else
         # Even if you have the command line tools installed, you still need Xcode.
         # You might have installed the command line tools before installing Xcode. For instance, you might have set up Homebrew first.
