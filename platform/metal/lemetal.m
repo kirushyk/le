@@ -1,4 +1,5 @@
 #import "lemetal.h"
+#import <MacTypes.h>
 #import <le/le.h>
 #import <le/tensors/letensor-imp.h>
 #import <Metal/Metal.h>
@@ -169,7 +170,9 @@ void
 le_metal_tensor_mul_tensor(LeTensor *a, const LeTensor *b)
 {
     id<MTLLibrary> library = [device newDefaultLibrary];
+    assert(library);
     id<MTLFunction> function = [library newFunctionWithName:@"hadamardProductKernel"];
+    assert(function);
     id<MTLCommandBuffer> commandBuffer = [commandQueue commandBuffer];
     id<MTLComputePipelineState> computePipelineState = [device newComputePipelineStateWithFunction:function error:NULL];
     id<MTLComputeCommandEncoder> computeCommandEncoder = [commandBuffer computeCommandEncoder];
