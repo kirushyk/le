@@ -26,7 +26,7 @@ le_tests_deps = [
 
 if have_metal
     le_tests += [
-        #['metal/hadamard.c'],
+        ['metal/hadamard.c'],
         ['metal/matmul.c']
     ]
     le_tests_deps += le_metal
