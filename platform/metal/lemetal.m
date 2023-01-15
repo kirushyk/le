@@ -1,3 +1,4 @@
+#include "metal-config.h"
 #import "lemetal.h"
 #import <MacTypes.h>
 #import <le/le.h>
@@ -7,6 +8,9 @@
 
 static id<MTLDevice> device;
 static id<MTLCommandQueue> commandQueue;
+#ifdef HAVE_METALLIB
+static id<MTLLibrary> library;
+#endif
 
 void
 le_metal_init(void)
@@ -18,6 +22,18 @@ le_metal_init(void)
         NSLog(@"Using device: %@", device.name);
     }
     commandQueue = [device newCommandQueue];
+    NSError *libraryError = NULL;
+#ifdef HAVE_METALLIB
+    NSURL *libraryURL = [NSURL fileURLWithPath:@METALLIB_INSTALL_PATH "/" METALLIB_FILENAME];
+    library = [device newLibraryWithURL:libraryURL error:&libraryError];
+    if (!library) {
+        libraryURL = [NSURL fileURLWithPath:@METALLIB_BUILD_PATH "/" METALLIB_FILENAME];
+        library = [device newLibraryWithURL:libraryURL error:&libraryError];
+    }
+    if (!library) {
+        NSLog(@"Library error: %@", libraryError.localizedDescription);
+    }
+#endif
 }
 
 LeTensor *
@@ -169,7 +185,6 @@ le_metal_data_copy(void *data, size_t bytes)
 void
 le_metal_tensor_mul_tensor(LeTensor *a, const LeTensor *b)
 {
-    id<MTLLibrary> library = [device newDefaultLibrary];
     assert(library);
     id<MTLFunction> function = [library newFunctionWithName:@"hadamardProductKernel"];
     assert(function);
