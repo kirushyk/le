@@ -38,8 +38,13 @@ endif
 
 have_metal = have_objc and metal.found()
 
+metallib_filename = 'le.metallib'
+
 if have_metal
-    if metalc.found() and metallib.found()
+    metal_config = configuration_data()
+    have_metallib = metalc.found() and metallib.found()
+    metal_config.set('HAVE_METALLIB', have_metallib)
+    if have_metallib
         compiled_shaders = []
         foreach shader: le_metal_shaders
             air_filename = shader.split('.')[0] + '.air'
@@ -50,10 +55,16 @@ if have_metal
             )
             compiled_shaders += [air]
         endforeach
-        linked_shader = custom_target('le.metallib',
-            output: 'le.metallib',
+        metallib_path = get_option('datadir') / 'le' / 'metal'
+        metal_config.set_quoted('METALLIB_FILENAME', metallib_filename)
+        metal_config.set_quoted('METALLIB_BUILD_PATH', meson.current_build_dir())
+        metal_config.set_quoted('METALLIB_INSTALL_PATH', get_option('prefix') / metallib_path)
+        linked_shader = custom_target(metallib_filename,
+            output: metallib_filename,
             input: compiled_shaders,
-            command: [metallib, '@INPUT@', '-o', '@OUTPUT@']
+            command: [metallib, '@INPUT@', '-o', '@OUTPUT@'],
+            install: true,
+            install_dir: metallib_path
         )
     else
         # Even if you have the command line tools installed, you still need Xcode.
@@ -61,11 +72,12 @@ if have_metal
         # The command line tools are pointing to an incomplete SDK, rather than the one you installed with Xcode.
         # sudo xcode-select --switch /Applications/Xcode.app/Contents/Developer
     endif
+    configure_file(output: 'metal-config.h', configuration: metal_config)
 
-    le_metal = static_library('le_metal', le_metal_sources + linked_shader,
-        dependencies: [
-            metal
-        ],
+    # install_data(metallib_filename, install_dir: metallib_path)
+
+    le_metal = static_library('le_metal', le_metal_sources,
+        dependencies: metal,
         include_directories: include_directories('../../'),
     )
 endif
