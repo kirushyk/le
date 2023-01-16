@@ -69,6 +69,15 @@ le_cuda_matrix_new_product(const LeTensor *a, bool transpose_a, const LeTensor *
     return c;
 }
 
+void 
+le_cuda_tensor_mul_tensor (LeTensor *self, const LeTensor *b)
+{
+    assert(self->device_type == LE_DEVICE_TYPE_CUDA);
+    assert(b->device_type == LE_DEVICE_TYPE_CUDA);
+    assert(self->element_type == LE_TYPE_FLOAT32);
+    assert(b->element_type == LE_TYPE_FLOAT32);
+}
+
 LeTensor *
 le_tensor_to_cuda(const LeTensor *cpu_tensor)
 {
@@ -129,7 +138,7 @@ le_cuda_data_copy(void *data, size_t bytes)
 }
 
 void
-le_cuda_data_free (void *data)
+le_cuda_data_free(void *data)
 {
     if (data)
     {
