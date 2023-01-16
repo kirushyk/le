@@ -209,6 +209,7 @@ le_tensor_new_copy(const LeTensor *another)
         }
         break;
     default:
+        assert(false);
         break;
     }
     
@@ -767,6 +768,7 @@ le_tensor_mul_tensor(LeTensor *self, const LeTensor *b)
         }
         break;
     default:
+        assert(false);
         break;
     }
 }
