@@ -117,6 +117,17 @@ le_cuda_tensor_to_cpu(const LeTensor *cuda_tensor)
     return tensor;
 }
 
+void *
+le_cuda_data_copy(void *data, size_t bytes)
+{
+    void *dataCopy;
+    cudaError_t cuda_res;
+    cuda_res = cudaMalloc((void**)&dataCopy, bytes);
+    assert(cuda_res == cudaSuccess);
+    cudaMemcpy(dataCopy, data, bytes, cudaMemcpyDeviceToDevice);
+    return dataCopy;
+}
+
 void
 le_cuda_data_free (void *data)
 {
