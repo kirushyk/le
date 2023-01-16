@@ -187,6 +187,14 @@ le_tensor_new_copy(const LeTensor *another)
         }
         break;
 #endif
+#ifdef HAVE_CUDA
+    case LE_DEVICE_TYPE_CUDA:
+        if (another->stride == le_shape_get_size(another->shape, -1))
+        {
+            self->data = le_cuda_data_copy(another->data, data_size);
+        }
+        break;
+#endif
     case LE_DEVICE_TYPE_CPU:
         {
             self->data = malloc(data_size);
@@ -758,6 +766,11 @@ le_tensor_mul_tensor(LeTensor *self, const LeTensor *b)
 #ifdef HAVE_METAL
     case LE_DEVICE_TYPE_METAL:
         le_metal_tensor_mul_tensor(self, b);
+        break;
+#endif
+#ifdef HAVE_CUDA
+    case LE_DEVICE_TYPE_CUDA:
+        le_cuda_tensor_mul_tensor(self, b);
         break;
 #endif
     case LE_DEVICE_TYPE_CPU:
