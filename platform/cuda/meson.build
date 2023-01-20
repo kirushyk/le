@@ -7,35 +7,40 @@ le_cuda_sources = [
     'lecuda.c'
 ]
 
-cublas = dependency('cuda', version: '>=10', modules: ['cublas'], required: get_option('cuda'))
+stdcpp = meson.get_compiler('cpp').find_library('stdc++', required: get_option('cuda'))
+cuda = dependency('cuda', version: '>=10', modules: ['cublas'], required: get_option('cuda'))
+have_cuda = cuda.found() and stdcpp.found()
 
 le_cuda_deps = [
-    cublas
+    stdcpp,
+    cuda
 ]
-
-have_cuda = cublas.found()
 
 le_cuda_dev_sources = [
     'hadamard.cu'
 ]
 
-nvcc = find_program(['nvcc', '/usr/local/cuda/bin/nvcc'], required: false)
-dev_objs = []
-if nvcc.found()
-    foreach dev_source: le_cuda_dev_sources
-        obj_filename = dev_source.split('.')[0] + '.o'
-        obj = custom_target(obj_filename,
-            output: obj_filename,
-            input: dev_source,
-            command: [nvcc, '@INPUT@', '-c', '-o', '@OUTPUT@']
-        )
-        dev_objs += [obj]
-    endforeach
-endif
-
 if have_cuda
+    nvcc = find_program(['nvcc', '/usr/local/cuda/bin/nvcc'], required: false)
+    dev_objs = []
+    if nvcc.found()
+        foreach dev_source: le_cuda_dev_sources
+            obj_filename = dev_source.split('.')[0] + '.o'
+            obj = custom_target(obj_filename,
+                output: obj_filename,
+                input: dev_source,
+                command: [
+                    nvcc, '@INPUT@',
+                    '-I../', '-Xcompiler', '\'-fPIC\'',
+                    '-c', '-o', '@OUTPUT@'
+                ]
+            )
+            dev_objs += [obj]
+        endforeach
+    endif
+
     le_cuda = static_library('le_cuda', le_cuda_sources + dev_objs,
         dependencies: le_cuda_deps,
-        include_directories: incdir,
+        include_directories: incdir
     )
 endif

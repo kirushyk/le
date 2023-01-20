@@ -69,6 +69,8 @@ le_cuda_matrix_new_product(const LeTensor *a, bool transpose_a, const LeTensor *
     return c;
 }
 
+extern void hadamard_wrapper(float *a, float *b, int w, int h);
+
 void 
 le_cuda_tensor_mul_tensor (LeTensor *self, const LeTensor *b)
 {
@@ -76,6 +78,11 @@ le_cuda_tensor_mul_tensor (LeTensor *self, const LeTensor *b)
     assert(b->device_type == LE_DEVICE_TYPE_CUDA);
     assert(self->element_type == LE_TYPE_FLOAT32);
     assert(b->element_type == LE_TYPE_FLOAT32);
+    assert(self->shape->num_dimensions == 2);
+    assert(b->shape->num_dimensions == 2);
+    assert(le_tensor_contiguous(self));
+    assert(le_tensor_contiguous(b));
+    hadamard_wrapper(self->data, b->data, self->shape->sizes[1], self->shape->sizes[0]);
 }
 
 LeTensor *
