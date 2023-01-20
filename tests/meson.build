@@ -34,6 +34,7 @@ endif
 
 if have_cuda
     le_tests += [
+        ['cuda/hadamard.c'],
         ['cuda/matmul.c']
     ]
     le_tests_deps += le_cuda
