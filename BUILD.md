@@ -26,7 +26,7 @@ Use [Homebrew](https://brew.sh) to install packages needed:
 You can put your build directory inside of source directory:
 
     cd {source_directory_name}
-    meson {build_directory_name}
+    PATH=$PATH:/usr/local/cuda/bin/ meson setup {build_directory_name}
 
 ## Compilation
 
