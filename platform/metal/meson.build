@@ -21,14 +21,14 @@ xcrun = find_program('xcrun', required: false)
 metalc = disabler()
 metallib = disabler()
 if xcrun.found()
-    r = run_command(xcrun, '--sdk', 'macosx', '-f', 'metal')
+    r = run_command(xcrun, '--sdk', 'macosx', '-f', 'metal', check: false)
     if r.returncode() == 0
         ## @todo: Prettify using dirs: argument
         metalc = find_program(r.stdout().strip(), required: false)
     else
         warning('unable to find metal utility')
     endif
-    r = run_command(xcrun, '--sdk', 'macosx', '-f', 'metallib')
+    r = run_command(xcrun, '--sdk', 'macosx', '-f', 'metallib', check: false)
     if r.returncode() == 0
         metallib = find_program(r.stdout().strip(), required: false)
     else
