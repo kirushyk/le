@@ -1,7 +1,7 @@
 # Copyright (c) Kyrylo Polezhaiev and contributors. All rights reserved.
 # Released under the MIT license. See LICENSE file in the project root for full license information.
 
-project('le', 'c', 'cpp',
+project('le', 'c',
     version: '0.1.1',
     meson_version: '>= 0.53.2',
     default_options: [
