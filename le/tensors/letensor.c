@@ -888,19 +888,28 @@ void
 le_tensor_apply_sigmoid(LeTensor *self)
 {
     /// @todo: Take stride into account
-    assert(self->device_type == LE_DEVICE_TYPE_CPU);
+    switch (self->device_type) {
+    case LE_DEVICE_TYPE_CPU:
 #ifdef __APPLE__
-    return le_accelerate_tensor_apply_sigmoid(self);
+        return le_accelerate_tensor_apply_sigmoid(self);
 #else
-    assert(self->element_type == LE_TYPE_FLOAT32);
-    unsigned i;
-    unsigned elements_count = le_shape_get_elements_count(self->shape);
-    
-    for (i = 0; i < elements_count; i++)
-    {
-        ((float *)self->data)[i] = le_sigmoid(((float *)self->data)[i]);
-    }
+        assert(self->element_type == LE_TYPE_FLOAT32);
+        unsigned elements_count = le_shape_get_elements_count(self->shape);
+        for (unsigned i = 0; i < elements_count; i++)
+        {
+            ((float *)self->data)[i] = le_sigmoid(((float *)self->data)[i]);
+        }
 #endif
+        break;
+#ifdef HAVE_CUDA
+    case LE_DEVICE_TYPE_CUDA:
+        le_cuda_tensor_apply_sigmoid(self);
+        break;
+#endif
+    default:
+        assert(false);
+        break;
+    }
 }
 
 void
