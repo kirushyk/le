@@ -13,6 +13,10 @@ LeTensor * le_cuda_matrix_new_product (const LeTensor * a,
 
 void       le_cuda_tensor_mul_tensor (LeTensor *self, const LeTensor *b);
 
+void       le_cuda_tensor_apply_sigmoid (LeTensor *tensor);
+
+void       le_cuda_tensor_apply_sigmoid_prime (LeTensor *tensor);
+
 LeTensor * le_tensor_to_cuda (const LeTensor * cpu_tensor);
    
 LeTensor * le_cuda_tensor_to_cpu(const LeTensor * cuda_tensor);

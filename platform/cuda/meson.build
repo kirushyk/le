@@ -4,8 +4,9 @@
 incdir = include_directories('../../')
 
 le_cuda_sources = [
-    'lecuda.c',
-    'hadamard.cu'
+    'hadamard.cu',
+    'sigmoid.cu',
+    'lecuda.c'
 ]
 
 have_cuda = add_languages(['cuda', 'cpp'], required: get_option('cuda')) 

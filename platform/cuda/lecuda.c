@@ -72,7 +72,7 @@ le_cuda_matrix_new_product(const LeTensor *a, bool transpose_a, const LeTensor *
 extern void hadamard_wrapper(float *a, float *b, int l);
 
 void 
-le_cuda_tensor_mul_tensor (LeTensor *self, const LeTensor *b)
+le_cuda_tensor_mul_tensor(LeTensor *self, const LeTensor *b)
 {
     assert(self->device_type == LE_DEVICE_TYPE_CUDA);
     assert(b->device_type == LE_DEVICE_TYPE_CUDA);
@@ -83,6 +83,30 @@ le_cuda_tensor_mul_tensor (LeTensor *self, const LeTensor *b)
     assert(le_tensor_contiguous(self));
     assert(le_tensor_contiguous(b));
     hadamard_wrapper(self->data, b->data, le_shape_get_elements_count(self->shape));
+    cudaDeviceSynchronize();
+}
+
+extern void sigmoid_wrapper(float *a, int l);
+
+void
+le_cuda_tensor_apply_sigmoid(LeTensor *self)
+{
+    assert(self->device_type == LE_DEVICE_TYPE_CUDA);
+    assert(self->element_type == LE_TYPE_FLOAT32);
+    assert(le_tensor_contiguous(self));
+    sigmoid_wrapper(self->data, le_shape_get_elements_count(self->shape));
+    cudaDeviceSynchronize();
+}
+
+extern void sigmoid_prime_wrapper(float *a, int l);
+
+void
+le_cuda_tensor_apply_sigmoid_prime(LeTensor *self)
+{
+    assert(self->device_type == LE_DEVICE_TYPE_CUDA);
+    assert(self->element_type == LE_TYPE_FLOAT32);
+    assert(le_tensor_contiguous(self));
+    sigmoid_prime_wrapper(self->data, le_shape_get_elements_count(self->shape));
     cudaDeviceSynchronize();
 }
 
