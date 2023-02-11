@@ -7,7 +7,7 @@ le_metal_shaders = [
     'hadamard.metal'
 ]
 
-have_objc = add_languages('objc', required: false)
+have_objc = add_languages('objc', native: false, required: false)
 
 metal = dependency('appleframeworks',
     modules: [

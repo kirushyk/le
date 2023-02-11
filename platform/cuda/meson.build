@@ -7,7 +7,7 @@ le_cuda_sources = [
     'lecuda.c'
 ]
 
-have_cuda = add_languages(['cuda', 'cpp'], required: get_option('cuda')) 
+have_cuda = add_languages(['cuda', 'cpp'], native: false, required: get_option('cuda')) 
 
 cuda = dependency('cuda', version: '>=10', modules: ['cublas'], required: get_option('cuda'))
 have_cuda = have_cuda and cuda.found()
