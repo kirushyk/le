@@ -203,3 +203,45 @@ le_metal_tensor_mul_tensor(LeTensor *a, const LeTensor *b)
     [commandBuffer commit];
     [commandBuffer waitUntilCompleted];
 }
+
+void
+le_metal_tensor_apply_sigmoid(LeTensor *tensor)
+{
+    assert(library);
+    id<MTLFunction> function = [library newFunctionWithName:@"sigmoidKernel"];
+    assert(function);
+
+    id<MTLCommandBuffer> commandBuffer = [commandQueue commandBuffer];
+    id<MTLComputePipelineState> computePipelineState = [device newComputePipelineStateWithFunction:function error:NULL];
+    id<MTLComputeCommandEncoder> computeCommandEncoder = [commandBuffer computeCommandEncoder];
+    [computeCommandEncoder setComputePipelineState:computePipelineState];
+    id<MTLBuffer> buffer_a = (__bridge id<MTLBuffer>)(tensor->data);
+    [computeCommandEncoder setBuffer:buffer_a offset:0 atIndex:0];
+    MTLSize threadGroupSize = MTLSizeMake(le_shape_get_elements_count(tensor->shape), 1, 1);
+    MTLSize threadGroupCount = MTLSizeMake(1, 1, 1);
+    [computeCommandEncoder dispatchThreadgroups:threadGroupSize threadsPerThreadgroup:threadGroupCount];
+    [computeCommandEncoder endEncoding];
+    [commandBuffer commit];
+    [commandBuffer waitUntilCompleted];
+}
+
+void
+le_metal_tensor_apply_sigmoid_prime(LeTensor *tensor)
+{
+    assert(library);
+    id<MTLFunction> function = [library newFunctionWithName:@"sigmoidPrimeKernel"];
+    assert(function);
+
+    id<MTLCommandBuffer> commandBuffer = [commandQueue commandBuffer];
+    id<MTLComputePipelineState> computePipelineState = [device newComputePipelineStateWithFunction:function error:NULL];
+    id<MTLComputeCommandEncoder> computeCommandEncoder = [commandBuffer computeCommandEncoder];
+    [computeCommandEncoder setComputePipelineState:computePipelineState];
+    id<MTLBuffer> buffer_a = (__bridge id<MTLBuffer>)(tensor->data);
+    [computeCommandEncoder setBuffer:buffer_a offset:0 atIndex:0];
+    MTLSize threadGroupSize = MTLSizeMake(le_shape_get_elements_count(tensor->shape), 1, 1);
+    MTLSize threadGroupCount = MTLSizeMake(1, 1, 1);
+    [computeCommandEncoder dispatchThreadgroups:threadGroupSize threadsPerThreadgroup:threadGroupCount];
+    [computeCommandEncoder endEncoding];
+    [commandBuffer commit];
+    [commandBuffer waitUntilCompleted];
+}

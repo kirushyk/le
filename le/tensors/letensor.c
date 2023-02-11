@@ -1,6 +1,7 @@
 /* Copyright (c) Kyrylo Polezhaiev and contributors. All rights reserved.
    Released under the MIT license. See LICENSE file in the project root for full license information. */
 
+#include "platform/ledevice.h"
 #define DEFAULT_LOG_CATEGORY "tensor"
 
 #include "../config.h"
@@ -906,6 +907,11 @@ le_tensor_apply_sigmoid(LeTensor *self)
         le_cuda_tensor_apply_sigmoid(self);
         break;
 #endif
+#ifdef HAVE_METAL
+    case LE_DEVICE_TYPE_METAL:
+        le_metal_tensor_apply_sigmoid(self);
+        break;
+#endif
     default:
         assert(false);
         break;
@@ -932,6 +938,11 @@ le_tensor_apply_sigmoid_prime(LeTensor *self)
 #ifdef HAVE_CUDA
     case LE_DEVICE_TYPE_CUDA:
         le_cuda_tensor_apply_sigmoid_prime(self);
+        break;
+#endif
+#ifdef HAVE_METAL
+    case LE_DEVICE_TYPE_METAL:
+        le_metal_tensor_apply_sigmoid_prime(self);
         break;
 #endif
     default:
