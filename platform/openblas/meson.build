@@ -1,8 +1,6 @@
 # Copyright (c) Kyrylo Polezhaiev and contributors. All rights reserved.
 # Released under the MIT license. See LICENSE file in the project root for full license information.
 
-incdir = include_directories('../../')
-
 le_openblas_sources = [
     'leopenblas.c'
 ]
@@ -16,9 +14,9 @@ have_openblas = openblas.found()
 
 if have_openblas
     le_openblas = static_library('le_openblas', le_openblas_sources,
+        include_directories: inc,
         dependencies: [
             openblas
-        ],
-        include_directories: incdir,
+        ]
     )
 endif

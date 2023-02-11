@@ -1,8 +1,6 @@
 # Copyright (c) Kyrylo Polezhaiev and contributors. All rights reserved.
 # Released under the MIT license. See LICENSE file in the project root for full license information.
 
-incdir = include_directories('../../')
-
 le_cuda_sources = [
     'hadamard.cu',
     'sigmoid.cu',
@@ -20,7 +18,7 @@ le_cuda_deps = [
 
 if have_cuda
     le_cuda = static_library('le_cuda', le_cuda_sources,
-        dependencies: le_cuda_deps,
-        include_directories: incdir
+        include_directories: inc,
+        dependencies: le_cuda_deps
     )
 endif

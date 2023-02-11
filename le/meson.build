@@ -1,8 +1,6 @@
 # Copyright (c) Kyrylo Polezhaiev and contributors. All rights reserved.
 # Released under the MIT license. See LICENSE file in the project root for full license information.
 
-incdir = include_directories('../')
-
 le_sources = [
     'lelist.c',
     'ledataset.c',
@@ -92,7 +90,7 @@ install_headers('tensors/lescalar.h', subdir : 'le/tensors')
 install_headers('lelog.h', subdir : 'le')
 
 le = library('le', le_sources,
-    include_directories: incdir,
+    include_directories: inc,
     link_with: le_libs,
     dependencies: le_deps,
     install: true

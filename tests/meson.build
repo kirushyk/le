@@ -50,7 +50,7 @@ foreach filenames : le_tests
     filename = filenames[0]
     test_name = filename.split('.')[0].underscorify()
     exe = executable(test_name, filenames,
-        include_directories: include_directories('..'),
+        include_directories: inc,
         link_with: le_tests_deps,
         install: false
     )

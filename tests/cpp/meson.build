@@ -2,12 +2,13 @@ cpp_tests = [
     'shape.cpp'
 ]
 
-incdir = include_directories('..' / '..', '..' / '..' / '..' / 'bindings' / 'cpp')
-
 foreach filename : cpp_tests
     test_name = filename.split('.')[0].underscorify()
     exe = executable(test_name, filename,
-        include_directories: incdir,
+        include_directories: [
+            inc,
+            inc_cpp
+        ],
         link_with: [
             le_tests_deps,
             le_cpp

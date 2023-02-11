@@ -12,11 +12,16 @@ le_cpp_sources = [
     'bgd.cpp'
 ]
 
+inc_cpp = include_directories('.')
+
 have_cpp = add_languages('cpp', required: false)
 if have_cpp
     le_cpp = static_library('le_cpp',
         le_cpp_sources,
-        include_directories: incdir,
+        include_directories: [
+            inc,
+            inc_cpp
+        ],
         link_with: le
     )
 endif

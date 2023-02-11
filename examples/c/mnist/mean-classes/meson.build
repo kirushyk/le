@@ -10,7 +10,7 @@ mnist_inspect_sources = [
 if gtk.found()
     executable('mnist-mean', mnist_inspect_sources,
         dependencies: gtk,
-        include_directories: incdir,
+        include_directories: inc,
         link_with: [
             le,
             mnist

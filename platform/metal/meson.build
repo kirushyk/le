@@ -3,6 +3,7 @@ le_metal_sources = [
 ]
 
 le_metal_shaders = [
+    'sigmoid.metal',
     'hadamard.metal'
 ]
 
@@ -77,7 +78,7 @@ if have_metal
     # install_data(metallib_filename, install_dir: metallib_path)
 
     le_metal = static_library('le_metal', le_metal_sources,
-        dependencies: metal,
-        include_directories: include_directories('../../'),
+        include_directories: inc,
+        dependencies: metal
     )
 endif

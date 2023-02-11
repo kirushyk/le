@@ -25,7 +25,8 @@ endif
 
 if have_python
     pylib_inc = [
-        include_directories('../..', '../../bindings/cpp')
+        inc,
+        inc_cpp
     ]
     pybind11_found = false
     pip3_pybind11_path = py3.get_install_dir() / 'pybind11' / 'include'
