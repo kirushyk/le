@@ -1,11 +1,5 @@
-svm_py = configure_file(input : 'support-vector-machine.py',
-                        output : 'support-vector-machine.py',
-                        copy : true)
+fs = import('fs')
 
-plr_py = configure_file(input : 'polynomial-logistic-regression.py',
-                        output : 'polynomial-logistic-regression.py',
-                        copy : true)
-
-snn_py = configure_file(input : 'shallow-neural-network.py',
-                        output : 'shallow-neural-network.py',
-                        copy : true)
+svm_py = fs.copyfile('support-vector-machine.py', 'support-vector-machine.py')
+plr_py = fs.copyfile('polynomial-logistic-regression.py', 'polynomial-logistic-regression.py')
+snn_py = fs.copyfile('shallow-neural-network.py', 'shallow-neural-network.py')
