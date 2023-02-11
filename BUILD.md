@@ -21,7 +21,7 @@ Use [Homebrew](https://brew.sh) to install packages needed:
 
 [Meson Build system](https://mesonbuild.com) is used to automate building and installation. To create build directory, type:
 
-    meson {source_directory_name} {build_directory_name}
+    meson setup {source_directory_name} {build_directory_name}
 
 You can put your build directory inside of source directory:
 
