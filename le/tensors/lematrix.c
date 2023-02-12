@@ -10,15 +10,15 @@
 #include <math.h>
 #include "letensor-imp.h"
 #ifdef __APPLE__
-#   include "../platform/accelerate/leaccelerate.h"
+#   include "../backends/accelerate/leaccelerate.h"
 #elif defined(HAVE_OPENBLAS)
-#   include "../platform/openblas/leopenblas.h"
+#   include "../backends/openblas/leopenblas.h"
 #endif
 #if defined(HAVE_CUDA)
-#   include "../platform/cuda/lecuda.h"
+#   include "../backends/cuda/lecuda.h"
 #endif
 #if defined(HAVE_METAL)
-#   include "../platform/metal/lemetal.h"
+#   include "../backends/metal/lemetal.h"
 #endif
 
 unsigned

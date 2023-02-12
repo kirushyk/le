@@ -1,7 +1,6 @@
 /* Copyright (c) Kyrylo Polezhaiev and contributors. All rights reserved.
    Released under the MIT license. See LICENSE file in the project root for full license information. */
 
-#include "platform/ledevice.h"
 #define DEFAULT_LOG_CATEGORY "tensor"
 
 #include "../config.h"
@@ -15,15 +14,15 @@
 #include <stdarg.h>
 #include <math.h>
 #ifdef __APPLE__
-#   include "../platform/accelerate/leaccelerate.h"
+#   include "../backends/accelerate/leaccelerate.h"
 #elif defined(HAVE_OPENBLAS)
-#   include "../platform/openblas/leopenblas.h"
+#   include "../backends/openblas/leopenblas.h"
 #endif
 #if defined(HAVE_METAL)
-#   include "../platform/metal/lemetal.h"
+#   include "../backends/metal/lemetal.h"
 #endif
 #if defined(HAVE_CUDA)
-#   include "../platform/cuda/lecuda.h"
+#   include "../backends/cuda/lecuda.h"
 #endif
 
 LeTensor *

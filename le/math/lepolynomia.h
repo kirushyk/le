@@ -7,7 +7,7 @@
 #define __LEPOLYNOMIA_H__
 
 #include <stdio.h>
-#include "lemacros.h"
+#include "../lemacros.h"
 
 LE_BEGIN_DECLS
 

@@ -7,7 +7,7 @@
 #include <stdbool.h>
 #include "letype.h"
 #include "leshape.h"
-#include "../../platform/ledevice.h"
+#include "../../backends/ledevice.h"
 
 struct LeTensor
 {

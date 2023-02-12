@@ -8,7 +8,7 @@
 #include "lemodel.h"
 #include <le/tensors/letensor-imp.h>
 #include <le/tensors/lematrix.h>
-#include "lepolynomia.h"
+#include "math/lepolynomia.h"
 #include "leloss.h"
 
 struct LeLogisticClassifier

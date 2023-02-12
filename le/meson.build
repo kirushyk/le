@@ -6,13 +6,13 @@ le_sources = [
     'ledataset.c',
     'math/lerand.c',
     'math/leclamp.c',
+    'math/lepolynomia.c',
     'tensors/letype.c',
     'tensors/leshape.c',
     'tensors/letensor.c',
     'tensors/letensor-cast.c',
     'tensors/lescalar.c',
     'tensors/lematrix.c',
-    'lepolynomia.c',
     'models/leknn.c',
     'models/lelogistic.c',
     'models/le1layernn.c',
@@ -59,9 +59,9 @@ config.set('HAVE_CUDA', have_cuda)
 config.set('HAVE_METAL', have_metal)
 configure_file(output: 'config.h', configuration: config)
 
-install_headers('lepolynomia.h', subdir : 'le')
 install_headers('leloss.h', subdir : 'le')
 install_headers('ledataset.h', subdir : 'le')
+install_headers('math/lepolynomia.h', subdir : 'le')
 install_headers('math/lerand.h', subdir : 'le/math')
 install_headers('math/leclamp.h', subdir : 'le/math')
 install_headers('tensors/letensor.h', subdir : 'le/tensors')

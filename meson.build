@@ -13,7 +13,7 @@ project('le', 'c',
 cc = meson.get_compiler('c')
 inc = include_directories('.')
 
-subdir('platform')
+subdir('backends')
 subdir('le')
 subdir('ext')
 subdir('bindings')

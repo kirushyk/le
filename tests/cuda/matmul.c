@@ -1,7 +1,7 @@
 #include <assert.h>
 #include <stdlib.h>
 #include <le/le.h>
-#include <platform/cuda/lecuda.h>
+#include <backends/cuda/lecuda.h>
 
 int main(int argc, char *argv[])
 {    

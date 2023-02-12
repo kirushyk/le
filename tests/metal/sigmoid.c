@@ -1,7 +1,7 @@
 #include <assert.h>
 #include <stdlib.h>
 #include <le/le.h>
-#include <platform/metal/lemetal.h>
+#include <backends/metal/lemetal.h>
 
 int main(int argc, char *argv[])
 {   
