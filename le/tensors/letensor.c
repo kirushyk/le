@@ -436,7 +436,7 @@ le_tensor_reshape(LeTensor *self, unsigned num_dimensions, ...)
     for (unsigned i = 0; i < num_dimensions; i++)
     {
         int size = va_arg(args, int);
-        le_shape_set_size(self->shape, i, size);
+        le_shape_set_size(new_shape, i, size);
     }
 
     va_end(args);

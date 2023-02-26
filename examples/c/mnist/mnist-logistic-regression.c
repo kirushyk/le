@@ -13,7 +13,7 @@ main()
     MNIST *mnist = le_mnist_load(NULL);
 
     LeTensor *train_images = le_data_set_get_input(mnist->train);
-    le_tensor_reshape(train_images, 2, 60000, 28 * 28);
+    assert(le_tensor_reshape(train_images, 2, 60000, 28 * 28));
     LeTensor *train_input = le_matrix_new_transpose(train_images);
     LeTensor *train_input_f32 = le_tensor_new_cast(train_input, LE_TYPE_FLOAT32);
     le_tensor_mul(train_input_f32, 2.0f / 255.0f);

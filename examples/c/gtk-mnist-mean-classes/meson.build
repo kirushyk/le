@@ -18,4 +18,3 @@ if gtk.found()
         install: true
     )
 endif
-
