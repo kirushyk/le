@@ -15,8 +15,8 @@ le_accelerate_matrix_new_product(const LeTensor *a, bool transpose_a, const LeTe
     assert(b->element_type == LE_TYPE_FLOAT32);
     assert(a->shape->num_dimensions == 2);
     assert(b->shape->num_dimensions == 2);
-    assert(le_tensor_contiguous(a));
-    assert(le_tensor_contiguous(b));
+    // assert(le_tensor_contiguous(a));
+    // assert(le_tensor_contiguous(b));
     
     unsigned size_a = transpose_a ? a->shape->sizes[0] : a->shape->sizes[1];
     unsigned size_b = transpose_b ? b->shape->sizes[1] : b->shape->sizes[0];
@@ -32,10 +32,10 @@ le_accelerate_matrix_new_product(const LeTensor *a, bool transpose_a, const LeTe
                 transpose_b ? CblasTrans : CblasNoTrans,
                 c_height, c_width, size_a,
                 1.0f,
-                a->data, a->shape->sizes[1],
-                b->data, b->shape->sizes[1],
+                a->data, a->stride,
+                b->data, b->stride,
                 0.0f,
-                c->data, c->shape->sizes[1]);
+                c->data, c->stride);
     
     return c;
 }
