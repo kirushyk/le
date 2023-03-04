@@ -21,6 +21,7 @@ typedef struct LeSGD LeSGD;
 LeSGD *            le_sgd_new                              (LeModel *               model,
                                                             LeTensor *              input,
                                                             LeTensor *              output,
+                                                            size_t                  batch_size,
                                                             float                   learning_rate,
                                                             float                   momentum);
 

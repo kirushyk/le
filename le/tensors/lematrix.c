@@ -692,7 +692,6 @@ le_matrix_new_conv2d(const LeTensor *image, const LeTensor *filter)
     return self;
 }
 
-
 LeTensor *
 le_matrix_get_column(const LeTensor *matrix, unsigned x)
 {
@@ -738,7 +737,7 @@ le_matrix_get_columns_copy(const LeTensor *self, unsigned x, unsigned width)
 {
     assert(self->device_type == LE_DEVICE_TYPE_CPU);
     assert(self->shape->num_dimensions == 2);
-    unsigned self_width = le_matrix_get_height(self);
+    unsigned self_width = le_matrix_get_width(self);
     assert(self_width >= x + width);
 
     unsigned height = le_matrix_get_height(self);

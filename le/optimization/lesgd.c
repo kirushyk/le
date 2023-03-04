@@ -19,6 +19,7 @@ struct LeSGD
     LeTensor *input;
     LeTensor *output;
 
+    size_t batch_size;
     float momentum_rate;
     LeList *momenta;
 };
@@ -55,9 +56,13 @@ le_sgd_step(LeOptimizer *optimizer)
     LE_INFO("Epoch %u Step %u", optimizer->epoch, optimizer->step);
     
     unsigned num_examples = le_matrix_get_width(self->input);
-    unsigned example_index = optimizer->step % num_examples;
-    LeTensor *input = le_matrix_get_column(self->input, example_index);
-    LeTensor *output = le_matrix_get_column(self->output, example_index);
+
+    unsigned example_index = (optimizer->step * self->batch_size) % num_examples;
+
+    size_t batch_size = example_index + self->batch_size < num_examples ? self->batch_size : num_examples - example_index;
+
+    LeTensor *input = le_matrix_get_columns_copy(self->input, example_index, batch_size);
+    LeTensor *output = le_matrix_get_columns_copy(self->output, example_index, batch_size);
 
     optimizer->gradients = le_model_get_gradients(optimizer->model, input, output);
 
@@ -111,10 +116,10 @@ le_sgd_step(LeOptimizer *optimizer)
     le_list_foreach(optimizer->gradients, (LeFunction)le_tensor_free);
     
     optimizer->step++;
-    if (optimizer->step % num_examples == 0)
-    {
-        optimizer->epoch++;
-    }
+    // if (optimizer->step * self->batch_size >= num_examples)
+    // {
+    //     optimizer->epoch++;
+    // }
 }
 
 void
@@ -152,7 +157,7 @@ le_sgd_construct(LeSGD *self)
 }
 
 LeSGD *
-le_sgd_new(LeModel *model, LeTensor *input, LeTensor *output, float learning_rate, float momentum)
+le_sgd_new(LeModel *model, LeTensor *input, LeTensor *output, size_t batch_size, float learning_rate, float momentum)
 {
     assert(model);
     LeSGD *self = malloc(sizeof(LeSGD));
@@ -169,6 +174,7 @@ le_sgd_new(LeModel *model, LeTensor *input, LeTensor *output, float learning_rat
 
     self->input = input;
     self->output = output;
+    self->batch_size = batch_size;
     self->momenta = NULL;
     self->momentum_rate = momentum;
     return self;
