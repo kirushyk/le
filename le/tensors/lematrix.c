@@ -718,6 +718,7 @@ le_matrix_get_column_copy(const LeTensor *self, unsigned x)
     /// @todo: Take stride into account
     assert(self->device_type == LE_DEVICE_TYPE_CPU);
     assert(self->shape->num_dimensions == 2);
+    assert(self->element_type == LE_TYPE_FLOAT32);
     /// @todo: Add dimension checks
     
     unsigned y;
