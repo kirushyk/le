@@ -70,6 +70,7 @@ le_1_layer_nn_predict(Le1LayerNN *self, const LeTensor *x)
     LeTensor *a = le_matrix_new_product(self->weights, x);
     le_matrix_add(a, self->bias);
     le_tensor_apply_sigmoid(a);
+    // le_matrix_apply_softmax(a)
     return a;
 }
 
@@ -99,8 +100,11 @@ le_1_layer_nn_init(Le1LayerNN *self, unsigned features_count, unsigned classes_c
     assert(self);
     assert(self->bias == NULL);
     assert(self->weights == NULL);
+    assert(features_count >= 1);
+    assert(classes_count >= 1);
     
-    self->weights = le_matrix_new_zeros(LE_TYPE_FLOAT32, classes_count, features_count);
+    self->weights = le_matrix_new_rand_f32(LE_DISTRIBUTION_NORMAL, classes_count, features_count);
+    le_tensor_mul_f32(self->weights, sqrtf(1.0f / features_count));
     self->bias = le_matrix_new_zeros(LE_TYPE_FLOAT32, classes_count, 1);
     
     le_model_append_parameter(LE_MODEL(self), self->weights);
