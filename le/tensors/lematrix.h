@@ -144,6 +144,10 @@ LeTensor *         le_matrix_get_column                    (const LeTensor *    
 LeTensor *         le_matrix_get_column_copy               (const LeTensor *        matrix,
                                                             unsigned                x);
 
+LeTensor *         le_matrix_get_columns_copy              (const LeTensor *        matrix,
+                                                            unsigned                x,
+                                                            unsigned                width);
+
 void               le_matrix_apply_softmax                 (LeTensor *              matrix);
 
 void               le_matrix_apply_softmax_prime           (LeTensor *              matrix);

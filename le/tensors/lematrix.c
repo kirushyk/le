@@ -732,6 +732,30 @@ le_matrix_get_column_copy(const LeTensor *self, unsigned x)
     return column;
 }
 
+LeTensor *
+le_matrix_get_columns_copy(const LeTensor *self, unsigned x, unsigned width)
+{
+    assert(self->device_type == LE_DEVICE_TYPE_CPU);
+    assert(self->shape->num_dimensions == 2);
+    unsigned self_width = le_matrix_get_height(self);
+    assert(self_width >= x + width);
+
+    unsigned height = le_matrix_get_height(self);
+    const size_t element_size = le_type_size(self->element_type);
+
+    LeTensor *columns = le_matrix_new_uninitialized(self->element_type, height, width);
+    for (unsigned y = 0; y < height; y++)
+    {
+        memcpy(
+            (char *)columns->data + y * width * element_size,
+            (char *)self->data + (x + y * self->stride) * element_size,
+            width * element_size
+        );
+    }
+    
+    return columns;
+}
+
 void
 le_matrix_apply_softmax(LeTensor *self)
 {
