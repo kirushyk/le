@@ -16,8 +16,8 @@ le_tests = [
     ['tensorlist.c'],
     ['subtensor.c'],
     ['input_normalization.c'],
-    ['cnn-inf.c']
-    # ['gradcheck.c']
+    ['cnn-inf.c'],
+    ['gradcheck.c']
 ]
 
 le_tests_deps = [
