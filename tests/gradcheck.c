@@ -17,7 +17,7 @@ main(int argc, char *argv[])
     srand(time(NULL));
 #endif
 
-    const float epsilon = 1e-2f;
+    const float epsilon = 1e-3f;
     LeTensor *x = le_tensor_new(LE_TYPE_FLOAT32, 2, 2, 4,
         1.0, 2.0, 3.0, 4.0,
         4.0, 3.0, 2.0, 1.0
