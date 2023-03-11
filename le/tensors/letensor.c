@@ -654,7 +654,7 @@ le_rbf(const LeTensor *a, const LeTensor *b, float sigma)
 }
 
 void
-le_tensor_add_tensor(LeTensor *a, LeTensor *b)
+le_tensor_add_tensor(LeTensor *a, const LeTensor *b)
 {
     /// @todo: Take stride into account
     assert(a->device_type == LE_DEVICE_TYPE_CPU);

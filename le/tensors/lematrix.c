@@ -114,21 +114,31 @@ le_matrix_add(LeTensor *self, const LeTensor *another)
 {
     assert(self->device_type == LE_DEVICE_TYPE_CPU);
     assert(another->device_type == LE_DEVICE_TYPE_CPU);
+    assert(self->element_type == LE_TYPE_FLOAT32);
     assert(self->stride == le_shape_get_size(self->shape, -1));
     assert(another->stride == le_shape_get_size(another->shape, -1));
     assert(self->shape->num_dimensions == 2);
     
     /// @note: Add horizontal broadcasting
     assert(self->shape->sizes[0] == another->shape->sizes[0]);
-    assert(another->shape->sizes[1] == 1);
-    
-    for (unsigned y = 0; y < self->shape->sizes[0]; y++)
+
+    if (le_shape_equal(self->shape, another->shape))
     {
-        for (unsigned x = 0; x < self->shape->sizes[1]; x++)
+        le_tensor_add(self, another);
+    }
+    else if (another->shape->sizes[1] == 1)
+    {
+        for (uint32_t y = 0; y < self->shape->sizes[0]; y++)
         {
-            /// @todo: Take stride into account
-            ((float *)self->data)[y * self->stride + x] += ((float *)another->data)[y];
+            for (uint32_t x = 0; x < self->shape->sizes[1]; x++)
+            {
+                ((float *)self->data)[y * self->stride + x] += ((float *)another->data)[y * another->stride];
+            }
         }
+    }
+    else
+    {
+        assert(false);
     }
 }
 

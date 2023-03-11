@@ -84,7 +84,7 @@ void               le_tensor_add_f32                       (LeTensor *          
 
 /// @note: a = a + b
 void               le_tensor_add_tensor                    (LeTensor *              a,
-                                                            LeTensor *              b);
+                                                            const LeTensor *        b);
 
 /// @note: a = a + b
 #define le_tensor_add(a, b) _Generic(b, \
