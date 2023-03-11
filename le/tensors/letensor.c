@@ -1315,6 +1315,8 @@ le_tensor_get_stats(LeTensor *self)
     stats.mean = 0.0f;
     stats.max = 0.0f;
     stats.min = 0.0f;
+    stats.nans = 0;
+    stats.zeros = 0;
 
     /// @todo: Take stride into account
     unsigned elements_count = le_shape_get_elements_count(self->shape);
@@ -1340,6 +1342,10 @@ le_tensor_get_stats(LeTensor *self)
         {
             float value = ((float *)self->data)[virtual_index(i, last_size, self->stride)];
             stats.deviation += fabs(value - stats.mean);
+            if (isnan(value))
+                stats.nans++;
+            if (value == 0)
+                stats.zeros = 0;
         }
         stats.deviation /= elements_count;
     }

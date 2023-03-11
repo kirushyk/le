@@ -191,6 +191,8 @@ typedef struct LeTensorStats
    float max;
    float mean;
    float deviation;
+   unsigned nans;
+   unsigned zeros;
 } LeTensorStats;
 
 LeTensorStats      le_tensor_get_stats                     (LeTensor *              tensor);
