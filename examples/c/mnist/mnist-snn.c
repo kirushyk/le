@@ -81,7 +81,7 @@ main(int argc, char *argv[])
         }
         else if (strcmp(argv[1], "sgd") == 0)
         {
-            optimizer = LE_OPTIMIZER(le_sgd_new(LE_MODEL(neural_network), train_input_f32, train_output, 0.03f, 0.9f));
+            optimizer = LE_OPTIMIZER(le_sgd_new(LE_MODEL(neural_network), train_input_f32, train_output, 64, 0.03f, 0.9f));
             print_module = 100;
             num_epochs = 2;
         }
