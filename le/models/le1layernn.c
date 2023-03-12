@@ -70,7 +70,7 @@ le_1_layer_nn_predict(Le1LayerNN *self, const LeTensor *x)
     LeTensor *a = le_matrix_new_product(self->weights, x);
     le_matrix_add(a, self->bias);
     le_tensor_apply_sigmoid(a);
-    // le_matrix_apply_softmax(a)
+    // le_matrix_apply_softmax(a);
     return a;
 }
 
