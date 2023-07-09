@@ -234,7 +234,7 @@ le_sequential_get_gradients(LeSequential *self, const LeTensor *x, const LeTenso
     assert(current_layer_iterator == NULL);
     assert(cached_inputs_iterator == NULL);
 
-    le_list_foreach(cached_inputs, (LeFunction)le_tensor_free);
+    le_list_free(cached_inputs, LE_FUNCTION(le_tensor_free));
     le_tensor_free(signal);
 
     return gradients;
@@ -316,8 +316,8 @@ le_sequential_check_gradients(LeSequential *self, const LeTensor *x, const LeTen
     {
         LE_ERROR("Some gradients missing or extra gradients estimations present");
     }
-    le_list_foreach(gradients_estimations, (LeFunction)le_tensor_free);
-    le_list_foreach(gradients, (LeFunction)le_tensor_free);
+    le_list_free(gradients_estimations, LE_FUNCTION(le_tensor_free));
+    le_list_free(gradients, LE_FUNCTION(le_tensor_free));
     return average_normalized_distance;
 }
 

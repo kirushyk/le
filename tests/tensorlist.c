@@ -54,8 +54,8 @@ main()
     assert(i == NULL);
     assert(j == NULL);
     
-    le_list_foreach(loaded_tensorlist, (LeFunction)le_tensor_free);
-    le_list_foreach(tensorlist, (LeFunction)le_tensor_free);
+    le_list_free(loaded_tensorlist, LE_FUNCTION(le_tensor_free));
+    le_list_free(tensorlist, LE_FUNCTION(le_tensor_free));
 
     return EXIT_SUCCESS;
 }

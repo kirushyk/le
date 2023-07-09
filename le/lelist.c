@@ -95,3 +95,16 @@ le_list_foreach2(LeList *list, LeCallback callback, void *user_data)
         list = next;
     }
 }
+
+void
+le_list_free(LeList *list, LeFunction destroy)
+{
+    le_list_foreach(list, destroy);
+    while (list)
+    {
+        LeList *next = list->next;
+        next->prev = NULL;
+        free(list);
+        list = next;
+    }
+}

@@ -129,7 +129,8 @@ le_sgd_step(LeOptimizer *optimizer)
         LE_WARNING("Extra momenta passed");
     }
     
-    le_list_foreach(optimizer->gradients, (LeFunction)le_tensor_free);
+    le_list_free(optimizer->gradients, LE_FUNCTION(le_tensor_free));
+    optimizer->gradients = NULL;
     
     optimizer->step++;
     // if (optimizer->step * self->batch_size >= num_examples)
@@ -197,8 +198,8 @@ le_sgd_new(LeModel *model, LeTensor *input, LeTensor *output, size_t batch_size,
 }
 
 void
-le_sgd_free(LeSGD *optimizer)
+le_sgd_free(LeSGD *self)
 {
-    le_list_foreach(optimizer->momenta, LE_FUNCTION(le_tensor_free));
-    free(optimizer);
+    le_list_free(self->momenta, LE_FUNCTION(le_tensor_free));
+    free(self);
 }

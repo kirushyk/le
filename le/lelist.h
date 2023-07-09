@@ -38,6 +38,9 @@ void               le_list_foreach2                        (LeList *            
                                                             LeCallback              callback,
                                                             void *                  user_data);
 
+void               le_list_free                            (LeList *                list,
+                                                            LeFunction              destroy);
+
 LE_END_DECLS
 
 #endif
