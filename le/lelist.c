@@ -77,25 +77,21 @@ le_list_append(LeList *list, void *data)
 void
 le_list_foreach(LeList *list, LeFunction function)
 {
-    if (list)
+    while (list)
     {
-        while (list->next)
-        {
-            function(list->data);
-            list = list->next;
-        }
+        LeList *next = list->next;
+        function(list->data);
+        list = next;
     }
 }
 
 void
 le_list_foreach2(LeList *list, LeCallback callback, void *user_data)
 {
-    if (list)
+    while (list)
     {
-        while (list->next)
-        {
-            callback(list->data, user_data);
-            list = list->next;
-        }
+        LeList *next = list->next;
+        callback(list->data, user_data);
+        list = next;
     }
 }
