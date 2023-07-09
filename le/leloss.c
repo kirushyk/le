@@ -41,7 +41,9 @@ le_cross_entropy_loss(const LeTensor *h, const LeTensor *y)
     assert(h->shape->num_dimensions == 2);
     assert(y->shape->num_dimensions == 2);
     assert(le_shape_equal(h->shape, y->shape));
-    assert(h->shape->sizes[0] >= 2);
+    assert(h->shape->sizes[0] >= 2); 
+    assert(h->element_type == LE_TYPE_FLOAT32);
+    assert(y->element_type == LE_TYPE_FLOAT32);
     
     unsigned num_classes = y->shape->sizes[0];
     unsigned num_examples = y->shape->sizes[1];
@@ -89,7 +91,10 @@ le_one_hot_misclassification(const LeTensor *h, const LeTensor *y)
 {
     assert(h->shape->num_dimensions == 2);
     assert(y->shape->num_dimensions == 2);
+    assert(h->shape->sizes[0] == y->shape->sizes[0]);
     assert(h->shape->sizes[1] == y->shape->sizes[1]);
+    assert(h->element_type == LE_TYPE_FLOAT32);
+    assert(y->element_type == LE_TYPE_FLOAT32);
     
     unsigned i, j;
     

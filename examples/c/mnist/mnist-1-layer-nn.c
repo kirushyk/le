@@ -31,9 +31,12 @@ main()
     le_tensor_reshape(test_labels, 2, 1, 10000);
     LeTensor *test_output = le_matrix_new_one_hot(LE_TYPE_FLOAT32, test_labels, 10);
     
-    Le1LayerNN *neural_network = le_1_layer_nn_new();
-    le_1_layer_nn_init(neural_network, 28 * 28, 10);
-    LeOptimizer *optimizer = LE_OPTIMIZER(le_sgd_new(LE_MODEL(neural_network), train_input_f32, train_output, 60000, 0.03f, 0.0f));
+    LeSequential *neural_network = le_sequential_new();
+    le_sequential_add(neural_network, le_dense_layer_new("d1", 28 * 28, 10));
+    le_sequential_add(neural_network, le_activation_layer_new("a1", LE_ACTIVATION_RELU));
+    LeLoss loss = LE_LOSS_CROSS_ENTROPY;
+    le_sequential_set_loss(neural_network, loss);
+    LeOptimizer *optimizer = LE_OPTIMIZER(le_sgd_new(LE_MODEL(neural_network), train_input_f32, train_output, 60000, 0.003f, 0.1f));
     // LeOptimizer *optimizer = LE_OPTIMIZER(le_bgd_new(LE_MODEL(neural_network), train_input_f32, train_output, 0.003f));
     // Le1LayerNNTrainingOptions options;
     // options.learning_rate = 0.03;
@@ -55,7 +58,7 @@ main()
             //     test_pred_stats.nans, test_pred_stats.zeros);
 
 
-            float train_loss = le_cross_entropy_loss(train_prediction, train_output);
+            float train_loss = le_loss(loss, train_prediction, train_output);
             float train_misclassification = le_one_hot_misclassification(train_prediction, train_output);
             printf("Train Set Loss: %f, Misclassification: %f\n", train_loss, train_misclassification);
             le_tensor_free(train_prediction);
@@ -67,7 +70,7 @@ main()
             //     test_pred_stats.min, test_pred_stats.max, test_pred_stats.mean, test_pred_stats.deviation,
             //     test_pred_stats.nans, test_pred_stats.zeros);
 
-            float test_loss = le_cross_entropy_loss(test_prediction, test_output);
+            float test_loss = le_loss(loss, test_prediction, test_output);
             float test_misclassification = le_one_hot_misclassification(test_prediction, test_output);
             printf("Test Set Loss: %f, Misclassification: %f\n", test_loss, test_misclassification);
             le_tensor_free(test_prediction);
@@ -75,7 +78,7 @@ main()
     }
 
     le_sgd_free(LE_SGD(optimizer));
-    le_1_layer_nn_free(neural_network);
+    le_sequential_free(neural_network);
     le_tensor_free(test_output);
     le_tensor_free(test_input_f32);
     le_tensor_free(test_input);
