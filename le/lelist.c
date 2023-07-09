@@ -103,7 +103,6 @@ le_list_free(LeList *list, LeFunction destroy)
     while (list)
     {
         LeList *next = list->next;
-        next->prev = NULL;
         free(list);
         list = next;
     }
