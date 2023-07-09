@@ -33,10 +33,10 @@ main()
     
     LeSequential *neural_network = le_sequential_new();
     le_sequential_add(neural_network, le_dense_layer_new("d1", 28 * 28, 10));
-    le_sequential_add(neural_network, le_activation_layer_new("a1", LE_ACTIVATION_RELU));
+    le_sequential_add(neural_network, le_activation_layer_new("a1", LE_ACTIVATION_SOFTMAX));
     LeLoss loss = LE_LOSS_CROSS_ENTROPY;
     le_sequential_set_loss(neural_network, loss);
-    LeOptimizer *optimizer = LE_OPTIMIZER(le_sgd_new(LE_MODEL(neural_network), train_input_f32, train_output, 60000, 0.003f, 0.1f));
+    LeOptimizer *optimizer = LE_OPTIMIZER(le_sgd_new(LE_MODEL(neural_network), train_input_f32, train_output, 60000, 0.001f, 0.0f));
     // LeOptimizer *optimizer = LE_OPTIMIZER(le_bgd_new(LE_MODEL(neural_network), train_input_f32, train_output, 0.003f));
     // Le1LayerNNTrainingOptions options;
     // options.learning_rate = 0.03;
