@@ -168,27 +168,27 @@ le_sequential_get_gradients(LeSequential *self, const LeTensor *x, const LeTenso
         
     /// @note: We cache input of each layer in list of tensors
     /// to ease computation of gradients during backpropagation
-    LeList *inputs = NULL;
-    LeTensor *signal = forward_propagation(self, x, &inputs);
+    LeList *cached_inputs = NULL;
+    LeTensor *signal = forward_propagation(self, x, &cached_inputs);
     // LE_INFO("output =\n%s", le_tensor_to_cstr(signal));
     // LeTensorStats signal_stats = le_tensor_get_stats(signal);
     // LE_INFO("Output stats:\n\tmin: %f\n\tmax: %f\n\tmean: %f\n\tdeviation: %f", signal_stats.min, signal_stats.max, signal_stats.mean, signal_stats.deviation);
 
     LE_INFO("Back Propagation");
-    LeList *current = le_list_last(self->layers);
-    inputs = le_list_last(inputs);
+    LeList *current_layer_iterator = le_list_last(self->layers);
+    LeList *cached_inputs_iterator = le_list_last(cached_inputs);
     LeActivationLayer *last_layer = NULL;
     LeActivationAndLossBackward actiation_loss_backward = NULL;
-    if (current && current->data)
+    if (current_layer_iterator && current_layer_iterator->data)
     {
-        last_layer = LE_ACTIVATION_LAYER(current->data);
+        last_layer = LE_ACTIVATION_LAYER(current_layer_iterator->data);
         actiation_loss_backward = activation_loss_backward_fn(last_layer->activation, self->loss);
     }
     if (last_layer && actiation_loss_backward)
     {
         actiation_loss_backward(signal, y);
-        current = current->prev;
-        inputs = inputs->prev;
+        current_layer_iterator = current_layer_iterator->prev;
+        cached_inputs_iterator = cached_inputs_iterator->prev;
     }
     else
     {
@@ -202,17 +202,17 @@ le_sequential_get_gradients(LeSequential *self, const LeTensor *x, const LeTenso
     // LeList *current = NULL;
     LeList *gradients = NULL;
     for (/* current = le_list_last(self->layers), inputs = le_list_last(inputs) */;
-         current && inputs;
-         current = current->prev, inputs = inputs->prev)
+         current_layer_iterator && cached_inputs_iterator;
+         current_layer_iterator = current_layer_iterator->prev, cached_inputs_iterator = cached_inputs_iterator->prev)
     {
-        LeLayer *current_layer = LE_LAYER(current->data);
+        LeLayer *current_layer = LE_LAYER(current_layer_iterator->data);
         LE_INFO("Layer %s Backward", current_layer->name);
         LeList *current_layer_param_gradients = NULL;
-        LeTensor *cached_input = LE_TENSOR(inputs->data);
+        LeTensor *cached_input = LE_TENSOR(cached_inputs_iterator->data);
         LeTensor *cached_output = NULL;
-        if (inputs->next)
+        if (cached_inputs_iterator->next)
         {
-            cached_output = LE_TENSOR(inputs->next->data);
+            cached_output = LE_TENSOR(cached_inputs_iterator->next->data);
         }
         /// @todo: Use cached output of last layer to speed-up backprop.
         LeTensor *input_gradient = le_layer_backward_prop(current_layer, cached_input, cached_output, signal, &current_layer_param_gradients); 
@@ -231,9 +231,10 @@ le_sequential_get_gradients(LeSequential *self, const LeTensor *x, const LeTenso
     }
     
     /// @note: Make sure number of cached inputs equal to number of layers
-    assert(current == NULL);
-    assert(inputs == NULL);
+    assert(current_layer_iterator == NULL);
+    assert(cached_inputs_iterator == NULL);
 
+    le_list_foreach(cached_inputs, (LeFunction)le_tensor_free);
     le_tensor_free(signal);
 
     return gradients;
