@@ -14,7 +14,19 @@ def LeShapeSummary(value, internal_dict):
     summary += ""
     return summary
 
+type_names = ["void",
+    "i8",
+    "u8",
+    "i16",
+    "u16",
+    "i32",
+    "u32",
+    "f16",
+    "f32",
+    "f64"
+]
+
 def LeTensorSummary(value, internal_dict):
-    summary = str(value.GetChildMemberWithName("element_type").GetValue()) + " "
+    summary = type_names[value.GetChildMemberWithName("element_type").GetValueAsUnsigned()] + " "
     summary += LeShapeSummary(value.GetChildMemberWithName("shape"), internal_dict)
     return summary
