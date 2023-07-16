@@ -178,15 +178,15 @@ le_sequential_get_gradients(LeSequential *self, const LeTensor *x, const LeTenso
     LeList *current_layer_iterator = le_list_last(self->layers);
     LeList *cached_inputs_iterator = le_list_last(cached_inputs);
     LeActivationLayer *last_layer = NULL;
-    LeActivationAndLossBackward actiation_loss_backward = NULL;
+    LeActivationAndLossBackward activation_loss_backward = NULL;
     if (current_layer_iterator && current_layer_iterator->data)
     {
         last_layer = LE_ACTIVATION_LAYER(current_layer_iterator->data);
-        actiation_loss_backward = activation_loss_backward_fn(last_layer->activation, self->loss);
+        activation_loss_backward = activation_loss_backward_fn(last_layer->activation, self->loss);
     }
-    if (last_layer && actiation_loss_backward)
+    if (last_layer && activation_loss_backward)
     {
-        actiation_loss_backward(signal, y);
+        activation_loss_backward(signal, y);
         current_layer_iterator = current_layer_iterator->prev;
         cached_inputs_iterator = cached_inputs_iterator->prev;
     }
