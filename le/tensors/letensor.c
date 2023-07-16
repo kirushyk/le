@@ -444,6 +444,8 @@ le_tensor_reshape(LeTensor *self, unsigned num_dimensions, ...)
         le_shape_free(self->shape);
         self->shape = new_shape;
 
+        self->stride = le_shape_get_size(self->shape, -1);
+
         return true;
     }
     else
@@ -555,6 +557,7 @@ le_tensor_assign(LeTensor *tensor, const LeTensor *another)
         size_t data_size = le_shape_get_elements_count(another->shape) * le_type_size(another->element_type);
         memcpy(tensor->data, another->data, data_size);
     }
+    else assert (false);
 }
 
 void
