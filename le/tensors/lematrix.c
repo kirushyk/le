@@ -736,7 +736,7 @@ le_matrix_get_column_copy(const LeTensor *self, unsigned x)
     
     for (y = 0; y < height; y++)
     {
-        ((float *)column->data)[y] = ((float *)self->data)[y * self->shape->sizes[1] + x];
+        ((float *)column->data)[y] = ((float *)self->data)[y * self->stride + x];
     }
     
     return column;
