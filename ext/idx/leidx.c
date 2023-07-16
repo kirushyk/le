@@ -73,17 +73,9 @@ le_idx_read(const char *filename)
             {
                 le_shape_set_size(shape, i, bswap_32(shape_bytes[i]));
             }
-            
-            size_t elements_count = 1;
-            for (uint8_t i = 0; i < header.dimensionality; i++)
-            {
-                elements_count = elements_count * le_shape_get_size(shape, i);
-            }
 
-            size_t element_size = le_type_size(type);
-                        
             tensor = le_tensor_new_uninitialized(type, shape);
-            fread(le_tensor_get_data(tensor), element_size, elements_count, fin);
+            fread(le_tensor_get_data(tensor), le_type_size(type), le_shape_get_elements_count(shape), fin);
         }
         else
         {
@@ -149,17 +141,9 @@ le_idx_gz_read(const char *filename)
             {
                 le_shape_set_size(shape, i, bswap_32(shape_bytes[i]));
             }
-
-            size_t elements_count = 1;
-            for (uint8_t i = 0; i < header.dimensionality; i++)
-            {
-                elements_count = elements_count * le_shape_get_size(shape, i);
-            }
-
-            size_t element_size = le_type_size(type);
             
             tensor = le_tensor_new_uninitialized(type, shape);
-            gzread(fin, le_tensor_get_data(tensor), (unsigned)(element_size * elements_count));
+            gzread(fin, le_tensor_get_data(tensor), (unsigned)(le_type_size(type) * le_shape_get_elements_count(shape)));
         }
         else
         {
