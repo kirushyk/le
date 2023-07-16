@@ -20,6 +20,7 @@ struct LeSGD
     LeTensor *output;
 
     size_t batch_size;
+    unsigned example_index;
     float momentum_rate;
     LeList *momenta;
 };
@@ -57,12 +58,10 @@ le_sgd_step(LeOptimizer *optimizer)
     
     unsigned num_examples = le_matrix_get_width(self->input);
 
-    unsigned example_index = (optimizer->step * self->batch_size) % num_examples;
+    size_t batch_size = self->example_index + self->batch_size < num_examples ? self->batch_size : num_examples - self->example_index;
 
-    size_t batch_size = example_index + self->batch_size < num_examples ? self->batch_size : num_examples - example_index;
-
-    LeTensor *input = le_matrix_get_columns_copy(self->input, example_index, batch_size);
-    LeTensor *output = le_matrix_get_columns_copy(self->output, example_index, batch_size);
+    LeTensor *input = le_matrix_get_columns_copy(self->input, self->example_index, batch_size);
+    LeTensor *output = le_matrix_get_columns_copy(self->output, self->example_index, batch_size);
 
     optimizer->gradients = le_model_get_gradients(optimizer->model, input, output);
 
@@ -109,9 +108,10 @@ le_sgd_step(LeOptimizer *optimizer)
         //     gradient_stats.min, gradient_stats.max, gradient_stats.mean, gradient_stats.deviation,
         //     gradient_stats.nans, gradient_stats.zeros);
         LeTensor *momentum = LE_TENSOR(momentum_iterator->data);
+        le_tensor_mul(momentum, self->momentum_rate);
+        le_tensor_mul(gradient, 1.0f - self->momentum_rate);
         le_tensor_add(momentum, gradient);
         le_tensor_sub_scaled(parameter, optimizer->learning_rate, momentum);
-        le_tensor_mul(momentum, self->momentum_rate);
     }
 
     if (parameters_iterator)
@@ -133,6 +133,10 @@ le_sgd_step(LeOptimizer *optimizer)
     optimizer->gradients = NULL;
     
     optimizer->step++;
+    self->example_index += batch_size;
+    if (self->example_index >= num_examples) {
+        self->example_index = 0;
+    }
     // if (optimizer->step * self->batch_size >= num_examples)
     // {
     //     optimizer->epoch++;
@@ -192,6 +196,7 @@ le_sgd_new(LeModel *model, LeTensor *input, LeTensor *output, size_t batch_size,
     self->input = input;
     self->output = output;
     self->batch_size = batch_size;
+    self->example_index = 0;
     self->momenta = NULL;
     self->momentum_rate = momentum;
     return self;
