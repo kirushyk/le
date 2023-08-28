@@ -99,6 +99,7 @@ LeTensor *
 le_activation_layer_backward_prop(LeLayer *layer, LeTensor *cached_input, LeTensor *cached_output, LeTensor *output_gradient, LeList **parameters_gradient)
 {
     assert(layer);
+    assert(cached_input);
     assert(output_gradient);
     
     LeActivationLayer *self = LE_ACTIVATION_LAYER(layer);
