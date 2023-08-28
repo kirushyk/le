@@ -22,4 +22,10 @@ if have_mnist
         link_with: mnist_example_deps,
         install: false
     )
+
+    executable('mnist-2nn', 'mnist-2nn.c',
+        include_directories: inc,
+        link_with: mnist_example_deps,
+        install: false
+    )
 endif

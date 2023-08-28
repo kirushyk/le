@@ -54,11 +54,11 @@ main(int argc, char *argv[])
     
     LeSequential *neural_network = le_sequential_new();
     le_sequential_add(neural_network,
-                      LE_LAYER(le_dense_layer_new("D1", 28 * 28, 300)));
+                      LE_LAYER(le_dense_layer_new("D1", 28 * 28, 800)));
     le_sequential_add(neural_network,
                       LE_LAYER(le_activation_layer_new("A1", LE_ACTIVATION_TANH)));
     le_sequential_add(neural_network,
-                      LE_LAYER(le_dense_layer_new("D2", 300, 10)));
+                      LE_LAYER(le_dense_layer_new("D2", 800, 10)));
     le_sequential_add(neural_network,
                       LE_LAYER(le_activation_layer_new("Softmax", LE_ACTIVATION_SOFTMAX)));
 
