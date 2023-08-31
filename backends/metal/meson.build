@@ -7,7 +7,7 @@ le_metal_shaders = [
     'hadamard.metal'
 ]
 
-have_objc = add_languages('objc', native: false, required: false)
+have_objc = add_languages('objc', native: false, required: get_option('metal'))
 
 metal = dependency('appleframeworks',
     modules: [
@@ -15,23 +15,23 @@ metal = dependency('appleframeworks',
         'metal',
         'metalperformanceshaders'
     ],
-    required: false
+    required: get_option('metal')
 )
 
-xcrun = find_program('xcrun', required: false)
+xcrun = find_program('xcrun', required: get_option('metal'))
 metalc = disabler()
 metallib = disabler()
 if xcrun.found()
     r = run_command(xcrun, '--sdk', 'macosx', '-f', 'metal', check: false)
     if r.returncode() == 0
         ## @todo: Prettify using dirs: argument
-        metalc = find_program(r.stdout().strip(), required: false)
+        metalc = find_program(r.stdout().strip(), required: get_option('metal'))
     else
         warning('unable to find metal utility')
     endif
     r = run_command(xcrun, '--sdk', 'macosx', '-f', 'metallib', check: false)
     if r.returncode() == 0
-        metallib = find_program(r.stdout().strip(), required: false)
+        metallib = find_program(r.stdout().strip(), required: get_option('metal'))
     else
         warning('unable to find metallib utility')
     endif
@@ -77,6 +77,8 @@ if have_metal
         error('''Even if you have the command line tools installed, you still need Xcode.
 You might have installed the command line tools before installing Xcode. For instance, you might have set up Homebrew first.
 The command line tools are pointing to an incomplete SDK, rather than the one you installed with Xcode.
-sudo xcode-select --switch /Applications/Xcode.app/Contents/Developer''')
+sudo xcode-select --switch /Applications/Xcode.app/Contents/Developer
+To explicitly disable Metal backend, configure build/ folder with -Dmetal=disabled:
+meson setup -Dmetal=disabled build/''')
     endif
 endif

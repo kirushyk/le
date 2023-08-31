@@ -9,3 +9,9 @@ option('cuda',
    value: 'auto',
    description: 'Enable CUDA backend'
 )
+
+option('metal',
+   type: 'feature',
+   value: 'auto',
+   description: 'Enable Metal backend'
+)
