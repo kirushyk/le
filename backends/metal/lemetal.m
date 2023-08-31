@@ -8,9 +8,7 @@
 
 static id<MTLDevice> device;
 static id<MTLCommandQueue> commandQueue;
-#ifdef HAVE_METALLIB
 static id<MTLLibrary> library;
-#endif
 
 void
 le_metal_init(void)
@@ -22,8 +20,8 @@ le_metal_init(void)
         NSLog(@"Using device: %@", device.name);
     }
     commandQueue = [device newCommandQueue];
+    
     NSError *libraryError = NULL;
-#ifdef HAVE_METALLIB
     NSURL *libraryURL = [NSURL fileURLWithPath:@METALLIB_INSTALL_PATH "/" METALLIB_FILENAME];
     library = [device newLibraryWithURL:libraryURL error:&libraryError];
     if (!library) {
@@ -33,7 +31,6 @@ le_metal_init(void)
     if (!library) {
         NSLog(@"Library error: %@", libraryError.localizedDescription);
     }
-#endif
 }
 
 LeTensor *

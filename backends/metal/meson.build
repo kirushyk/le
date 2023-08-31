@@ -42,10 +42,8 @@ have_metal = have_objc and metal.found()
 metallib_filename = 'le.metallib'
 
 if have_metal
-    metal_config = configuration_data()
-    have_metallib = metalc.found() and metallib.found()
-    metal_config.set('HAVE_METALLIB', have_metallib)
-    if have_metallib
+    if metalc.found() and metallib.found()
+        metal_config = configuration_data()
         compiled_shaders = []
         foreach shader: le_metal_shaders
             air_filename = shader.split('.')[0] + '.air'
@@ -67,18 +65,18 @@ if have_metal
             install: true,
             install_dir: metallib_path
         )
+        configure_file(output: 'metal-config.h', configuration: metal_config)
+
+        # install_data(metallib_filename, install_dir: metallib_path)
+
+        le_metal = static_library('le_metal', le_metal_sources,
+            include_directories: inc,
+            dependencies: metal
+        )
     else
-        # Even if you have the command line tools installed, you still need Xcode.
-        # You might have installed the command line tools before installing Xcode. For instance, you might have set up Homebrew first.
-        # The command line tools are pointing to an incomplete SDK, rather than the one you installed with Xcode.
-        # sudo xcode-select --switch /Applications/Xcode.app/Contents/Developer
+        error('''Even if you have the command line tools installed, you still need Xcode.
+You might have installed the command line tools before installing Xcode. For instance, you might have set up Homebrew first.
+The command line tools are pointing to an incomplete SDK, rather than the one you installed with Xcode.
+sudo xcode-select --switch /Applications/Xcode.app/Contents/Developer''')
     endif
-    configure_file(output: 'metal-config.h', configuration: metal_config)
-
-    # install_data(metallib_filename, install_dir: metallib_path)
-
-    le_metal = static_library('le_metal', le_metal_sources,
-        include_directories: inc,
-        dependencies: metal
-    )
 endif
