@@ -630,17 +630,17 @@ le_matrix_new_product_full(const LeTensor *a, bool transpose_a, const LeTensor *
             {
                 for (unsigned x = 0; x < b_width; x++)
                 {
-                    size_t index = y * b->stride + x;
-                    ((float *)self->data)[index] = 0.0f;
+                    size_t self_index = y * self->stride + x;
+                    ((float *)self->data)[self_index] = 0.0f;
                     for (unsigned i = 0; i < a_width; i++)
                     {
                         /// @note: Check indices
-                        size_t a_index = transpose_a ? i * a_height + y : y * a->stride + i;
+                        size_t a_index = transpose_a ? i * a->stride + y : y * a->stride + i;
                         float a_element = ((float *)a->data)[a_index];
-                        size_t b_index = transpose_b ? x * b_height + i : i * b->stride + x;
+                        size_t b_index = transpose_b ? x * b->stride + i : i * b->stride + x;
                         float b_element = ((float *)b->data)[b_index];
                         float prod = a_element * b_element;
-                        ((float *)self->data)[index] += prod;
+                        ((float *)self->data)[self_index] += prod;
                     }
                 }
             }
