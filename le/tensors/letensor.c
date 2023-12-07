@@ -1256,7 +1256,7 @@ le_tensor_print(const LeTensor *self, FILE *stream)
     {
         for (x = 0; x < self->shape->sizes[1]; x++)
         {
-            fprintf(stream, "%1.3f", ((float *)self->data)[y * self->shape->sizes[1] + x]);
+            fprintf(stream, "%1.3f", ((float *)self->data)[y * self->stride + x]);
             if (x < self->shape->sizes[1] - 1)
             {
                 fprintf(stream, " ");
