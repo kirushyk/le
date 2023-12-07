@@ -29,12 +29,12 @@ main()
     LeTensor *test_output = le_matrix_new_one_hot(LE_TYPE_FLOAT32, test_labels, 10);
     
     LeSequential *neural_network = le_sequential_new();
-    le_sequential_add(neural_network, le_dense_layer_new("d1", 28 * 28, 300));
-    le_sequential_add(neural_network, le_activation_layer_new("a1", LE_ACTIVATION_TANH));
-    le_sequential_add(neural_network, le_dense_layer_new("d1", 300, 100));
-    le_sequential_add(neural_network, le_activation_layer_new("a1", LE_ACTIVATION_TANH));
-    le_sequential_add(neural_network, le_dense_layer_new("d2", 100, 10));
-    le_sequential_add(neural_network, le_activation_layer_new("a2", LE_ACTIVATION_SOFTMAX));
+    le_sequential_add(neural_network, LE_LAYER(le_dense_layer_new("d1", 28 * 28, 300)));
+    le_sequential_add(neural_network, LE_LAYER(le_activation_layer_new("a1", LE_ACTIVATION_TANH)));
+    le_sequential_add(neural_network, LE_LAYER(le_dense_layer_new("d1", 300, 100)));
+    le_sequential_add(neural_network, LE_LAYER(le_activation_layer_new("a1", LE_ACTIVATION_TANH)));
+    le_sequential_add(neural_network, LE_LAYER(le_dense_layer_new("d2", 100, 10)));
+    le_sequential_add(neural_network, LE_LAYER(le_activation_layer_new("a2", LE_ACTIVATION_SOFTMAX)));
     LeLoss loss = LE_LOSS_CROSS_ENTROPY;
     le_sequential_set_loss(neural_network, loss);
     size_t num_epochs = 100;

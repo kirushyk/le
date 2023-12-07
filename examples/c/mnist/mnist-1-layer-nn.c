@@ -69,8 +69,8 @@ main()
     
     LeSequential *neural_network = le_sequential_new();
     LeDenseLayer *layer = le_dense_layer_new("d1", 28 * 28, 10);
-    le_sequential_add(neural_network, layer);
-    le_sequential_add(neural_network, le_activation_layer_new("a1", LE_ACTIVATION_SOFTMAX));
+    le_sequential_add(neural_network, LE_LAYER(layer));
+    le_sequential_add(neural_network, LE_LAYER(le_activation_layer_new("a1", LE_ACTIVATION_SOFTMAX)));
     LeLoss loss = LE_LOSS_CROSS_ENTROPY;
     le_sequential_set_loss(neural_network, loss);
     size_t num_epochs = 100;
