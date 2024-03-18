@@ -13,7 +13,7 @@ print_case (LeTensor *X, LeTensor *Y, unsigned index, LeModel *model)
     LeTensor *x = le_matrix_get_column_copy (X, index);
     LeTensor *y = le_matrix_get_column_copy (Y, index);
     
-    LeTensor *h = le_model_predict (model, X);
+    LeTensor *h = le_model_predict (model, x);
 
     for (unsigned i = 0; i < 28; i++) {
         for (unsigned j = 0; j < 28; j++) {
@@ -37,8 +37,9 @@ print_case (LeTensor *X, LeTensor *Y, unsigned index, LeModel *model)
         }
     }
 
-    printf("%u) Label: %d, Pred: %d\n", index, label, pred);
+    printf("%u) Label: %d, Pred: %d (%f)\n", index, label, pred, pred_prob);
 
+    le_tensor_free(h);
     le_tensor_free(y);
     le_tensor_free(x);
 }
