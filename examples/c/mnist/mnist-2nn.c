@@ -29,17 +29,15 @@ main()
     LeTensor *test_output = le_matrix_new_one_hot(LE_TYPE_FLOAT32, test_labels, 10);
     
     LeSequential *neural_network = le_sequential_new();
-    le_sequential_add(neural_network, LE_LAYER(le_dense_layer_new("d1", 28 * 28, 300)));
+    le_sequential_add(neural_network, LE_LAYER(le_dense_layer_new("d1", 28 * 28, 800)));
     le_sequential_add(neural_network, LE_LAYER(le_activation_layer_new("a1", LE_ACTIVATION_TANH)));
-    le_sequential_add(neural_network, LE_LAYER(le_dense_layer_new("d1", 300, 100)));
-    le_sequential_add(neural_network, LE_LAYER(le_activation_layer_new("a1", LE_ACTIVATION_TANH)));
-    le_sequential_add(neural_network, LE_LAYER(le_dense_layer_new("d2", 100, 10)));
+    le_sequential_add(neural_network, LE_LAYER(le_dense_layer_new("d2", 800, 10)));
     le_sequential_add(neural_network, LE_LAYER(le_activation_layer_new("a2", LE_ACTIVATION_SOFTMAX)));
     LeLoss loss = LE_LOSS_CROSS_ENTROPY;
     le_sequential_set_loss(neural_network, loss);
     size_t num_epochs = 100;
-    size_t batch_size = 64;
-    float learning_rate = 1e-3f;
+    size_t batch_size = 256;
+    float learning_rate = 1e-5f;
     float momentum = 0.8f;
     LeOptimizer *optimizer = LE_OPTIMIZER(le_sgd_new(LE_MODEL(neural_network), train_input_f32, train_output, batch_size, learning_rate, momentum));
     for (unsigned i = 0, j = 0; i <= num_epochs * 60000; i += batch_size)

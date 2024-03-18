@@ -77,7 +77,7 @@ main()
     size_t num_epochs = 100;
     size_t batch_size = 64;
     float learning_rate = 1e-3f;
-    float momentum =0.9f;
+    float momentum = 0.9f;
     LeOptimizer *optimizer = LE_OPTIMIZER(le_sgd_new(LE_MODEL(neural_network), train_input_f32, train_output, batch_size, learning_rate, momentum));
     for (unsigned i = 0, j = 0; i <= num_epochs * 60000; i += batch_size)
     {
