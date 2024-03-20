@@ -4,7 +4,7 @@
 ![Platforms](https://img.shields.io/badge/platform-macos%20%7C%20linux-lightgrey.svg)
 ![Interfaces](https://img.shields.io/badge/interface-c%20%7C%20c%2B%2B%20%7C%20rust%20%7C%20python-blue.svg)
 
-Le is Machine Learning Framework designed so that programs using it will be easy to read. Library is written in pure C but in object-oriented way. Bindings to other languages are provided so Le can be used by C++, Rust and Python programs. 
+Le is machine learning library written in C using GObject. Bindings to other languages are provided so Le can be used by C++, Rust and Python programs. 
 
 Le is now under heavy development. Please come back soon.
 
