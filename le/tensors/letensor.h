@@ -9,7 +9,7 @@
 #ifndef __LETENSOR_H__
 #define __LETENSOR_H__
 
-LE_BEGIN_DECLS
+G_BEGIN_DECLS
 
 /// Tensors are multi-dimensional arrays containing elements of a uniform type
 typedef struct LeTensor LeTensor;
@@ -54,28 +54,28 @@ bool               le_tensor_reshape                       (LeTensor *          
                                                             ...);
 
 LeTensor *         le_tensor_pick                          (LeTensor *              another,
-                                                            uint32_t                index);
+                                                            guint32                index);
 
 LeTensor *         le_tensor_pick_copy                     (const LeTensor *        another,
-                                                            uint32_t                index);
+                                                            guint32                index);
 
 void *             le_tensor_at                            (const LeTensor *        another,
-                                                            uint32_t                index);
+                                                            guint32                index);
 
-uint8_t            le_tensor_at_u8                         (const LeTensor *        tensor,
-                                                            uint32_t                index);
+guint8            le_tensor_at_u8                         (const LeTensor *        tensor,
+                                                            guint32                index);
 
-uint32_t           le_tensor_at_u32                        (const LeTensor *        tensor,
-                                                            uint32_t                index);
+guint32           le_tensor_at_u32                        (const LeTensor *        tensor,
+                                                            guint32                index);
 
 float              le_tensor_at_f32                        (const LeTensor *        tensor,
-                                                            uint32_t                index);
+                                                            guint32                index);
 
 void               le_tensor_assign                        (LeTensor *              tensor,
                                                             const LeTensor *        another);
 
 void               le_tensor_set_f32                       (LeTensor *              tensor,
-                                                            uint32_t                index,
+                                                            guint32                index,
                                                             float                   value);
 
 /// @note: a = a + b
@@ -134,7 +134,7 @@ void               le_tensor_mul_tensor                    (LeTensor *          
 )(a, b)
 
 void               le_tensor_div_u32                       (LeTensor *              a,
-                                                            uint32_t                b);
+                                                            guint32                b);
 
 float              le_tensor_sum_f32                       (const LeTensor *        tensor);
 
@@ -199,8 +199,8 @@ LeTensorStats      le_tensor_get_stats                     (LeTensor *          
 
 LeTensor *         le_tensor_new_equal_u8                  (LeType                  type,
                                                             LeTensor *              tensor,
-                                                            uint8_t                 scalar);
+                                                            guint8                 scalar);
 
-LE_END_DECLS
+G_END_DECLS
 
 #endif

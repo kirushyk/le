@@ -13,7 +13,7 @@ struct LeDataSet
 LeDataSet *
 le_data_set_new_copy(LeTensor *x, LeTensor *y)
 {
-    LeDataSet *data = malloc(sizeof(LeDataSet));
+    LeDataSet *data = g_new0 (LeDataSet, 1);
     data->x = le_tensor_new_copy(x);
     data->y = le_tensor_new_copy(y);
     return data;
@@ -22,7 +22,7 @@ le_data_set_new_copy(LeTensor *x, LeTensor *y)
 LeDataSet *
 le_data_set_new_take(LeTensor *input, LeTensor *output)
 {
-    LeDataSet *data = malloc(sizeof(LeDataSet));
+    LeDataSet *data = g_new0 (LeDataSet, 1);
     data->x = input;
     data->y = output;
     return data;
@@ -45,5 +45,5 @@ le_data_set_free(LeDataSet *self)
 {
     le_tensor_free(self->x);
     le_tensor_free(self->y);
-    free(self);
+    g_free (self);
 }

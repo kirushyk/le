@@ -5,9 +5,9 @@
 #define __LELOG_H__
 
 #include <stdarg.h>
-#include "lemacros.h"
+#include "glib.h"
 
-LE_BEGIN_DECLS
+G_BEGIN_DECLS
 
 // #ifndef DEFAULT_LOG_CATEGORY
 // #error DEFAULT_LOG_CATEGORY is not defined for current file
@@ -33,6 +33,6 @@ void               le_log                                  (const char *        
 #define LE_WARNING(...) le_log(DEFAULT_LOG_CATEGORY, LE_LOG_LEVEL_WARNING, __VA_ARGS__)
 #define LE_INFO(...)    le_log(DEFAULT_LOG_CATEGORY, LE_LOG_LEVEL_INFO,    __VA_ARGS__)
 
-LE_END_DECLS
+G_END_DECLS
 
 #endif

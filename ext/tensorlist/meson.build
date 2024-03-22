@@ -8,4 +8,5 @@ tensorlist_sources = [
 tensorlist = static_library('le_tensorlist', tensorlist_sources,
     include_directories: inc,
     link_with: le,
+    dependencies: glib
 )

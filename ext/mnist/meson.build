@@ -8,7 +8,8 @@ mnist_sources = [
 ]
 
 mnist_deps = [
-    cc.find_library('m')
+    cc.find_library('m'),
+    glib
 ]
 
 have_mnist = have_idx

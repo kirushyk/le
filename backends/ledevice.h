@@ -1,9 +1,9 @@
 #ifndef __LEDEVICE_H__
 #define __LEDEVICE_H__
 
-#include <le/lemacros.h>
+#include <glib.h>
 
-LE_BEGIN_DECLS
+G_BEGIN_DECLS
 
 typedef enum LeDeviceType
 {
@@ -12,6 +12,6 @@ typedef enum LeDeviceType
     LE_DEVICE_TYPE_METAL
 } LeDeviceType;
 
-LE_END_DECLS
+G_END_DECLS
 
 #endif

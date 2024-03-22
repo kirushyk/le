@@ -4,18 +4,24 @@
 #ifndef __LE_SEQUENTIAL_H__
 #define __LE_SEQUENTIAL_H__
 
-#include "../lemacros.h"
+#include <glib.h>
 #include <le/tensors/letensor.h>
 #include "../leloss.h"
 #include "lemodel.h"
 #include "layers/lelayer.h"
 
-LE_BEGIN_DECLS
+G_BEGIN_DECLS
 
 /// Sequential model is a plain stack of layers where each layer has exactly one input and one output
-typedef struct LeSequential LeSequential;
+// typedef struct LeSequential LeSequential;
 
-#define LE_SEQUENTIAL(a) ((LeSequential *)(a))
+G_DECLARE_FINAL_TYPE (LeSequential, le_sequential, LE, SEQUENTIAL, LeModel);
+
+// struct _LeSequentialClass
+// {
+//     LeModelClass parent;
+// };
+// #define LE_SEQUENTIAL(a) ((LeSequential *)(a))
 
 LeSequential *          le_sequential_new                  (void);
 
@@ -32,11 +38,11 @@ float                   le_sequential_compute_cost         (LeSequential        
                                                             const LeTensor         *x, 
                                                             const LeTensor         *y);
 
-LeList *                le_sequential_get_gradients        (LeSequential           *model,
+GList *                le_sequential_get_gradients        (LeSequential           *model,
                                                             const LeTensor         *x, 
                                                             const LeTensor         *y);
 
-LeList *                le_sequential_estimate_gradients   (LeSequential           *model,
+GList *                le_sequential_estimate_gradients   (LeSequential           *model,
                                                             const LeTensor         *x, 
                                                             const LeTensor         *y,
                                                             float                   epsilon);
@@ -51,6 +57,6 @@ void                    le_sequential_to_dot               (LeSequential *      
 
 void                    le_sequential_free                 (LeSequential *          model);
 
-LE_END_DECLS
+G_END_DECLS
 
 #endif

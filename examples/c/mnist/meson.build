@@ -8,24 +8,28 @@ if have_mnist
     executable('mnist-logistic-regression', 'mnist-logistic-regression.c',
         include_directories: inc,
         link_with: mnist_example_deps,
-        install: false
+        install: false,
+        dependencies: glib
     )
 
     executable('mnist-1-layer-nn', 'mnist-1-layer-nn.c',
         include_directories: inc,
         link_with: mnist_example_deps,
-        install: false
+        install: false,
+        dependencies: glib
     )
 
     executable('mnist-snn', 'mnist-snn.c',
         include_directories: inc,
         link_with: mnist_example_deps,
-        install: false
+        install: false,
+        dependencies: glib
     )
 
     executable('mnist-2nn', 'mnist-2nn.c',
         include_directories: inc,
         link_with: mnist_example_deps,
-        install: false
+        install: false,
+        dependencies: glib
     )
 endif

@@ -28,7 +28,7 @@ le_cuda_matrix_new_product(const LeTensor *a, bool transpose_a, const LeTensor *
     unsigned c_height = transpose_a ? a->shape->sizes[1] : a->shape->sizes[0];
     unsigned c_width = transpose_b ? b->shape->sizes[0] : b->shape->sizes[1];
 
-    LeTensor *c = malloc(sizeof(struct LeTensor));
+    LeTensor *c = g_new0 (LeTensor, 1);
     c->device_type = LE_DEVICE_TYPE_CUDA;
     c->element_type = a->element_type;
     c->shape = le_shape_new(2, c_height, c_width);
@@ -116,7 +116,7 @@ le_tensor_to_cuda(const LeTensor *cpu_tensor)
     assert(le_tensor_contiguous(cpu_tensor));
     assert(cpu_tensor->device_type == LE_DEVICE_TYPE_CPU);
     
-    LeTensor *tensor = malloc(sizeof(struct LeTensor));
+    LeTensor *tensor = g_new0 (LeTensor, 1);
     tensor->device_type = LE_DEVICE_TYPE_CUDA;
     tensor->element_type = cpu_tensor->element_type;
     tensor->shape = le_shape_copy(cpu_tensor->shape);
@@ -141,7 +141,7 @@ le_cuda_tensor_to_cpu(const LeTensor *cuda_tensor)
     assert(le_tensor_contiguous(cuda_tensor));
     assert(cuda_tensor->device_type == LE_DEVICE_TYPE_CUDA);
     
-    LeTensor *tensor = malloc(sizeof(struct LeTensor));
+    LeTensor *tensor = g_new0 (LeTensor, 1);
     tensor->device_type = LE_DEVICE_TYPE_CPU;
     tensor->element_type = cuda_tensor->element_type;
     tensor->shape = le_shape_copy(cuda_tensor->shape);
@@ -149,7 +149,7 @@ le_cuda_tensor_to_cpu(const LeTensor *cuda_tensor)
     tensor->owns_data = true;
     size_t data_size = le_shape_get_elements_count(tensor->shape) * le_type_size(tensor->element_type);
 
-    tensor->data = malloc(data_size);
+    tensor->data = g_malloc(data_size);
     cublasStatus_t cublas_status;
     cublas_status = cublasGetMatrix(cuda_tensor->shape->sizes[1], cuda_tensor->shape->sizes[0], sizeof(float), cuda_tensor->data, cuda_tensor->shape->sizes[1], tensor->data, tensor->shape->sizes[1]);
     assert(cublas_status == CUBLAS_STATUS_SUCCESS);

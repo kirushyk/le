@@ -71,7 +71,10 @@ if have_metal
 
         le_metal = static_library('le_metal', le_metal_sources,
             include_directories: inc,
-            dependencies: metal
+            dependencies: [
+                metal,
+                glib
+            ]
         )
     else
         error('''Even if you have the command line tools installed, you still need Xcode.

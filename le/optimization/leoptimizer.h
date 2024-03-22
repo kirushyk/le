@@ -4,21 +4,19 @@
 #ifndef __LEOPTIMIZER_H__
 #define __LEOPTIMIZER_H__
 
-#include "../leobject.h"
-#include <le/lelist.h>
-#include <le/lemacros.h>
+#include <glib.h>
 #include <le/models/lemodel.h>
 
-LE_BEGIN_DECLS
+G_BEGIN_DECLS
 
 /// Base class for all optimizers
 typedef struct LeOptimizer
 {
-    LeObject                 parent;
+    GObject                 parent;
 
     LeModel                 *model;
-    LeList                  *parameters;
-    LeList                  *gradients;
+    GList                   *parameters;
+    GList                   *gradients;
     float                    learning_rate;
     unsigned                 step;
     unsigned                 epoch;
@@ -28,13 +26,13 @@ typedef struct LeOptimizer
 
 typedef struct LeOptimizerClass
 {
-    LeClass parent;
+    GObjectClass parent;
     void (*step)(LeOptimizer *optimizer);
     void (*epoch)(LeOptimizer *optimizer);
 } LeOptimizerClass;
 
 #define LE_OPTIMIZER_CLASS(klass) ((LeOptimizerClass *)(klass))
-#define LE_OPTIMIZER_GET_CLASS(obj) (LE_OPTIMIZER_CLASS(LE_OBJECT_GET_CLASS(obj)))
+#define LE_OPTIMIZER_GET_CLASS(obj) (LE_OPTIMIZER_CLASS(G_OBJECT_GET_CLASS(obj)))
 
 void               le_optimizer_construct                  (LeOptimizer *           optimizer);
 
@@ -44,6 +42,6 @@ void               le_optimizer_epoch                      (LeOptimizer *       
 
 void               le_optimizer_free                       (LeOptimizer *           optimizer);
 
-LE_END_DECLS
+G_END_DECLS
 
 #endif

@@ -5,9 +5,9 @@
 #define __LE1LAYERNN_H__
 
 #include <le/tensors/letensor.h>
-#include <le/lemacros.h>
+#include <glib.h>
 
-LE_BEGIN_DECLS
+G_BEGIN_DECLS
 
 /// @note: Temporary Model needed to develop MLP and SGD. To be removed later.
 typedef struct Le1LayerNN Le1LayerNN;
@@ -31,6 +31,6 @@ void         le_1_layer_nn_train          (Le1LayerNN                *classifier
 
 void         le_1_layer_nn_free           (Le1LayerNN                *classifier);
 
-LE_END_DECLS
+G_END_DECLS
 
 #endif

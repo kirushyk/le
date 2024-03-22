@@ -11,7 +11,8 @@ have_idx = zlib.found()
 
 if zlib.found()
     idx_deps = [
-        zlib
+        zlib,
+        glib
     ]
 
     idx = static_library('le_idx', idx_sources,

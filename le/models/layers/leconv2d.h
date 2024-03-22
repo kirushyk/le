@@ -5,9 +5,9 @@
 #define __LECONV2D_H__
 
 #include "lelayer.h"
-#include <le/lemacros.h>
+#include <glib.h>
 
-LE_BEGIN_DECLS
+G_BEGIN_DECLS
 
 typedef struct LeConv2D
 {
@@ -29,6 +29,6 @@ LeConv2D * le_conv2d_new (const char *name,
                           unsigned    padding,
                           unsigned    stride);
 
-LE_END_DECLS
+G_END_DECLS
 
 #endif

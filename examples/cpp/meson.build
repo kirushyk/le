@@ -12,7 +12,8 @@ if have_cpp
         link_with: [
             le_cpp
         ],
-        install: false
+        install: false,
+        dependencies: glib
     )
 
     executable('support-vector-machine-cpp', 'support-vector-machine.cpp',
@@ -23,7 +24,8 @@ if have_cpp
         link_with: [
             le_cpp
         ],
-        install: false
+        install: false,
+        dependencies: glib
     )
 
     executable('shallow-neural-network-cpp', 'shallow-neural-network.cpp',
@@ -34,6 +36,7 @@ if have_cpp
         link_with: [
             le_cpp
         ],
-        install: false
+        install: false,
+        dependencies: glib
     )
 endif

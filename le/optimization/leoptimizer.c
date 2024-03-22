@@ -7,20 +7,20 @@
 
 static LeOptimizerClass klass;
 
-void
-le_optimizer_construct(LeOptimizer *self)
-{
-    LE_OBJECT_GET_CLASS(self) = LE_CLASS(&klass);
-    self->model = NULL;
-    self->parameters = NULL;
-    self->gradients = NULL;
-}
+// void
+// le_optimizer_construct(LeOptimizer *self)
+// {
+//     G_OBJECT_GET_CLASS(self) = G_OBJECT_CLASS(&klass);
+//     self->model = NULL;
+//     self->parameters = NULL;
+//     self->gradients = NULL;
+// }
 
 void
 le_optimizer_step(LeOptimizer *self)
 {
     assert(self);
-    assert(LE_OBJECT_GET_CLASS(self));
+    assert(G_OBJECT_GET_CLASS(self));
     assert(LE_OPTIMIZER_GET_CLASS(self)->step);
     
     LE_OPTIMIZER_GET_CLASS(self)->step(self);
@@ -30,7 +30,7 @@ void
 le_optimizer_epoch(LeOptimizer *self)
 {
     assert(self);
-    assert(LE_OBJECT_GET_CLASS(self));
+    assert(G_OBJECT_GET_CLASS(self));
     assert(LE_OPTIMIZER_GET_CLASS(self)->epoch);
     
     LE_OPTIMIZER_GET_CLASS(self)->epoch(self);
@@ -39,5 +39,5 @@ le_optimizer_epoch(LeOptimizer *self)
 void
 le_optimizer_free(LeOptimizer *self)
 {
-    free(self);
+    g_free (self);
 }

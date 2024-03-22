@@ -22,6 +22,9 @@ if have_cpp
             inc,
             inc_cpp
         ],
-        link_with: le
+        link_with: le,
+        dependencies: [
+            glib
+        ]
     )
 endif

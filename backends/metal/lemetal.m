@@ -1,4 +1,5 @@
 #include "metal-config.h"
+#include <glib.h>
 #import "lemetal.h"
 #import <MacTypes.h>
 #import <le/le.h>
@@ -50,7 +51,7 @@ le_metal_matrix_new_product(const LeTensor *a, bool transpose_a, const LeTensor 
     unsigned c_height = transpose_a ? a->shape->sizes[1] : a->shape->sizes[0];
     unsigned c_width = transpose_b ? b->shape->sizes[0] : b->shape->sizes[1];
         
-    LeTensor *c = malloc(sizeof(struct LeTensor));
+    LeTensor *c = g_new0 (LeTensor, 1);
     c->device_type = LE_DEVICE_TYPE_METAL;
     c->element_type = LE_TYPE_FLOAT32;
     c->shape = le_shape_new(2, c_height, c_width);
@@ -118,7 +119,7 @@ le_tensor_to_metal(const LeTensor *another)
     assert(le_tensor_contiguous(another));
     assert(another->device_type == LE_DEVICE_TYPE_CPU);
     
-    LeTensor *tensor = malloc(sizeof(struct LeTensor));
+    LeTensor *tensor = g_new0 (LeTensor, 1);
     tensor->device_type = LE_DEVICE_TYPE_METAL;
     tensor->element_type = another->element_type;
     tensor->shape = le_shape_copy(another->shape);
@@ -138,7 +139,7 @@ le_tensor_to_cpu(const LeTensor *another)
     assert(le_tensor_contiguous(another));
     assert(another->device_type == LE_DEVICE_TYPE_METAL);
     
-    LeTensor *tensor = malloc(sizeof(struct LeTensor));
+    LeTensor *tensor = g_new0 (LeTensor, 1);
     tensor->device_type = LE_DEVICE_TYPE_CPU;
     tensor->element_type = another->element_type;
     tensor->shape = le_shape_copy(another->shape);
@@ -147,7 +148,7 @@ le_tensor_to_cpu(const LeTensor *another)
     size_t data_size = le_shape_get_elements_count(tensor->shape) * le_type_size(tensor->element_type);
 
     id<MTLBuffer> buffer = (__bridge id<MTLBuffer>)(another->data);
-    tensor->data = malloc(data_size);
+    tensor->data = g_malloc (data_size);
     memcpy(tensor->data, [buffer contents], data_size);
     
     return tensor;

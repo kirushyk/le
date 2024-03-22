@@ -26,7 +26,7 @@ typedef struct Le1LayerNNClass
 LeTensor *
 le_1_layer_nn_predict(Le1LayerNN *self, const LeTensor *x);
 
-LeList *
+GList *
 le_1_layer_nn_get_gradients(Le1LayerNN *self, const LeTensor *x, const LeTensor *y);
 
 Le1LayerNNClass *
@@ -40,7 +40,7 @@ le_1_layer_nn_class_ensure_init(void)
         klass.parent.predict =
             (LeTensor *(*)(LeModel *, const LeTensor *))le_1_layer_nn_predict;
         klass.parent.get_gradients =
-            (LeList *(*)(LeModel *, const LeTensor *, const LeTensor *))le_1_layer_nn_get_gradients;
+            (GList *(*)(LeModel *, const LeTensor *, const LeTensor *))le_1_layer_nn_get_gradients;
         le_1_layer_nn_class_initialized = 1;
     }
 
@@ -51,7 +51,7 @@ void
 le_1_layer_nn_construct(Le1LayerNN *self)
 {
     le_model_construct((LeModel *)self);
-    LE_OBJECT_GET_CLASS(self) = LE_CLASS(le_1_layer_nn_class_ensure_init());
+    G_OBJECT_GET_CLASS(self) = G_OBJECT_CLASS(le_1_layer_nn_class_ensure_init());
     self->weights = NULL;
     self->bias = 0;
 }
@@ -74,7 +74,7 @@ le_1_layer_nn_predict(Le1LayerNN *self, const LeTensor *x)
     return a;
 }
 
-LeList *
+GList *
 le_1_layer_nn_get_gradients(Le1LayerNN *self, const LeTensor *x, const LeTensor *y)
 {
     unsigned examples_count = le_matrix_get_width(x);
@@ -86,10 +86,10 @@ le_1_layer_nn_get_gradients(Le1LayerNN *self, const LeTensor *x, const LeTensor 
     LeTensor *db = le_matrix_new_sum(h, 1);
     le_tensor_free(h);
 
-    LeList *gradients = NULL;
+    GList *gradients = NULL;
     
-    gradients = le_list_append(gradients, dw);
-    gradients = le_list_append(gradients, db);
+    gradients = g_list_append(gradients, dw);
+    gradients = g_list_append(gradients, db);
 
     return gradients;
 }
@@ -163,5 +163,5 @@ le_1_layer_nn_free(Le1LayerNN *self)
 {
     le_tensor_free(self->weights);
     le_tensor_free(self->bias);
-    free(self);
+    g_free (self);
 }

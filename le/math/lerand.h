@@ -1,9 +1,9 @@
 #ifndef __LERAND_H__
 #define __LERAND_H__
 
-#include <le/lemacros.h>
+#include <glib.h>
 
-LE_BEGIN_DECLS
+G_BEGIN_DECLS
 
 float                   le_random_uniform_f32              (void);
 
@@ -17,6 +17,6 @@ typedef enum LeDistribution
 
 float                   le_random_f32                      (LeDistribution          distribution);
 
-LE_END_DECLS
+G_END_DECLS
 
 #endif

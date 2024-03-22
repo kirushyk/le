@@ -4,10 +4,10 @@
 #ifndef __LESVM_H__
 #define __LESVM_H__
 
-#include "../lemacros.h"
+#include <glib.h>
 #include <le/tensors/letensor.h>
 
-LE_BEGIN_DECLS
+G_BEGIN_DECLS
 
 typedef enum LeKernel
 {
@@ -34,6 +34,6 @@ void                    le_svm_train                       (LeSVM *             
 
 void                    le_svm_free                        (LeSVM *                 svm);
 
-LE_END_DECLS
+G_END_DECLS
 
 #endif

@@ -15,7 +15,7 @@ struct LeTensor
     LeShape      *shape;
     bool          owns_data;
     /// @note: In dimension of lowest order
-    uint32_t      stride;
+    guint32      stride;
     LeDeviceType  device_type;
     void         *data;
 };

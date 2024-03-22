@@ -34,7 +34,7 @@ le_dense_layer_forward_prop(LeLayer *layer, LeTensor *input)
 }
 
 LeTensor *
-le_dense_layer_backward_prop(LeLayer *layer, LeTensor *cached_input, LeTensor *cached_output, LeTensor *output_gradient, LeList **parameters_gradient)
+le_dense_layer_backward_prop(LeLayer *layer, LeTensor *cached_input, LeTensor *cached_output, LeTensor *output_gradient, GList **parameters_gradient)
 {
     assert(layer);
     assert(output_gradient);
@@ -55,8 +55,8 @@ le_dense_layer_backward_prop(LeLayer *layer, LeTensor *cached_input, LeTensor *c
         LeTensor *dw = le_matrix_new_product_full(h, false, cached_input, true);
         LeTensor *db = le_matrix_new_sum(h, 1);
         le_tensor_free(h);
-        *parameters_gradient = le_list_append(*parameters_gradient, db);
-        *parameters_gradient = le_list_append(*parameters_gradient, dw);
+        *parameters_gradient = g_list_append(*parameters_gradient, db);
+        *parameters_gradient = g_list_append(*parameters_gradient, dw);
     }
 
     return input_gradient;
@@ -79,28 +79,28 @@ le_dense_layer_get_description(LeLayer *self)
 
 static LeDenseLayerClass klass;
 
-static void
-le_dense_layer_class_ensure_init()
-{
-    static bool initialized = false;
+// static void
+// le_dense_layer_class_ensure_init()
+// {
+//     static bool initialized = false;
     
-    if (!initialized)
-    {
-        klass.parent.forward_prop = le_dense_layer_forward_prop;
-        klass.parent.backward_prop = le_dense_layer_backward_prop;
-        klass.parent.get_output_shape = le_dense_layer_get_output_shape;
-        klass.parent.get_description = le_dense_layer_get_description;
-        initialized = true;
-    }
-}
+//     if (!initialized)
+//     {
+//         klass.parent.forward_prop = le_dense_layer_forward_prop;
+//         klass.parent.backward_prop = le_dense_layer_backward_prop;
+//         klass.parent.get_output_shape = le_dense_layer_get_output_shape;
+//         klass.parent.get_description = le_dense_layer_get_description;
+//         initialized = true;
+//     }
+// }
 
 LeDenseLayer *
 le_dense_layer_new(const char *name, unsigned inputs, unsigned units)
 {
     LeDenseLayer *self = malloc(sizeof(LeDenseLayer));
-    le_layer_construct(LE_LAYER(self), name);
-    le_dense_layer_class_ensure_init();
-    LE_OBJECT_GET_CLASS(self) = LE_CLASS(&klass);
+    // le_layer_construct(LE_LAYER(self), name);
+    // le_dense_layer_class_ensure_init();
+    // G_OBJECT_GET_CLASS(self) = G_OBJECT_CLASS(&klass);
     self->w = le_matrix_new_rand_f32(LE_DISTRIBUTION_NORMAL, units, inputs);
     /// @todo: Optimize
     float variance = sqrtf(1.0f / inputs);

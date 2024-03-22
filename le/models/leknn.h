@@ -4,10 +4,10 @@
 #ifndef __LEKNN_H__
 #define __LEKNN_H__
 
-#include <le/lemacros.h>
+#include <glib.h>
 #include <le/tensors/letensor.h>
 
-LE_BEGIN_DECLS
+G_BEGIN_DECLS
 
 /** @note: Lazy algorithm which just remembers training set */
 typedef struct LeKNN LeKNN;
@@ -26,6 +26,6 @@ LeTensor *              le_knn_predict                    (LeKNN *              
 
 void                    le_knn_free                       (LeKNN *                  knn);
 
-LE_END_DECLS
+G_END_DECLS
 
 #endif

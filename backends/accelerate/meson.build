@@ -14,7 +14,8 @@ if accelerate.found()
     le_accelerate = static_library('le_accelerate', le_accelerate_sources,
         include_directories: inc,
         dependencies: [
-            accelerate
+            accelerate,
+            glib
         ]
     )
 endif

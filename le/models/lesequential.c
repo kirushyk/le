@@ -6,29 +6,58 @@
 #include "lesequential.h"
 #include <assert.h>
 #include <stdlib.h>
+#include <glib.h>
 #include <le/lelog.h>
 #include <le/leloss.h>
 #include <le/models/layers/leactivationlayer.h>
 #include <le/tensors/letensor-imp.h>
-#include "lelist.h"
 #include <le/tensors/lematrix.h>
 
-struct LeSequential
+typedef struct _LeSequential
 {
     LeModel parent;
-    LeList *layers;
-    LeLoss loss;
-};
+} LeSequential;
 
-typedef struct LeSequentialClass
+typedef struct _LeSequentialPrivate
 {
-    LeModelClass parent;
-} LeSequentialClass;
+    GList *layers;
+    LeLoss loss;
+} LeSequentialPrivate;
+
+static void le_sequential_class_init (LeSequentialClass * klass);
+static void le_sequential_init (LeSequential * self);
+G_DEFINE_FINAL_TYPE_WITH_PRIVATE (LeSequential, le_sequential, LE_TYPE_MODEL);
+
+static void
+le_sequential_dispose (GObject * object)
+{
+  G_OBJECT_CLASS (le_sequential_parent_class)->dispose (object);
+}
+
+static void
+le_sequential_finalize (GObject * object)
+{
+}
+
+static void
+le_sequential_class_init (LeSequentialClass * klass)
+{
+  G_OBJECT_CLASS (klass)->dispose = le_sequential_dispose;
+  G_OBJECT_CLASS (klass)->finalize = le_sequential_finalize;
+  LE_MODEL_CLASS (klass)->predict = (LeTensor *(*)(LeModel *, const LeTensor *))le_sequential_predict;
+  LE_MODEL_CLASS (klass)->get_gradients = (GList *(*)(LeModel *, const LeTensor *, const LeTensor *))le_sequential_get_gradients;
+}
+
+static void
+le_sequential_init (LeSequential * self)
+{
+
+}
 
 LeTensor *
 le_sequential_predict(LeSequential *self, const LeTensor *x);
 
-LeList *
+GList *
 le_sequential_get_gradients(LeSequential *self, const LeTensor *x, const LeTensor *y);
 
 LeSequentialClass *
@@ -39,31 +68,26 @@ le_sequential_class_ensure_init()
     
     if (!initialized)
     {
-        klass.parent.predict =
-            (LeTensor *(*)(LeModel *, const LeTensor *))le_sequential_predict;
-        klass.parent.get_gradients =
-            (LeList *(*)(LeModel *, const LeTensor *, const LeTensor *))le_sequential_get_gradients;
         initialized = 1;
     }
 
     return &klass;
 }
 
-void
-le_sequential_construct(LeSequential *self)
-{
-    le_model_construct(LE_MODEL(self));
-    LE_OBJECT_GET_CLASS(self) = LE_CLASS(le_sequential_class_ensure_init());
+// void
+// le_sequential_construct(LeSequential *self)
+// {
+//     le_model_construct(LE_MODEL(self));
+//     G_OBJECT_GET_CLASS(self) = G_OBJECT_CLASS(le_sequential_class_ensure_init());
     
-    self->layers = NULL;
-    self->loss = LE_LOSS_MSE;
-}
+//     self->layers = NULL;
+//     priv->loss = LE_LOSS_MSE;
+// }
 
 LeSequential *
 le_sequential_new(void)
 {
-    LeSequential *self = malloc(sizeof(struct LeSequential));
-    le_sequential_construct(self);
+    LeSequential *self = g_object_new (le_sequential_get_type (), NULL);
     return self;
 }
 
@@ -72,10 +96,11 @@ le_sequential_add(LeSequential *self, LeLayer *layer)
 {
     LE_INFO("Adding New Layer: %s", layer->name);
 
-    self->layers = le_list_append(self->layers, layer);
-    LeList *parameters = le_layer_get_parameters(layer);
+    LeSequentialPrivate *priv = le_sequential_get_instance_private (self);
+    priv->layers = g_list_append (priv->layers, layer);
+    GList *parameters = le_layer_get_parameters(layer);
     
-    for (LeList *current = parameters; current != NULL; current = current->next)
+    for (GList *current = parameters; current != NULL; current = current->next)
     {
         LeTensor *parameter = LE_TENSOR(current->data);
         le_model_append_parameter(LE_MODEL(self), parameter);
@@ -85,29 +110,31 @@ le_sequential_add(LeSequential *self, LeLayer *layer)
 void
 le_sequential_set_loss(LeSequential *self, LeLoss loss)
 {
-    self->loss = loss;
+    LeSequentialPrivate *priv = le_sequential_get_instance_private (self);
+    priv->loss = loss;
 }
 
 /** @note: Used in both _predict and _get_gradients method, 
  * @param inputs if not null is used to cache input of each layer.
  */
 static LeTensor *
-forward_propagation(LeSequential *self, const LeTensor *x, LeList **inputs)
+forward_propagation(LeSequential *self, const LeTensor *x, GList **inputs)
 {
     assert(self);
     assert(x);
+    LeSequentialPrivate *priv = le_sequential_get_instance_private (self);
 
     LE_INFO("Forward Propagation");
     LeTensor *signal = le_tensor_new_copy(x);
     
-    for (LeList *current = self->layers;
+    for (GList *current = priv->layers;
          current != NULL;
          current = current->next)
     {
         LeLayer *current_layer = LE_LAYER(current->data);
         if (inputs)
         {
-            *inputs = le_list_append(*inputs, le_tensor_new_copy(signal));
+            *inputs = g_list_append(*inputs, le_tensor_new_copy(signal));
         }
         // LE_INFO("signal =\n%s", le_tensor_to_cstr(signal));
         // LE_INFO("Layer %s Forward", current_layer->name);
@@ -128,9 +155,10 @@ le_sequential_predict(LeSequential *self, const LeTensor *x)
 float 
 le_sequential_compute_cost(LeSequential *self, const LeTensor *x, const LeTensor *y)
 {
+    LeSequentialPrivate *priv = le_sequential_get_instance_private (self);
     /// @todo: Take regularization term into account;
     LeTensor *h = forward_propagation(self, x, NULL);
-    const float j = le_loss(self->loss, h, y);
+    const float j = le_loss(priv->loss, h, y);
     le_tensor_free(h);
     return j;
 }
@@ -159,30 +187,31 @@ activation_loss_backward_fn(LeActivation activation, LeLoss loss)
     return NULL;
 }
 
-LeList *
+GList *
 le_sequential_get_gradients(LeSequential *self, const LeTensor *x, const LeTensor *y)
 {
     assert(self);
     assert(x);
     assert(y);
+    LeSequentialPrivate *priv = le_sequential_get_instance_private (self);
         
     /// @note: We cache input of each layer in list of tensors
     /// to ease computation of gradients during backpropagation
-    LeList *cached_inputs = NULL;
+    GList *cached_inputs = NULL;
     LeTensor *signal = forward_propagation(self, x, &cached_inputs);
     // LE_INFO("output =\n%s", le_tensor_to_cstr(signal));
     // LeTensorStats signal_stats = le_tensor_get_stats(signal);
     // LE_INFO("Output stats:\n\tmin: %f\n\tmax: %f\n\tmean: %f\n\tdeviation: %f", signal_stats.min, signal_stats.max, signal_stats.mean, signal_stats.deviation);
 
     LE_INFO("Back Propagation");
-    LeList *current_layer_iterator = le_list_last(self->layers);
-    LeList *cached_inputs_iterator = le_list_last(cached_inputs);
+    GList *current_layer_iterator = g_list_last(priv->layers);
+    GList *cached_inputs_iterator = g_list_last(cached_inputs);
     LeActivationLayer *last_layer = NULL;
     LeActivationAndLossBackward activation_loss_backward = NULL;
     if (current_layer_iterator && current_layer_iterator->data)
     {
         last_layer = LE_ACTIVATION_LAYER(current_layer_iterator->data);
-        activation_loss_backward = activation_loss_backward_fn(last_layer->activation, self->loss);
+        activation_loss_backward = activation_loss_backward_fn(last_layer->activation, priv->loss);
     }
     if (last_layer && activation_loss_backward)
     {
@@ -193,21 +222,21 @@ le_sequential_get_gradients(LeSequential *self, const LeTensor *x, const LeTenso
     else
     {
         /// @note: Derivative of assumed cost function
-        le_apply_loss_derivative(self->loss, signal, y);
+        le_apply_loss_derivative(priv->loss, signal, y);
         LE_INFO("signal =\n%s", le_tensor_to_cstr(signal));
         // signal_stats = le_tensor_get_stats(signal);
         // LE_INFO("Loss derivative stats:\n\tmin: %f\n\tmax: %f\n\tmean: %f\n\tdeviation: %f", signal_stats.min, signal_stats.max, signal_stats.mean, signal_stats.deviation);
     }
 
-    // LeList *current = NULL;
-    LeList *gradients = NULL;
-    for (/* current = le_list_last(self->layers), inputs = le_list_last(inputs) */;
+    // GList *current = NULL;
+    GList *gradients = NULL;
+    for (/* current = g_list_last(self->layers), inputs = g_list_last(inputs) */;
          current_layer_iterator && cached_inputs_iterator;
          current_layer_iterator = current_layer_iterator->prev, cached_inputs_iterator = cached_inputs_iterator->prev)
     {
         LeLayer *current_layer = LE_LAYER(current_layer_iterator->data);
         LE_INFO("Layer %s Backward", current_layer->name);
-        LeList *current_layer_param_gradients = NULL;
+        GList *current_layer_param_gradients = NULL;
         LeTensor *cached_input = LE_TENSOR(cached_inputs_iterator->data);
         LeTensor *cached_output = NULL;
         if (cached_inputs_iterator->next)
@@ -221,12 +250,12 @@ le_sequential_get_gradients(LeSequential *self, const LeTensor *x, const LeTenso
         LE_INFO("signal =\n%s", le_tensor_to_cstr(signal));
         // LeTensorStats signal_stats = le_tensor_get_stats(signal);
         // LE_INFO("Signal stats:\n\tmin: %f\n\tmax: %f\n\tmean: %f\n\tdeviation: %f", signal_stats.min, signal_stats.max, signal_stats.mean, signal_stats.deviation);
-        for (LeList *current_gradient = current_layer_param_gradients;
+        for (GList *current_gradient = current_layer_param_gradients;
              current_gradient;
              current_gradient = current_gradient->next)
         {
             LeTensor *gradient = LE_TENSOR(current_gradient->data);
-            gradients = le_list_prepend(gradients, gradient);
+            gradients = g_list_prepend(gradients, gradient);
         }
     }
     
@@ -234,13 +263,13 @@ le_sequential_get_gradients(LeSequential *self, const LeTensor *x, const LeTenso
     assert(current_layer_iterator == NULL);
     assert(cached_inputs_iterator == NULL);
 
-    le_list_free(cached_inputs, LE_FUNCTION(le_tensor_free));
+    g_list_free_full (cached_inputs, (GDestroyNotify)le_tensor_free);
     le_tensor_free(signal);
 
     return gradients;
 }
 
-LeList *
+GList *
 le_sequential_estimate_gradients(LeSequential *self, const LeTensor *x, const LeTensor *y, float epsilon)
 {
     assert(self);
@@ -248,9 +277,9 @@ le_sequential_estimate_gradients(LeSequential *self, const LeTensor *x, const Le
     assert(y);
     assert(epsilon > 0.0f);
 
-    LeList *grad_estimates = NULL;
+    GList *grad_estimates = NULL;
 
-    for (LeList *params_iterator = LE_MODEL(self)->parameters;
+    for (GList *params_iterator = le_model_get_parameters (self);
          params_iterator;
          params_iterator = params_iterator->next)
     {
@@ -269,7 +298,7 @@ le_sequential_estimate_gradients(LeSequential *self, const LeTensor *x, const Le
             /// @note: We need to restore initial parameter
             le_tensor_set_f32(param, i, element);
         }
-        grad_estimates = le_list_append(grad_estimates, grad_estimate);
+        grad_estimates = g_list_append(grad_estimates, grad_estimate);
     }
 
     return grad_estimates;
@@ -279,9 +308,9 @@ le_sequential_estimate_gradients(LeSequential *self, const LeTensor *x, const Le
 float
 le_sequential_check_gradients(LeSequential *self, const LeTensor *x, const LeTensor *y, float epsilon)
 {
-    LeList *gradients = le_model_get_gradients(LE_MODEL(self), x, y);
-    LeList *gradients_estimations = le_sequential_estimate_gradients(self, x, y, epsilon);
-    LeList *gradients_iterator, *gradients_estimations_iterator;
+    GList *gradients = le_model_get_gradients(LE_MODEL(self), x, y);
+    GList *gradients_estimations = le_sequential_estimate_gradients(self, x, y, epsilon);
+    GList *gradients_iterator, *gradients_estimations_iterator;
     float average_normalized_distance = 0.0f;
     unsigned parameter_number = 0;
     for (gradients_iterator = gradients, gradients_estimations_iterator = gradients_estimations;
@@ -316,23 +345,24 @@ le_sequential_check_gradients(LeSequential *self, const LeTensor *x, const LeTen
     {
         LE_ERROR("Some gradients missing or extra gradients estimations present");
     }
-    le_list_free(gradients_estimations, LE_FUNCTION(le_tensor_free));
-    le_list_free(gradients, LE_FUNCTION(le_tensor_free));
+    g_list_free_full (gradients_estimations, (GDestroyNotify)le_tensor_free);
+    g_list_free_full (gradients, (GDestroyNotify)le_tensor_free);
     return average_normalized_distance;
 }
 
 void
 le_sequential_to_dot(LeSequential *self, const char *filename)
 {
+    LeSequentialPrivate *priv = le_sequential_get_instance_private (self);
     FILE *fout = fopen(filename, "wt");
     
     if (!fout)
         return;
 
     fprintf(fout, "digraph graphname {\n");
-    fprintf(fout, "__cost [shape=record label=\"{J|%s}\"];\n", le_loss_get_desc(self->loss));
+    fprintf(fout, "__cost [shape=record label=\"{J|%s}\"];\n", le_loss_get_desc(priv->loss));
 
-    for (LeList *current = self->layers;
+    for (GList *current = priv->layers;
          current != NULL; 
          current = current->next)
     {
@@ -367,5 +397,5 @@ le_sequential_to_dot(LeSequential *self, const char *filename)
 void
 le_sequential_free(LeSequential *self)
 {
-    free(self);
+    g_free (self);
 }

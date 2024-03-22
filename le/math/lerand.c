@@ -1,7 +1,7 @@
 #include "lerand.h"
 #include <stdlib.h>
 #include <math.h>
-#include <le/lemacros.h>
+#include <glib.h>
 
 float
 le_random_uniform_f32(void)

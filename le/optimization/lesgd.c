@@ -22,7 +22,7 @@ struct LeSGD
     size_t batch_size;
     unsigned example_index;
     float momentum_rate;
-    LeList *momenta;
+    GList *momenta;
 };
 
 typedef struct LeSGDClass
@@ -32,16 +32,16 @@ typedef struct LeSGDClass
 
 static LeSGDClass klass;
 
-LeList *
-le_sgd_init_momenta(LeList *gradients)
+GList *
+le_sgd_init_momenta(GList *gradients)
 {
-    LeList *momentum_list = NULL;
-    for (LeList *gradients_iterator = gradients; 
+    GList *momentum_list = NULL;
+    for (GList *gradients_iterator = gradients; 
          gradients_iterator;
          gradients_iterator = gradients_iterator->next)
     {
         LeTensor *momentum = le_tensor_new_zeros_like(LE_TENSOR(gradients_iterator->data));
-        momentum_list = le_list_append(momentum_list, momentum);
+        momentum_list = g_list_append(momentum_list, momentum);
     }
     return momentum_list;
 }
@@ -50,9 +50,9 @@ void
 le_sgd_step(LeOptimizer *optimizer)
 {
     LeSGD *self = LE_SGD(optimizer);
-    LeList *parameters_iterator;
-    LeList *gradients_iterator;
-    LeList *momentum_iterator;
+    GList *parameters_iterator;
+    GList *gradients_iterator;
+    GList *momentum_iterator;
 
     LE_INFO("Epoch %u Step %u", optimizer->epoch, optimizer->step);
     
@@ -129,7 +129,7 @@ le_sgd_step(LeOptimizer *optimizer)
         LE_WARNING("Extra momenta passed");
     }
     
-    le_list_free(optimizer->gradients, LE_FUNCTION(le_tensor_free));
+    g_list_free_full (optimizer->gradients, (GDestroyNotify)le_tensor_free);
     optimizer->gradients = NULL;
     
     optimizer->step++;
@@ -174,7 +174,7 @@ le_sgd_construct(LeSGD *self)
 {
     le_optimizer_construct((LeOptimizer *)self);
     le_sgd_class_ensure_init();
-    ((LeObject *)self)->klass = (LeClass *)&klass;
+    ((GObject *)self)->klass = (GObjectClass *)&klass;
 }
 
 LeSGD *
@@ -205,6 +205,6 @@ le_sgd_new(LeModel *model, LeTensor *input, LeTensor *output, size_t batch_size,
 void
 le_sgd_free(LeSGD *self)
 {
-    le_list_free(self->momenta, LE_FUNCTION(le_tensor_free));
-    free(self);
+    g_list_free_full (self->momenta, (GDestroyNotify)le_tensor_free);
+    g_free (self);
 }

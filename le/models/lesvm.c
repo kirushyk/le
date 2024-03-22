@@ -51,7 +51,7 @@ void
 le_svm_construct(LeSVM *self)
 {
     le_model_construct(LE_MODEL(self));
-    LE_OBJECT_GET_CLASS(self) = LE_CLASS(le_svm_class_ensure_init());
+    G_OBJECT_GET_CLASS(self) = G_OBJECT_CLASS(le_svm_class_ensure_init());
     self->bias = 0.0f;
     self->alphas = NULL;
     self->weights = NULL;
@@ -299,5 +299,5 @@ le_svm_predict(LeSVM *self, const LeTensor *x)
 void
 le_svm_free(LeSVM *self)
 {
-    free(self);
+    g_free (self);
 }

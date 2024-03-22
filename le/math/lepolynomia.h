@@ -7,12 +7,12 @@
 #define __LEPOLYNOMIA_H__
 
 #include <stdio.h>
-#include "../lemacros.h"
+#include <glib.h>
 
-LE_BEGIN_DECLS
+G_BEGIN_DECLS
 
 LeTensor * le_matrix_new_polynomia        (const LeTensor *matrix);
 
-LE_END_DECLS
+G_END_DECLS
 
 #endif

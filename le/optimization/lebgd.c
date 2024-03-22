@@ -30,8 +30,8 @@ void
 le_bgd_step(LeOptimizer *optimizer)
 {
     LeBGD *self = (LeBGD *)optimizer;
-    LeList *parameters_iterator;
-    LeList *gradients_iterator;
+    GList *parameters_iterator;
+    GList *gradients_iterator;
 
     LE_INFO("Step");
 
@@ -40,7 +40,7 @@ le_bgd_step(LeOptimizer *optimizer)
         LE_WARNING("Learning rate = %f", optimizer->learning_rate);
     }
 
-    LeList *gradients = NULL;
+    GList *gradients = NULL;
     bool own_gradients = false;
 
     if (optimizer->model)
@@ -79,7 +79,7 @@ le_bgd_step(LeOptimizer *optimizer)
 
     if (own_gradients)
     {
-        le_list_free(gradients, LE_FUNCTION(le_tensor_free));
+        g_list_free_full (gradients, (GDestroyNotify)le_tensor_free);
     }
 
     LE_OPTIMIZER(self)->step++;
@@ -92,37 +92,37 @@ le_bgd_epoch(LeOptimizer *optimizer)
     le_bgd_step(optimizer);
 }
 
-void
-le_bgd_class_ensure_init(void)
-{
-    static bool initialized = false;
+// void
+// le_bgd_class_ensure_init(void)
+// {
+//     static bool initialized = false;
 
-    if (!initialized)
-    {
-        klass.parent.step =
-            (void (*)(LeOptimizer *))le_bgd_step;
-        klass.parent.epoch =
-            (void (*)(LeOptimizer *))le_bgd_epoch; /// @note: epoch == step for BGD
-        initialized = 1;
-    }
-}
+//     if (!initialized)
+//     {
+//         klass.parent.step =
+//             (void (*)(LeOptimizer *))le_bgd_step;
+//         klass.parent.epoch =
+//             (void (*)(LeOptimizer *))le_bgd_epoch; /// @note: epoch == step for BGD
+//         initialized = 1;
+//     }
+// }
 
-void
-le_bgd_construct(LeBGD *self)
-{
-    le_optimizer_construct((LeOptimizer *)self);
-    le_bgd_class_ensure_init();
-    ((LeObject *)self)->klass = (LeClass *)&klass;
-}
+// void
+// le_bgd_construct(LeBGD *self)
+// {
+//     le_optimizer_construct((LeOptimizer *)self);
+//     le_bgd_class_ensure_init();
+//     ((GObject *)self)->klass = (GObjectClass *)&klass;
+// }
 
 LeBGD * 
-le_bgd_new_simple(LeList *parameters, LeList *gradients, float learning_rate)
+le_bgd_new_simple(GList *parameters, GList *gradients, float learning_rate)
 {
     assert(parameters);
     assert(gradients);
 
     LeBGD *self = malloc(sizeof(LeBGD));
-    le_bgd_construct(self);
+    // le_bgd_construct(self);
     if (learning_rate <= 0.0f)
     {
         LE_WARNING("Learning rate = %f", learning_rate);
@@ -145,7 +145,7 @@ le_bgd_new(LeModel *model, const LeTensor *input, const LeTensor *output, float 
     assert(model);
 
     LeBGD *self = malloc(sizeof(LeBGD));
-    le_bgd_construct(self);
+    // le_bgd_construct(self);
     if (learning_rate <= 0.0f)
     {
         LE_WARNING("Learning rate = %f", learning_rate);
@@ -165,5 +165,5 @@ le_bgd_new(LeModel *model, const LeTensor *input, const LeTensor *output, float 
 void
 le_bgd_free(LeBGD *optimizer)
 {
-    free(optimizer);
+    g_free (optimizer);
 }

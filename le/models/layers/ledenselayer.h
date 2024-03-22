@@ -4,10 +4,10 @@
 #ifndef __LEDENSELAYER_H__
 #define __LEDENSELAYER_H__
 
-#include <le/lemacros.h>
+#include <glib.h>
 #include "lelayer.h"
 
-LE_BEGIN_DECLS
+G_BEGIN_DECLS
 
 /** @note: Densely-connected (fully-connected) layer */
 
@@ -25,6 +25,6 @@ LeDenseLayer * le_dense_layer_new (const char *name,
                                    unsigned    inputs,
                                    unsigned    units);
 
-LE_END_DECLS
+G_END_DECLS
 
 #endif

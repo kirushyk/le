@@ -8,9 +8,9 @@ dsttype_name ## _ ## srctype_name(void *dst, void *src, size_t index) \
     ((dst_type *)dst)[index] = ((src_type *)src)[index]; \
 }
 
-DEFINE_SIMPLE_CAST_FN(float, f32, uint8_t, u8)
-DEFINE_SIMPLE_CAST_FN(uint32_t, u32, uint8_t, u8)
-DEFINE_SIMPLE_CAST_FN(uint8_t, u8, uint32_t, u32)
+DEFINE_SIMPLE_CAST_FN(float, f32, guint8, u8)
+DEFINE_SIMPLE_CAST_FN(guint32, u32, guint8, u8)
+DEFINE_SIMPLE_CAST_FN(guint8, u8, guint32, u32)
 
 bool le_cast_rawcpy[LE_TYPE_COUNT][LE_TYPE_COUNT] =
 {

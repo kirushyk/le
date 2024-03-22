@@ -5,9 +5,9 @@
 #define __LELOSS_H__
 
 #include <le/tensors/lematrix.h>
-#include "lemacros.h"
+#include "glib.h"
 
-LE_BEGIN_DECLS
+G_BEGIN_DECLS
 
 float le_logistic_loss                       (const LeTensor *predictions,
                                               const LeTensor *labels);
@@ -49,6 +49,6 @@ void         le_apply_loss_derivative (LeLoss          loss,
 
 const char * le_loss_get_desc         (LeLoss          loss);    
 
-LE_END_DECLS
+G_END_DECLS
 
 #endif

@@ -10,7 +10,8 @@ foreach filename : le_benchmarks
         exe = executable(test_name, filename,
         include_directories: inc,
         link_with: le,
-        install: false
+        install: false,
+        dependencies: glib
     )
     benchmark(test_name, exe, timeout : 3 * 60)
 endforeach

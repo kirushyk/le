@@ -23,10 +23,10 @@ int
 main(int argc, const char *argv[])
 {
     LeTensor *w = le_scalar_new(0.0f);
-    LeList *parameters = le_list_append(NULL, w);
+    GList *parameters = g_list_append(NULL, w);
     
     LeTensor *dw = le_scalar_new(0.0f);
-    LeList *gradients = le_list_append(NULL, dw);
+    GList *gradients = g_list_append(NULL, dw);
     
     LeOptimizer *optimizer = LE_OPTIMIZER(le_bgd_new_simple(parameters, gradients, 0.2f));
     

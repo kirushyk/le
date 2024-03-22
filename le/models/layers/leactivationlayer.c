@@ -22,14 +22,14 @@ typedef struct LeActivationLayerClass
 static LeTensor *
 le_tensor_new_softmax_jacobians_stacked(LeTensor *softmax_output)
 {  
-    LeTensor *self = malloc(sizeof(struct LeTensor));
+    LeTensor *self = g_new0 (LeTensor, 1);
     self->element_type = LE_TYPE_FLOAT32;
     unsigned num_classes = le_matrix_get_height(softmax_output);
     unsigned num_examples = le_matrix_get_width(softmax_output);
     self->shape = le_shape_new(3, num_examples, num_classes, num_classes);
     self->stride = le_shape_get_size(self->shape, -1);
     self->owns_data = true;
-    self->data = malloc(le_shape_get_elements_count(self->shape) * sizeof(float));
+    self->data = g_new0 (gfloat, le_shape_get_elements_count(self->shape));
     
     unsigned num_classes_squared = num_classes * num_classes;
     for (unsigned example = 0; example < num_examples; example++)
@@ -96,7 +96,7 @@ le_activation_layer_forward_prop(LeLayer *layer, LeTensor *input)
 }
 
 LeTensor *
-le_activation_layer_backward_prop(LeLayer *layer, LeTensor *cached_input, LeTensor *cached_output, LeTensor *output_gradient, LeList **parameters_gradient)
+le_activation_layer_backward_prop(LeLayer *layer, LeTensor *cached_input, LeTensor *cached_output, LeTensor *output_gradient, GList **parameters_gradient)
 {
     assert(layer);
     assert(cached_input);
@@ -290,7 +290,7 @@ le_activation_layer_new(const char *name, LeActivation activation)
     LeActivationLayer *self = malloc(sizeof(LeActivationLayer));
     le_layer_construct(LE_LAYER(self), name);
     le_activation_layer_class_ensure_init();
-    LE_OBJECT_GET_CLASS(self) = LE_CLASS(&klass);
+    G_OBJECT_GET_CLASS(self) = G_OBJECT_CLASS(&klass);
     self->activation = activation;
     return self;
 }

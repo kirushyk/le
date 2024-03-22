@@ -5,7 +5,6 @@
 #include <assert.h>
 #include <stdlib.h>
 #include <string.h>
-#include <le/lemem.h>
 #include <le/tensors/lematrix.h>
 #include <le/tensors/letensor-imp.h>
 
@@ -15,7 +14,7 @@ le_layer_construct(LeLayer *self, const char *name)
     assert(self);
     
     self->parameters = NULL;
-    self->name = le_strdup(name);
+    self->name = g_strdup(name);
 }
 
 LeTensor *
@@ -29,7 +28,7 @@ le_layer_forward_prop(LeLayer *self, LeTensor *input)
     return klass->forward_prop(self, input);
 }
 
-LeList *
+GList *
 le_layer_get_parameters(LeLayer *self)
 {
     assert(self);
@@ -41,7 +40,7 @@ unsigned
 le_layer_get_parameters_count(LeLayer *layer)
 {
     unsigned count = 0;
-    for (LeList *current = layer->parameters; current != NULL; current = current->next)
+    for (GList *current = layer->parameters; current != NULL; current = current->next)
     {
         count += le_shape_get_elements_count(LE_TENSOR(current->data)->shape);
     }
@@ -54,11 +53,11 @@ le_layer_append_parameter(LeLayer *self, LeTensor *parameter)
     assert(self);
     assert(parameter);
     
-    self->parameters = le_list_append(self->parameters, parameter);
+    self->parameters = g_list_append(self->parameters, parameter);
 }
 
 LeTensor * 
-le_layer_backward_prop(LeLayer *self, LeTensor *cached_input, LeTensor *cached_output, LeTensor *output_gradient, LeList **parameters_gradient)
+le_layer_backward_prop(LeLayer *self, LeTensor *cached_input, LeTensor *cached_output, LeTensor *output_gradient, GList **parameters_gradient)
 {
     assert(self);
     LeLayerClass *klass = LE_LAYER_GET_CLASS(self);

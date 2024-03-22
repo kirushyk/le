@@ -1,10 +1,10 @@
 #ifndef __LESCALAR_H__
 #define __LESCALAR_H__
 
-#include <le/lemacros.h>
+#include <glib.h>
 #include "letensor.h"
 
-LE_BEGIN_DECLS
+G_BEGIN_DECLS
 
 /// Scalar is Rank 0 Tensor with single element
 typedef LeTensor LeScalar;
@@ -18,6 +18,6 @@ LeScalar *         le_scalar_new_f64                       (double              
    double: le_scalar_new_f64 \
 )(s)
 
-LE_END_DECLS
+G_END_DECLS
 
 #endif

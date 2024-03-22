@@ -22,7 +22,7 @@ struct _LEMainWindow
     GtkWidget *drawing_area;
     MNIST *mnist;
     LeTensor *mean_inputs;
-    uint32_t index;
+    guint32 index;
     
     cairo_surface_t *image_visualisation;
 };
@@ -30,7 +30,7 @@ struct _LEMainWindow
 G_DEFINE_TYPE(LEMainWindow, le_main_window, GTK_TYPE_APPLICATION_WINDOW);
 
 static cairo_surface_t *
-render_image(uint8_t *data)
+render_image(guint8 *data)
 {
     if (data == NULL)
     {
@@ -45,7 +45,7 @@ draw_callback(GtkDrawingArea *drawing_area, cairo_t *cr, int width, int height, 
     LEMainWindow *window = LE_MAIN_WINDOW(data);
 
     cairo_scale(cr, SCALE, SCALE);
-    for (uint8_t i = 0; i < 10; i++)
+    for (guint8 i = 0; i < 10; i++)
     {
         LeTensor *image = le_tensor_pick(window->mean_inputs, i);
         cairo_surface_t *image_visualisation = render_image(image->data);
@@ -95,19 +95,19 @@ le_main_window_init(LEMainWindow *self)
     self->image_visualisation = NULL;
 
     LeTensor *mean_inputs_u32 = le_tensor_new_zeros (LE_TYPE_UINT32, le_shape_new(3, CLASSES_COUNT, 28, 28));
-    uint32_t examples_count = 60000;
-    uint32_t contrast = 5;
-    for (uint32_t i = 0; i < examples_count; i++)
+    guint32 examples_count = 60000;
+    guint32 contrast = 5;
+    for (guint32 i = 0; i < examples_count; i++)
     {
         LeTensor *current_image = le_tensor_pick(le_data_set_get_input(self->mnist->train), i);
         LeTensor *current_image_u32 = le_tensor_new_cast(current_image, LE_TYPE_UINT32);
-        uint8_t label = le_tensor_at_u8(le_data_set_get_output(self->mnist->train), i);
+        guint8 label = le_tensor_at_u8(le_data_set_get_output(self->mnist->train), i);
         LeTensor *mean_image_u32 = le_tensor_pick(mean_inputs_u32, label);
         le_tensor_add_tensor(mean_image_u32, current_image_u32);
         le_tensor_free(current_image_u32);
     }
     self->mean_inputs = le_tensor_new_uninitialized (LE_TYPE_UINT8, le_shape_new(3, CLASSES_COUNT, 28, 28));
-    for (uint32_t i = 0; i < 10; i++)
+    for (guint32 i = 0; i < 10; i++)
     {
         LeTensor *current_mean_image_u32 = le_tensor_pick(mean_inputs_u32, i);
         le_tensor_div_u32(current_mean_image_u32, examples_count / contrast);

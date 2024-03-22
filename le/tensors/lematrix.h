@@ -6,11 +6,11 @@
 #ifndef __LEMATRIX_H__
 #define __LEMATRIX_H__
 
-#include <le/lemacros.h>
+#include <glib.h>
 #include <le/math/lerand.h>
 #include "letensor.h"
 
-LE_BEGIN_DECLS
+G_BEGIN_DECLS
 
 unsigned           le_matrix_get_width                     (const LeTensor *        matrix);
 
@@ -36,7 +36,7 @@ int32_t            le_matrix_at_i32                        (const LeTensor *    
                                                             unsigned                y,
                                                             unsigned                x);
 
-uint32_t           le_matrix_at_u32                        (const LeTensor *        matrix,
+guint32           le_matrix_at_u32                        (const LeTensor *        matrix,
                                                             unsigned                y,
                                                             unsigned                x);                             
 
@@ -52,7 +52,7 @@ void               le_matrix_set_i8                        (LeTensor *          
 void               le_matrix_set_u8                        (LeTensor *              matrix,
                                                             unsigned                y,
                                                             unsigned                x,
-                                                            uint8_t                 value);
+                                                            guint8                 value);
 
 void               le_matrix_set_i16                       (LeTensor *              matrix,
                                                             unsigned                y,
@@ -62,7 +62,7 @@ void               le_matrix_set_i16                       (LeTensor *          
 void               le_matrix_set_u16                       (LeTensor *              matrix,
                                                             unsigned                y,
                                                             unsigned                x,
-                                                            uint16_t                value);
+                                                            guint16                value);
 
 void               le_matrix_set_i32                       (LeTensor *              matrix,
                                                             unsigned                y,
@@ -72,7 +72,7 @@ void               le_matrix_set_i32                       (LeTensor *          
 void               le_matrix_set_u32                       (LeTensor *              matrix,
                                                             unsigned                y,
                                                             unsigned                x,
-                                                            uint32_t                value);
+                                                            guint32                value);
 
 void               le_matrix_set_f16                       (LeTensor *              matrix,
                                                             unsigned                y,
@@ -93,11 +93,11 @@ void               le_matrix_set_f64                       (LeTensor *          
 /// @note: Make sure to pass correct argument type here
 #define le_matrix_set(m, y, x, v) _Generic((v), \
    int8_t: le_matrix_set_i8, \
-   uint8_t: le_matrix_set_u8, \
+   guint8: le_matrix_set_u8, \
    int16_t: le_matrix_set_i16, \
-   uint16_t: le_matrix_set_u16, \
+   guint16: le_matrix_set_u16, \
    int32_t: le_matrix_set_i32, \
-   uint32_t: le_matrix_set_u32, \
+   guint32: le_matrix_set_u32, \
    float: le_matrix_set_f32, \
    double: le_matrix_set_f64 \
 )(m, y, x, v)
@@ -150,6 +150,6 @@ LeTensor *         le_matrix_get_columns_copy              (const LeTensor *    
 
 void               le_matrix_apply_softmax                 (LeTensor *              matrix);
 
-LE_END_DECLS
+G_END_DECLS
 
 #endif

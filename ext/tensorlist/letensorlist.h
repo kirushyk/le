@@ -6,9 +6,9 @@
 
 #include <le/le.h>
 
-void     le_tensorlist_save (LeList     *tensors,
+void     le_tensorlist_save (GList     *tensors,
                              const char *filename);
 
-LeList * le_tensorlist_load (const char *filename);
+GList * le_tensorlist_load (const char *filename);
 
 #endif

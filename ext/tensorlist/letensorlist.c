@@ -17,27 +17,27 @@ le_tensor_serialize(LeTensor *tensor, FILE *fout)
     assert(tensor);
     assert(fout);
 
-    fwrite((uint8_t *)&tensor->element_type, sizeof(uint8_t), 1, fout);
-    fwrite((uint8_t *)&tensor->shape->num_dimensions, sizeof(uint8_t), 1, fout);
-    fwrite(tensor->shape->sizes, sizeof(uint32_t), tensor->shape->num_dimensions, fout);
+    fwrite((guint8 *)&tensor->element_type, sizeof(guint8), 1, fout);
+    fwrite((guint8 *)&tensor->shape->num_dimensions, sizeof(guint8), 1, fout);
+    fwrite(tensor->shape->sizes, sizeof(guint32), tensor->shape->num_dimensions, fout);
     unsigned elements_count = le_shape_get_elements_count(tensor->shape);
     fwrite(tensor->data, le_type_size(tensor->element_type), elements_count, fout);
 }
 
 void
-le_tensorlist_save(LeList *tensors, const char *filename)
+le_tensorlist_save(GList *tensors, const char *filename)
 {
     FILE *fout = fopen(filename, "wb");
     if (fout)
     {
-        uint8_t version = 2;
+        guint8 version = 2;
         fwrite(&version, sizeof(version), 1, fout);
-        uint16_t num_tensors = 0;
-        /// @todo: Make this be LeList function
-        for (LeList *current = tensors; current != NULL; current = current->next)
+        guint16 num_tensors = 0;
+        /// @todo: Make this be GList function
+        for (GList *current = tensors; current != NULL; current = current->next)
             num_tensors++;
         fwrite(&num_tensors, sizeof(num_tensors), 1, fout);
-        for (LeList *current = tensors; current != NULL; current = current->next)
+        for (GList *current = tensors; current != NULL; current = current->next)
         {
             le_tensor_serialize(LE_TENSOR(current->data), fout);
         }
@@ -50,13 +50,13 @@ le_tensor_deserialize(FILE *fin)
 {
     assert(fin);
 
-    LeTensor *self = malloc(sizeof(struct LeTensor));
-    fread((uint8_t *)&self->element_type, sizeof(uint8_t), 1, fin);
+    LeTensor *self = g_new0 (LeTensor, 1);
+    fread((guint8 *)&self->element_type, sizeof(guint8), 1, fin);
 
-    self->shape = malloc(sizeof(LeShape));
-    fread((uint8_t *)&self->shape->num_dimensions, sizeof(uint8_t), 1, fin);
-    self->shape->sizes = malloc(self->shape->num_dimensions * sizeof(uint32_t));
-    fread(self->shape->sizes, sizeof(uint32_t), self->shape->num_dimensions, fin);
+    self->shape = g_new0 (LeShape, 1);
+    fread((guint8 *)&self->shape->num_dimensions, sizeof(guint8), 1, fin);
+    self->shape->sizes = g_new0 (guint32, self->shape->num_dimensions);
+    fread(self->shape->sizes, sizeof(guint32), self->shape->num_dimensions, fin);
 
     if (self->shape->num_dimensions > 0)
         self->stride = le_shape_get_size(self->shape, -1);
@@ -65,29 +65,29 @@ le_tensor_deserialize(FILE *fin)
     self->owns_data = true;
     self->device_type = LE_DEVICE_TYPE_CPU;
     unsigned elements_count = le_shape_get_elements_count(self->shape);
-    self->data = malloc(elements_count * le_type_size(self->element_type));
+    self->data = g_malloc (elements_count * le_type_size(self->element_type));
     fread(self->data, le_type_size(self->element_type), elements_count, fin);
     
     return self;
 }
 
-LeList *
+GList *
 le_tensorlist_load(const char *filename)
 {
-    LeList *list = NULL;
+    GList *list = NULL;
     FILE *fin = fopen(filename, "rb");
     if (fin)
     {
-        uint8_t version = 0;
+        guint8 version = 0;
         fread(&version, sizeof(version), 1, fin);
         if (version <= 2)
         {
-            uint16_t num_tensors = 0;
+            guint16 num_tensors = 0;
             fread(&num_tensors, sizeof(num_tensors), 1, fin);
-            for (uint16_t i = 0; i < num_tensors; i++)
+            for (guint16 i = 0; i < num_tensors; i++)
             {
                 LeTensor *tensor = le_tensor_deserialize(fin);
-                list = le_list_append(list, tensor);
+                list = g_list_append(list, tensor);
             }
         }
         else

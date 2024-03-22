@@ -2,7 +2,6 @@
 # Released under the MIT license. See LICENSE file in the project root for full license information.
 
 le_sources = [
-    'lelist.c',
     'ledataset.c',
     'math/lerand.c',
     'math/leclamp.c',
@@ -13,26 +12,26 @@ le_sources = [
     'tensors/letensor-cast.c',
     'tensors/lescalar.c',
     'tensors/lematrix.c',
-    'models/leknn.c',
-    'models/lelogistic.c',
-    'models/le1layernn.c',
+    # 'models/leknn.c',
+    # 'models/lelogistic.c',
+    # 'models/le1layernn.c',
     'models/lemodel.c',
-    'models/lesvm.c',
+    # 'models/lesvm.c',
     'models/layers/lelayer.c',
     'models/layers/ledenselayer.c',
-    'models/layers/leactivationlayer.c',
-    'models/layers/leconv2d.c',
+    # 'models/layers/leactivationlayer.c',
+    # 'models/layers/leconv2d.c',
     'models/lesequential.c',
     'optimization/leoptimizer.c',
     'optimization/lebgd.c',
-    'optimization/lesgd.c',
-    'optimization/adam.c',
+    # 'optimization/lesgd.c',
+    # 'optimization/adam.c',
     'leloss.c',
-    'lemem.c',
     'lelog.c'
 ]
 
 le_deps = [
+    glib,
     cc.find_library('m')
 ]
 
@@ -70,8 +69,6 @@ install_headers('optimization/leoptimizer.h', subdir : 'le/optimization')
 install_headers('optimization/lebgd.h', subdir : 'le/optimization')
 install_headers('optimization/lesgd.h', subdir : 'le/optimization')
 install_headers('optimization/adam.h', subdir : 'le/optimization')
-install_headers('lelist.h', subdir : 'le')
-install_headers('leobject.h', subdir : 'le')
 install_headers('models/lesequential.h', subdir : 'le/models')
 install_headers('models/lesvm.h', subdir : 'le/models')
 install_headers('models/layers/leconv2d.h', subdir : 'le/models/layers')
@@ -82,7 +79,6 @@ install_headers('models/lemodel.h', subdir : 'le/models')
 install_headers('models/le1layernn.h', subdir : 'le/models')
 install_headers('models/lelogistic.h', subdir : 'le/models')
 install_headers('le.h', subdir : 'le')
-install_headers('lemem.h', subdir : 'le')
 install_headers('tensors/letype.h', subdir : 'le')
 install_headers('tensors/leshape.h', subdir : 'le')
 install_headers('tensors/lematrix.h', subdir : 'le/tensors')

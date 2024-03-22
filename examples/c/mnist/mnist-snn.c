@@ -93,10 +93,10 @@ main(int argc, char *argv[])
 
     if (filename)
     {
-        LeList *parameters_iterator = NULL;
-        LeList *parameters = le_model_get_parameters(LE_MODEL(neural_network));
-        LeList *loaded_parameters_iterator = NULL;
-        LeList *loaded_parameters = le_tensorlist_load(filename);
+        GList *parameters_iterator = NULL;
+        GList *parameters = le_model_get_parameters(LE_MODEL(neural_network));
+        GList *loaded_parameters_iterator = NULL;
+        GList *loaded_parameters = le_tensorlist_load(filename);
         
         if (loaded_parameters)
         {

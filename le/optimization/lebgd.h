@@ -9,17 +9,16 @@
 #define __LEBGD_H__
 
 #include "leoptimizer.h"
-#include <le/lelist.h>
-#include <le/lemacros.h>
+#include <glib.h>
 
-LE_BEGIN_DECLS
+G_BEGIN_DECLS
 
 typedef struct LeBGD LeBGD;
 
 #define LE_BGD(o) ((LeBGD *)(o))
 
-LeBGD *            le_bgd_new_simple                       (LeList *                parameters,
-                                                            LeList *                gradients,
+LeBGD *            le_bgd_new_simple                       (GList *                parameters,
+                                                            GList *                gradients,
                                                             float                   learning_rate);
 
 LeBGD *            le_bgd_new                              (LeModel *               model,
@@ -35,6 +34,6 @@ void               le_bgd_epoch                            (LeOptimizer *       
 
 void               le_bgd_free                             (LeBGD *                 optimizer);
 
-LE_END_DECLS
+G_END_DECLS
 
 #endif

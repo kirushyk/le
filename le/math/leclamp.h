@@ -1,14 +1,14 @@
-#ifndef __LECLAMP_H__
-#define __LECLAMP_H__
+#ifndef __LE__MATH__CLAMP_H__
+#define __LE__MATH__CLAMP_H__
 
-#include <le/lemacros.h>
+#include <glib.h>
 
-LE_BEGIN_DECLS
+G_BEGIN_DECLS
 
-float                   le_clamp_f32                       (float                   v,
-                                                            float                   min,
-                                                            float                   max);
+float le_clamp_f32 (float v,
+                    float min,
+                    float max);
 
-LE_END_DECLS
+G_END_DECLS
 
 #endif

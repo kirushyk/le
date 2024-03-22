@@ -53,7 +53,7 @@ le_conv2d_forward_prop(LeLayer *layer, LeTensor *input)
 
 LeTensor *
 le_conv2d_backward_prop(LeLayer *layer, LeTensor *cached_input, LeTensor *cached_output,
-                        LeTensor *output_gradient, LeList **parameters_gradient)
+                        LeTensor *output_gradient, GList **parameters_gradient)
 {
     return NULL;
 }
@@ -87,7 +87,7 @@ le_conv2d_new(const char *name, unsigned filter_size, unsigned num_channels,
     LeConv2D *self = malloc(sizeof(LeConv2D));
     le_layer_construct(LE_LAYER(self), name);
     le_conv2d_class_ensure_init();
-    LE_OBJECT_GET_CLASS(self) = LE_CLASS(&klass);
+    G_OBJECT_GET_CLASS(self) = G_OBJECT_CLASS(&klass);
     self->padding = padding;
     self->stride = stride;
     LeShape *weights_shape = le_shape_new(4, filter_size, filter_size, num_channels, num_filters);

@@ -90,13 +90,13 @@ le_accelerate_rbf(const LeTensor *a, const LeTensor *b, float sigma)
     assert(a->shape->sizes[1] == 1);
     assert(b->shape->sizes[1] == 1);
     
-    float *c = malloc(sizeof(float) * a->shape->sizes[0]);
+    float *c = g_new0(float, a->shape->sizes[0]);
     
     float result;
     vDSP_vsub(a->data, a->stride, b->data, b->stride, c, 1, a->shape->sizes[0]);
     vDSP_svesq(c, 1, &result, a->shape->sizes[0]);
 
-    free(c);
+    g_free (c);
     
     return expf(-result / (2.0f * sigma * sigma));
 }

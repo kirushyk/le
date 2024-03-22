@@ -6,13 +6,13 @@
 
 #include <stddef.h>
 #include <stdint.h>
-#include <le/lemacros.h>
+#include <glib.h>
 
-LE_BEGIN_DECLS
+G_BEGIN_DECLS
 
-#define F16_0 (uint16_t)0
-#define F16_1 (uint16_t)15360
-typedef uint16_t lehalf;
+#define F16_0 (guint16)0
+#define F16_1 (guint16)15360
+typedef guint16 lehalf;
 
 typedef enum LeType
 {
@@ -34,6 +34,6 @@ size_t             le_type_size                            (LeType              
 
 const char *       le_type_name                            (LeType                  type);
 
-LE_END_DECLS
+G_END_DECLS
 
 #endif

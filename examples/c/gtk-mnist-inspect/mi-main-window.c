@@ -23,7 +23,7 @@ struct _LEMainWindow
     
     MNIST *data_set;
     LeTensor *input, *output;
-    uint32_t index;
+    guint32 index;
     
     cairo_surface_t *image_visualisation;
 };
@@ -34,7 +34,7 @@ struct _LEMainWindow
 G_DEFINE_TYPE(LEMainWindow, le_main_window, GTK_TYPE_APPLICATION_WINDOW);
 
 static cairo_surface_t *
-render_image(uint8_t *data)
+render_image(guint8 *data)
 {
     cairo_surface_t *surface = cairo_image_surface_create(CAIRO_FORMAT_A8, 28, 28);
     
@@ -46,7 +46,7 @@ render_image(uint8_t *data)
     cairo_surface_flush(surface);
     guint8 *pixmap = cairo_image_surface_get_data(surface);
     int stride = cairo_image_surface_get_stride(surface);
-    for (uint32_t y = 0; y < 28; y++) {
+    for (guint32 y = 0; y < 28; y++) {
         memcpy(pixmap + y * stride, data + y * 28, 28);
     }
     
@@ -155,7 +155,7 @@ index_changed(GtkSpinButton *spin_button, gpointer data)
 {
     LEMainWindow *window = LE_MAIN_WINDOW(data);
         
-    window->index = (uint32_t)gtk_spin_button_get_value(spin_button);
+    window->index = (guint32)gtk_spin_button_get_value(spin_button);
     
     update_image(window);
 }

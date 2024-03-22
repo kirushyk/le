@@ -4,33 +4,28 @@
 #ifndef __LE_MODEL_H__
 #define __LE_MODEL_H__
 
-#include <le/lemacros.h>
-#include "../leobject.h"
+#include <glib.h>
+#include <glib-object.h>
 #include <le/tensors/letensor.h>
-#include "../lelist.h"
 
-LE_BEGIN_DECLS
+G_BEGIN_DECLS
 
-typedef struct LeModel
+#define LE_TYPE_MODEL (le_model_get_type ())
+G_DECLARE_DERIVABLE_TYPE (LeModel, le_model, LE, MODEL, GObject);
+
+struct _LeModelClass
 {
-    LeObject  parent;
-    LeList   *parameters;
-} LeModel;
+    GObjectClass parent;
+    LeTensor * (*predict)         (struct _LeModel *model, const LeTensor *x);
+    GList *    (*get_gradients)   (struct _LeModel *model, const LeTensor *x, const LeTensor *y);
+    float      (*train_iteration) (struct _LeModel *model);
+    gpointer padding[12];
+};
 
-#define LE_MODEL(obj) ((LeModel *)(obj))
-
-typedef struct LeModelClass
-{
-    LeClass parent;
-    LeTensor * (*predict)         (LeModel *model, const LeTensor *x);
-    LeList *   (*get_gradients)   (LeModel *model, const LeTensor *x, const LeTensor *y);
-    float      (*train_iteration) (LeModel *model);
-} LeModelClass;
+// #define LE_MODEL(obj) ((LeModel *)(obj))
 
 #define LE_MODEL_CLASS(klass) ((LeModelClass *)(klass))
-#define LE_MODEL_GET_CLASS(obj) (LE_MODEL_CLASS(LE_OBJECT_GET_CLASS(obj)))
-
-void                    le_model_construct                 (LeModel *               model);
+#define LE_MODEL_GET_CLASS(obj) (LE_MODEL_CLASS(G_OBJECT_GET_CLASS(obj)))
 
 /** @note: This function is to be used by instances of subclasses of LeModel
     to list its trainable parameters */
@@ -40,16 +35,16 @@ void                    le_model_append_parameter          (LeModel *           
 LeTensor *              le_model_predict                   (LeModel *               model,
                                                             const LeTensor *        x);
 
-LeList *                le_model_get_gradients             (LeModel *               model,
+GList *                 le_model_get_gradients             (LeModel *               model,
                                                             const LeTensor *        x,
                                                             const LeTensor *        y);
 
 float                   le_model_train_iteration           (LeModel *               model);
 
-LeList *                le_model_get_parameters            (LeModel *               model);
+GList *                 le_model_get_parameters            (LeModel *               model);
 
 void                    le_model_free                      (LeModel *               model);
 
-LE_END_DECLS
+G_END_DECLS
 
 #endif

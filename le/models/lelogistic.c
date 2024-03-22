@@ -47,7 +47,7 @@ void
 le_logistic_classifier_construct(LeLogisticClassifier *self)
 {
     le_model_construct(LE_MODEL(self));
-    LE_OBJECT_GET_CLASS(self) = LE_CLASS(le_logistic_classifier_class_ensure_init());
+    G_OBJECT_GET_CLASS(self) = G_OBJECT_CLASS(le_logistic_classifier_class_ensure_init());
     self->weights = NULL;
     self->bias = 0;
     self->polynomia_degree = 0;
@@ -150,5 +150,5 @@ void
 le_logistic_classifier_free(LeLogisticClassifier *self)
 {
     le_tensor_free(self->weights);
-    free(self);
+    g_free (self);
 }

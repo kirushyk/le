@@ -31,20 +31,20 @@ le_shape_new(unsigned num_dimensions, ...)
 LeShape *
 le_shape_new_uninitialized(unsigned num_dimensions)
 {
-    LeShape *self = malloc(sizeof(LeShape));
+    LeShape *self = g_new0 (LeShape, 1);
     self->num_dimensions = num_dimensions;
-    self->sizes = malloc(num_dimensions * sizeof(uint32_t));
+    self->sizes = g_new0 (guint32, num_dimensions);
     
     return self;
 }
 
-uint32_t *
+guint32 *
 le_shape_get_data(LeShape *shape)
 {
     return shape->sizes;
 }
 
-uint32_t
+guint32
 le_shape_get_size(LeShape *shape, int dimension)
 {
     assert(shape);
@@ -54,7 +54,7 @@ le_shape_get_size(LeShape *shape, int dimension)
 }
 
 void
-le_shape_set_size(LeShape *shape, unsigned dimension, uint32_t size)
+le_shape_set_size(LeShape *shape, unsigned dimension, guint32 size)
 {
     assert(shape);
     assert(dimension < shape->num_dimensions);
@@ -65,10 +65,10 @@ LeShape *
 le_shape_copy(LeShape *another)
 {
     assert(another);
-    LeShape *self = malloc(sizeof(LeShape));
+    LeShape *self = g_new0 (LeShape, 1);
     self->num_dimensions = another->num_dimensions;
-    size_t size = self->num_dimensions * sizeof(uint32_t);
-    self->sizes = malloc(size);
+    size_t size = self->num_dimensions * sizeof(guint32);
+    self->sizes = g_malloc (size);
     memcpy(self->sizes, another->sizes, size);
     return self;
 }
@@ -77,10 +77,10 @@ LeShape *
 le_shape_lower_dimension(LeShape *another)
 {
     /// @todo: Add assertions
-    LeShape *self = malloc(sizeof(LeShape));
+    LeShape *self = g_new0 (LeShape, 1);
     self->num_dimensions = another->num_dimensions - 1;
-    size_t size = self->num_dimensions * sizeof(uint32_t);
-    self->sizes = malloc(size);
+    size_t size = self->num_dimensions * sizeof(guint32);
+    self->sizes = g_malloc (size);
     memcpy(self->sizes, another->sizes + 1, size);
     return self;
 }
@@ -90,8 +90,8 @@ le_shape_free(LeShape *self)
 {
     if (self)
     {
-        free(self->sizes);
-        free(self);
+        g_free (self->sizes);
+        g_free (self);
     }
 }
 
@@ -134,13 +134,13 @@ le_shape_to_cstr(LeShape *shape)
     return buffer;
 }
 
-uint32_t
+guint32
 le_shape_get_elements_count(LeShape *shape)
 {
     assert(shape);
     assert(shape->sizes);
     
-    uint32_t count = 0;
+    guint32 count = 0;
     if (shape)
     {
         count = 1;
@@ -152,13 +152,13 @@ le_shape_get_elements_count(LeShape *shape)
     return count;
 }
 
-uint32_t
+guint32
 le_shape_get_regions_count(LeShape *shape)
 {
     assert(shape);
     assert(shape->sizes);
     
-    uint32_t count = 0;
+    guint32 count = 0;
     if (shape)
     {
         count = 1;

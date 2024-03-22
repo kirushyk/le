@@ -45,7 +45,7 @@ void
 le_knn_construct(LeKNN *self)
 {
     le_model_construct(LE_MODEL(self));
-    LE_OBJECT_GET_CLASS(self) = LE_CLASS(le_knn_class_ensure_init());
+    G_OBJECT_GET_CLASS(self) = G_OBJECT_CLASS(le_knn_class_ensure_init());
     self->x = NULL;
     self->y= NULL;
     self->k = 1;
@@ -81,8 +81,8 @@ le_knn_predict(LeKNN *self, const LeTensor *x)
     unsigned features_count = le_matrix_get_height(x);
     assert(le_matrix_get_height(self->x) == features_count);
     LeTensor *h = le_matrix_new_uninitialized(LE_TYPE_FLOAT32, 1, test_examples_count);
-    float *squared_distances = (float *)malloc(train_examples_count * sizeof(float));
-    unsigned *indices = (unsigned *)malloc(self->k * sizeof(unsigned));
+    float *squared_distances = g_new0 (gfloat, train_examples_count);
+    unsigned *indices = g_new0(unsigned, self->k);
     for (unsigned i = 0; i < test_examples_count; i++)
     {
         for (unsigned j = 0; j < train_examples_count; j++)
@@ -119,8 +119,8 @@ le_knn_predict(LeKNN *self, const LeTensor *x)
         prediction /= self->k;
         le_matrix_set_f32(h, 0, i, prediction);
     }
-    free(indices);
-    free(squared_distances);
+    g_free (indices);
+    g_free (squared_distances);
     return h;
 }
 

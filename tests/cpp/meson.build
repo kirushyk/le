@@ -10,10 +10,11 @@ foreach filename : cpp_tests
             inc_cpp
         ],
         link_with: [
-            le_tests_deps,
+            le_tests_link_with,
             le_cpp
         ],
-        install: false
+        install: false,
+        dependencies: glib
     )
     test(test_name, exe, timeout : 3 * 60, suite: 'C++')
 endforeach

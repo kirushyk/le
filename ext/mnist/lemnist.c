@@ -17,7 +17,7 @@ le_mnist_load(const char *path)
         path = MNIST_DATASET_INSTALL_PATH;
     }
 
-    MNIST *mnist = malloc(sizeof(MNIST));
+    MNIST *mnist = g_new0 (MNIST, 1);
     char buffer[1024];
     
     sprintf(buffer, "%s/train-images-idx3-ubyte.gz", path);
@@ -42,6 +42,6 @@ le_mnist_free(MNIST *mnist)
     {
         le_data_set_free(mnist->train);
         le_data_set_free(mnist->test);
-        free(mnist);
+        g_free (mnist);
     }
 }

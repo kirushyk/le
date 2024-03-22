@@ -15,9 +15,9 @@
 
 struct IDXHeader
 {
-    uint16_t zeros;
-    uint8_t type;
-    uint8_t dimensionality;
+    guint16 zeros;
+    guint8 type;
+    guint8 dimensionality;
 };
 
 LeTensor *
@@ -69,7 +69,7 @@ le_idx_read(const char *filename)
             fread(shape_bytes, sizeof(int32_t), header.dimensionality, fin);
 
             LeShape *shape = le_shape_new_uninitialized(header.dimensionality);
-            for (uint8_t i = 0; i < header.dimensionality; i++)
+            for (guint8 i = 0; i < header.dimensionality; i++)
             {
                 le_shape_set_size(shape, i, bswap_32(shape_bytes[i]));
             }
@@ -137,7 +137,7 @@ le_idx_gz_read(const char *filename)
             gzread(fin, shape_bytes, sizeof(int32_t) * header.dimensionality);
 
             LeShape *shape = le_shape_new_uninitialized(header.dimensionality);
-            for (uint8_t i = 0; i < header.dimensionality; i++)
+            for (guint8 i = 0; i < header.dimensionality; i++)
             {
                 le_shape_set_size(shape, i, bswap_32(shape_bytes[i]));
             }

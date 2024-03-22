@@ -12,6 +12,7 @@ project('le', 'c',
 
 cc = meson.get_compiler('c')
 inc = include_directories('.')
+glib = dependency('glib-2.0')
 
 subdir('backends')
 subdir('le')

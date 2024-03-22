@@ -8,11 +8,10 @@
 #ifndef __LE__OPTIMIZATION__ADAM_H__
 #define __LE__OPTIMIZATION__ADAM_H__
 
-#include <le/lemacros.h>
-#include <le/lelist.h>
+#include <glib.h>
 #include "leoptimizer.h"
 
-LE_BEGIN_DECLS
+G_BEGIN_DECLS
 
 typedef struct LeAdam LeAdam;
 
@@ -32,6 +31,6 @@ void     le_adam_epoch (LeOptimizer * optimizer);
 
 void     le_adam_free  (LeAdam *      optimizer);
 
-LE_END_DECLS
+G_END_DECLS
 
 #endif

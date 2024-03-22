@@ -6,7 +6,7 @@
 
 #include <le/le.h>
 
-LE_BEGIN_DECLS
+G_BEGIN_DECLS
 
 LeTensor * le_openblas_matrix_new_product         (const LeTensor *a,
                                                    bool            transpose_a,
@@ -16,6 +16,6 @@ LeTensor * le_openblas_matrix_new_product         (const LeTensor *a,
 float      le_openblas_dot_product                (const LeTensor *a,
                                                    const LeTensor *b);
 
-LE_END_DECLS
+G_END_DECLS
 
 #endif

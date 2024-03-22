@@ -8,11 +8,10 @@
 #ifndef __LESGD_H__
 #define __LESGD_H__
 
-#include <le/lemacros.h>
-#include <le/lelist.h>
+#include <glib.h>
 #include "leoptimizer.h"
 
-LE_BEGIN_DECLS
+G_BEGIN_DECLS
 
 typedef struct LeSGD LeSGD;
 
@@ -31,6 +30,6 @@ void               le_sgd_epoch                            (LeOptimizer *       
 
 void               le_sgd_free                             (LeSGD *                 optimizer);
 
-LE_END_DECLS
+G_END_DECLS
 
 #endif

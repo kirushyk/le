@@ -4,25 +4,29 @@
 executable('support-vector-machine', 'support-vector-machine.c',
     include_directories: inc,
     link_with: le,
-    install: false
+    install: false,
+    dependencies: glib
 )
 
 executable('polynomial-logistic-regression', 'polynomial-logistic-regression.c',
     include_directories: inc,
     link_with: le,
-    install: false
+    install: false,
+    dependencies: glib
 )
 
 executable('polynomia', 'polynomia.c',
     include_directories: inc,
     link_with: le,
-    install: false
+    install: false,
+    dependencies: glib
 )
 
 executable('shallow-neural-network', 'shallow-neural-network.c',
     include_directories: inc,
     link_with: le,
-    install: false
+    install: false,
+    dependencies: glib
 )
 
 subdir('mnist')

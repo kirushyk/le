@@ -6,7 +6,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdbool.h>
-#include <le/lelist.h>
+#include <glib.h>
 
 static const char *le_level_name[(size_t)LE_LOG_LEVEL_LAST] =
 {
@@ -24,7 +24,7 @@ category_present(const char *category)
         return false;
 
     static bool categories_parsed = false;
-    static LeList *categories_requested = NULL;
+    static GList *categories_requested = NULL;
     if (!categories_parsed)
     {
         char *sep = ",";
@@ -33,12 +33,12 @@ category_present(const char *category)
              word;
              word = strtok(NULL, sep))
         {
-            categories_requested = le_list_prepend(categories_requested, word);
+            categories_requested = g_list_prepend(categories_requested, word);
         }
 
         categories_parsed = true;
     }
-    for (LeList *categories_iterator = categories_requested;
+    for (GList *categories_iterator = categories_requested;
          categories_iterator;
          categories_iterator = categories_iterator->next)
     {
