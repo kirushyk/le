@@ -13,7 +13,7 @@ le_sources = [
     'tensors/lescalar.c',
     'tensors/lematrix.c',
     # 'models/leknn.c',
-    # 'models/lelogistic.c',
+    'models/lelogistic.c',
     # 'models/le1layernn.c',
     'models/lemodel.c',
     # 'models/lesvm.c',

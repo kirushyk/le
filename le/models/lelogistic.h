@@ -5,13 +5,16 @@
 #define __LELOGISTIC_H__
 
 #include <glib.h>
+#include "lemodel.h"
 #include <le/tensors/letensor.h>
 
 G_BEGIN_DECLS
 
-typedef struct LeLogisticClassifier LeLogisticClassifier;
+G_DECLARE_FINAL_TYPE (LeLogisticClassifier, le_logistic_classifier, LE, LOGISTIC_CLASSIFIER, LeModel);
 
-#define LE_LOGISTIC_CLASSIFIER(obj) ((LeLogisticClassifier *)(obj))
+// typedef struct LeLogisticClassifier LeLogisticClassifier;
+
+// #define LE_LOGISTIC_CLASSIFIER(obj) ((LeLogisticClassifier *)(obj))
 
 LeLogisticClassifier * le_logistic_classifier_new     (void);
 
@@ -36,8 +39,6 @@ void                    le_logistic_classifier_train       (LeLogisticClassifier
                                                             const LeTensor *        y_train,
                                                             LeLogisticClassifierTrainingOptions
                                                                                     options);
-
-void                    le_logistic_classifier_free        (LeLogisticClassifier *  classifier);
 
 G_END_DECLS
 
