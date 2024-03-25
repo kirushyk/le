@@ -53,7 +53,10 @@ foreach filenames : le_tests
     exe = executable(test_name, filenames,
         include_directories: inc,
         link_with: le_tests_link_with,
-        dependencies: glib,
+        dependencies: [
+            glib,
+            gobject
+        ],
         install: false
     )
     test(test_name, exe, timeout : 3 * 60)

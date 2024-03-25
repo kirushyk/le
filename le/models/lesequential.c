@@ -94,7 +94,7 @@ le_sequential_new(void)
 void
 le_sequential_add(LeSequential *self, LeLayer *layer)
 {
-    LE_INFO("Adding New Layer: %s", layer->name);
+    LE_INFO("Adding New Layer: %s", le_layer_get_name (layer));
 
     LeSequentialPrivate *priv = le_sequential_get_instance_private (self);
     priv->layers = g_list_append (priv->layers, layer);
@@ -137,7 +137,7 @@ forward_propagation(LeSequential *self, const LeTensor *x, GList **inputs)
             *inputs = g_list_append(*inputs, le_tensor_new_copy(signal));
         }
         // LE_INFO("signal =\n%s", le_tensor_to_cstr(signal));
-        // LE_INFO("Layer %s Forward", current_layer->name);
+        // LE_INFO("Layer %s Forward", le_layer_get_name (current_layer));
         LeTensor *output = le_layer_forward_prop(current_layer, signal);
         le_tensor_free(signal);
         signal = output;
@@ -211,7 +211,7 @@ le_sequential_get_gradients(LeSequential *self, const LeTensor *x, const LeTenso
     if (current_layer_iterator && current_layer_iterator->data)
     {
         last_layer = LE_ACTIVATION_LAYER(current_layer_iterator->data);
-        activation_loss_backward = activation_loss_backward_fn(last_layer->activation, priv->loss);
+        activation_loss_backward = activation_loss_backward_fn (le_activation_layer_get_activation (last_layer), priv->loss);
     }
     if (last_layer && activation_loss_backward)
     {
@@ -235,7 +235,7 @@ le_sequential_get_gradients(LeSequential *self, const LeTensor *x, const LeTenso
          current_layer_iterator = current_layer_iterator->prev, cached_inputs_iterator = cached_inputs_iterator->prev)
     {
         LeLayer *current_layer = LE_LAYER(current_layer_iterator->data);
-        LE_INFO("Layer %s Backward", current_layer->name);
+        LE_INFO("Layer %s Backward", le_layer_get_name (current_layer));
         GList *current_layer_param_gradients = NULL;
         LeTensor *cached_input = LE_TENSOR(cached_inputs_iterator->data);
         LeTensor *cached_output = NULL;
@@ -279,7 +279,7 @@ le_sequential_estimate_gradients(LeSequential *self, const LeTensor *x, const Le
 
     GList *grad_estimates = NULL;
 
-    for (GList *params_iterator = le_model_get_parameters (self);
+    for (GList *params_iterator = le_model_get_parameters (LE_MODEL (self));
          params_iterator;
          params_iterator = params_iterator->next)
     {
@@ -369,7 +369,7 @@ le_sequential_to_dot(LeSequential *self, const char *filename)
         LeLayer *current_layer = LE_LAYER(current->data);
         assert(current_layer);
         fprintf(fout, "%s [shape=record label=\"{%s|%s|%d Parameters}\"];\n",
-            current_layer->name, current_layer->name,
+            le_layer_get_name (current_layer), le_layer_get_name (current_layer),
             le_layer_get_description(current_layer),
             le_layer_get_parameters_count(current_layer));
         const char *next_node = "__cost";
@@ -378,12 +378,12 @@ le_sequential_to_dot(LeSequential *self, const char *filename)
             LeLayer *next_layer = LE_LAYER(current->next->data);
             assert(next_layer);
 
-            next_node = next_layer->name;
+            next_node = le_layer_get_name (next_layer);
         }
             
         LeShape *current_laye_output_shape = le_layer_get_output_shape(current_layer);
         fprintf(fout, "%s -> %s [label=\"%s\"];\n", 
-            current_layer->name, next_node,
+            le_layer_get_name (current_layer), next_node,
             le_shape_to_cstr(current_laye_output_shape));
         le_shape_free(current_laye_output_shape);
 

@@ -11,11 +11,62 @@
 
 #define DEFAULT_LOG_CATEGORY "activation-layer"
 
-typedef struct LeActivationLayerClass
+struct _LeActivationLayer
 {
-    LeLayerClass parent;
+    LeLayer parent;
+};
+
+// typedef struct LeActivationLayerClass
+// {
+//     LeLayerClass parent;
     
-} LeActivationLayerClass;
+// } LeActivationLayerClass;
+
+typedef struct _LeActivationLayerPrivate
+{
+    LeActivation activation;
+} LeActivationLayerPrivate;
+
+static void le_activation_layer_class_init (LeActivationLayerClass * klass);
+static void le_activation_layer_init (LeActivationLayer * self);
+G_DEFINE_FINAL_TYPE_WITH_PRIVATE (LeActivationLayer, le_activation_layer, LE_TYPE_LAYER);
+
+static void
+le_activation_layer_dispose (GObject * object)
+{
+  G_OBJECT_CLASS (le_activation_layer_parent_class)->dispose (object);
+}
+
+static void
+le_activation_layer_finalize (GObject * object)
+{
+}
+
+LeTensor * le_activation_layer_forward_prop(LeLayer *layer, LeTensor *input);
+LeTensor * le_activation_layer_backward_prop(LeLayer *layer, LeTensor *cached_input, LeTensor *cached_output, LeTensor *output_gradient, GList **parameters_gradient);
+LeShape * le_activation_layer_get_output_shape(LeLayer *layer);
+const char * le_activation_layer_get_description(LeLayer *layer);
+
+static void
+le_activation_layer_class_init (LeActivationLayerClass * klass)
+{
+  G_OBJECT_CLASS (klass)->dispose = le_activation_layer_dispose;
+  G_OBJECT_CLASS (klass)->finalize = le_activation_layer_finalize;
+  // LeTensor * (*forward_prop)(LeLayer *self, LeTensor *x);
+  // LeTensor * (*backward_prop)(LeLayer *self, LeTensor *x, LeTensor *y, LeTensor *dJ_dy, GList **dJ_dw);
+  // LeShape * (*get_output_shape)(LeLayer *self);
+  // const char * (*get_description)(LeLayer *self);
+  LE_LAYER_CLASS (klass)->forward_prop = le_activation_layer_forward_prop;
+  LE_LAYER_CLASS (klass)->backward_prop = le_activation_layer_backward_prop;
+  LE_LAYER_CLASS (klass)->get_output_shape = le_activation_layer_get_output_shape;
+  LE_LAYER_CLASS (klass)->get_description = le_activation_layer_get_description;
+}
+
+static void
+le_activation_layer_init (LeActivationLayer * self)
+{
+
+}
 
 #define EPSILON 1e-3f
 
@@ -60,165 +111,170 @@ le_tensor_new_softmax_jacobians_stacked(LeTensor *softmax_output)
 }
 
 LeTensor *
-le_activation_layer_forward_prop(LeLayer *layer, LeTensor *input)
+le_activation_layer_forward_prop (LeLayer * layer, LeTensor * input)
 {
-    assert(layer);
-    assert(input);
+  assert(layer);
+  assert(input);
+  
+  LeActivationLayer *self = LE_ACTIVATION_LAYER (layer);
+  LeActivationLayerPrivate *priv = le_activation_layer_get_instance_private (self);
+  g_assert_nonnull (priv);
     
-    LeActivationLayer *self = LE_ACTIVATION_LAYER(layer);
-    
-    LeTensor *output = le_tensor_new_copy(input);
-    switch (self->activation) {
-    case LE_ACTIVATION_SIGMOID:
-        /// @note: Sigmoid activation function: g'(x) = 1 / (1 + exp(-x))
-        le_tensor_apply_sigmoid(output);
-        break;
+  LeTensor *output = le_tensor_new_copy (input);
+  switch (priv->activation) {
+  case LE_ACTIVATION_SIGMOID:
+    /// @note: Sigmoid activation function: g'(x) = 1 / (1 + exp(-x))
+    le_tensor_apply_sigmoid(output);
+    break;
 
-    case LE_ACTIVATION_TANH:
-        /// @note: Hyperbolic tangent activation function: g(x) = tanh(x)
-        le_tensor_apply_tanh(output);
-        break;
+  case LE_ACTIVATION_TANH:
+    /// @note: Hyperbolic tangent activation function: g(x) = tanh(x)
+    le_tensor_apply_tanh(output);
+    break;
 
-    case LE_ACTIVATION_RELU:
-        le_tensor_apply_relu(output);
-        break;
-        
-    case LE_ACTIVATION_SOFTMAX:
-        le_matrix_apply_softmax(output);
-        break;
-        
-    case LE_ACTIVATION_LINEAR:
-    default:
-        /// @note: Linear activation function: g(x) = x
-        break;
-    }
-    return output;
+  case LE_ACTIVATION_RELU:
+    le_tensor_apply_relu(output);
+    break;
+      
+  case LE_ACTIVATION_SOFTMAX:
+    le_matrix_apply_softmax(output);
+    break;
+      
+  case LE_ACTIVATION_LINEAR:
+  default:
+    /// @note: Linear activation function: g(x) = x
+    break;
+  }
+  return output;
 }
 
 LeTensor *
-le_activation_layer_backward_prop(LeLayer *layer, LeTensor *cached_input, LeTensor *cached_output, LeTensor *output_gradient, GList **parameters_gradient)
+le_activation_layer_backward_prop (LeLayer * layer, LeTensor * cached_input, LeTensor * cached_output, LeTensor * output_gradient, GList ** parameters_gradient)
 {
-    assert(layer);
-    assert(cached_input);
-    assert(output_gradient);
-    
-    LeActivationLayer *self = LE_ACTIVATION_LAYER(layer);
-    
-    /// @note: Diagonals of Jacobians of activation function at cached_input, stacked.
-    /// Rank 2 Tensor. For element-wise activations where a0 depends only from z0.
-    LeTensor *activation_primes = NULL;
-    /// @note: Jacobians of activation function at cached_input, stacked. Rank 3 Tensor.
-    /// For activations where a0 may depend from z0, z1 and other inputs.
-    LeTensor *activation_jacobians = NULL;
-    /// @note: If both activation_primes and activation_jacobians is NULL, output gradient
-    /// will propagade backward unchanged. This is the case for linear activation function.
+  assert(layer);
+  assert(cached_input);
+  assert(output_gradient);
+  
+  LeActivationLayer *self = LE_ACTIVATION_LAYER(layer);
+  
+  /// @note: Diagonals of Jacobians of activation function at cached_input, stacked.
+  /// Rank 2 Tensor. For element-wise activations where a0 depends only from z0.
+  LeTensor *activation_primes = NULL;
+  /// @note: Jacobians of activation function at cached_input, stacked. Rank 3 Tensor.
+  /// For activations where a0 may depend from z0, z1 and other inputs.
+  LeTensor *activation_jacobians = NULL;
+  /// @note: If both activation_primes and activation_jacobians is NULL, output gradient
+  /// will propagade backward unchanged. This is the case for linear activation function.
 
-    switch (self->activation) {
-    case LE_ACTIVATION_SIGMOID:
-        /// @note: Derivative of sigmoid activation function: g'(x) = g(x)(1 - g(x))
-        if (cached_output)
-        {
-            activation_primes = le_tensor_new_copy(cached_output);
-            le_tensor_apply_x_minus_sqr_x(activation_primes);
-        }
-        else
-        {
-            activation_primes = le_tensor_new_copy(cached_input);
-            le_tensor_apply_sigmoid_prime(activation_primes);
-        }
-        break;
+  LeActivationLayerPrivate *priv = le_activation_layer_get_instance_private (self);
+  g_assert_nonnull (priv);
 
-    case LE_ACTIVATION_TANH:
-        /// @note: Derivative of hyperbolic tangent activation function: g'(x) = 1 - g(x)^2
-        if (cached_output)
-        {
-            activation_primes = le_tensor_new_copy(cached_output);
-            le_tensor_apply_sqr(activation_primes);
-            le_tensor_apply_1_minus(activation_primes);
-        }
-        else
-        {
-            activation_primes = le_tensor_new_copy(cached_input);
-            le_tensor_apply_tanh(activation_primes);
-            le_tensor_apply_sqr(activation_primes);
-            le_tensor_apply_1_minus(activation_primes);
-        }
-        break;
-
-    case LE_ACTIVATION_RELU:
-        activation_primes = le_tensor_new_copy(cached_input);
-        le_tensor_apply_gt(activation_primes, 0.0f);
-        break;
-        
-    case LE_ACTIVATION_SOFTMAX:
-        if (cached_output)
-        {
-            activation_jacobians = le_tensor_new_softmax_jacobians_stacked(cached_output);
-        }
-        else
-        {
-            LeTensor *computed_output = le_tensor_new_copy(cached_input);
-            le_matrix_apply_softmax(computed_output);
-            activation_jacobians = le_tensor_new_softmax_jacobians_stacked(computed_output);
-            le_tensor_free(computed_output);
-        }
-        break;
-        
-    case LE_ACTIVATION_LINEAR:
-    default:
-        /// @note: Derivative of linear activation function: g'(x) = 1
-        break;
-    }
-
-    LeTensor *input_gradient = NULL;
-    if (activation_primes)
+  switch (priv->activation) {
+  case LE_ACTIVATION_SIGMOID:
+    /// @note: Derivative of sigmoid activation function: g'(x) = g(x)(1 - g(x))
+    if (cached_output)
     {
-        assert(activation_jacobians == NULL);
-        /// @note: Diagonal of Jacobian of activation function.
-        /// Non-diagonal partial derivatives will be discarded.
-        /// Hadamard is used for chain rule.
-        input_gradient = le_tensor_new_copy(output_gradient);
-        le_tensor_mul(input_gradient, activation_primes);
-        le_tensor_free(activation_primes);
-    } 
-    else if (activation_jacobians)
-    {
-        assert(activation_jacobians->shape->num_dimensions == 3);
-
-        unsigned examples_count = activation_jacobians->shape->sizes[0];
-        /// @todo: Optimize, just allocate, do not copy.
-        input_gradient = le_tensor_new_copy(output_gradient);
-        for (unsigned example = 0; example < examples_count; example++)
-        {
-            LeTensor *jacobian = le_tensor_pick(activation_jacobians, example);
-            LE_INFO("jacobian =\n%s", le_tensor_to_cstr(jacobian));
-            unsigned classes_count = le_matrix_get_height(jacobian);
-            for (unsigned input = 0; input < classes_count; input++)
-            {
-                float dJ_dz = 0.0f;
-                
-                for (unsigned output = 0; output < classes_count; output++)
-                {
-                    float dJ_da = le_matrix_at_f32(output_gradient, output, example);
-                    float da_dz = le_matrix_at_f32(jacobian, output, input);
-                    dJ_dz += dJ_da * da_dz;
-                }
-            
-                le_matrix_set_f32(input_gradient, input, example, dJ_dz);
-            }
-            le_tensor_free(jacobian);
-        }
-        le_tensor_free(activation_jacobians);
+      activation_primes = le_tensor_new_copy(cached_output);
+      le_tensor_apply_x_minus_sqr_x(activation_primes);
     }
     else
     {
-        /// @note: Both activation_primes and activation_jacobians is NULL.
-        /// It means we have identity activation function with derivative equal to 1.
-        /// We will just pass output gradient backward.
-        input_gradient = le_tensor_new_copy(output_gradient);
+      activation_primes = le_tensor_new_copy(cached_input);
+      le_tensor_apply_sigmoid_prime(activation_primes);
     }
+    break;
+
+  case LE_ACTIVATION_TANH:
+    /// @note: Derivative of hyperbolic tangent activation function: g'(x) = 1 - g(x)^2
+    if (cached_output)
+    {
+      activation_primes = le_tensor_new_copy(cached_output);
+      le_tensor_apply_sqr(activation_primes);
+      le_tensor_apply_1_minus(activation_primes);
+    }
+    else
+    {
+      activation_primes = le_tensor_new_copy(cached_input);
+      le_tensor_apply_tanh(activation_primes);
+      le_tensor_apply_sqr(activation_primes);
+      le_tensor_apply_1_minus(activation_primes);
+    }
+    break;
+
+  case LE_ACTIVATION_RELU:
+    activation_primes = le_tensor_new_copy(cached_input);
+    le_tensor_apply_gt(activation_primes, 0.0f);
+    break;
+      
+  case LE_ACTIVATION_SOFTMAX:
+    if (cached_output)
+    {
+      activation_jacobians = le_tensor_new_softmax_jacobians_stacked(cached_output);
+    }
+    else
+    {
+      LeTensor *computed_output = le_tensor_new_copy(cached_input);
+      le_matrix_apply_softmax(computed_output);
+      activation_jacobians = le_tensor_new_softmax_jacobians_stacked(computed_output);
+      le_tensor_free(computed_output);
+    }
+    break;
+      
+  case LE_ACTIVATION_LINEAR:
+  default:
+    /// @note: Derivative of linear activation function: g'(x) = 1
+    break;
+  }
+
+  LeTensor *input_gradient = NULL;
+  if (activation_primes)
+  {
+    assert(activation_jacobians == NULL);
+    /// @note: Diagonal of Jacobian of activation function.
+    /// Non-diagonal partial derivatives will be discarded.
+    /// Hadamard is used for chain rule.
+    input_gradient = le_tensor_new_copy(output_gradient);
+    le_tensor_mul(input_gradient, activation_primes);
+    le_tensor_free(activation_primes);
+  } 
+  else if (activation_jacobians)
+  {
+    assert(activation_jacobians->shape->num_dimensions == 3);
+
+    unsigned examples_count = activation_jacobians->shape->sizes[0];
+    /// @todo: Optimize, just allocate, do not copy.
+    input_gradient = le_tensor_new_copy(output_gradient);
+    for (unsigned example = 0; example < examples_count; example++)
+    {
+      LeTensor *jacobian = le_tensor_pick(activation_jacobians, example);
+      LE_INFO("jacobian =\n%s", le_tensor_to_cstr(jacobian));
+      unsigned classes_count = le_matrix_get_height(jacobian);
+      for (unsigned input = 0; input < classes_count; input++)
+      {
+        float dJ_dz = 0.0f;
+        
+        for (unsigned output = 0; output < classes_count; output++)
+        {
+          float dJ_da = le_matrix_at_f32(output_gradient, output, example);
+          float da_dz = le_matrix_at_f32(jacobian, output, input);
+          dJ_dz += dJ_da * da_dz;
+        }
     
-    return input_gradient;
+        le_matrix_set_f32(input_gradient, input, example, dJ_dz);
+      }
+      le_tensor_free(jacobian);
+    }
+    le_tensor_free(activation_jacobians);
+  }
+  else
+  {
+    /// @note: Both activation_primes and activation_jacobians is NULL.
+    /// It means we have identity activation function with derivative equal to 1.
+    /// We will just pass output gradient backward.
+    input_gradient = le_tensor_new_copy(output_gradient);
+  }
+  
+  return input_gradient;
 }
 
 LeShape *
@@ -237,60 +293,74 @@ static const char *linear_description = "Identity";
 const char *
 le_activation_layer_get_description(LeLayer *layer)
 {
-    assert(layer);
-    
-    LeActivationLayer *self = LE_ACTIVATION_LAYER(layer);
+  assert(layer);
+  
+  LeActivationLayer *self = LE_ACTIVATION_LAYER(layer);
+  LeActivationLayerPrivate *priv = le_activation_layer_get_instance_private (self);
+  g_assert_nonnull (priv);
 
-    switch (self->activation) {
-    case LE_ACTIVATION_SIGMOID:
-        return sigmoid_description;
-        break;
+  switch (priv->activation) {
+  case LE_ACTIVATION_SIGMOID:
+    return sigmoid_description;
+    break;
 
-    case LE_ACTIVATION_TANH:
-        return tanh_description;
-        break;
+  case LE_ACTIVATION_TANH:
+    return tanh_description;
+    break;
 
-    case LE_ACTIVATION_RELU:
-        return relu_description;
-        break;
-        
-    case LE_ACTIVATION_SOFTMAX:
-        return softmax_description;
-        break;
-        
-    case LE_ACTIVATION_LINEAR:
-    default:
-        return linear_description;
-        break;
-    }
-        
+  case LE_ACTIVATION_RELU:
+    return relu_description;
+    break;
+      
+  case LE_ACTIVATION_SOFTMAX:
+    return softmax_description;
+    break;
+      
+  case LE_ACTIVATION_LINEAR:
+  default:
     return linear_description;
+    break;
+  }
+      
+  return linear_description;
 }
 
-static LeActivationLayerClass klass;
+// static LeActivationLayerClass klass;
 
-static void
-le_activation_layer_class_ensure_init()
-{
-    static bool initialized = false;
+// static void
+// le_activation_layer_class_ensure_init()
+// {
+//     static bool initialized = false;
     
-    if (!initialized)
-    {
-        klass.parent.forward_prop = le_activation_layer_forward_prop;
-        klass.parent.backward_prop = le_activation_layer_backward_prop;
-        klass.parent.get_output_shape = le_activation_layer_get_output_shape;
-        klass.parent.get_description = le_activation_layer_get_description;
-        initialized = true;
-    }
-}
+//     if (!initialized)
+//     {
+//         klass.parent.forward_prop = le_activation_layer_forward_prop;
+//         klass.parent.backward_prop = le_activation_layer_backward_prop;
+//         klass.parent.get_output_shape = le_activation_layer_get_output_shape;
+//         klass.parent.get_description = le_activation_layer_get_description;
+//         initialized = true;
+//     }
+// }
 
 LeActivationLayer *
-le_activation_layer_new(const char *name, LeActivation activation)
+le_activation_layer_new (const char * name, LeActivation activation)
 {
-    LeActivationLayer *self = malloc(sizeof(LeActivationLayer));
-    le_layer_construct(LE_LAYER(self), name);
-    le_activation_layer_class_ensure_init();
-    G_OBJECT_GET_CLASS(self) = G_OBJECT_CLASS(&klass);
-    self->activation = activation;
-    return self;
+  LeActivationLayer *self = g_object_new (le_activation_layer_get_type (), NULL);
+  // LeActivationLayer *self = malloc(sizeof(LeActivationLayer));
+  // le_layer_construct(LE_LAYER(self), name);
+  // le_activation_layer_class_ensure_init();
+  // G_OBJECT_GET_CLASS(self) = G_OBJECT_CLASS(&klass);
+  LeActivationLayerPrivate *priv = le_activation_layer_get_instance_private (self);
+  g_assert_nonnull (priv);
+  priv->activation = activation;
+  return self;
+}
+
+LeActivation
+le_activation_layer_get_activation (const LeActivationLayer * self)
+{
+  g_assert_nonnull (self);
+  LeActivationLayerPrivate *priv = le_activation_layer_get_instance_private ((LeActivationLayer *)self);
+  g_assert_nonnull (priv);
+  return priv->activation;
 }

@@ -19,7 +19,7 @@ le_sources = [
     # 'models/lesvm.c',
     'models/layers/lelayer.c',
     'models/layers/ledenselayer.c',
-    # 'models/layers/leactivationlayer.c',
+    'models/layers/leactivationlayer.c',
     # 'models/layers/leconv2d.c',
     'models/lesequential.c',
     'optimization/leoptimizer.c',
@@ -31,8 +31,9 @@ le_sources = [
 ]
 
 le_deps = [
+    cc.find_library('m'),
     glib,
-    cc.find_library('m')
+    gobject
 ]
 
 le_libs = []

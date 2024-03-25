@@ -18,17 +18,14 @@ typedef enum LeActivation
     LE_ACTIVATION_SOFTMAX
 } LeActivation;
 
-typedef struct LeActivationLayer
-{
-    LeLayer parent;
-    
-    LeActivation activation;
-} LeActivationLayer;
+G_DECLARE_FINAL_TYPE (LeActivationLayer, le_activation_layer, LE, ACTIVATION_LAYER, LeLayer);
 
 #define LE_ACTIVATION_LAYER(a) ((LeActivationLayer *)(a))
 
-LeActivationLayer *     le_activation_layer_new            (const char *            name,
-                                                            LeActivation            activation);
+LeActivationLayer * le_activation_layer_new            (const char *              name,
+                                                        LeActivation              activation);
+
+LeActivation        le_activation_layer_get_activation (const LeActivationLayer * layer);
 
 G_END_DECLS
 

@@ -7,23 +7,17 @@
 #include <glib.h>
 #include <glib-object.h>
 #include <le/tensors/letensor.h>
-#include <glib.h>
 
 G_BEGIN_DECLS
 
 /** @note: Abstract Layer class */
 
-typedef struct LeLayer
-{
-    GObject parent;
-    
-    GList     *parameters;
-    const char *name;
-} LeLayer;
+#define LE_TYPE_LAYER (le_layer_get_type ())
+G_DECLARE_DERIVABLE_TYPE (LeLayer, le_layer, LE, LAYER, GObject);
 
 #define LE_LAYER(a) ((LeLayer *)(a))
 
-typedef struct LeLayerClass
+typedef struct _LeLayerClass
 {
     GObjectClass parent;
     
@@ -36,13 +30,15 @@ typedef struct LeLayerClass
 #define LE_LAYER_CLASS(a) ((LeLayerClass *)(a))
 #define LE_LAYER_GET_CLASS(a) LE_LAYER_CLASS(G_OBJECT_GET_CLASS(a))
 
-void         le_layer_construct            (LeLayer     *layer,
-                                            const char  *name);
+// void         le_layer_construct            (LeLayer     *layer,
+//                                             const char  *name);
+
+const gchar * le_layer_get_name (const LeLayer * layer);
 
 LeTensor *   le_layer_forward_prop         (LeLayer     *layer,
                                             LeTensor    *input);
 
-GList *     le_layer_get_parameters       (LeLayer     *layer);
+GList *      le_layer_get_parameters       (LeLayer     *layer);
 
 unsigned     le_layer_get_parameters_count (LeLayer     *layer);
 
