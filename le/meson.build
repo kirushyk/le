@@ -16,7 +16,7 @@ le_sources = [
     'models/lelogistic.c',
     # 'models/le1layernn.c',
     'models/lemodel.c',
-    # 'models/lesvm.c',
+    'models/lesvm.c',
     'models/layers/lelayer.c',
     'models/layers/ledenselayer.c',
     'models/layers/leactivationlayer.c',

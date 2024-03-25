@@ -5,6 +5,7 @@
 #define __LESVM_H__
 
 #include <glib.h>
+#include "lemodel.h"
 #include <le/tensors/letensor.h>
 
 G_BEGIN_DECLS
@@ -15,9 +16,11 @@ typedef enum LeKernel
     LE_KERNEL_RBF
 } LeKernel;
 
-typedef struct LeSVM LeSVM;
+// typedef struct LeSVM LeSVM;
 
-#define LE_SVM(obj) ((LeSVM *)(obj))
+// #define LE_SVM(obj) ((LeSVM *)(obj))
+
+G_DECLARE_FINAL_TYPE (LeSVM, le_svm, LE, SVM, LeModel);
 
 LeSVM *                 le_svm_new                         (void);
 
@@ -31,8 +34,6 @@ void                    le_svm_train                       (LeSVM *             
                                                             const LeTensor *        x_train,
                                                             const LeTensor *        y_train,
                                                             LeSVMTrainingOptions    options);
-
-void                    le_svm_free                        (LeSVM *                 svm);
 
 G_END_DECLS
 

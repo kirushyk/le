@@ -3,6 +3,7 @@
 
 #include <stdlib.h>
 #include <assert.h>
+#include <glib.h>
 #include <le/le.h>
 #include <le/tensors/letensor-imp.h>
 #include <ext/mnist/lemnist.h>
@@ -39,7 +40,7 @@ main()
     options.regularization = LE_REGULARIZATION_NONE;
     options.lambda = 0.0f;
     le_logistic_classifier_train(classifier, train_input_f32, train_output, options);
-    g_object_free (classifier);
+    g_object_unref (classifier);
     
     le_tensor_free(test_output);
     le_tensor_free(test_input_f32);

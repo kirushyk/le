@@ -8,10 +8,13 @@
 #include "lemodel.h"
 #include <le/tensors/lematrix.h>
 
-struct LeSVM
+typedef struct _LeSVM
 {
     LeModel   parent;
-    
+} LeSVM;
+
+typedef struct _LeSVMPrivate
+{    
     /* Training data */
     LeTensor *x;
     LeTensor *y;
@@ -21,49 +24,69 @@ struct LeSVM
     /* Weights for linear classifier */
     LeTensor *weights;
     LeTensor *alphas;
-};
+} LeSVMPrivate;
 
-typedef struct LeSVMClass
+// typedef struct LeSVMClass
+// {
+//     LeModelClass parent;
+// } LeSVMClass;
+static void le_svm_class_init (LeSVMClass * klass);
+static void le_svm_init (LeSVM * self);
+G_DEFINE_FINAL_TYPE_WITH_PRIVATE (LeSVM, le_svm, LE_TYPE_MODEL);
+
+static void
+le_svm_dispose (GObject * object)
 {
-    LeModelClass parent;
-} LeSVMClass;
-
-LeTensor *
-le_svm_predict(LeSVM *self, const LeTensor *x);
-
-LeSVMClass *
-le_svm_class_ensure_init(void)
-{
-    static bool initialized = false;
-    static LeSVMClass klass;
-    
-    if (!initialized)
-    {
-        klass.parent.predict =
-            (LeTensor *(*)(LeModel *, const LeTensor *))le_svm_predict;
-        initialized = 1;
-    }
-
-    return &klass;
+  LeSVM *self = LE_SVM (object);
+  g_assert_nonnull (self);
+  LeSVMPrivate *priv = le_svm_get_instance_private (self);
+  g_assert_nonnull (priv);
+  if (priv->x)
+    le_tensor_free (priv->x);
+  if (priv->y)
+    le_tensor_free (priv->y);
+  if (priv->weights)
+    le_tensor_free (priv->weights);
+  if (priv->alphas)
+    le_tensor_free (priv->alphas);
+  G_OBJECT_CLASS (le_svm_parent_class)->dispose (object);
 }
 
-void
-le_svm_construct(LeSVM *self)
+static void
+le_svm_finalize (GObject * object)
 {
-    le_model_construct(LE_MODEL(self));
-    G_OBJECT_GET_CLASS(self) = G_OBJECT_CLASS(le_svm_class_ensure_init());
-    self->bias = 0.0f;
-    self->alphas = NULL;
-    self->weights = NULL;
-    self->kernel = LE_KERNEL_LINEAR;
+}
+
+
+LeTensor * le_svm_predict(LeModel *self, const LeTensor *x);
+
+static void
+le_svm_class_init (LeSVMClass * klass)
+{
+  G_OBJECT_CLASS (klass)->dispose = le_svm_dispose;
+  G_OBJECT_CLASS (klass)->finalize = le_svm_finalize;
+  LE_MODEL_CLASS (klass)->predict = le_svm_predict;
+  LE_MODEL_CLASS (klass)->get_gradients = NULL;
+}
+
+static void
+le_svm_init (LeSVM * self)
+{
+  LeSVMPrivate *priv = le_svm_get_instance_private (self);
+  g_assert_nonnull (priv);
+  priv->bias = 0.0f;
+  priv->x = NULL;
+  priv->y = NULL;
+  priv->alphas = NULL;
+  priv->weights = NULL;
+  priv->kernel = LE_KERNEL_LINEAR;
 }
 
 LeSVM *
-le_svm_new(void)
+le_svm_new (void)
 {
-    LeSVM *self = malloc(sizeof(struct LeSVM));
-    le_svm_construct(self);
-    return self;
+  LeSVM *self = g_object_new (le_svm_get_type (), NULL);
+  return self;
 }
 
 static float
@@ -81,223 +104,223 @@ kernel_function(const LeTensor *a, const LeTensor *b, LeKernel kernel)
 LeTensor *
 le_svm_margins(LeSVM *self, const LeTensor *x)
 {
-    if (self == NULL)
-        return NULL;
+  g_assert_nonnull (self);
+  LeSVMPrivate *priv = le_svm_get_instance_private (self);
+  g_assert_nonnull (priv);
     
     /* In case we use linear kernel and have weights, apply linear classification */
-    if (self->weights != NULL)
+  if (priv->weights != NULL)
+  {
+    LeTensor *weights_transposed = le_matrix_new_transpose (priv->weights);
+    LeTensor *margins = le_matrix_new_product (weights_transposed, x);
+    le_tensor_free (weights_transposed);
+    le_tensor_add (margins, priv->bias);
+    return margins;
+  }
+  else
+  {
+    if (priv->alphas == NULL)
+      return NULL;
+      
+    unsigned test_examples_count = le_matrix_get_width (x);
+    LeTensor *margins = le_matrix_new_uninitialized (LE_TYPE_FLOAT32, 1, test_examples_count);
+    for (unsigned i = 0; i < test_examples_count; i++)
     {
-        LeTensor *weights_transposed = le_matrix_new_transpose(self->weights);
-        LeTensor *margins = le_matrix_new_product(weights_transposed, x);
-        le_tensor_free(weights_transposed);
-        le_tensor_add(margins, self->bias);
-        return margins;
+      LeTensor *example = le_matrix_get_column (x, i);
+      
+      unsigned j;
+      float margin = 0;
+      unsigned training_examples_count = le_matrix_get_width (priv->x);
+      for (j = 0; j < training_examples_count; j++)
+      {
+          LeTensor *x_train_j = le_matrix_get_column (priv->x, j);
+          float alphaj = le_matrix_at_f32 (priv->alphas, 0, j);
+          if (alphaj > 1e-4f || alphaj < -1e-4f)
+          {
+              margin += alphaj * le_matrix_at_f32 (priv->y, 0, j) * kernel_function (x_train_j, example, priv->kernel);
+          }
+          le_tensor_free (x_train_j);
+      }
+      margin += priv->bias;
+      
+      le_matrix_set (margins, 0, i, margin);
+      le_tensor_free (example);
     }
-    else
-    {
-        if (self->alphas == NULL)
-            return NULL;
-        
-        unsigned test_examples_count = le_matrix_get_width(x);
-        LeTensor *margins = le_matrix_new_uninitialized(LE_TYPE_FLOAT32, 1, test_examples_count);
-        for (unsigned i = 0; i < test_examples_count; i++)
-        {
-            LeTensor *example = le_matrix_get_column(x, i);
-            
-            unsigned j;
-            float margin = 0;
-            unsigned training_examples_count = le_matrix_get_width(self->x);
-            for (j = 0; j < training_examples_count; j++)
-            {
-                LeTensor *x_train_j = le_matrix_get_column(self->x, j);
-                float alphaj = le_matrix_at_f32(self->alphas, 0, j);
-                if (alphaj > 1e-4f || alphaj < -1e-4f)
-                {
-                    margin += alphaj * le_matrix_at_f32(self->y, 0, j) * kernel_function(x_train_j, example, self->kernel);
-                }
-                le_tensor_free(x_train_j);
-            }
-            margin += self->bias;
-            
-            le_matrix_set(margins, 0, i, margin);
-            le_tensor_free(example);
-        }
-        return margins;
-    }
+    return margins;
+  }
 }
 
 void
 le_svm_train(LeSVM *self, const LeTensor *x_train, const LeTensor *y_train, LeSVMTrainingOptions options)
 {
-    unsigned passes = 0;
-    /// @todo: Expose this parameter
-    unsigned max_passes = 100;
-    unsigned max_iterations = 10000;
-    
-    unsigned features_count = le_matrix_get_height(x_train);
-    unsigned examples_count = le_matrix_get_width(x_train);
-    /// @todo: Add more clever input data checks
-    assert(examples_count == le_matrix_get_width(y_train));
+  g_assert_nonnull (self);
+  LeSVMPrivate *priv = le_svm_get_instance_private (self);
+  g_assert_nonnull (priv);
+  unsigned passes = 0;
+  /// @todo: Expose this parameter
+  unsigned max_passes = 100;
+  unsigned max_iterations = 10000;
+  
+  unsigned features_count = le_matrix_get_height(x_train);
+  unsigned examples_count = le_matrix_get_width(x_train);
+  /// @todo: Add more clever input data checks
+  assert(examples_count == le_matrix_get_width(y_train));
 
     /// @todo: Add checks
-    self->x = (LeTensor *)x_train;
-    self->y = (LeTensor *)y_train;
-    self->kernel = options.kernel;
-    /// @todo: Add cleanup here
-    /// @note: Maybe use stack variable instead
-    self->alphas = le_matrix_new_zeros(LE_TYPE_FLOAT32, 1, examples_count);
-    self->bias = 0;
-    /// @todo: Add cleanup here
-    self->weights = NULL;
+  priv->x = (LeTensor *)x_train;
+  priv->y = (LeTensor *)y_train;
+  priv->kernel = options.kernel;
+  /// @todo: Add cleanup here
+  /// @note: Maybe use stack variable instead
+  priv->alphas = le_matrix_new_zeros(LE_TYPE_FLOAT32, 1, examples_count);
+  priv->bias = 0;
+  /// @todo: Add cleanup here
+  priv->weights = NULL;
     
-    const float tol = 1e-4f;
-    const float C = options.c;
+  const float tol = 1e-4f;
+  const float C = options.c;
 
-    /// @note: Sequential Minimal Optimization (SMO) algorithm
-    for (unsigned iteration = 0; passes < max_passes && iteration < max_iterations; iteration++)
-    {
-        unsigned num_changed_alphas = 0;
-        
-        for (int i = 0; i < examples_count; i++)
-        {
-            /// @todo: Implement immutable matrix columns
-            LeTensor *x_train_i = le_matrix_get_column(x_train, i);
-            /// @note: We will have 1x1 matrix here
-            LeTensor *shallow_margin_matrix = le_svm_margins(self, x_train_i);
-            float margin = le_matrix_at_f32(shallow_margin_matrix, 0, 0);
-            le_tensor_free(shallow_margin_matrix);
-            float Ei = margin - le_matrix_at_f32(y_train, 0, i);
-            if ((le_matrix_at_f32(y_train, 0, i) * Ei < -tol && le_matrix_at_f32(self->alphas, 0, i) < C) ||
-                (le_matrix_at_f32(y_train, 0, i) * Ei > tol && le_matrix_at_f32(self->alphas, 0, i) > 0.0f))
-            {
-                int j = i;
-                while (j == i)
-                    j = rand() % examples_count;
-                /// @todo: Implement immutable matrix columns
-                LeTensor *x_train_j = le_matrix_get_column(x_train, j);
-                /// @note: We will have 1x1 matrix here
-                LeTensor *shallow_margin_matrix = le_svm_margins(self, x_train_j);
-                float margin = le_matrix_at_f32(shallow_margin_matrix, 0, 0);
-                le_tensor_free(shallow_margin_matrix);
-                float Ej = margin - le_matrix_at_f32(y_train, 0, j);
-                
-                float ai = le_matrix_at_f32(self->alphas, 0, i);
-                float aj = le_matrix_at_f32(self->alphas, 0, j);
-                float L = 0, H = C;
-                if (le_matrix_at_f32(y_train, 0, i) == le_matrix_at_f32(y_train, 0, j))
-                {
-                    L = fmax(0, ai + aj - C);
-                    H = fmin(C, ai + aj);
-                }
-                else
-                {
-                    L = fmax(0, aj - ai);
-                    H = fmin(C, C + aj - ai);
-                }
-                
-                if (fabs(L - H) > 1e-4f)
-                {
-                    float eta = 2 * kernel_function(x_train_i, x_train_j, self->kernel) -
-                        kernel_function(x_train_i, x_train_i, self->kernel) -
-                        kernel_function(x_train_j, x_train_j, self->kernel);
-                    if (eta < 0)
-                    {
-                        float newaj = aj - le_matrix_at_f32(y_train, 0, j) * (Ei - Ej) / eta;
-                        if (newaj > H)
-                            newaj = H;
-                        if (newaj < L)
-                            newaj = L;
-                        if (fabs(aj - newaj) >= 1e-4)
-                        {
-                            le_matrix_set(self->alphas, 0, j, newaj);
-                            float newai = ai + le_matrix_at_f32(y_train, 0, i) * le_matrix_at_f32(y_train, 0, j) * (aj - newaj);
-                            le_matrix_set(self->alphas, 0, i, newai);
-                            
-                            float b1 = self->bias - Ei - le_matrix_at_f32(y_train, 0, i) * (newai - ai) * kernel_function(x_train_i, x_train_i, self->kernel)
-                            - le_matrix_at_f32(y_train, 0, j) * (newaj - aj) * kernel_function(x_train_i, x_train_j, self->kernel);
-                            float b2 = self->bias - Ej - le_matrix_at_f32(y_train, 0, i) * (newai - ai) * kernel_function(x_train_i, x_train_j, self->kernel)
-                            - le_matrix_at_f32(y_train, 0, j) * (newaj - aj) * kernel_function(x_train_j, x_train_j, self->kernel);
-                            self->bias = 0.5f * (b1 + b2);
-                            if (newai > 0 && newai < C)
-                                self->bias = b1;
-                            if (newaj > 0 && newaj < C)
-                                self->bias = b2;
-                            
-                            num_changed_alphas++;
-                        }
-                    }
-                }
-                le_tensor_free(x_train_j);
-            }
-            le_tensor_free(x_train_i);
-        }
+  /// @note: Sequential Minimal Optimization (SMO) algorithm
+  for (unsigned iteration = 0; passes < max_passes && iteration < max_iterations; iteration++)
+  {
+      unsigned num_changed_alphas = 0;
+      
+      for (int i = 0; i < examples_count; i++)
+      {
+          /// @todo: Implement immutable matrix columns
+          LeTensor *x_train_i = le_matrix_get_column(x_train, i);
+          /// @note: We will have 1x1 matrix here
+          LeTensor *shallow_margin_matrix = le_svm_margins(self, x_train_i);
+          float margin = le_matrix_at_f32(shallow_margin_matrix, 0, 0);
+          le_tensor_free(shallow_margin_matrix);
+          float Ei = margin - le_matrix_at_f32(y_train, 0, i);
+          if ((le_matrix_at_f32(y_train, 0, i) * Ei < -tol && le_matrix_at_f32(priv->alphas, 0, i) < C) ||
+              (le_matrix_at_f32(y_train, 0, i) * Ei > tol && le_matrix_at_f32(priv->alphas, 0, i) > 0.0f))
+          {
+              int j = i;
+              while (j == i)
+                  j = rand() % examples_count;
+              /// @todo: Implement immutable matrix columns
+              LeTensor *x_train_j = le_matrix_get_column(x_train, j);
+              /// @note: We will have 1x1 matrix here
+              LeTensor *shallow_margin_matrix = le_svm_margins(self, x_train_j);
+              float margin = le_matrix_at_f32(shallow_margin_matrix, 0, 0);
+              le_tensor_free(shallow_margin_matrix);
+              float Ej = margin - le_matrix_at_f32(y_train, 0, j);
+              
+              float ai = le_matrix_at_f32(priv->alphas, 0, i);
+              float aj = le_matrix_at_f32(priv->alphas, 0, j);
+              float L = 0, H = C;
+              if (le_matrix_at_f32(y_train, 0, i) == le_matrix_at_f32(y_train, 0, j))
+              {
+                  L = fmax(0, ai + aj - C);
+                  H = fmin(C, ai + aj);
+              }
+              else
+              {
+                  L = fmax(0, aj - ai);
+                  H = fmin(C, C + aj - ai);
+              }
+              
+              if (fabs(L - H) > 1e-4f)
+              {
+                  float eta = 2 * kernel_function(x_train_i, x_train_j, priv->kernel) -
+                      kernel_function(x_train_i, x_train_i, priv->kernel) -
+                      kernel_function(x_train_j, x_train_j, priv->kernel);
+                  if (eta < 0)
+                  {
+                      float newaj = aj - le_matrix_at_f32(y_train, 0, j) * (Ei - Ej) / eta;
+                      if (newaj > H)
+                          newaj = H;
+                      if (newaj < L)
+                          newaj = L;
+                      if (fabs(aj - newaj) >= 1e-4)
+                      {
+                          le_matrix_set(priv->alphas, 0, j, newaj);
+                          float newai = ai + le_matrix_at_f32(y_train, 0, i) * le_matrix_at_f32(y_train, 0, j) * (aj - newaj);
+                          le_matrix_set(priv->alphas, 0, i, newai);
+                          
+                          float b1 = priv->bias - Ei - le_matrix_at_f32(y_train, 0, i) * (newai - ai) * kernel_function(x_train_i, x_train_i, priv->kernel)
+                          - le_matrix_at_f32(y_train, 0, j) * (newaj - aj) * kernel_function(x_train_i, x_train_j, priv->kernel);
+                          float b2 = priv->bias - Ej - le_matrix_at_f32(y_train, 0, i) * (newai - ai) * kernel_function(x_train_i, x_train_j, priv->kernel)
+                          - le_matrix_at_f32(y_train, 0, j) * (newaj - aj) * kernel_function(x_train_j, x_train_j, priv->kernel);
+                          priv->bias = 0.5f * (b1 + b2);
+                          if (newai > 0 && newai < C)
+                              priv->bias = b1;
+                          if (newaj > 0 && newaj < C)
+                              priv->bias = b2;
+                          
+                          num_changed_alphas++;
+                      }
+                  }
+              }
+              le_tensor_free(x_train_j);
+          }
+          le_tensor_free(x_train_i);
+      }
 
-        if (num_changed_alphas == 0)
-            passes++;
-        else
-            passes = 0;
-    }
-    
-    if (self->kernel == LE_KERNEL_LINEAR)
-    {
-        /* For linear kernel, we calculate weights */
-        self->weights = le_matrix_new_uninitialized(LE_TYPE_FLOAT32, features_count, 1);
-        for (int j = 0; j < features_count; j++)
-        {
-            float s = 0.0f;
-            for (int i = 0; i < examples_count; i++)
-            {
-                s += le_matrix_at_f32(self->alphas, 0, i) * le_matrix_at_f32(y_train, 0, i) * le_matrix_at_f32(x_train, j, i);
-            }
-            le_matrix_set(self->weights, j, 0, s);
-        }
-    }
-    else
-    {
-        /* For other kernels, we only retain alphas and training data for support vectors */
-        unsigned support_vectors_count = 0;
-        const float alpha_tolerance = 1e-4f;
-        for (int i = 0; i < examples_count; i++)
-        {
-            if (le_matrix_at_f32(self->alphas, 0, i) >= alpha_tolerance)
-                support_vectors_count++;
-        }
-        
-        LeTensor *new_alphas = le_matrix_new_uninitialized(LE_TYPE_FLOAT32, 1, support_vectors_count);
-        self->x = le_matrix_new_uninitialized(LE_TYPE_FLOAT32, features_count, support_vectors_count);
-        self->y = le_matrix_new_uninitialized(LE_TYPE_FLOAT32, 1, support_vectors_count);
+      if (num_changed_alphas == 0)
+          passes++;
+      else
+          passes = 0;
+  }
+  
+  if (priv->kernel == LE_KERNEL_LINEAR)
+  {
+      /* For linear kernel, we calculate weights */
+      priv->weights = le_matrix_new_uninitialized(LE_TYPE_FLOAT32, features_count, 1);
+      for (int j = 0; j < features_count; j++)
+      {
+          float s = 0.0f;
+          for (int i = 0; i < examples_count; i++)
+          {
+              s += le_matrix_at_f32(priv->alphas, 0, i) * le_matrix_at_f32(y_train, 0, i) * le_matrix_at_f32(x_train, j, i);
+          }
+          le_matrix_set(priv->weights, j, 0, s);
+      }
+  }
+  else
+  {
+      /* For other kernels, we only retain alphas and training data for support vectors */
+      unsigned support_vectors_count = 0;
+      const float alpha_tolerance = 1e-4f;
+      for (int i = 0; i < examples_count; i++)
+      {
+          if (le_matrix_at_f32(priv->alphas, 0, i) >= alpha_tolerance)
+              support_vectors_count++;
+      }
+      
+      LeTensor *new_alphas = le_matrix_new_uninitialized(LE_TYPE_FLOAT32, 1, support_vectors_count);
+      priv->x = le_matrix_new_uninitialized(LE_TYPE_FLOAT32, features_count, support_vectors_count);
+      priv->y = le_matrix_new_uninitialized(LE_TYPE_FLOAT32, 1, support_vectors_count);
 
-        int j = 0; /// Iterator for new matrices
-        for (int i = 0; i < examples_count; i++)
-        {
-            if (le_matrix_at_f32(self->alphas, 0, i) >= alpha_tolerance)
-            {
-                le_matrix_set(new_alphas, 0, j, le_matrix_at_f32(self->alphas, 0, i));
-                le_matrix_set(self->y, 0, j, le_matrix_at_f32(y_train, 0, i));
-                for (int k = 0; k < features_count; k++)
-                    le_matrix_set(self->x, k, j, le_matrix_at_f32(x_train, k, i));
-                j++;
-            }
-        }
-        
-        le_tensor_free(self->alphas);
-        self->alphas = new_alphas;
-    }
+      int j = 0; /// Iterator for new matrices
+      for (int i = 0; i < examples_count; i++)
+      {
+          if (le_matrix_at_f32(priv->alphas, 0, i) >= alpha_tolerance)
+          {
+              le_matrix_set(new_alphas, 0, j, le_matrix_at_f32(priv->alphas, 0, i));
+              le_matrix_set(priv->y, 0, j, le_matrix_at_f32(y_train, 0, i));
+              for (int k = 0; k < features_count; k++)
+                  le_matrix_set(priv->x, k, j, le_matrix_at_f32(x_train, k, i));
+              j++;
+          }
+      }
+      
+      le_tensor_free(priv->alphas);
+      priv->alphas = new_alphas;
+  }
 }
 
 LeTensor *
-le_svm_predict(LeSVM *self, const LeTensor *x)
+le_svm_predict (LeModel * model, const LeTensor * x)
 {
-    assert(self != NULL);
-    assert(x != NULL);
+  g_assert_nonnull (model);
+  LeSVM *self = LE_SVM (model);
+  g_assert_nonnull (self);
+  g_assert_nonnull (x);
 
-    LeTensor *y_predicted = le_svm_margins(self, x);
-    le_tensor_apply_sgn(y_predicted);
-    return y_predicted;
-}
-
-void
-le_svm_free(LeSVM *self)
-{
-    g_free (self);
+  LeTensor *y_predicted = le_svm_margins (self, x);
+  le_tensor_apply_sgn (y_predicted);
+  return y_predicted;
 }

@@ -3,6 +3,7 @@
 
 #include <stdlib.h>
 #include <assert.h>
+#include <glib.h>
 #include <le/le.h>
 #include <le/tensors/letensor-imp.h>
 #include <ext/mnist/lemnist.h>
@@ -36,7 +37,7 @@ main()
     options.kernel = LE_KERNEL_RBF;
     options.c = 1;
     le_svm_train(classifier, train_input_f32, train_output, options);
-    le_svm_free(classifier);
+    g_object_unref (classifier);
     
     le_tensor_free(test_output);
     le_tensor_free(test_input_f32);
