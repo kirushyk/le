@@ -5,12 +5,16 @@
 #define __LEKNN_H__
 
 #include <glib.h>
+#include "lemodel.h"
 #include <le/tensors/letensor.h>
 
 G_BEGIN_DECLS
 
+G_DECLARE_FINAL_TYPE (LeKNN, le_knn, LE, KNN, LeModel);
+
+
 /** @note: Lazy algorithm which just remembers training set */
-typedef struct LeKNN LeKNN;
+// typedef struct LeKNN LeKNN;
 
 #define LE_KNN(obj) ((LeKNN *)(obj))
 
@@ -21,10 +25,10 @@ void                    le_knn_train                      (LeKNN *              
                                                            LeTensor *               y,
                                                            unsigned                 k);
 
-LeTensor *              le_knn_predict                    (LeKNN *                  model,
+LeTensor *              le_knn_predict                    (LeModel *                model,
                                                            const LeTensor *         x);
 
-void                    le_knn_free                       (LeKNN *                  knn);
+// void                    le_knn_free                       (LeKNN *                  knn);
 
 G_END_DECLS
 
