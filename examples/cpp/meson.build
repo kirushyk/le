@@ -13,7 +13,7 @@ if have_cpp
             le_cpp
         ],
         install: false,
-        dependencies: glib
+        dependencies: [glib, gobject]
     )
 
     executable('support-vector-machine-cpp', 'support-vector-machine.cpp',
@@ -25,7 +25,7 @@ if have_cpp
             le_cpp
         ],
         install: false,
-        dependencies: glib
+        dependencies: [glib, gobject]
     )
 
     executable('shallow-neural-network-cpp', 'shallow-neural-network.cpp',
@@ -37,6 +37,6 @@ if have_cpp
             le_cpp
         ],
         install: false,
-        dependencies: glib
+        dependencies: [glib, gobject]
     )
 endif
