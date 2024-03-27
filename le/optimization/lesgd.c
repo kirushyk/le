@@ -12,25 +12,74 @@
 
 #define DEFAULT_LOG_CATEGORY "sgd"
 
-struct LeSGD
+typedef struct _LeSGD
 {
-    LeOptimizer parent;
+  LeOptimizer parent;
+} LeSGD;
 
-    LeTensor *input;
-    LeTensor *output;
-
-    size_t batch_size;
-    unsigned example_index;
-    float momentum_rate;
-    GList *momenta;
-};
-
-typedef struct LeSGDClass
+typedef struct _LeSGDPrivate
 {
-    LeOptimizerClass parent;
-} LeSGDClass;
+  unsigned k;
+  
+  LeTensor *input;
+  LeTensor *output;
 
-static LeSGDClass klass;
+  size_t batch_size;
+  unsigned example_index;
+  float momentum_rate;
+  LeList *momenta;
+} LeSGDPrivate;
+
+static void le_sgd_class_init (LeSGDClass * klass);
+static void le_sgd_init (LeSGD * self);
+G_DEFINE_FINAL_TYPE_WITH_PRIVATE (LeSGD, le_sgd, LE_TYPE_OPTIMIZER);
+
+static void
+le_sgd_dispose (GObject * object)
+{
+  LeSGD *self = LE_SGD (object);
+  g_assert_nonnull (self);
+  LeSGDPrivate *priv = le_sgd_get_instance_private (self);
+  g_assert_nonnull (priv);
+  g_list_free_full (priv->momenta, (GDestroyNotify)le_tensor_free);
+  G_OBJECT_CLASS (le_sgd_parent_class)->dispose (object);
+}
+
+static void
+le_sgd_finalize (GObject * object)
+{
+}
+
+void le_sgd_step (LeOptimizer * optimizer);
+
+void le_sgd_epoch (LeOptimizer * optimizer);
+
+static void
+le_sgd_class_init (LeSGDClass * klass)
+{
+  G_OBJECT_CLASS (klass)->dispose = le_sgd_dispose;
+  G_OBJECT_CLASS (klass)->finalize = le_sgd_finalize;
+  LE_MODEL_CLASS (klass)->step = le_sgd_step;
+  LE_MODEL_CLASS (klass)->epoch = le_sgd_epoch;
+}
+
+static void
+le_sgd_init (LeSGD * self)
+{
+  LeSGDPrivate *priv = le_sgd_get_instance_private (self);
+  // LE_OPTIMIZER(self)->model = model;
+  // LE_OPTIMIZER(self)->step = 0;
+  // LE_OPTIMIZER(self)->epoch = 0;
+  // LE_OPTIMIZER(self)->parameters = le_model_get_parameters(LE_OPTIMIZER(self)->model);
+  // LE_OPTIMIZER(self)->learning_rate = learning_rate;
+
+  self->input = input;
+  self->output = output;
+  self->batch_size = batch_size;
+  self->example_index = 0;
+  self->momenta = NULL;
+  self->momentum_rate = momentum;
+}
 
 GList *
 le_sgd_init_momenta(GList *gradients)
@@ -154,57 +203,32 @@ le_sgd_epoch(LeOptimizer *optimizer)
     }
 }
 
-void
-le_sgd_class_ensure_init(void)
-{
-    static bool initialized = false;
-
-    if (!initialized)
-    {
-        klass.parent.step =
-            (void (*)(LeOptimizer *))le_sgd_step;
-        klass.parent.epoch =
-            (void (*)(LeOptimizer *))le_sgd_epoch;
-        initialized = 1;
-    }
-}
-
-void
-le_sgd_construct(LeSGD *self)
-{
-    le_optimizer_construct((LeOptimizer *)self);
-    le_sgd_class_ensure_init();
-    ((GObject *)self)->klass = (GObjectClass *)&klass;
-}
-
 LeSGD *
 le_sgd_new(LeModel *model, LeTensor *input, LeTensor *output, size_t batch_size, float learning_rate, float momentum)
 {
-    assert(model);
-    LeSGD *self = malloc(sizeof(LeSGD));
-    le_sgd_construct(self);
-    if (learning_rate <= 0.0f)
-    {
-        LE_WARNING("Learning rate = %f", learning_rate);
-    }
-    LE_OPTIMIZER(self)->model = model;
-    LE_OPTIMIZER(self)->step = 0;
-    LE_OPTIMIZER(self)->epoch = 0;
-    LE_OPTIMIZER(self)->parameters = le_model_get_parameters(LE_OPTIMIZER(self)->model);
-    LE_OPTIMIZER(self)->learning_rate = learning_rate;
+  assert(model);
+  LeSGD *self = g_object_new (le_sgd_get_type (), NULL);
+  g_assert_cmpfloat (learning_rate, >, 0.0f);
 
-    self->input = input;
-    self->output = output;
-    self->batch_size = batch_size;
-    self->example_index = 0;
-    self->momenta = NULL;
-    self->momentum_rate = momentum;
-    return self;
+  LeSGDPrivate *priv = le_sgd_get_instance_private (self);
+  g_assert_nonnull (priv);
+  
+  // LE_OPTIMIZER(self)->model = model;
+  // LE_OPTIMIZER(self)->parameters = le_model_get_parameters(LE_OPTIMIZER(self)->model);
+
+  priv->input = input;
+  priv->output = output;
+  priv->batch_size = batch_size;
+  priv->example_index = 0;
+  priv->momenta = NULL;
+  priv->momentum_rate = momentum;
+
+  return self;
 }
 
-void
-le_sgd_free(LeSGD *self)
-{
-    g_list_free_full (self->momenta, (GDestroyNotify)le_tensor_free);
-    g_free (self);
-}
+// void
+// le_sgd_free(LeSGD *self)
+// {
+//     g_list_free_full (self->momenta, (GDestroyNotify)le_tensor_free);
+//     g_free (self);
+// }

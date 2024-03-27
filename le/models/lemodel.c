@@ -88,8 +88,8 @@ le_model_get_parameters(LeModel *self)
     return priv->parameters;
 }
 
-void
-le_model_free(LeModel *self)
-{
-    g_free (self);
-}
+// void
+// le_model_free(LeModel *self)
+// {
+//     g_free (self);
+// }

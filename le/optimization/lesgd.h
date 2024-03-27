@@ -13,7 +13,8 @@
 
 G_BEGIN_DECLS
 
-typedef struct LeSGD LeSGD;
+G_DECLARE_FINAL_TYPE (LeSGD, le_sgd, LE, SGD, LeOptimizer);
+// typedef struct LeSGD LeSGD;
 
 #define LE_SGD(o) ((LeSGD *)(o))
 
@@ -28,7 +29,7 @@ void               le_sgd_step                             (LeOptimizer *       
 
 void               le_sgd_epoch                            (LeOptimizer *           optimizer);
 
-void               le_sgd_free                             (LeSGD *                 optimizer);
+// void               le_sgd_free                             (LeSGD *                 optimizer);
 
 G_END_DECLS
 

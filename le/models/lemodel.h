@@ -43,7 +43,7 @@ float                   le_model_train_iteration           (LeModel *           
 
 GList *                 le_model_get_parameters            (LeModel *               model);
 
-void                    le_model_free                      (LeModel *               model);
+// void                    le_model_free                      (LeModel *               model);
 
 G_END_DECLS
 
