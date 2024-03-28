@@ -16,7 +16,7 @@ G_BEGIN_DECLS
 G_DECLARE_FINAL_TYPE (LeSGD, le_sgd, LE, SGD, LeOptimizer);
 // typedef struct LeSGD LeSGD;
 
-#define LE_SGD(o) ((LeSGD *)(o))
+// #define LE_SGD(o) ((LeSGD *)(o))
 
 LeSGD *            le_sgd_new                              (LeModel *               model,
                                                             LeTensor *              input,

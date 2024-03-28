@@ -44,7 +44,7 @@ train_until_convergence(bool use_normalization)
         }
     }
     
-    le_bgd_free(optimizer);
+    g_object_unref(optimizer);
     le_sequential_free(nn);
 
     le_tensor_free(y);

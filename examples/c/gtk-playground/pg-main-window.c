@@ -224,7 +224,7 @@ train_current_model(LEMainWindow *self)
             {
                 le_optimizer_step(LE_OPTIMIZER(self->optimizer));
             }
-            /// le_bgd_free(LE_BGD(self->optimizer));
+            /// g_object_unref(LE_BGD(self->optimizer));
             /// @todo: g_free 
             /// le_tensor_free(labels);
         }

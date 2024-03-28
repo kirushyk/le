@@ -37,9 +37,13 @@ struct _LeOptimizerClass
 // #define LE_OPTIMIZER_CLASS(klass) ((LeOptimizerClass *)(klass))
 // #define LE_OPTIMIZER_GET_CLASS(obj) (LE_OPTIMIZER_CLASS(G_OBJECT_GET_CLASS(obj)))
 
-void               le_optimizer_step                       (LeOptimizer *           optimizer);
+void le_optimizer_step     (LeOptimizer *           optimizer);
 
-void               le_optimizer_epoch                      (LeOptimizer *           optimizer);
+void le_optimizer_epoch    (LeOptimizer *           optimizer);
+
+GList * le_optimizer_get_parameters (LeOptimizer * optimizer);
+
+GList * le_optimizer_get_gradients (LeOptimizer * optimizer);
 
 G_END_DECLS
 

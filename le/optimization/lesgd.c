@@ -27,7 +27,7 @@ typedef struct _LeSGDPrivate
   size_t batch_size;
   unsigned example_index;
   float momentum_rate;
-  LeList *momenta;
+  GList *momenta;
 } LeSGDPrivate;
 
 static void le_sgd_class_init (LeSGDClass * klass);
@@ -59,8 +59,8 @@ le_sgd_class_init (LeSGDClass * klass)
 {
   G_OBJECT_CLASS (klass)->dispose = le_sgd_dispose;
   G_OBJECT_CLASS (klass)->finalize = le_sgd_finalize;
-  LE_MODEL_CLASS (klass)->step = le_sgd_step;
-  LE_MODEL_CLASS (klass)->epoch = le_sgd_epoch;
+  LE_OPTIMIZER_CLASS (klass)->step = le_sgd_step;
+  LE_OPTIMIZER_CLASS (klass)->epoch = le_sgd_epoch;
 }
 
 static void
@@ -73,46 +73,47 @@ le_sgd_init (LeSGD * self)
   // LE_OPTIMIZER(self)->parameters = le_model_get_parameters(LE_OPTIMIZER(self)->model);
   // LE_OPTIMIZER(self)->learning_rate = learning_rate;
 
-  self->input = input;
-  self->output = output;
-  self->batch_size = batch_size;
-  self->example_index = 0;
-  self->momenta = NULL;
-  self->momentum_rate = momentum;
+  priv->input = NULL;
+  priv->output = NULL;
+  priv->batch_size = 1;
+  priv->example_index = 0;
+  priv->momenta = NULL;
+  priv->momentum_rate = 0.8;
 }
 
 GList *
-le_sgd_init_momenta(GList *gradients)
+le_sgd_init_momenta (GList * gradients)
 {
-    GList *momentum_list = NULL;
-    for (GList *gradients_iterator = gradients; 
-         gradients_iterator;
-         gradients_iterator = gradients_iterator->next)
-    {
-        LeTensor *momentum = le_tensor_new_zeros_like(LE_TENSOR(gradients_iterator->data));
-        momentum_list = g_list_append(momentum_list, momentum);
-    }
-    return momentum_list;
+  GList *momentum_list = NULL;
+  for (GList *gradients_iterator = gradients; 
+        gradients_iterator;
+        gradients_iterator = gradients_iterator->next)
+  {
+    LeTensor *momentum = le_tensor_new_zeros_like(LE_TENSOR(gradients_iterator->data));
+    momentum_list = g_list_append(momentum_list, momentum);
+  }
+  return momentum_list;
 }
 
 void
 le_sgd_step(LeOptimizer *optimizer)
 {
     LeSGD *self = LE_SGD(optimizer);
+    LeSGDPrivate *priv = le_sgd_get_instance_private (self);
     GList *parameters_iterator;
     GList *gradients_iterator;
     GList *momentum_iterator;
 
-    LE_INFO("Epoch %u Step %u", optimizer->epoch, optimizer->step);
+    // LE_INFO("Epoch %u Step %u", optimizer->epoch, optimizer->step);
     
-    unsigned num_examples = le_matrix_get_width(self->input);
+    unsigned num_examples = le_matrix_get_width(priv->input);
 
-    size_t batch_size = self->example_index + self->batch_size < num_examples ? self->batch_size : num_examples - self->example_index;
+    size_t batch_size = priv->example_index + priv->batch_size < num_examples ? priv->batch_size : num_examples - priv->example_index;
 
-    LeTensor *input = le_matrix_get_columns_copy(self->input, self->example_index, batch_size);
-    LeTensor *output = le_matrix_get_columns_copy(self->output, self->example_index, batch_size);
+    LeTensor *input = le_matrix_get_columns_copy(priv->input, priv->example_index, batch_size);
+    LeTensor *output = le_matrix_get_columns_copy(priv->output, priv->example_index, batch_size);
 
-    optimizer->gradients = le_model_get_gradients(optimizer->model, input, output);
+    le_optimizer_get_gradients (optimizer) = le_model_get_gradients(optimizer->model, input, output);
 
     // LE_INFO("Input %s:\n%s", le_shape_to_cstr(input->shape), le_tensor_to_cstr(input));
     // LeTensorStats input_stats = le_tensor_get_stats(input);
@@ -126,17 +127,17 @@ le_sgd_step(LeOptimizer *optimizer)
     //     output_stats.min, output_stats.max, output_stats.mean, output_stats.deviation,
     //     output_stats.nans, output_stats.zeros);
         
-    if (self->momenta == NULL)
+    if (priv->momenta == NULL)
     {
-        self->momenta = le_sgd_init_momenta(optimizer->gradients);
+        priv->momenta = le_sgd_init_momenta(le_optimizer_get_gradients (optimizer));
     }
 
     le_tensor_free(output);
     le_tensor_free(input);
 
-    for (parameters_iterator = optimizer->parameters,
-            gradients_iterator = optimizer->gradients,
-            momentum_iterator = self->momenta;
+    for (parameters_iterator = le_optimizer_get_gradients (parameters),
+            gradients_iterator = le_optimizer_get_gradients (optimizer),
+            momentum_iterator = priv->momenta;
          parameters_iterator &&
             gradients_iterator &&
             momentum_iterator;
@@ -157,8 +158,8 @@ le_sgd_step(LeOptimizer *optimizer)
         //     gradient_stats.min, gradient_stats.max, gradient_stats.mean, gradient_stats.deviation,
         //     gradient_stats.nans, gradient_stats.zeros);
         LeTensor *momentum = LE_TENSOR(momentum_iterator->data);
-        le_tensor_mul(momentum, self->momentum_rate);
-        le_tensor_mul(gradient, 1.0f - self->momentum_rate);
+        le_tensor_mul(momentum, priv->momentum_rate);
+        le_tensor_mul(gradient, 1.0f - priv->momentum_rate);
         le_tensor_add(momentum, gradient);
         le_tensor_sub_scaled(parameter, optimizer->learning_rate, momentum);
     }
@@ -178,15 +179,15 @@ le_sgd_step(LeOptimizer *optimizer)
         LE_WARNING("Extra momenta passed");
     }
     
-    g_list_free_full (optimizer->gradients, (GDestroyNotify)le_tensor_free);
-    optimizer->gradients = NULL;
+    g_list_free_full (le_optimizer_get_gradients (optimizer), (GDestroyNotify)le_tensor_free);
+    le_optimizer_get_gradients (optimizer) = NULL;
     
     optimizer->step++;
-    self->example_index += batch_size;
-    if (self->example_index >= num_examples) {
-        self->example_index = 0;
+    priv->example_index += batch_size;
+    if (priv->example_index >= num_examples) {
+        priv->example_index = 0;
     }
-    // if (optimizer->step * self->batch_size >= num_examples)
+    // if (optimizer->step * priv->batch_size >= num_examples)
     // {
     //     optimizer->epoch++;
     // }
@@ -196,7 +197,7 @@ void
 le_sgd_epoch(LeOptimizer *optimizer)
 {
     LeSGD *self = LE_SGD(optimizer);
-    unsigned num_examples = le_matrix_get_width(self->input);
+    unsigned num_examples = le_matrix_get_width(priv->input);
     for (unsigned i = 0; i < num_examples; i++)
     {
         le_sgd_step(optimizer);
@@ -225,10 +226,3 @@ le_sgd_new(LeModel *model, LeTensor *input, LeTensor *output, size_t batch_size,
 
   return self;
 }
-
-// void
-// le_sgd_free(LeSGD *self)
-// {
-//     g_list_free_full (self->momenta, (GDestroyNotify)le_tensor_free);
-//     g_free (self);
-// }

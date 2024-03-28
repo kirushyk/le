@@ -41,7 +41,7 @@ main(int argc, const char *argv[])
         printf("J(%0.2f) = %0.2f. Gradient = %0.2f\n", w_, J(w_), grad_);
     }
     
-    le_bgd_free(LE_BGD(optimizer));
+    g_object_unref(LE_BGD(optimizer));
     
     return EXIT_SUCCESS;
 }

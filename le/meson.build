@@ -24,7 +24,7 @@ le_sources = [
     'models/lesequential.c',
     'optimization/leoptimizer.c',
     'optimization/lebgd.c',
-    # 'optimization/lesgd.c',
+    'optimization/lesgd.c',
     # 'optimization/adam.c',
     'leloss.c',
     'lelog.c'

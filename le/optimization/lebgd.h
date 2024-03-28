@@ -13,9 +13,11 @@
 
 G_BEGIN_DECLS
 
-typedef struct LeBGD LeBGD;
+G_DECLARE_FINAL_TYPE (LeBGD, le_bgd, LE, BGD, LeOptimizer);
 
-#define LE_BGD(o) ((LeBGD *)(o))
+// typedef struct LeBGD LeBGD;
+
+// #define LE_BGD(o) ((LeBGD *)(o))
 
 LeBGD *            le_bgd_new_simple                       (GList *                parameters,
                                                             GList *                gradients,
@@ -32,7 +34,7 @@ void               le_bgd_step                             (LeOptimizer *       
 
 void               le_bgd_epoch                            (LeOptimizer *           optimizer);
 
-void               le_bgd_free                             (LeBGD *                 optimizer);
+// void               g_object_unref                             (LeBGD *                 optimizer);
 
 G_END_DECLS
 

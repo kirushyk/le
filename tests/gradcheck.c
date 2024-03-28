@@ -52,7 +52,7 @@ main(int argc, char *argv[])
     {
         le_optimizer_step(LE_OPTIMIZER(optimizer));
     }
-    le_bgd_free(optimizer);
+    g_object_unref(optimizer);
     LE_INFO("cost = %f", le_sequential_compute_cost(nn, x, y));
     average_normalized_distance = le_sequential_check_gradients(nn, x, y, epsilon);
     LE_INFO("average normalized distance = %f", average_normalized_distance);

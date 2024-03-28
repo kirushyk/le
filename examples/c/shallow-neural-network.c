@@ -69,7 +69,7 @@ main(int argc, const char *argv[])
         }
     }
     
-    le_bgd_free(optimizer);
+    g_object_unref(optimizer);
     
     LeTensor *h = le_model_predict(LE_MODEL(neural_network), x);
     printf("Predicted value =\n");

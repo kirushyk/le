@@ -49,7 +49,7 @@ le_optimizer_class_init (LeOptimizerClass * klass)
 }
 
 static void
-le_optimizer_init (LeModel * self)
+le_optimizer_init (LeOptimizer * self)
 {
   LeOptimizerPrivate *priv = le_optimizer_get_instance_private (self);
   priv->model = NULL;
@@ -79,3 +79,16 @@ le_optimizer_epoch(LeOptimizer *self)
   LE_OPTIMIZER_GET_CLASS(self)->epoch(self);
 }
 
+GList *
+le_optimizer_get_parameters (LeOptimizer * optimizer)
+{
+  LeOptimizerPrivate *priv = le_optimizer_get_instance_private (self);
+  return priv->gradients;
+}
+
+GList *
+le_optimizer_get_gradients (LeOptimizer * optimizer)
+{
+  LeOptimizerPrivate *priv = le_optimizer_get_instance_private (self);
+  return priv->parameters;
+}
