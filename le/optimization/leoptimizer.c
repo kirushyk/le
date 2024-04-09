@@ -80,15 +80,57 @@ le_optimizer_epoch(LeOptimizer *self)
 }
 
 GList *
-le_optimizer_get_parameters (LeOptimizer * optimizer)
+le_optimizer_get_parameters (LeOptimizer * self)
 {
+  g_assert_nonnull (self);
   LeOptimizerPrivate *priv = le_optimizer_get_instance_private (self);
-  return priv->gradients;
+  g_assert_nonnull (priv);
+  return priv->parameters;
 }
 
 GList *
-le_optimizer_get_gradients (LeOptimizer * optimizer)
+le_optimizer_get_gradients (LeOptimizer * self)
 {
+  g_assert_nonnull (self);
   LeOptimizerPrivate *priv = le_optimizer_get_instance_private (self);
-  return priv->parameters;
+  g_assert_nonnull (priv);
+  return priv->gradients;
+}
+
+void
+le_optimizer_set_gradients (LeOptimizer * self, GList * gradients)
+{
+  g_assert_nonnull (self);
+  LeOptimizerPrivate *priv = le_optimizer_get_instance_private (self);
+  g_assert_nonnull (priv);
+  priv->gradients = gradients;
+}
+
+float 
+le_optimizer_get_learning_rate (LeOptimizer * self)
+{
+  g_assert_nonnull (self);
+  LeOptimizerPrivate *priv = le_optimizer_get_instance_private (self);
+  g_assert_nonnull (priv);
+  g_assert_cmpfloat (priv->learning_rate, >, 0);
+  return priv->learning_rate;
+}
+
+void
+le_optimizer_set_learning_rate (LeOptimizer * self, float learning_rate)
+{
+  g_assert_nonnull (self);
+  g_assert_cmpfloat (learning_rate, >, 0);
+  LeOptimizerPrivate *priv = le_optimizer_get_instance_private (self);
+  g_assert_nonnull (priv);
+  priv->learning_rate = learning_rate;
+}
+
+LeModel *
+le_optimizer_get_model (LeOptimizer * self)
+{
+  g_assert_nonnull (self);
+  LeOptimizerPrivate *priv = le_optimizer_get_instance_private (self);
+  g_assert_nonnull (priv);
+  return priv->model;
 }

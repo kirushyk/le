@@ -107,7 +107,7 @@ main()
         print_case(train_input_f32, train_output, i, LE_MODEL(neural_network));
     }
 
-    le_sgd_free(LE_SGD(optimizer));
+    g_object_unref(LE_SGD(optimizer));
     //g_object_unref(LE_SGD(optimizer));
     le_sequential_free(neural_network);
     le_tensor_free(test_output);

@@ -9,7 +9,7 @@
 
 G_BEGIN_DECLS
 
-#define LE_TYPE_OPTIMIZER (le_optimizer_get_type ())
+// #define LE_TYPE_OPTIMIZER (le_optimizer_get_type ())
 G_DECLARE_DERIVABLE_TYPE (LeOptimizer, le_optimizer, LE, OPTIMIZER, GObject);
 
 /// Base class for all optimizers
@@ -30,20 +30,30 @@ G_DECLARE_DERIVABLE_TYPE (LeOptimizer, le_optimizer, LE, OPTIMIZER, GObject);
 struct _LeOptimizerClass
 {
     GObjectClass parent;
-    void (*step)(LeOptimizer *optimizer);
-    void (*epoch)(LeOptimizer *optimizer);
+    void (*step)  (struct _LeOptimizer *optimizer);
+    void (*epoch) (struct _LeOptimizer *optimizer);
 };
 
 // #define LE_OPTIMIZER_CLASS(klass) ((LeOptimizerClass *)(klass))
 // #define LE_OPTIMIZER_GET_CLASS(obj) (LE_OPTIMIZER_CLASS(G_OBJECT_GET_CLASS(obj)))
 
-void le_optimizer_step     (LeOptimizer *           optimizer);
+void      le_optimizer_step              (LeOptimizer * optimizer);
 
-void le_optimizer_epoch    (LeOptimizer *           optimizer);
+void      le_optimizer_epoch             (LeOptimizer * optimizer);
 
-GList * le_optimizer_get_parameters (LeOptimizer * optimizer);
+GList *   le_optimizer_get_parameters    (LeOptimizer * optimizer);
 
-GList * le_optimizer_get_gradients (LeOptimizer * optimizer);
+GList *   le_optimizer_get_gradients     (LeOptimizer * optimizer);
+
+void      le_optimizer_set_gradients     (LeOptimizer * optimizer,
+                                          GList *       gradients);
+
+float     le_optimizer_get_learning_rate (LeOptimizer * optimizer);
+
+void      le_optimizer_set_learning_rate (LeOptimizer * optimizer,
+                                          float         learning_rate);
+
+LeModel * le_optimizer_get_model         (LeOptimizer * optimizer);
 
 G_END_DECLS
 

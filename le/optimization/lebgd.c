@@ -26,7 +26,7 @@ typedef struct _LeBGDPrivate
 
 static void le_bgd_class_init (LeBGDClass * klass);
 static void le_bgd_init (LeBGD * self);
-G_DEFINE_FINAL_TYPE_WITH_PRIVATE (LeBGD, le_bgd, LE_TYPE_OPTIMIZER);
+G_DEFINE_FINAL_TYPE_WITH_PRIVATE (LeBGD, le_bgd, le_optimizer_get_type ());
 
 static void
 le_bgd_dispose (GObject * object)
@@ -82,17 +82,15 @@ le_bgd_step(LeOptimizer *optimizer)
 
     LE_INFO("Step");
 
-    if (optimizer->learning_rate <= 0.0f)
-    {
-        LE_WARNING("Learning rate = %f", optimizer->learning_rate);
-    }
+    float learning_rate = le_optimizer_get_learning_rate (optimizer);
 
     GList *gradients = NULL;
     bool own_gradients = false;
 
-    if (optimizer->model)
+    LeModel *model = le_optimizer_get_model (optimizer);
+    if (model)
     {
-        gradients = le_model_get_gradients(optimizer->model, priv->input, priv->output);
+        gradients = le_model_get_gradients(model, priv->input, priv->output);
         own_gradients = true;
     }
     else if (le_optimizer_get_gradients (optimizer))
@@ -101,7 +99,7 @@ le_bgd_step(LeOptimizer *optimizer)
     }
     
 
-    for (parameters_iterator = le_optimizer_get_gradients (parameters), gradients_iterator = gradients;
+    for (parameters_iterator = le_optimizer_get_parameters (optimizer), gradients_iterator = gradients;
          parameters_iterator && gradients_iterator;
          parameters_iterator = parameters_iterator->next, gradients_iterator = gradients_iterator->next)
     {
@@ -109,7 +107,7 @@ le_bgd_step(LeOptimizer *optimizer)
         LE_INFO("Parameter %s:\n%s", le_shape_to_cstr(parameter->shape), le_tensor_to_cstr(parameter));
         LeTensor *gradient = (LeTensor *)gradients_iterator->data;
         LE_INFO("Gradient %s:\n%s", le_shape_to_cstr(gradient->shape), le_tensor_to_cstr(gradient));
-        le_tensor_sub_scaled_f32(parameter, optimizer->learning_rate, gradient);
+        le_tensor_sub_scaled_f32(parameter, learning_rate, gradient);
         LeTensorStats gradient_stats = le_tensor_get_stats(gradient);
         LE_INFO("Gradient stats:\n\tmin: %f\n\tmax: %f\n\tmean: %f\n\tdeviation: %f", gradient_stats.min, gradient_stats.max, gradient_stats.mean, gradient_stats.deviation);
     }
@@ -129,8 +127,8 @@ le_bgd_step(LeOptimizer *optimizer)
         g_list_free_full (gradients, (GDestroyNotify)le_tensor_free);
     }
 
-    LE_OPTIMIZER(self)->step++;
-    LE_OPTIMIZER(self)->epoch++;
+    // LE_OPTIMIZER(self)->step++;
+    // LE_OPTIMIZER(self)->epoch++;
 }
 
 void
@@ -199,14 +197,13 @@ le_bgd_new(LeModel *model, const LeTensor *input, const LeTensor *output, float 
   {
       LE_WARNING("Learning rate = %f", learning_rate);
   }
-  LE_OPTIMIZER(self)->model = model;
-  LE_OPTIMIZER(self)->step = 0;
-  LE_OPTIMIZER(self)->epoch = 0;
-  LE_OPTIMIZER(self)->parameters = le_model_get_parameters(LE_OPTIMIZER(self)->model);
-  LE_OPTIMIZER(self)->gradients = NULL;
-  LE_OPTIMIZER(self)->learning_rate = learning_rate;
+  // LE_OPTIMIZER(self)->model = model;
+  // LE_OPTIMIZER(self)->step = 0;
+  // LE_OPTIMIZER(self)->epoch = 0;
+  // LE_OPTIMIZER(self)->parameters = le_model_get_parameters(LE_OPTIMIZER(self)->model);
+  // LE_OPTIMIZER(self)->gradients = NULL;
+  // LE_OPTIMIZER(self)->learning_rate = learning_rate;
 
-  LeBGDPrivate *priv = le_bgd_get_instance_private (self);
   priv->input = input;
   priv->output = output;
   return self;

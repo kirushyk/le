@@ -2,6 +2,7 @@
    Released under the MIT license. See LICENSE file in the project root for full license information. */
 
 #include "pg-main-window.h"
+#include <glib.h>
 #include <locale.h>
 #include <stdlib.h>
 #include <le/le.h>
@@ -151,15 +152,15 @@ render_predictions(LeModel *model, guint width, guint height)
 void
 erase_model(LEMainWindow *self)
 {
-    if (self->model)
-        le_model_free(self->model);
-    self->model = NULL;
-    if (self->optimizer)
-        le_optimizer_free(self->optimizer);
-    self->optimizer = NULL;
-    if (self->classifier_visualisation)
-        cairo_surface_destroy(self->classifier_visualisation);
-    self->classifier_visualisation = NULL;
+  if (self->model)
+    g_object_unref(self->model);
+  self->model = NULL;
+  if (self->optimizer)
+    g_object_unref(self->optimizer);
+  self->optimizer = NULL;
+  if (self->classifier_visualisation)
+    cairo_surface_destroy(self->classifier_visualisation);
+  self->classifier_visualisation = NULL;
 }
 
 static void
@@ -168,7 +169,7 @@ update_epoch_label(LEMainWindow *self)
     unsigned epoch = 0;
     if (self->optimizer)
     {
-        epoch = LE_OPTIMIZER(self->optimizer)->epoch;
+        // epoch = LE_OPTIMIZER(self->optimizer)->epoch;
     }
     gchar buffer[16];
     sprintf(buffer, "%u", epoch);
@@ -219,7 +220,7 @@ train_current_model(LEMainWindow *self)
                 LeTensor *labels = le_tensor_new_copy(le_data_set_get_output(self->train_data));
                 self->optimizer = LE_OPTIMIZER(le_bgd_new(self->model, x, labels, learning_rate));
             }
-            self->optimizer->learning_rate = learning_rate;
+            le_optimizer_set_learning_rate(self->optimizer, learning_rate);
             for (unsigned i = 0; i <= 400; i++)
             {
                 le_optimizer_step(LE_OPTIMIZER(self->optimizer));
@@ -477,7 +478,7 @@ reset_button_clicked(GtkButton *button, gpointer user_data)
     create_model(self);
     if (self->optimizer)
     {
-        le_optimizer_free(self->optimizer);
+        g_object_unref(self->optimizer);
         self->optimizer = NULL;
     }
     gtk_widget_queue_draw(GTK_WIDGET(self->drawing_area));

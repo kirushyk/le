@@ -8,8 +8,8 @@
 #ifndef __LEBGD_H__
 #define __LEBGD_H__
 
-#include "leoptimizer.h"
 #include <glib.h>
+#include "leoptimizer.h"
 
 G_BEGIN_DECLS
 
