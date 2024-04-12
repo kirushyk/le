@@ -134,3 +134,13 @@ le_optimizer_get_model (LeOptimizer * self)
   g_assert_nonnull (priv);
   return priv->model;
 }
+
+void
+le_optimizer_set_model (LeOptimizer * self, LeModel * model)
+{
+  g_assert_nonnull (self);
+  LeOptimizerPrivate *priv = le_optimizer_get_instance_private (self);
+  g_assert_nonnull (priv);
+  priv->model = model;
+  priv->parameters = le_model_get_parameters (model);
+}

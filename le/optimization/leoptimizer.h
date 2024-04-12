@@ -48,12 +48,15 @@ GList *   le_optimizer_get_gradients     (LeOptimizer * optimizer);
 void      le_optimizer_set_gradients     (LeOptimizer * optimizer,
                                           GList *       gradients);
 
-gfloat     le_optimizer_get_learning_rate (LeOptimizer * optimizer);
+gfloat    le_optimizer_get_learning_rate (LeOptimizer * optimizer);
 
 void      le_optimizer_set_learning_rate (LeOptimizer * optimizer,
-                                          gfloat         learning_rate);
+                                          gfloat        learning_rate);
 
 LeModel * le_optimizer_get_model         (LeOptimizer * optimizer);
+
+void      le_optimizer_set_model         (LeOptimizer * optimizer,
+                                          LeModel * model);
 
 G_END_DECLS
 

@@ -192,17 +192,12 @@ le_bgd_new(LeModel *model, const LeTensor *input, const LeTensor *output, gfloat
 
   LeBGD *self = g_object_new (le_bgd_get_type (), NULL);
   LeBGDPrivate *priv = le_bgd_get_instance_private (self);
-  // le_bgd_construct(self);
   if (learning_rate <= 0.0f)
   {
       LE_WARNING("Learning rate = %f", learning_rate);
   }
-  // LE_OPTIMIZER(self)->model = model;
-  // LE_OPTIMIZER(self)->step = 0;
-  // LE_OPTIMIZER(self)->epoch = 0;
-  // LE_OPTIMIZER(self)->parameters = le_model_get_parameters(LE_OPTIMIZER(self)->model);
-  // LE_OPTIMIZER(self)->gradients = NULL;
-  // LE_OPTIMIZER(self)->learning_rate = learning_rate;
+  le_optimizer_set_learning_rate (LE_OPTIMIZER (self), learning_rate);
+  le_optimizer_set_model (LE_OPTIMIZER (self), model);
 
   priv->input = input;
   priv->output = output;

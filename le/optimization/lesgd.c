@@ -218,8 +218,8 @@ le_sgd_new(LeModel *model, LeTensor *input, LeTensor *output, gsize batch_size, 
   LeSGDPrivate *priv = le_sgd_get_instance_private (self);
   g_assert_nonnull (priv);
   
-  // LE_OPTIMIZER(self)->model = model;
-  // LE_OPTIMIZER(self)->parameters = le_model_get_parameters(LE_OPTIMIZER(self)->model);
+  le_optimizer_set_learning_rate (LE_OPTIMIZER (self), learning_rate);
+  le_optimizer_set_model (LE_OPTIMIZER (self), model);
 
   priv->input = input;
   priv->output = output;
