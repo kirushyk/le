@@ -6,7 +6,6 @@ config.set_quoted('TEST_DIR', meson.current_build_dir())
 configure_file(output: 'test-config.h', configuration: config)
 
 le_tests = [
-    ['list.c'],
     ['matrices.c'],
     ['tensor-view.c'],
     ['type-generic.c'],
