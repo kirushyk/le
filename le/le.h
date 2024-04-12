@@ -13,7 +13,6 @@
 #include "glib.h"
 #include "ledataset.h"
 #include "models/lelogistic.h"
-#include "models/le1layernn.h"
 #include "models/lesvm.h"
 #include "models/lesequential.h"
 #include "models/layers/lelayer.h"
