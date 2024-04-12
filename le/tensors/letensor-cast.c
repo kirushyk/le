@@ -3,12 +3,12 @@
 
 #define DEFINE_SIMPLE_CAST_FN(dst_type, dsttype_name, src_type, srctype_name) \
 void \
-dsttype_name ## _ ## srctype_name(void *dst, void *src, size_t index) \
+dsttype_name ## _ ## srctype_name(void *dst, void *src, gsize index) \
 { \
     ((dst_type *)dst)[index] = ((src_type *)src)[index]; \
 }
 
-DEFINE_SIMPLE_CAST_FN(float, f32, guint8, u8)
+DEFINE_SIMPLE_CAST_FN(gfloat, f32, guint8, u8)
 DEFINE_SIMPLE_CAST_FN(guint32, u32, guint8, u8)
 DEFINE_SIMPLE_CAST_FN(guint8, u8, guint32, u32)
 

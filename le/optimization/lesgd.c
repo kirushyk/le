@@ -24,9 +24,9 @@ typedef struct _LeSGDPrivate
   LeTensor *input;
   LeTensor *output;
 
-  size_t batch_size;
+  gsize batch_size;
   unsigned example_index;
-  float momentum_rate;
+  gfloat momentum_rate;
   GList *momenta;
 } LeSGDPrivate;
 
@@ -108,7 +108,7 @@ le_sgd_step(LeOptimizer *optimizer)
     
     unsigned num_examples = le_matrix_get_width(priv->input);
 
-    size_t batch_size = priv->example_index + priv->batch_size < num_examples ? priv->batch_size : num_examples - priv->example_index;
+    gsize batch_size = priv->example_index + priv->batch_size < num_examples ? priv->batch_size : num_examples - priv->example_index;
 
     LeTensor *input = le_matrix_get_columns_copy(priv->input, priv->example_index, batch_size);
     LeTensor *output = le_matrix_get_columns_copy(priv->output, priv->example_index, batch_size);
@@ -163,7 +163,7 @@ le_sgd_step(LeOptimizer *optimizer)
       le_tensor_mul(momentum, priv->momentum_rate);
       le_tensor_mul(gradient, 1.0f - priv->momentum_rate);
       le_tensor_add(momentum, gradient);
-      float learning_rate = le_optimizer_get_learning_rate (optimizer);
+      gfloat learning_rate = le_optimizer_get_learning_rate (optimizer);
       le_tensor_sub_scaled(parameter, learning_rate, momentum);
     }
 
@@ -209,7 +209,7 @@ le_sgd_epoch(LeOptimizer *optimizer)
 }
 
 LeSGD *
-le_sgd_new(LeModel *model, LeTensor *input, LeTensor *output, size_t batch_size, float learning_rate, float momentum)
+le_sgd_new(LeModel *model, LeTensor *input, LeTensor *output, gsize batch_size, gfloat learning_rate, gfloat momentum)
 {
   assert(model);
   LeSGD *self = g_object_new (le_sgd_get_type (), NULL);

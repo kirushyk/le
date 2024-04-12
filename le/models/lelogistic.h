@@ -28,9 +28,9 @@ typedef enum LeRegularization
 typedef struct LeLogisticClassifierTrainingOptions
 {
     unsigned                 polynomia_degree;
-    float                    learning_rate;
+    gfloat                    learning_rate;
     LeRegularization         regularization;
-    float                    lambda;
+    gfloat                    lambda;
     unsigned                 max_iterations;
 } LeLogisticClassifierTrainingOptions;
 

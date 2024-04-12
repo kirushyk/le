@@ -11,6 +11,6 @@ typedef struct ARGB32
     guint8 b, g, r, a;
 } ARGB32;
 
-ARGB32 color_for_logistic(float scalar);
+ARGB32 color_for_logistic(gfloat scalar);
 
 #endif

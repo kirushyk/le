@@ -49,8 +49,8 @@ draw_callback(GtkDrawingArea *drawing_area, cairo_t *cr, int width, int height, 
     {
         LeTensor *image = le_tensor_pick(window->mean_inputs, i);
         cairo_surface_t *image_visualisation = render_image(image->data);
-        double x = ((i < 5) ? i : (i - 5)) * 28;
-        double y = i < 5 ? 0 : 28;
+        gdouble x = ((i < 5) ? i : (i - 5)) * 28;
+        gdouble y = i < 5 ? 0 : 28;
         cairo_set_source_surface(cr, image_visualisation, x, y);
         cairo_surface_destroy(image_visualisation);
         cairo_paint(cr);

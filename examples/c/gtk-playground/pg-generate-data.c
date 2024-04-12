@@ -15,9 +15,9 @@ pg_generate_data(const char *pattern_name, unsigned examples_count)
     {
         for (unsigned i = 0; i < examples_count; i++)
         {
-            float scalar = (rand() * 2.0f / RAND_MAX) - 1.0f;
-            float x = sinf(scalar * 3.0f * M_PI) * fabs(scalar);
-            float y = cosf(scalar * 3.0f * M_PI) * scalar;
+            gfloat scalar = (rand() * 2.0f / RAND_MAX) - 1.0f;
+            gfloat x = sinf(scalar * 3.0f * M_PI) * fabs(scalar);
+            gfloat y = cosf(scalar * 3.0f * M_PI) * scalar;
             le_matrix_set(input, 0, i, x);
             le_matrix_set(input, 1, i, y);
             le_matrix_set(output, 0, i, scalar > 0.0f ? 1.0f : 0.0f);
@@ -27,10 +27,10 @@ pg_generate_data(const char *pattern_name, unsigned examples_count)
     {
         for (unsigned i = 0; i < examples_count; i++)
         {
-            float distance = (float)rand() / RAND_MAX;
-            float angle = rand() * 2.0f * M_PI / RAND_MAX;
-            float x = sinf(angle) * distance;
-            float y = cosf(angle) * distance;
+            gfloat distance = (gfloat)rand() / RAND_MAX;
+            gfloat angle = rand() * 2.0f * M_PI / RAND_MAX;
+            gfloat x = sinf(angle) * distance;
+            gfloat y = cosf(angle) * distance;
             le_matrix_set(input, 0, i, x);
             le_matrix_set(input, 1, i, y);
             le_matrix_set(output, 0, i, distance < 0.5f ? 1.0f : 0.0f);
@@ -38,14 +38,14 @@ pg_generate_data(const char *pattern_name, unsigned examples_count)
     }
     else if (g_strcmp0(pattern_name, "linsep") == 0)
     {
-        float bias = (float)rand() / RAND_MAX - 0.5f;
-        float slope = rand() * 20.0f / RAND_MAX - 10.0f;
+        gfloat bias = (gfloat)rand() / RAND_MAX - 0.5f;
+        gfloat slope = rand() * 20.0f / RAND_MAX - 10.0f;
         le_tensor_mul(input, 2.0f);
         le_tensor_add(input, -1.0f);
         for (unsigned i = 0; i < examples_count; i++)
         {
-            float x = le_matrix_at_f32(input, 0, i);
-            float y = le_matrix_at_f32(input, 1, i);
+            gfloat x = le_matrix_at_f32(input, 0, i);
+            gfloat y = le_matrix_at_f32(input, 1, i);
             
             le_matrix_set(output, 0, i, (y > bias + slope * x) ? 1.0f : 0.0f);
         }
@@ -53,7 +53,7 @@ pg_generate_data(const char *pattern_name, unsigned examples_count)
     else if (g_strcmp0(pattern_name, "svb") == 0)
     {
 #define SUPPORT_VECTORS_COUNT 4
-        float svx[SUPPORT_VECTORS_COUNT], svy[SUPPORT_VECTORS_COUNT];
+        gfloat svx[SUPPORT_VECTORS_COUNT], svy[SUPPORT_VECTORS_COUNT];
         
         for (unsigned j = 0; j < SUPPORT_VECTORS_COUNT; j++)
         {
@@ -66,14 +66,14 @@ pg_generate_data(const char *pattern_name, unsigned examples_count)
         for (unsigned i = 0; i < examples_count; i++)
         {
             unsigned closest_vector = 0;
-            float min_squared_distance = 2.0f;
+            gfloat min_squared_distance = 2.0f;
             
-            float x = le_matrix_at_f32(input, 0, i);
-            float y = le_matrix_at_f32(input, 1, i);
+            gfloat x = le_matrix_at_f32(input, 0, i);
+            gfloat y = le_matrix_at_f32(input, 1, i);
             
             for (unsigned j = 0; j < SUPPORT_VECTORS_COUNT; j++)
             {
-                float squared_distance = (x - svx[j]) * (x - svx[j]) + (y - svy[j]) * (y - svy[j]);
+                gfloat squared_distance = (x - svx[j]) * (x - svx[j]) + (y - svy[j]) * (y - svy[j]);
                 if (squared_distance < min_squared_distance)
                 {
                     min_squared_distance = squared_distance;

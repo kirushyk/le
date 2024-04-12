@@ -15,14 +15,14 @@ print_case (LeTensor *X, LeTensor *Y, unsigned index, LeModel *model)
     for (unsigned i = 0; i < 28; i++) {
         for (unsigned j = 0; j < 28; j++) {
             char c[] = " .:-=+*#%%@";
-            size_t ix = le_matrix_at_f32(x, i * 28 + j, 0) * 10;
+            gsize ix = le_matrix_at_f32(x, i * 28 + j, 0) * 10;
             putchar(c[ix]);
         }
         putchar('\n');
     }
 
     int label = -1, pred = -1;
-    float label_prob = 0.0f, pred_prob = 0.0f;
+    gfloat label_prob = 0.0f, pred_prob = 0.0f;
     for (unsigned i = 0; i < 10; i++) {
         if (le_matrix_at_f32(y, i, 0) > label_prob) {
             label_prob = le_matrix_at_f32(y, i, 0);
@@ -72,10 +72,10 @@ main()
     le_sequential_add(neural_network, LE_LAYER(le_activation_layer_new("a2", LE_ACTIVATION_SOFTMAX)));
     LeLoss loss = LE_LOSS_CROSS_ENTROPY;
     le_sequential_set_loss(neural_network, loss);
-    size_t num_epochs = 10000;
-    size_t batch_size = 256;
-    float learning_rate = 1e-5f;
-    float momentum = 0.8f;
+    gsize num_epochs = 10000;
+    gsize batch_size = 256;
+    gfloat learning_rate = 1e-5f;
+    gfloat momentum = 0.8f;
     LeOptimizer *optimizer = LE_OPTIMIZER(le_sgd_new(LE_MODEL(neural_network), train_input_f32, train_output, batch_size, learning_rate, momentum));
     for (unsigned i = 0, j = 0; i <= num_epochs * 60000; i += batch_size)
     {
@@ -87,15 +87,15 @@ main()
             
             LeTensor *train_prediction = le_model_predict(LE_MODEL(neural_network), train_input_f32);
 
-            float train_loss = le_loss(loss, train_prediction, train_output);
-            float train_misclassification = le_one_hot_misclassification(train_prediction, train_output);
+            gfloat train_loss = le_loss(loss, train_prediction, train_output);
+            gfloat train_misclassification = le_one_hot_misclassification(train_prediction, train_output);
             printf("Train Set Loss: %f, Misclassification: %f\n", train_loss, train_misclassification);
             le_tensor_free(train_prediction);
 
             LeTensor *test_prediction = le_model_predict(LE_MODEL(neural_network), test_input_f32);
 
-            float test_loss = le_loss(loss, test_prediction, test_output);
-            float test_misclassification = le_one_hot_misclassification(test_prediction, test_output);
+            gfloat test_loss = le_loss(loss, test_prediction, test_output);
+            gfloat test_misclassification = le_one_hot_misclassification(test_prediction, test_output);
             printf("Test Set Loss: %f, Misclassification: %f\n", test_loss, test_misclassification);
             le_tensor_free(test_prediction);
         }

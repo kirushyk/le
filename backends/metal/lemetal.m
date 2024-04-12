@@ -57,7 +57,7 @@ le_metal_matrix_new_product(const LeTensor *a, bool transpose_a, const LeTensor 
     c->shape = le_shape_new(2, c_height, c_width);
     c->stride = le_shape_get_size(c->shape, -1);
     c->owns_data = true;
-    size_t data_size = le_shape_get_elements_count(c->shape) * le_type_size(c->element_type);
+    gsize data_size = le_shape_get_elements_count(c->shape) * le_type_size(c->element_type);
     
     id<MTLCommandBuffer> commandBuffer = [commandQueue commandBuffer];
     
@@ -125,7 +125,7 @@ le_tensor_to_metal(const LeTensor *another)
     tensor->shape = le_shape_copy(another->shape);
     tensor->stride = le_shape_get_size(tensor->shape, -1);
     tensor->owns_data = true;
-    size_t data_size = le_shape_get_elements_count(tensor->shape) * le_type_size(tensor->element_type);
+    gsize data_size = le_shape_get_elements_count(tensor->shape) * le_type_size(tensor->element_type);
 
     tensor->data = (void *)CFBridgingRetain([device newBufferWithBytes:another->data length:data_size options:MTLResourceStorageModeManaged]);
     
@@ -145,7 +145,7 @@ le_tensor_to_cpu(const LeTensor *another)
     tensor->shape = le_shape_copy(another->shape);
     tensor->stride = le_shape_get_size(tensor->shape, -1);
     tensor->owns_data = true;
-    size_t data_size = le_shape_get_elements_count(tensor->shape) * le_type_size(tensor->element_type);
+    gsize data_size = le_shape_get_elements_count(tensor->shape) * le_type_size(tensor->element_type);
 
     id<MTLBuffer> buffer = (__bridge id<MTLBuffer>)(another->data);
     tensor->data = g_malloc (data_size);
@@ -164,7 +164,7 @@ le_metal_data_free(void *data)
 }
 
 void *
-le_metal_data_copy(void *data, size_t bytes)
+le_metal_data_copy(void *data, gsize bytes)
 {
     id<MTLBuffer> buffer = (__bridge id<MTLBuffer>)(data);
     id<MTLCommandBuffer> commandBuffer = [commandQueue commandBuffer];

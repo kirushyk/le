@@ -82,7 +82,7 @@ le_bgd_step(LeOptimizer *optimizer)
 
     LE_INFO("Step");
 
-    float learning_rate = le_optimizer_get_learning_rate (optimizer);
+    gfloat learning_rate = le_optimizer_get_learning_rate (optimizer);
 
     GList *gradients = NULL;
     bool own_gradients = false;
@@ -161,7 +161,7 @@ le_bgd_epoch(LeOptimizer *optimizer)
 // }
 
 LeBGD * 
-le_bgd_new_simple(GList *parameters, GList *gradients, float learning_rate)
+le_bgd_new_simple(GList *parameters, GList *gradients, gfloat learning_rate)
 {
   assert(parameters);
   assert(gradients);
@@ -186,7 +186,7 @@ le_bgd_new_simple(GList *parameters, GList *gradients, float learning_rate)
 }
 
 LeBGD *
-le_bgd_new(LeModel *model, const LeTensor *input, const LeTensor *output, float learning_rate)
+le_bgd_new(LeModel *model, const LeTensor *input, const LeTensor *output, gfloat learning_rate)
 {
   assert(model);
 

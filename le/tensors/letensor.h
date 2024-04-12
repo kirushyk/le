@@ -68,7 +68,7 @@ guint8            le_tensor_at_u8                         (const LeTensor *     
 guint32           le_tensor_at_u32                        (const LeTensor *        tensor,
                                                             guint32                index);
 
-float              le_tensor_at_f32                        (const LeTensor *        tensor,
+gfloat              le_tensor_at_f32                        (const LeTensor *        tensor,
                                                             guint32                index);
 
 void               le_tensor_assign                        (LeTensor *              tensor,
@@ -76,11 +76,11 @@ void               le_tensor_assign                        (LeTensor *          
 
 void               le_tensor_set_f32                       (LeTensor *              tensor,
                                                             guint32                index,
-                                                            float                   value);
+                                                            gfloat                   value);
 
 /// @note: a = a + b
 void               le_tensor_add_f32                       (LeTensor *              a,
-                                                            float                   b);
+                                                            gfloat                   b);
 
 /// @note: a = a + b
 void               le_tensor_add_tensor                    (LeTensor *              a,
@@ -88,14 +88,14 @@ void               le_tensor_add_tensor                    (LeTensor *          
 
 /// @note: a = a + b
 #define le_tensor_add(a, b) _Generic(b, \
-   float: le_tensor_add_f32, \
+   gfloat: le_tensor_add_f32, \
    LeTensor *: le_tensor_add_tensor, \
    const LeTensor *: le_tensor_add_tensor \
 )(a, b)
 
 /// @note: a = a - b
 void               le_tensor_sub_f32                       (LeTensor *              a,
-                                                            float                   b);
+                                                            gfloat                   b);
 
 /// @note: a = a - b
 void               le_tensor_sub_tensor                    (LeTensor *              a,
@@ -103,24 +103,24 @@ void               le_tensor_sub_tensor                    (LeTensor *          
 
 /// @note: a = a - b
 #define le_tensor_sub(a, b) _Generic(b, \
-   float: le_tensor_sub_f32, \
+   gfloat: le_tensor_sub_f32, \
    LeTensor *: le_tensor_sub_tensor, \
    const LeTensor *: le_tensor_sub_tensor \
 )(a, b)
 
 /// @note: a = a - c * b
 void               le_tensor_sub_scaled_f32                (LeTensor *              a,
-                                                            float                   c,
+                                                            gfloat                   c,
                                                             const LeTensor *        b);
 
 #define le_tensor_sub_scaled(a, s, b) \
     _Generic(s, \
-        float: le_tensor_sub_scaled_f32 \
+        gfloat: le_tensor_sub_scaled_f32 \
     )(a, s, b)
     
 /// @note: a = a * b
 void               le_tensor_mul_f32                       (LeTensor *              a,
-                                                            float                   b);
+                                                            gfloat                   b);
 
 /// @note: a = a * b
 void               le_tensor_mul_tensor                    (LeTensor *              a,
@@ -128,7 +128,7 @@ void               le_tensor_mul_tensor                    (LeTensor *          
 
 /// @note: a = a * b
 #define le_tensor_mul(a, b) _Generic(b, \
-   float: le_tensor_mul_f32, \
+   gfloat: le_tensor_mul_f32, \
    LeTensor *: le_tensor_mul_tensor, \
    const LeTensor *: le_tensor_mul_tensor \
 )(a, b)
@@ -136,12 +136,12 @@ void               le_tensor_mul_tensor                    (LeTensor *          
 void               le_tensor_div_u32                       (LeTensor *              a,
                                                             guint32                b);
 
-float              le_tensor_sum_f32                       (const LeTensor *        tensor);
+gfloat              le_tensor_sum_f32                       (const LeTensor *        tensor);
 
-float              le_tensor_sad_f32                       (const LeTensor *        a,
+gfloat              le_tensor_sad_f32                       (const LeTensor *        a,
                                                             const LeTensor *        b);
 
-float              le_tensor_l2_f32                        (const LeTensor *        tensor);
+gfloat              le_tensor_l2_f32                        (const LeTensor *        tensor);
 
 void               le_tensor_apply_sigmoid                 (LeTensor *              tensor);
 
@@ -156,11 +156,11 @@ void               le_tensor_apply_1_minus                 (LeTensor *          
 void               le_tensor_apply_x_minus_sqr_x           (LeTensor *              tensor);
 
 void               le_tensor_apply_gt_f32                  (LeTensor *              tensor,
-                                                            float                   scalar);
+                                                            gfloat                   scalar);
 
 /// @note: a = a > b
 #define le_tensor_apply_gt(tensor, scalar) _Generic(scalar, \
-   float: le_tensor_apply_gt_f32 \
+   gfloat: le_tensor_apply_gt_f32 \
 )(tensor, scalar)
 
 void               le_tensor_apply_sgn                     (LeTensor *              tensor);
@@ -178,19 +178,19 @@ void               le_tensor_print                         (const LeTensor *    
                                                             FILE *                  stream);
 
 /** @note: Inner product of two column vectors */
-float              le_dot_product                          (const LeTensor *        a,
+gfloat              le_dot_product                          (const LeTensor *        a,
                                                             const LeTensor *        b);
 
-float              le_rbf                                  (const LeTensor *        a,
+gfloat              le_rbf                                  (const LeTensor *        a,
                                                             const LeTensor *        b,
-                                                            float                   sigma);
+                                                            gfloat                   sigma);
 
 typedef struct LeTensorStats
 {
-   float min;
-   float max;
-   float mean;
-   float deviation;
+   gfloat min;
+   gfloat max;
+   gfloat mean;
+   gfloat deviation;
    unsigned nans;
    unsigned zeros;
 } LeTensorStats;

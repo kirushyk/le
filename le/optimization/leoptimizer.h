@@ -20,7 +20,7 @@ G_DECLARE_DERIVABLE_TYPE (LeOptimizer, le_optimizer, LE, OPTIMIZER, GObject);
 //     LeModel                 *model;
 //     GList                   *parameters;
 //     GList                   *gradients;
-//     float                    learning_rate;
+//     gfloat                    learning_rate;
 //     unsigned                 step;
 //     unsigned                 epoch;
 // } LeOptimizer;
@@ -48,10 +48,10 @@ GList *   le_optimizer_get_gradients     (LeOptimizer * optimizer);
 void      le_optimizer_set_gradients     (LeOptimizer * optimizer,
                                           GList *       gradients);
 
-float     le_optimizer_get_learning_rate (LeOptimizer * optimizer);
+gfloat     le_optimizer_get_learning_rate (LeOptimizer * optimizer);
 
 void      le_optimizer_set_learning_rate (LeOptimizer * optimizer,
-                                          float         learning_rate);
+                                          gfloat         learning_rate);
 
 LeModel * le_optimizer_get_model         (LeOptimizer * optimizer);
 

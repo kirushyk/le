@@ -33,7 +33,7 @@ int main(int argc, char *argv[])
     le_tensor_print(result, stdout);
     
     le_tensor_sub(result, a_copy);
-    float l2 = le_tensor_l2_f32(result);
+    gfloat l2 = le_tensor_l2_f32(result);
     assert(l2 < 1e-4f);
     
     le_tensor_free(result);

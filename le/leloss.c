@@ -10,7 +10,7 @@
 
 #define EPSILON 1e-5f
 
-float
+gfloat
 le_logistic_loss(const LeTensor *h, const LeTensor *y)
 {
     assert(h->shape->num_dimensions == 2);
@@ -18,14 +18,14 @@ le_logistic_loss(const LeTensor *h, const LeTensor *y)
     assert(le_shape_equal(h->shape, y->shape));
     assert(h->shape->sizes[0] == 1);
     
-    float result = 0.0f;
+    gfloat result = 0.0f;
     unsigned i;
     
     unsigned elements_count = le_shape_get_elements_count(h->shape);
     for (i = 0; i < elements_count; i++)
     {
-        float yi = le_tensor_at_f32(y, i);
-        float hi = le_clamp_f32(le_tensor_at_f32(h, i), EPSILON, 1.0f - EPSILON);
+        gfloat yi = le_tensor_at_f32(y, i);
+        gfloat hi = le_clamp_f32(le_tensor_at_f32(h, i), EPSILON, 1.0f - EPSILON);
         if (yi > 0)
             result -= yi * logf(hi);
         if (yi < 1)
@@ -35,7 +35,7 @@ le_logistic_loss(const LeTensor *h, const LeTensor *y)
     return result / elements_count;
 }
 
-float
+gfloat
 le_cross_entropy_loss(const LeTensor *h, const LeTensor *y)
 {
     assert(h->shape->num_dimensions == 2);
@@ -48,14 +48,14 @@ le_cross_entropy_loss(const LeTensor *h, const LeTensor *y)
     unsigned num_classes = y->shape->sizes[0];
     unsigned num_examples = y->shape->sizes[1];
     
-    float cost = 0.0f;
+    gfloat cost = 0.0f;
     for (unsigned i = 0; i < num_examples; i++)
     {
-        float loss = 0.0f;
+        gfloat loss = 0.0f;
         for (unsigned j = 0; j < num_classes; j++)
         {
-            float y_ji = le_matrix_at_f32(y, j, i);
-            float h_ji = le_clamp_f32(le_matrix_at_f32(h, j, i), EPSILON, 1.0f - EPSILON);
+            gfloat y_ji = le_matrix_at_f32(y, j, i);
+            gfloat h_ji = le_clamp_f32(le_matrix_at_f32(h, j, i), EPSILON, 1.0f - EPSILON);
             if (y_ji != 0.0f)
                 loss -= y_ji * logf(h_ji);
         }
@@ -65,7 +65,7 @@ le_cross_entropy_loss(const LeTensor *h, const LeTensor *y)
     return cost / num_examples;
 }
 
-float
+gfloat
 le_mse_loss(const LeTensor *h, const LeTensor *y)
 {
     assert(h->shape->num_dimensions == 2);
@@ -74,19 +74,19 @@ le_mse_loss(const LeTensor *h, const LeTensor *y)
     assert(h->element_type == LE_TYPE_FLOAT32);
     assert(y->element_type == LE_TYPE_FLOAT32);
 
-    float mse = 0.0;
+    gfloat mse = 0.0;
     unsigned elements_count = le_shape_get_elements_count(h->shape);
     /// @todo: Speed up this
     for (unsigned i = 0; i < elements_count; i++)
     {
-        float d = le_tensor_at_f32(h, i) - le_tensor_at_f32(y, i);
+        gfloat d = le_tensor_at_f32(h, i) - le_tensor_at_f32(y, i);
         mse += d * d;
     }
     
     return mse / elements_count;
 }
 
-float
+gfloat
 le_one_hot_misclassification(const LeTensor *h, const LeTensor *y)
 {
     assert(h->shape->num_dimensions == 2);
@@ -105,18 +105,18 @@ le_one_hot_misclassification(const LeTensor *h, const LeTensor *y)
     for (i = 0; i < examples_count; i++)
     {
         int predicted_class = -2;
-        float predicted_class_probability = 0.0f;
+        gfloat predicted_class_probability = 0.0f;
         int labeled_class = -1;
-        float labeled_class_probability = 0.0f;
+        gfloat labeled_class_probability = 0.0f;
         for (j = 0; j < classes_count; j++)
         {
-            float predicted_probability = le_matrix_at_f32(h, j, i);
+            gfloat predicted_probability = le_matrix_at_f32(h, j, i);
             if (predicted_probability > predicted_class_probability)
             {
                 predicted_class_probability = predicted_probability;
                 predicted_class = j;
             }
-            float labeled_probability = le_matrix_at_f32(y, j, i);
+            gfloat labeled_probability = le_matrix_at_f32(y, j, i);
             if (labeled_probability > labeled_class_probability)
             {
                 labeled_class_probability = labeled_probability;
@@ -129,7 +129,7 @@ le_one_hot_misclassification(const LeTensor *h, const LeTensor *y)
         }
     }
     
-    return ((float)misclassified_count) / ((float)examples_count);
+    return ((gfloat)misclassified_count) / ((gfloat)examples_count);
 }
 
 void
@@ -144,11 +144,11 @@ le_apply_cross_entropy_loss_derivative(LeTensor *h, const LeTensor *y)
     unsigned elements_count = le_shape_get_elements_count(h->shape);
     for (i = 0; i < elements_count; i++)
     {
-        float yi = le_tensor_at_f32(y, i);
-        float hi = le_tensor_at_f32(h, i); /// @note: hi ∈ (0, 1)
+        gfloat yi = le_tensor_at_f32(y, i);
+        gfloat hi = le_tensor_at_f32(h, i); /// @note: hi ∈ (0, 1)
         if (hi < EPSILON)
             hi = EPSILON;
-        float dJ_dh = (yi == 0.0f) ? 0.0f : (-yi / hi);
+        gfloat dJ_dh = (yi == 0.0f) ? 0.0f : (-yi / hi);
         le_tensor_set_f32(h, i, dJ_dh);
     }
 }
@@ -171,17 +171,17 @@ le_apply_logistic_loss_derivative(LeTensor *h, const LeTensor *y)
     unsigned elements_count = le_shape_get_elements_count(h->shape);
     for (i = 0; i < elements_count; i++)
     {
-        float yi = le_tensor_at_f32(y, i);
-        float hi = le_tensor_at_f32(h, i); /// @note: hi ∈ (0, 1)
-        float denom = hi * (1.0f - hi);
+        gfloat yi = le_tensor_at_f32(y, i);
+        gfloat hi = le_tensor_at_f32(h, i); /// @note: hi ∈ (0, 1)
+        gfloat denom = hi * (1.0f - hi);
         if (denom < EPSILON)
             denom = EPSILON;
-        float dJ_dh = (hi == yi) ? 0 : ((hi - yi) / denom);
+        gfloat dJ_dh = (hi == yi) ? 0 : ((hi - yi) / denom);
         le_tensor_set_f32(h, i, dJ_dh);
     }
 }
 
-float 
+gfloat 
 le_loss(LeLoss loss, const LeTensor *predictions, const LeTensor *labels)
 {
     switch (loss) 

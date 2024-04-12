@@ -15,7 +15,7 @@ LeTensor *
 le_tensor_to_cpu(const LeTensor *another);
 
 void *
-le_metal_data_copy(void *data, size_t bytes);
+le_metal_data_copy(void *data, gsize bytes);
 
 void
 le_metal_tensor_mul_tensor(LeTensor *self, const LeTensor *b);

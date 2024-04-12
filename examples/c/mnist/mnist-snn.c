@@ -143,14 +143,14 @@ main(int argc, char *argv[])
                 printf("Iteration %d\n", i);
                 
                 LeTensor *train_prediction = le_model_predict(LE_MODEL(neural_network), train_input_f32);
-                float train_set_error = le_cross_entropy_loss(train_prediction, train_output);
-                float train_set_accuracy = 1.0f - le_one_hot_misclassification(train_prediction, train_output);
+                gfloat train_set_error = le_cross_entropy_loss(train_prediction, train_output);
+                gfloat train_set_accuracy = 1.0f - le_one_hot_misclassification(train_prediction, train_output);
                 printf("Train Set Error: %f, Accuracy: %.1f%%\n", train_set_error, train_set_accuracy * 100.0f);
                 le_tensor_free(train_prediction);
 
                 LeTensor *test_prediction = le_model_predict(LE_MODEL(neural_network), test_input_f32);
-                float test_set_error = le_cross_entropy_loss(test_prediction, test_output);
-                float test_set_accuracy = 1.0f - le_one_hot_misclassification(test_prediction, test_output);
+                gfloat test_set_error = le_cross_entropy_loss(test_prediction, test_output);
+                gfloat test_set_accuracy = 1.0f - le_one_hot_misclassification(test_prediction, test_output);
                 printf("Test Set Error: %f, Accuracy: %.1f%%\n", test_set_error, test_set_accuracy * 100.0f);
                 le_tensor_free(test_prediction);
             }

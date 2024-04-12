@@ -21,12 +21,12 @@ G_DECLARE_FINAL_TYPE (LeBGD, le_bgd, LE, BGD, LeOptimizer);
 
 LeBGD *            le_bgd_new_simple                       (GList *                parameters,
                                                             GList *                gradients,
-                                                            float                   learning_rate);
+                                                            gfloat                   learning_rate);
 
 LeBGD *            le_bgd_new                              (LeModel *               model,
                                                             const LeTensor *        input,
                                                             const LeTensor *        output,
-                                                            float                   learning_rate);
+                                                            gfloat                   learning_rate);
 
 /// @note: le_optimizer_step virtual method will call this function if optimizer subclass is BGD.
 /// Exposed to speed-up C++ bindings.

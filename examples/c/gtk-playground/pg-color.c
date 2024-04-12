@@ -5,7 +5,7 @@
 
 /*
  ARGB32
- color_for_tanh(float scalar)
+ color_for_tanh(gfloat scalar)
  {
  ARGB32 color;
  if (scalar > 0)
@@ -26,7 +26,7 @@
  */
 
 ARGB32
-color_for_logistic(float scalar)
+color_for_logistic(gfloat scalar)
 {
     ARGB32 color;
     scalar = scalar * 2.f - 1.f;

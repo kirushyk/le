@@ -34,7 +34,7 @@ le_cuda_matrix_new_product(const LeTensor *a, bool transpose_a, const LeTensor *
     c->shape = le_shape_new(2, c_height, c_width);
     c->stride = le_shape_get_size(c->shape, -1);
     c->owns_data = true;
-    size_t data_size = le_shape_get_elements_count(c->shape) * le_type_size(c->element_type);
+    gsize data_size = le_shape_get_elements_count(c->shape) * le_type_size(c->element_type);
     
     cudaError_t cuda_res;
     cuda_res = cudaMalloc((void**)&c->data, data_size);
@@ -42,7 +42,7 @@ le_cuda_matrix_new_product(const LeTensor *a, bool transpose_a, const LeTensor *
     cuda_res = cudaMemset(c->data, 0, data_size);
     assert(cuda_res == cudaSuccess);
 
-    float alpha = 1.0f, beta = 0.0f;
+    gfloat alpha = 1.0f, beta = 0.0f;
 
     cublasHandle_t handle;
     cublasStatus_t cublas_status;
@@ -68,7 +68,7 @@ le_cuda_matrix_new_product(const LeTensor *a, bool transpose_a, const LeTensor *
     return c;
 }
 
-extern void hadamard_wrapper(float *a, float *b, int l);
+extern void hadamard_wrapper(gfloat *a, gfloat *b, int l);
 
 void 
 le_cuda_tensor_mul_tensor(LeTensor *self, const LeTensor *b)
@@ -85,7 +85,7 @@ le_cuda_tensor_mul_tensor(LeTensor *self, const LeTensor *b)
     cudaDeviceSynchronize();
 }
 
-extern void sigmoid_wrapper(float *a, int l);
+extern void sigmoid_wrapper(gfloat *a, int l);
 
 void
 le_cuda_tensor_apply_sigmoid(LeTensor *self)
@@ -97,7 +97,7 @@ le_cuda_tensor_apply_sigmoid(LeTensor *self)
     cudaDeviceSynchronize();
 }
 
-extern void sigmoid_prime_wrapper(float *a, int l);
+extern void sigmoid_prime_wrapper(gfloat *a, int l);
 
 void
 le_cuda_tensor_apply_sigmoid_prime(LeTensor *self)
@@ -122,13 +122,13 @@ le_tensor_to_cuda(const LeTensor *cpu_tensor)
     tensor->shape = le_shape_copy(cpu_tensor->shape);
     tensor->stride = le_shape_get_size(cpu_tensor->shape, -1);
     tensor->owns_data = true;
-    size_t data_size = le_shape_get_elements_count(tensor->shape) * le_type_size(tensor->element_type);
+    gsize data_size = le_shape_get_elements_count(tensor->shape) * le_type_size(tensor->element_type);
     
     cudaError_t cuda_res;
     cuda_res = cudaMalloc((void**)&tensor->data, data_size);
     assert(cuda_res == cudaSuccess);
     cublasStatus_t cublas_status;
-    cublas_status = cublasSetMatrix(cpu_tensor->shape->sizes[1], cpu_tensor->shape->sizes[0], sizeof(float), cpu_tensor->data, cpu_tensor->shape->sizes[1], tensor->data, tensor->shape->sizes[1]);
+    cublas_status = cublasSetMatrix(cpu_tensor->shape->sizes[1], cpu_tensor->shape->sizes[0], sizeof(gfloat), cpu_tensor->data, cpu_tensor->shape->sizes[1], tensor->data, tensor->shape->sizes[1]);
     assert(cublas_status == CUBLAS_STATUS_SUCCESS);
 
     return tensor;
@@ -147,18 +147,18 @@ le_cuda_tensor_to_cpu(const LeTensor *cuda_tensor)
     tensor->shape = le_shape_copy(cuda_tensor->shape);
     tensor->stride = le_shape_get_size(cuda_tensor->shape, -1);
     tensor->owns_data = true;
-    size_t data_size = le_shape_get_elements_count(tensor->shape) * le_type_size(tensor->element_type);
+    gsize data_size = le_shape_get_elements_count(tensor->shape) * le_type_size(tensor->element_type);
 
     tensor->data = g_malloc(data_size);
     cublasStatus_t cublas_status;
-    cublas_status = cublasGetMatrix(cuda_tensor->shape->sizes[1], cuda_tensor->shape->sizes[0], sizeof(float), cuda_tensor->data, cuda_tensor->shape->sizes[1], tensor->data, tensor->shape->sizes[1]);
+    cublas_status = cublasGetMatrix(cuda_tensor->shape->sizes[1], cuda_tensor->shape->sizes[0], sizeof(gfloat), cuda_tensor->data, cuda_tensor->shape->sizes[1], tensor->data, tensor->shape->sizes[1]);
     assert(cublas_status == CUBLAS_STATUS_SUCCESS);
     
     return tensor;
 }
 
 void *
-le_cuda_data_copy(void *data, size_t bytes)
+le_cuda_data_copy(void *data, gsize bytes)
 {
     void *dataCopy;
     cudaError_t cuda_res;

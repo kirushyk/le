@@ -75,7 +75,7 @@ le_model_get_gradients(LeModel *self, const LeTensor *x, const LeTensor *y)
     return LE_MODEL_GET_CLASS(self)->get_gradients(self, x, y);
 }
 
-float
+gfloat
 le_model_train_iteration(LeModel *self)
 {
     return LE_MODEL_GET_CLASS(self)->train_iteration(self);

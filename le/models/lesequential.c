@@ -152,13 +152,13 @@ le_sequential_predict(LeSequential *self, const LeTensor *x)
     return forward_propagation(self, x, NULL);
 }
 
-float 
+gfloat 
 le_sequential_compute_cost(LeSequential *self, const LeTensor *x, const LeTensor *y)
 {
     LeSequentialPrivate *priv = le_sequential_get_instance_private (self);
     /// @todo: Take regularization term into account;
     LeTensor *h = forward_propagation(self, x, NULL);
-    const float j = le_loss(priv->loss, h, y);
+    const gfloat j = le_loss(priv->loss, h, y);
     le_tensor_free(h);
     return j;
 }
@@ -270,7 +270,7 @@ le_sequential_get_gradients(LeSequential *self, const LeTensor *x, const LeTenso
 }
 
 GList *
-le_sequential_estimate_gradients(LeSequential *self, const LeTensor *x, const LeTensor *y, float epsilon)
+le_sequential_estimate_gradients(LeSequential *self, const LeTensor *x, const LeTensor *y, gfloat epsilon)
 {
     assert(self);
     assert(x);
@@ -288,12 +288,12 @@ le_sequential_estimate_gradients(LeSequential *self, const LeTensor *x, const Le
         unsigned elements_count = le_shape_get_elements_count(param->shape);
         for (unsigned i = 0; i < elements_count; i++)
         {
-            const float element = le_tensor_at_f32(param, i);
+            const gfloat element = le_tensor_at_f32(param, i);
             le_tensor_set_f32(param, i, element + epsilon);
-            const float j_plus = le_sequential_compute_cost(self, x, y);
+            const gfloat j_plus = le_sequential_compute_cost(self, x, y);
             le_tensor_set_f32(param, i, element - epsilon);
-            const float j_minus = le_sequential_compute_cost(self, x, y);
-            const float element_grad_estimate = (j_plus - j_minus) / (2.0f * epsilon);
+            const gfloat j_minus = le_sequential_compute_cost(self, x, y);
+            const gfloat element_grad_estimate = (j_plus - j_minus) / (2.0f * epsilon);
             le_tensor_set_f32(grad_estimate, i, element_grad_estimate);
             /// @note: We need to restore initial parameter
             le_tensor_set_f32(param, i, element);
@@ -305,13 +305,13 @@ le_sequential_estimate_gradients(LeSequential *self, const LeTensor *x, const Le
 }
 
 
-float
-le_sequential_check_gradients(LeSequential *self, const LeTensor *x, const LeTensor *y, float epsilon)
+gfloat
+le_sequential_check_gradients(LeSequential *self, const LeTensor *x, const LeTensor *y, gfloat epsilon)
 {
     GList *gradients = le_model_get_gradients(LE_MODEL(self), x, y);
     GList *gradients_estimations = le_sequential_estimate_gradients(self, x, y, epsilon);
     GList *gradients_iterator, *gradients_estimations_iterator;
-    float average_normalized_distance = 0.0f;
+    gfloat average_normalized_distance = 0.0f;
     unsigned parameter_number = 0;
     for (gradients_iterator = gradients, gradients_estimations_iterator = gradients_estimations;
          gradients_iterator && gradients_estimations_iterator;
@@ -321,8 +321,8 @@ le_sequential_check_gradients(LeSequential *self, const LeTensor *x, const LeTen
         LE_INFO("gradient_estimate =\n%s", le_tensor_to_cstr(gradient_estimate));
         LeTensor *gradient = LE_TENSOR(gradients_iterator->data);
         LE_INFO("gradient =\n%s", le_tensor_to_cstr(gradient));
-        float denominator = le_tensor_l2_f32(gradient) + le_tensor_l2_f32(gradient_estimate);
-        float normalized_distance = 1.0f;
+        gfloat denominator = le_tensor_l2_f32(gradient) + le_tensor_l2_f32(gradient_estimate);
+        gfloat normalized_distance = 1.0f;
         if (denominator > 0.0f)
         {
             le_tensor_sub(gradient_estimate, gradient);

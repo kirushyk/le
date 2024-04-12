@@ -40,7 +40,7 @@ le_openblas_matrix_new_product(const LeTensor *a, bool transpose_a, const LeTens
     return c;
 }
 
-float
+gfloat
 le_openblas_dot_product(const LeTensor *a, const LeTensor *b)
 {
     assert(a->element_type == LE_TYPE_FLOAT32);

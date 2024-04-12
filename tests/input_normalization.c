@@ -35,7 +35,7 @@ train_until_convergence(bool use_normalization)
     {
         le_optimizer_step(LE_OPTIMIZER(optimizer));
         LeTensor *h = le_model_predict(LE_MODEL(nn), x);
-        float loss = le_logistic_loss(h, y);
+        gfloat loss = le_logistic_loss(h, y);
         le_tensor_free(h);
         if (loss < 1.0f)
         {
@@ -62,7 +62,7 @@ int
 main(int argc, char *argv[])
 {
     unsigned steps_till_convergence[TRAIN_COUNT];
-    float mean_steps_count_with_norm = 0.0f, mean_steps_count_without_norm = 0.0f;
+    gfloat mean_steps_count_with_norm = 0.0f, mean_steps_count_without_norm = 0.0f;
 
     printf("Training WITHOUT input normalization...\n");
     for (int i = 0; i < TRAIN_COUNT; i++)

@@ -21,7 +21,7 @@ LeTensor * le_tensor_to_cuda (const LeTensor * cpu_tensor);
    
 LeTensor * le_cuda_tensor_to_cpu(const LeTensor * cuda_tensor);
 
-void *     le_cuda_data_copy (void *data, size_t bytes);
+void *     le_cuda_data_copy (void *data, gsize bytes);
 
 void       le_cuda_data_free (void *data);
 

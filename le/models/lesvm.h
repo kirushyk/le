@@ -27,7 +27,7 @@ LeSVM *                 le_svm_new                         (void);
 typedef struct LeSVMTrainingOptions
 {
     LeKernel kernel;
-    float    c;
+    gfloat    c;
 } LeSVMTrainingOptions;
 
 void                    le_svm_train                       (LeSVM *                 svm,

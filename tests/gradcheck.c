@@ -17,7 +17,7 @@ main(int argc, char *argv[])
     srand(time(NULL));
 #endif
 
-    const float epsilon = 1e-3f;
+    const gfloat epsilon = 1e-3f;
     LeTensor *x = le_tensor_new(LE_TYPE_FLOAT32, 2, 2, 4,
         1.0, 2.0, 3.0, 4.0,
         4.0, 3.0, 2.0, 1.0
@@ -32,7 +32,7 @@ main(int argc, char *argv[])
     le_sequential_add(nn, LE_LAYER(le_activation_layer_new("A1", LE_ACTIVATION_SIGMOID)));
     le_sequential_set_loss(nn, LE_LOSS_LOGISTIC);
     LE_INFO("cost = %f", le_sequential_compute_cost(nn, x, y));
-    float average_normalized_distance = le_sequential_check_gradients(nn, x, y, epsilon);
+    gfloat average_normalized_distance = le_sequential_check_gradients(nn, x, y, epsilon);
     LE_INFO("average normalized distance = %f", average_normalized_distance);
     bool failed = (average_normalized_distance > epsilon);
 

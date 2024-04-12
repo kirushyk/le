@@ -3,7 +3,7 @@
 
 #include "letype.h"
 
-size_t
+gsize
 le_type_size(LeType type)
 {
     switch (type) {

@@ -127,16 +127,16 @@ le_knn_predict(LeModel * model, const LeTensor *x)
     unsigned features_count = le_matrix_get_height(x);
     assert(le_matrix_get_height(priv->x) == features_count);
     LeTensor *h = le_matrix_new_uninitialized(LE_TYPE_FLOAT32, 1, test_examples_count);
-    float *squared_distances = g_new0 (gfloat, train_examples_count);
+    gfloat *squared_distances = g_new0 (gfloat, train_examples_count);
     unsigned *indices = g_new0(unsigned, priv->k);
     for (unsigned i = 0; i < test_examples_count; i++)
     {
         for (unsigned j = 0; j < train_examples_count; j++)
         {
-            float squared_distance = 0.0f;
+            gfloat squared_distance = 0.0f;
             for (unsigned dim = 0; dim < features_count; dim++)
             {
-                float distance = le_matrix_at_f32(priv->x, dim, j) - le_matrix_at_f32(x, dim, i);
+                gfloat distance = le_matrix_at_f32(priv->x, dim, j) - le_matrix_at_f32(x, dim, i);
                 squared_distance += distance * distance;
             }
             squared_distances[j] = squared_distance;
@@ -157,7 +157,7 @@ le_knn_predict(LeModel * model, const LeTensor *x)
             squared_distances[indices[n]] = HUGE_VALF;
         }
 
-        float prediction = 0.0f;
+        gfloat prediction = 0.0f;
         for (unsigned n = 0; n < priv->k; n++)
         {
             prediction += le_matrix_at_f32(priv->y, 0, indices[n]);

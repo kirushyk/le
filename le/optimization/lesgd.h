@@ -21,9 +21,9 @@ G_DECLARE_FINAL_TYPE (LeSGD, le_sgd, LE, SGD, LeOptimizer);
 LeSGD *            le_sgd_new                              (LeModel *               model,
                                                             LeTensor *              input,
                                                             LeTensor *              output,
-                                                            size_t                  batch_size,
-                                                            float                   learning_rate,
-                                                            float                   momentum);
+                                                            gsize                  batch_size,
+                                                            gfloat                   learning_rate,
+                                                            gfloat                   momentum);
 
 void               le_sgd_step                             (LeOptimizer *           optimizer);
 

@@ -20,10 +20,10 @@ typedef struct LeAdam LeAdam;
 LeAdam * le_adam_new   (LeModel *     model,
                         LeTensor *    input,
                         LeTensor *    output,
-                        size_t        batch_size,
-                        float         learning_rate,
-                        float         beta_1,
-                        float         beta_2);
+                        gsize        batch_size,
+                        gfloat         learning_rate,
+                        gfloat         beta_1,
+                        gfloat         beta_2);
 
 void     le_adam_step  (LeOptimizer * optimizer);
 

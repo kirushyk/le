@@ -19,7 +19,7 @@ typedef struct _LeLogisticClassifier
 typedef struct _LeLogisticClassifierPrivate
 {
     LeTensor *weights;
-    float     bias;
+    gfloat     bias;
     unsigned  polynomia_degree;
 } LeLogisticClassifierPrivate;
 
@@ -172,14 +172,14 @@ le_logistic_classifier_train(LeLogisticClassifier * self, const LeTensor * x_tra
     
     LeTensor *h = le_logistic_classifier_predict (LE_MODEL (self), x_train);
     
-    float train_set_error = le_logistic_loss(h, y_train);
+    gfloat train_set_error = le_logistic_loss(h, y_train);
     
     le_tensor_sub(h, y_train);
     le_tensor_mul(h, 1.0f / examples_count);
     LeTensor *dwt = le_matrix_new_product_full(h, false, x, true);
     LeTensor *dw = le_matrix_new_transpose(dwt);
     le_tensor_mul(dw, options.learning_rate);
-    float db = le_tensor_sum_f32(h);
+    gfloat db = le_tensor_sum_f32(h);
     
     le_tensor_free(dwt);
     le_tensor_free(h);

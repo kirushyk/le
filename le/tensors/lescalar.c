@@ -3,7 +3,7 @@
 #include "letensor-imp.h"
 
 LeScalar *
-le_scalar_new_f32(float scalar)
+le_scalar_new_f32(gfloat scalar)
 {
     LeTensor *self = g_new0 (LeTensor, 1);
     self->element_type = LE_TYPE_FLOAT32;
@@ -11,12 +11,12 @@ le_scalar_new_f32(float scalar)
     self->stride = 0;
     self->owns_data = true;
     self->data = g_new0 (gfloat, 1);
-    *((float *)self->data) = scalar;
+    *((gfloat *)self->data) = scalar;
     return self;
 }
 
 LeScalar *
-le_scalar_new_f64(double scalar)
+le_scalar_new_f64(gdouble scalar)
 {
     LeTensor *self = g_new0 (LeTensor, 1);
     self->element_type = LE_TYPE_FLOAT64;
@@ -24,6 +24,6 @@ le_scalar_new_f64(double scalar)
     self->stride = 0;
     self->owns_data = true;
     self->data = g_new0 (gdouble, 1);
-    *((double *)self->data) = scalar;
+    *((gdouble *)self->data) = scalar;
     return self;
 }

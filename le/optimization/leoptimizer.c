@@ -18,7 +18,7 @@ typedef struct _LeOptimizerPrivate
   LeModel  *model;
   GList    *parameters;
   GList    *gradients;
-  float     learning_rate;
+  gfloat     learning_rate;
   unsigned  step;
   unsigned  epoch;
 } LeOptimizerPrivate;
@@ -106,7 +106,7 @@ le_optimizer_set_gradients (LeOptimizer * self, GList * gradients)
   priv->gradients = gradients;
 }
 
-float 
+gfloat 
 le_optimizer_get_learning_rate (LeOptimizer * self)
 {
   g_assert_nonnull (self);
@@ -117,7 +117,7 @@ le_optimizer_get_learning_rate (LeOptimizer * self)
 }
 
 void
-le_optimizer_set_learning_rate (LeOptimizer * self, float learning_rate)
+le_optimizer_set_learning_rate (LeOptimizer * self, gfloat learning_rate)
 {
   g_assert_nonnull (self);
   g_assert_cmpfloat (learning_rate, >, 0);

@@ -103,7 +103,7 @@ le_dense_layer_new(const char *name, unsigned inputs, unsigned units)
     // G_OBJECT_GET_CLASS(self) = G_OBJECT_CLASS(&klass);
     self->w = le_matrix_new_rand_f32(LE_DISTRIBUTION_NORMAL, units, inputs);
     /// @todo: Optimize
-    float variance = sqrtf(1.0f / inputs);
+    gfloat variance = sqrtf(1.0f / inputs);
     le_tensor_mul(self->w, variance);
     self->b = le_matrix_new_zeros(LE_TYPE_FLOAT32, units, 1);
     le_layer_append_parameter(LE_LAYER(self), self->w);

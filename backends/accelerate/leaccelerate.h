@@ -17,11 +17,11 @@ void       le_accelerate_tensor_apply_sigmoid       (LeTensor *tensor);
 
 void       le_accelerate_tensor_apply_sigmoid_prime (LeTensor *tensor);
 
-float      le_accelerate_rbf                        (const LeTensor *a,
+gfloat      le_accelerate_rbf                        (const LeTensor *a,
                                                      const LeTensor *b,
-                                                     float           sigma);
+                                                     gfloat           sigma);
 
-float      le_accelerate_dot_product                (const LeTensor *a,
+gfloat      le_accelerate_dot_product                (const LeTensor *a,
                                                      const LeTensor *b);
 
 G_END_DECLS

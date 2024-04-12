@@ -18,7 +18,7 @@ struct _LeModelClass
     GObjectClass parent;
     LeTensor * (*predict)         (struct _LeModel *model, const LeTensor *x);
     GList *    (*get_gradients)   (struct _LeModel *model, const LeTensor *x, const LeTensor *y);
-    float      (*train_iteration) (struct _LeModel *model);
+    gfloat      (*train_iteration) (struct _LeModel *model);
     gpointer padding[12];
 };
 
@@ -39,7 +39,7 @@ GList *                 le_model_get_gradients             (LeModel *           
                                                             const LeTensor *        x,
                                                             const LeTensor *        y);
 
-float                   le_model_train_iteration           (LeModel *               model);
+gfloat                   le_model_train_iteration           (LeModel *               model);
 
 GList *                 le_model_get_parameters            (LeModel *               model);
 

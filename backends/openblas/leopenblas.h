@@ -13,7 +13,7 @@ LeTensor * le_openblas_matrix_new_product         (const LeTensor *a,
                                                    const LeTensor *b,
                                                    bool            transpose_b);
 
-float      le_openblas_dot_product                (const LeTensor *a,
+gfloat      le_openblas_dot_product                (const LeTensor *a,
                                                    const LeTensor *b);
 
 G_END_DECLS

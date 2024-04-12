@@ -50,7 +50,7 @@ le_accelerate_tensor_apply_sigmoid(LeTensor *tensor)
     int n = le_shape_get_elements_count(tensor->shape);
     vDSP_vneg(tensor->data, 1, tensor->data, 1, n);
     vvexpf(tensor->data, tensor->data, &n);
-    float one = 1.0f;
+    gfloat one = 1.0f;
     vDSP_vsadd(tensor->data, 1, &one, tensor->data, 1, n);
     vDSP_svdiv(&one, tensor->data, 1, tensor->data, 1, n);
 }
@@ -66,20 +66,20 @@ le_accelerate_tensor_apply_sigmoid_prime(LeTensor *tensor)
     int n = le_shape_get_elements_count(tensor->shape);
     vDSP_vneg(tensor->data, 1, tensor->data, 1, n);
     vvexpf(tensor->data, tensor->data, &n);
-    float one = 1.0f;
+    gfloat one = 1.0f;
 
     vDSP_vsadd(tensor->data, 1, &one, tensor->data, 1, n);
     vDSP_svdiv(&one, tensor->data, 1, tensor->data, 1, n);
     
     for (unsigned i = 0; i < n; i++)
     {
-        float sigmoid = ((float *)tensor->data)[i];
-        ((float *)tensor->data)[i] = sigmoid * (1 - sigmoid);
+        gfloat sigmoid = ((gfloat *)tensor->data)[i];
+        ((gfloat *)tensor->data)[i] = sigmoid * (1 - sigmoid);
     }
 }
 
-float
-le_accelerate_rbf(const LeTensor *a, const LeTensor *b, float sigma)
+gfloat
+le_accelerate_rbf(const LeTensor *a, const LeTensor *b, gfloat sigma)
 {
     assert(a->element_type == LE_TYPE_FLOAT32);
     assert(b->element_type == LE_TYPE_FLOAT32);
@@ -90,9 +90,9 @@ le_accelerate_rbf(const LeTensor *a, const LeTensor *b, float sigma)
     assert(a->shape->sizes[1] == 1);
     assert(b->shape->sizes[1] == 1);
     
-    float *c = g_new0(float, a->shape->sizes[0]);
+    gfloat *c = g_new0(gfloat, a->shape->sizes[0]);
     
-    float result;
+    gfloat result;
     vDSP_vsub(a->data, a->stride, b->data, b->stride, c, 1, a->shape->sizes[0]);
     vDSP_svesq(c, 1, &result, a->shape->sizes[0]);
 
@@ -101,7 +101,7 @@ le_accelerate_rbf(const LeTensor *a, const LeTensor *b, float sigma)
     return expf(-result / (2.0f * sigma * sigma));
 }
 
-float
+gfloat
 le_accelerate_dot_product(const LeTensor *a, const LeTensor *b)
 {
     assert(a->element_type == LE_TYPE_FLOAT32);

@@ -30,7 +30,7 @@ typedef enum LeType
     LE_TYPE_COUNT
 } LeType;
 
-size_t             le_type_size                            (LeType                  type);
+gsize             le_type_size                            (LeType                  type);
 
 const char *       le_type_name                            (LeType                  type);
 

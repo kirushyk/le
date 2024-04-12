@@ -81,8 +81,8 @@ draw_callback(GtkDrawingArea *drawing_area, cairo_t *cr, int width, int height, 
         gint examples_count = le_matrix_get_width(input);
         for (gint i = 0; i < examples_count; i++)
         {
-            double x = width * 0.5 + height * 0.5 * le_matrix_at_f32(input, 0, i);
-            double y = height * 0.5 - height * 0.5 * le_matrix_at_f32(input, 1, i);
+            gdouble x = width * 0.5 + height * 0.5 * le_matrix_at_f32(input, 0, i);
+            gdouble y = height * 0.5 - height * 0.5 * le_matrix_at_f32(input, 1, i);
             cairo_set_line_width(cr, 0.5);
             cairo_arc(cr, x, y, 2., 0., 2 * M_PI);
             le_matrix_at_f32(output, 0, i) > 0.5 ? cairo_set_source_rgba(cr, 1.0, 0.5, 0.0, 1.0) : cairo_set_source_rgba(cr, 0.0, 0.5, 1.0, 1.0);
@@ -100,8 +100,8 @@ draw_callback(GtkDrawingArea *drawing_area, cairo_t *cr, int width, int height, 
         gint examples_count = le_matrix_get_width(input);
         for (gint i = 0; i < examples_count; i++)
         {
-            double x = width * 0.5 + height * 0.5 * le_matrix_at_f32(input, 0, i);
-            double y = height * 0.5 - height * 0.5 * le_matrix_at_f32(input, 1, i);
+            gdouble x = width * 0.5 + height * 0.5 * le_matrix_at_f32(input, 0, i);
+            gdouble y = height * 0.5 - height * 0.5 * le_matrix_at_f32(input, 1, i);
             window->dark ? cairo_set_source_rgba(cr, 0.0, 1.0, 0.0, 1.0) : cairo_set_source_rgba(cr, 0.0, 0.5, 0.0, 1.0);
             cairo_set_line_width(cr, 0.5);
             cairo_arc(cr, x, y, 2., 0., 2 * M_PI);
@@ -182,7 +182,7 @@ train_current_model(LEMainWindow *self)
     if (self->train_data == NULL)
         return;
 
-    float learning_rate = 1.0f;
+    gfloat learning_rate = 1.0f;
     char *learning_rate_str = gtk_combo_box_text_get_active_text(GTK_COMBO_BOX_TEXT(self->alpha_combo));
     setlocale(LC_NUMERIC, "C");
     sscanf(learning_rate_str, "%f", &learning_rate);

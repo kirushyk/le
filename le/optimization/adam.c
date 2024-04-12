@@ -1,7 +1,7 @@
 #include "adam.h"
 
 LeAdam *
-le_adam_new (LeModel * model, LeTensor * input, LeTensor * output, size_t batch_size, float learning_rate, float beta_1, float beta_2)
+le_adam_new (LeModel * model, LeTensor * input, LeTensor * output, gsize batch_size, gfloat learning_rate, gfloat beta_1, gfloat beta_2)
 {
 
 }

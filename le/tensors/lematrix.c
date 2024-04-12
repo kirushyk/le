@@ -37,7 +37,7 @@ le_matrix_get_height(const LeTensor *self)
     return self->shape->sizes[0];
 }
 
-float
+gfloat
 le_matrix_at_f32(const LeTensor *self, unsigned y, unsigned x)
 {
     assert(self->device_type == LE_DEVICE_TYPE_CPU);
@@ -46,10 +46,10 @@ le_matrix_at_f32(const LeTensor *self, unsigned y, unsigned x)
     assert(y < self->shape->sizes[0]);
     assert(x < self->shape->sizes[1]);
     
-    return ((float *)self->data)[y * self->stride + x];
+    return ((gfloat *)self->data)[y * self->stride + x];
 }
 
-double
+gdouble
 le_matrix_at_f64(const LeTensor *self, unsigned y, unsigned x)
 {
     assert(self->device_type == LE_DEVICE_TYPE_CPU);
@@ -58,7 +58,7 @@ le_matrix_at_f64(const LeTensor *self, unsigned y, unsigned x)
     assert(y < self->shape->sizes[0]);
     assert(x < self->shape->sizes[1]);
     
-    return ((double *)self->data)[y * self->stride + x];
+    return ((gdouble *)self->data)[y * self->stride + x];
 }
 
 int8_t
@@ -132,7 +132,7 @@ le_matrix_add(LeTensor *self, const LeTensor *another)
         {
             for (guint32 x = 0; x < self->shape->sizes[1]; x++)
             {
-                ((float *)self->data)[y * self->stride + x] += ((float *)another->data)[y * another->stride];
+                ((gfloat *)self->data)[y * self->stride + x] += ((gfloat *)another->data)[y * another->stride];
             }
         }
     }
@@ -248,7 +248,7 @@ le_matrix_set_f16(LeTensor *self, unsigned y, unsigned x, lehalf value)
 }
 
 void
-le_matrix_set_f32(LeTensor *self, unsigned y, unsigned x, float value)
+le_matrix_set_f32(LeTensor *self, unsigned y, unsigned x, gfloat value)
 {
     assert(self->device_type == LE_DEVICE_TYPE_CPU);
     assert(self->element_type == LE_TYPE_FLOAT32);
@@ -259,11 +259,11 @@ le_matrix_set_f32(LeTensor *self, unsigned y, unsigned x, float value)
     assert(x < self->stride);
     
     /// @todo: Take stride into account
-    ((float *)self->data)[y * self->stride + x] = value;
+    ((gfloat *)self->data)[y * self->stride + x] = value;
 }
 
 void
-le_matrix_set_f64(LeTensor *self, unsigned y, unsigned x, double value)
+le_matrix_set_f64(LeTensor *self, unsigned y, unsigned x, gdouble value)
 {
     assert(self->device_type == LE_DEVICE_TYPE_CPU);
     assert(self->element_type == LE_TYPE_FLOAT64);
@@ -274,7 +274,7 @@ le_matrix_set_f64(LeTensor *self, unsigned y, unsigned x, double value)
     assert(x < self->stride);
     
     /// @todo: Take stride into account
-    ((double *)self->data)[y * self->stride + x] = value;
+    ((gdouble *)self->data)[y * self->stride + x] = value;
 }
 
 LeTensor *
@@ -320,10 +320,10 @@ le_matrix_new_identity(LeType type, unsigned size)
                 ((guint16 *)self->data)[y * size + x] = (x == y) ? F16_1 : F16_0;
                 break;
             case LE_TYPE_FLOAT32:
-                ((float *)self->data)[y * size + x] = (x == y) ? 1.0f : 0.0f;
+                ((gfloat *)self->data)[y * size + x] = (x == y) ? 1.0f : 0.0f;
                 break;
             case LE_TYPE_FLOAT64:
-                ((double *)self->data)[y * size + x] = (x == y) ? 1.0 : 0.0;
+                ((gdouble *)self->data)[y * size + x] = (x == y) ? 1.0 : 0.0;
                 break;
             case LE_TYPE_VOID:
             default:
@@ -393,10 +393,10 @@ le_matrix_new_zeros(LeType type, unsigned height, unsigned width)
             ((guint16 *)self->data)[i] = F16_0;
             break;
         case LE_TYPE_FLOAT32:
-            ((float *)self->data)[i] = 0.0f;
+            ((gfloat *)self->data)[i] = 0.0f;
             break;
         case LE_TYPE_FLOAT64:
-            ((double *)self->data)[i] = 0.0;
+            ((gdouble *)self->data)[i] = 0.0;
             break;
         case LE_TYPE_VOID:
         default:
@@ -426,7 +426,7 @@ le_matrix_new_rand_f32(LeDistribution distribution, unsigned height, unsigned wi
     
     for (i = 0; i < elements_count; i++)
     {
-        ((float *)self->data)[i] = le_random_f32(distribution);
+        ((gfloat *)self->data)[i] = le_random_f32(distribution);
     }
     
     return self;
@@ -505,10 +505,10 @@ le_matrix_new_sum(const LeTensor *a, unsigned dimension)
     assert(/*(dimension == 0) || */(dimension == 1));
     for (unsigned y = 0; y < a->shape->sizes[0]; y++)
     {
-        ((float *)self->data)[y] = 0.0f;
+        ((gfloat *)self->data)[y] = 0.0f;
         for (unsigned x = 0; x < a->shape->sizes[1]; x++)
         {
-            ((float *)self->data)[y] += ((float *)a->data)[y * a->shape->sizes[1] + x];
+            ((gfloat *)self->data)[y] += ((gfloat *)a->data)[y * a->shape->sizes[1] + x];
         }
     }
 
@@ -630,17 +630,17 @@ le_matrix_new_product_full(const LeTensor *a, bool transpose_a, const LeTensor *
             {
                 for (unsigned x = 0; x < b_width; x++)
                 {
-                    size_t self_index = y * self->stride + x;
-                    ((float *)self->data)[self_index] = 0.0f;
+                    gsize self_index = y * self->stride + x;
+                    ((gfloat *)self->data)[self_index] = 0.0f;
                     for (unsigned i = 0; i < a_width; i++)
                     {
                         /// @note: Check indices
-                        size_t a_index = transpose_a ? i * a->stride + y : y * a->stride + i;
-                        float a_element = ((float *)a->data)[a_index];
-                        size_t b_index = transpose_b ? x * b->stride + i : i * b->stride + x;
-                        float b_element = ((float *)b->data)[b_index];
-                        float prod = a_element * b_element;
-                        ((float *)self->data)[self_index] += prod;
+                        gsize a_index = transpose_a ? i * a->stride + y : y * a->stride + i;
+                        gfloat a_element = ((gfloat *)a->data)[a_index];
+                        gsize b_index = transpose_b ? x * b->stride + i : i * b->stride + x;
+                        gfloat b_element = ((gfloat *)b->data)[b_index];
+                        gfloat prod = a_element * b_element;
+                        ((gfloat *)self->data)[self_index] += prod;
                     }
                 }
             }
@@ -687,7 +687,7 @@ le_matrix_new_conv2d(const LeTensor *image, const LeTensor *filter)
     {
         for (int32_t ox = 0; ox < width; ox++)
         {
-            float value = 0.0f;
+            gfloat value = 0.0f;
             for (int32_t fy = 0; fy < fh; fy++)
             {
                 for (int32_t fx = 0; fx < fw; fx++)
@@ -736,7 +736,7 @@ le_matrix_get_column_copy(const LeTensor *self, unsigned x)
     
     for (y = 0; y < height; y++)
     {
-        ((float *)column->data)[y] = ((float *)self->data)[y * self->stride + x];
+        ((gfloat *)column->data)[y] = ((gfloat *)self->data)[y * self->stride + x];
     }
     
     return column;
@@ -751,7 +751,7 @@ le_matrix_get_columns_copy(const LeTensor *self, unsigned x, unsigned width)
     assert(self_width >= x + width);
 
     unsigned height = le_matrix_get_height(self);
-    const size_t element_size = le_type_size(self->element_type);
+    const gsize element_size = le_type_size(self->element_type);
 
     LeTensor *columns = le_matrix_new_uninitialized(self->element_type, height, width);
     for (unsigned y = 0; y < height; y++)
@@ -779,25 +779,25 @@ le_matrix_apply_softmax(LeTensor *self)
 
     for (example = 0; example < num_examples; example++)
     {
-        float max = -INFINITY;
+        gfloat max = -INFINITY;
         for (klass = 0; klass < num_classes; klass++)
         {
-            float value = le_matrix_at_f32(self, klass, example);
+            gfloat value = le_matrix_at_f32(self, klass, example);
             if (value > max)
             {
                 max = value;
             }
         }
-        float sum = 0;
+        gfloat sum = 0;
         for (klass = 0; klass < num_classes; klass++)
         {
-            float activation = expf(le_matrix_at_f32(self, klass, example) - max);
+            gfloat activation = expf(le_matrix_at_f32(self, klass, example) - max);
             sum += activation;
             le_matrix_set(self, klass, example, activation);
         }
         for (klass = 0; klass < num_classes; klass++)
         {
-            float activation = le_matrix_at_f32(self, klass, example);
+            gfloat activation = le_matrix_at_f32(self, klass, example);
             activation /= sum;
             le_matrix_set(self, klass, example, activation);
         }

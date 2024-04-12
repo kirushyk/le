@@ -6,15 +6,15 @@
 #include <le/le.h>
 
 /** @note: Dummy cost function from single weight argument w */
-float
-J(float w)
+gfloat
+J(gfloat w)
 {
     return 1 + (w - 3) * (w - 3);
 }
 
 /** @note: Derivative of that cost function with respect to its argument w */
-float
-dJ_dw(float w)
+gfloat
+dJ_dw(gfloat w)
 {
     return 2 * (w - 3);
 }
@@ -35,9 +35,9 @@ main(int argc, const char *argv[])
     {
         printf("Iteration %u. ", i);
         le_optimizer_step(optimizer);
-        float w_ = le_tensor_at_f32(w, 0);
+        gfloat w_ = le_tensor_at_f32(w, 0);
         le_tensor_set_f32(dw, 0, dJ_dw(w_));
-        float grad_ = le_tensor_at_f32(dw, 0);
+        gfloat grad_ = le_tensor_at_f32(dw, 0);
         printf("J(%0.2f) = %0.2f. Gradient = %0.2f\n", w_, J(w_), grad_);
     }
     

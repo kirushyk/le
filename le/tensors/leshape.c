@@ -67,7 +67,7 @@ le_shape_copy(LeShape *another)
     assert(another);
     LeShape *self = g_new0 (LeShape, 1);
     self->num_dimensions = another->num_dimensions;
-    size_t size = self->num_dimensions * sizeof(guint32);
+    gsize size = self->num_dimensions * sizeof(guint32);
     self->sizes = g_malloc (size);
     memcpy(self->sizes, another->sizes, size);
     return self;
@@ -79,7 +79,7 @@ le_shape_lower_dimension(LeShape *another)
     /// @todo: Add assertions
     LeShape *self = g_new0 (LeShape, 1);
     self->num_dimensions = another->num_dimensions - 1;
-    size_t size = self->num_dimensions * sizeof(guint32);
+    gsize size = self->num_dimensions * sizeof(guint32);
     self->sizes = g_malloc (size);
     memcpy(self->sizes, another->sizes + 1, size);
     return self;

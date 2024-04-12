@@ -9,13 +9,13 @@
 
 G_BEGIN_DECLS
 
-float le_logistic_loss                       (const LeTensor *predictions,
+gfloat le_logistic_loss                       (const LeTensor *predictions,
                                               const LeTensor *labels);
 
-float le_cross_entropy_loss                  (const LeTensor *predictions,
+gfloat le_cross_entropy_loss                  (const LeTensor *predictions,
                                               const LeTensor *label);
 
-float le_one_hot_misclassification           (const LeTensor *predictions,
+gfloat le_one_hot_misclassification           (const LeTensor *predictions,
                                               const LeTensor *labels);
 
 /// @note: Partial derivative with respect to predictions
@@ -39,7 +39,7 @@ typedef enum LeLoss {
    LE_LOSS_CROSS_ENTROPY
 } LeLoss;
 
-float        le_loss                  (LeLoss          loss,
+gfloat        le_loss                  (LeLoss          loss,
                                        const LeTensor *predictions,
                                        const LeTensor *labels);
 
