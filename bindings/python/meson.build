@@ -12,7 +12,10 @@ py3 = py_mod.find_installation('python3',
     required: get_option('python')
 )
 
-py_deps = []
+py_deps = [
+    glib,
+    gobject
+]
 
 have_python = false
 if py3.found()
