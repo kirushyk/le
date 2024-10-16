@@ -24,7 +24,8 @@ if have_cpp
         ],
         link_with: le,
         dependencies: [
-            glib
+            glib,
+            gobject
         ]
     )
 endif
