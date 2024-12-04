@@ -67,7 +67,7 @@ le_layer_forward_prop(LeLayer *self, LeTensor *input)
     assert(self);
     LeLayerClass *klass = LE_LAYER_GET_CLASS(self);
     assert(klass);
-    assert(klass->forward_prop);
+    g_assert_nonnull (klass->forward_prop);
 
     return klass->forward_prop(self, input);
 }

@@ -11,13 +11,7 @@ G_BEGIN_DECLS
 
 /** @note: Densely-connected (fully-connected) layer */
 
-typedef struct LeDenseLayer
-{
-    LeLayer parent;
-    
-    LeTensor *w;
-    LeTensor *b;
-} LeDenseLayer;
+G_DECLARE_FINAL_TYPE (LeDenseLayer, le_dense_layer, LE, DENSE_LAYER, LeLayer);
 
 #define LE_DENSE_LAYER(a) ((LeDenseLayer *)(a))
 
