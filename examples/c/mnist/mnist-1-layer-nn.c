@@ -109,7 +109,7 @@ main()
 
     g_object_unref(LE_SGD(optimizer));
     //g_object_unref(LE_SGD(optimizer));
-    le_sequential_free(neural_network);
+    g_object_unref (neural_network);
     le_tensor_free(test_output);
     le_tensor_free(test_input_f32);
     le_tensor_free(test_input);

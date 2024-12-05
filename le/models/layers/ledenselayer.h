@@ -17,7 +17,7 @@ G_DECLARE_FINAL_TYPE (LeDenseLayer, le_dense_layer, LE, DENSE_LAYER, LeLayer);
 
 LeDenseLayer * le_dense_layer_new (const char *name,
                                    unsigned    inputs,
-                                   unsigned    units);
+                                      unsigned    units);
 
 G_END_DECLS
 

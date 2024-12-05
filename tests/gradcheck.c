@@ -57,7 +57,7 @@ main(int argc, char *argv[])
     average_normalized_distance = le_sequential_check_gradients(nn, x, y, epsilon);
     LE_INFO("average normalized distance = %f", average_normalized_distance);
     failed |= (average_normalized_distance > epsilon);
-    le_sequential_free(nn);
+    g_object_unref(nn);
 
     le_tensor_free(y);
     le_tensor_free(x);

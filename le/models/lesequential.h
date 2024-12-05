@@ -55,8 +55,6 @@ gfloat                   le_sequential_check_gradients      (LeSequential       
 void                    le_sequential_to_dot               (LeSequential *          model,
                                                             const char *            filename);
 
-void                    le_sequential_free                 (LeSequential *          model);
-
 G_END_DECLS
 
 #endif

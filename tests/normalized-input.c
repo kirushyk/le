@@ -45,7 +45,7 @@ train_until_convergence(bool use_normalization)
     }
     
     g_object_unref(optimizer);
-    le_sequential_free(nn);
+    g_object_unref(nn);
 
     le_tensor_free(y);
     le_tensor_free(x);

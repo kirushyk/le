@@ -393,9 +393,3 @@ le_sequential_to_dot(LeSequential *self, const char *filename)
     
     fclose(fout);
 }
-
-void
-le_sequential_free(LeSequential *self)
-{
-    g_free (self);
-}

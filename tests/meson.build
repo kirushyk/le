@@ -13,7 +13,7 @@ le_tests = [
     ['relu.c'],
     ['tensorlist.c'],
     ['subtensor.c'],
-    ['input_normalization.c'],
+    ['normalized-input.c'],
     # ['cnn-inf.c'],
     ['gradcheck.c']
 ]
