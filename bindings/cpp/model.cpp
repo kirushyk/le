@@ -15,7 +15,10 @@ Model::Model():
 
 Model::~Model()
 {
-    
+    if (priv->model)
+    {
+        g_object_unref(priv->model);
+    }
 }
 
 LeModel * Model::c_model()
