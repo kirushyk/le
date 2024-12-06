@@ -12,8 +12,8 @@ G_BEGIN_DECLS
 
 typedef struct LeShape
 {
-    unsigned  num_dimensions;
-    guint32 *sizes;
+  unsigned  num_dimensions;
+  guint32 *sizes;
 } LeShape;
 
 LeShape *    le_shape_new_uninitialized  (unsigned  num_dimensions);

@@ -62,14 +62,20 @@ le_shape_set_size(LeShape *shape, unsigned dimension, guint32 size)
 }
 
 LeShape *
-le_shape_copy (LeShape *another)
+le_shape_copy (LeShape * another)
 {
   g_assert_nonnull (another);
-  LeShape *self = g_new0 (LeShape, 1);
+  LeShape *self = g_new (LeShape, 1);
   self->num_dimensions = another->num_dimensions;
-  gsize size = self->num_dimensions * sizeof(guint32);
-  self->sizes = g_malloc (size);
-  memcpy(self->sizes, another->sizes, size);
+  g_print ("%u\n", self->num_dimensions);
+  if (self->num_dimensions > 0) {
+    gsize size = self->num_dimensions * sizeof (guint32);
+    self->sizes = g_malloc (size);
+    g_print ("%p %p %lu\n", self->sizes, another->sizes, size);
+    memcpy (self->sizes, another->sizes, size);
+  } else {
+    self->sizes = NULL;
+  }
   return self;
 }
 
@@ -86,13 +92,16 @@ le_shape_lower_dimension(LeShape *another)
 }
 
 void
-le_shape_free(LeShape *self)
+le_shape_free (LeShape * self)
 {
-    if (self)
-    {
-        g_free (self->sizes);
-        g_free (self);
-    }
+  if (self)
+  {
+    g_assert_cmpint (self->num_dimensions > 0, ==, self->sizes != NULL);
+    
+    if (self->sizes)
+      g_free (self->sizes);
+    g_free (self);
+  }
 }
 
 const char *
@@ -135,39 +144,35 @@ le_shape_to_cstr(LeShape *shape)
 }
 
 guint32
-le_shape_get_elements_count(LeShape *shape)
+le_shape_get_elements_count(LeShape * shape)
 {
-    assert(shape);
-    assert(shape->sizes);
-    
-    guint32 count = 0;
-    if (shape)
+  guint32 count = 0;
+  if (shape)
+  {
+    g_assert_cmpint (shape->num_dimensions > 0, ==, shape->sizes != NULL);
+    count = 1;
+    for (unsigned i = 0; i < shape->num_dimensions; i++)
     {
-        count = 1;
-        for (unsigned i = 0; i < shape->num_dimensions; i++)
-        {
-            count *= shape->sizes[i];
-        }
+      count *= shape->sizes[i];
     }
-    return count;
+  }
+  return count;
 }
 
 guint32
 le_shape_get_regions_count(LeShape *shape)
 {
-    assert(shape);
-    assert(shape->sizes);
-    
-    guint32 count = 0;
-    if (shape)
+  guint32 count = 0;
+  if (shape)
+  {
+    g_assert_cmpint (shape->num_dimensions > 0, ==, shape->sizes != NULL);
+    count = 1;
+    for (unsigned i = 0; i < shape->num_dimensions - 1; i++)
     {
-        count = 1;
-        for (unsigned i = 0; i < shape->num_dimensions - 1; i++)
-        {
-            count *= shape->sizes[i];
-        }
+      count *= shape->sizes[i];
     }
-    return count;
+  }
+  return count;
 }
 
 bool
