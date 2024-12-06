@@ -47,10 +47,10 @@ le_shape_get_data(LeShape *shape)
 guint32
 le_shape_get_size(LeShape *shape, int dimension)
 {
-    assert(shape);
-    assert(dimension < (int)shape->num_dimensions);
-    assert(dimension >= -(int)shape->num_dimensions);
-    return shape->sizes[(dimension < 0) ? (shape->num_dimensions + dimension) : dimension];
+  g_assert_nonnull (shape);
+  g_assert_cmpint (dimension, <, (int)shape->num_dimensions);
+  g_assert_cmpint (dimension, >=, -(int)shape->num_dimensions);
+  return shape->sizes[(dimension < 0) ? (shape->num_dimensions + dimension) : dimension];
 }
 
 void
@@ -62,15 +62,15 @@ le_shape_set_size(LeShape *shape, unsigned dimension, guint32 size)
 }
 
 LeShape *
-le_shape_copy(LeShape *another)
+le_shape_copy (LeShape *another)
 {
-    assert(another);
-    LeShape *self = g_new0 (LeShape, 1);
-    self->num_dimensions = another->num_dimensions;
-    gsize size = self->num_dimensions * sizeof(guint32);
-    self->sizes = g_malloc (size);
-    memcpy(self->sizes, another->sizes, size);
-    return self;
+  g_assert_nonnull (another);
+  LeShape *self = g_new0 (LeShape, 1);
+  self->num_dimensions = another->num_dimensions;
+  gsize size = self->num_dimensions * sizeof(guint32);
+  self->sizes = g_malloc (size);
+  memcpy(self->sizes, another->sizes, size);
+  return self;
 }
 
 LeShape *

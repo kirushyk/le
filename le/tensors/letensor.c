@@ -168,60 +168,58 @@ le_tensor_get_data(const LeTensor *self)
 LeTensor *
 le_tensor_new_copy(const LeTensor *another)
 {
-    assert(another);
-    
-    LeTensor *self = g_new0 (LeTensor, 1);
-    self->device_type = another->device_type;
-    self->element_type = another->element_type;
-    self->shape = le_shape_copy(another->shape);
-    self->stride = le_shape_get_size(self->shape, -1);
-    self->owns_data = true;
-    gsize data_size = le_shape_get_elements_count(self->shape) * le_type_size(self->element_type);
-    switch (self->device_type)
-    {
+  g_assert_nonnull (another);
+
+  LeTensor *self = g_new0 (LeTensor, 1);
+  self->device_type = another->device_type;
+  self->element_type = another->element_type;
+  self->shape = le_shape_copy (another->shape);
+  self->stride = self->shape->num_dimensions > 0 ? le_shape_get_size (self->shape, -1) : 0;
+  self->owns_data = true;
+  gsize data_size = le_shape_get_elements_count (self->shape) * le_type_size (self->element_type);
+  switch (self->device_type)
+  {
 #ifdef HAVE_METAL
-    case LE_DEVICE_TYPE_METAL:
-        if (another->stride == le_shape_get_size(another->shape, -1))
-        {
-            self->data = le_metal_data_copy(another->data, data_size);
-        }
-        break;
+  case LE_DEVICE_TYPE_METAL:
+    if (self->shape->num_dimensions > 0 && (another->stride == le_shape_get_size (another->shape, -1)))
+    {
+      self->data = le_metal_data_copy(another->data, data_size);
+    }
+    break;
 #endif
 #ifdef HAVE_CUDA
-    case LE_DEVICE_TYPE_CUDA:
-        if (another->stride == le_shape_get_size(another->shape, -1))
-        {
-            self->data = le_cuda_data_copy(another->data, data_size);
-        }
-        break;
-#endif
-    case LE_DEVICE_TYPE_CPU:
-        {
-            self->data = g_malloc (data_size);
-            if (another->stride == le_shape_get_size(another->shape, -1))
-            {
-                memcpy(self->data, another->data, data_size);
-            }
-            else
-            {
-                unsigned regions_count = le_shape_get_regions_count(another->shape);
-                gsize region_size = self->stride * le_type_size(self->element_type);
-                gsize bytes_stride = another->stride * le_type_size(another->element_type);
-                for (unsigned i = 0; i < regions_count; i++)
-                {
-                    memcpy((guint8 *)self->data + i * region_size,
-                        (guint8 *)another->data + i * bytes_stride,
-                        region_size);
-                }
-            }
-        }
-        break;
-    default:
-        assert(false);
-        break;
+  case LE_DEVICE_TYPE_CUDA:
+    if (self->shape->num_dimensions > 0 && (another->stride == le_shape_get_size (another->shape, -1)))
+    {
+      self->data = le_cuda_data_copy (another->data, data_size);
     }
-    
-    return self;
+    break;
+#endif
+  case LE_DEVICE_TYPE_CPU:
+    self->data = g_malloc (data_size);
+    if (self->shape->num_dimensions > 0 && (another->stride == le_shape_get_size (another->shape, -1)))
+    {
+      memcpy (self->data, another->data, data_size);
+    }
+    else
+    {
+      guint32 regions_count = le_shape_get_regions_count (another->shape);
+      gsize region_size = self->stride * le_type_size (self->element_type);
+      gsize bytes_stride = another->stride * le_type_size (another->element_type);
+      for (guint32 i = 0; i < regions_count; i++)
+      {
+        memcpy ((guint8 *)self->data + i * region_size,
+            (guint8 *)another->data + i * bytes_stride,
+            region_size);
+      }
+    }
+    break;
+  default:
+    g_assert_not_reached ();
+    break;
+  }
+  
+  return self;
 }
 
 LeTensor *
