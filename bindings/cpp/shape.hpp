@@ -9,6 +9,7 @@ class Shape
 {
 public:
     Shape(unsigned numDimensions);
+    Shape(const Shape &another);
     ~Shape();
 
     LeShape *c_shape();

@@ -13,6 +13,12 @@ Shape::Shape(unsigned numDimensions):
     priv->c_shape = le_shape_new_uninitialized(numDimensions);
 }
 
+Shape::Shape(const Shape &another):
+    priv(std::make_shared<Private>())
+{
+    priv->c_shape = le_shape_copy(another.priv->c_shape);
+}
+
 LeShape *Shape::c_shape()
 {
     return priv->c_shape;

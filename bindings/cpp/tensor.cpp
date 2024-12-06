@@ -24,7 +24,7 @@ Tensor::Tensor(Type t, unsigned num_dimensions, ...):
 Tensor::Tensor(Type t, Shape s):
     priv(std::make_shared<Private>())
 {
-    priv->tensor = le_tensor_new_uninitialized((LeType)t, s.c_shape());
+    priv->tensor = le_tensor_new_uninitialized((LeType)t, le_shape_copy(s.c_shape()));
 }
 
 Tensor::Tensor(const Tensor &tensor):
