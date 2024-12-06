@@ -151,7 +151,7 @@ le_svm_margins(LeSVM *self, const LeTensor *x)
 }
 
 void
-le_svm_train(LeSVM *self, const LeTensor *x_train, const LeTensor *y_train, LeSVMTrainingOptions options)
+le_svm_train (LeSVM * self, const LeTensor * x_train, const LeTensor * y_train, LeSVMTrainingOptions options)
 {
   g_assert_nonnull (self);
   LeSVMPrivate *priv = le_svm_get_instance_private (self);
@@ -161,18 +161,22 @@ le_svm_train(LeSVM *self, const LeTensor *x_train, const LeTensor *y_train, LeSV
   unsigned max_passes = 100;
   unsigned max_iterations = 10000;
   
-  unsigned features_count = le_matrix_get_height(x_train);
-  unsigned examples_count = le_matrix_get_width(x_train);
+  unsigned features_count = le_matrix_get_height (x_train);
+  unsigned examples_count = le_matrix_get_width (x_train);
   /// @todo: Add more clever input data checks
-  assert(examples_count == le_matrix_get_width(y_train));
+  assert(examples_count == le_matrix_get_width (y_train));
 
-    /// @todo: Add checks
-  priv->x = (LeTensor *)x_train;
-  priv->y = (LeTensor *)y_train;
+  /// @todo: Add checks
+  if (priv->x)
+    le_tensor_free (priv->x); 
+  priv->x = le_tensor_new_copy ((LeTensor *)x_train);
+  if (priv->y)
+    le_tensor_free (priv->y);
+  priv->y = le_tensor_new_copy ((LeTensor *)y_train);
   priv->kernel = options.kernel;
   /// @todo: Add cleanup here
   /// @note: Maybe use stack variable instead
-  priv->alphas = le_matrix_new_zeros(LE_TYPE_FLOAT32, 1, examples_count);
+  priv->alphas = le_matrix_new_zeros (LE_TYPE_FLOAT32, 1, examples_count);
   priv->bias = 0;
   /// @todo: Add cleanup here
   priv->weights = NULL;

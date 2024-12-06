@@ -67,11 +67,9 @@ le_shape_copy (LeShape * another)
   g_assert_nonnull (another);
   LeShape *self = g_new (LeShape, 1);
   self->num_dimensions = another->num_dimensions;
-  g_print ("%u\n", self->num_dimensions);
   if (self->num_dimensions > 0) {
     gsize size = self->num_dimensions * sizeof (guint32);
     self->sizes = g_malloc (size);
-    g_print ("%p %p %lu\n", self->sizes, another->sizes, size);
     memcpy (self->sizes, another->sizes, size);
   } else {
     self->sizes = NULL;
