@@ -14,7 +14,7 @@ le_random_normal_f32(void)
 {
     gfloat u1 = le_random_uniform_f32();
     gfloat u2 = le_random_uniform_f32();
-    return cosf(2.0f * (gfloat)M_PI * u2) * sqrtf(-2.0f * logf(u1));
+    return cosf(2.0f * (gfloat)G_PI * u2) * sqrtf(-2.0f * logf(u1));
 }
 
 gfloat
