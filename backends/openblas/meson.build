@@ -16,6 +16,7 @@ if have_openblas
     le_openblas = static_library('le_openblas', le_openblas_sources,
         include_directories: inc,
         dependencies: [
+            glib,
             openblas
         ]
     )
