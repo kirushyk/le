@@ -29,18 +29,18 @@ if py3.found()
         pybind11_found = false
         pip3_pybind11_path = py3.get_install_dir() / 'pybind11' / 'include'
         if run_command('[', '-d', pip3_pybind11_path, ']', check: false).returncode() == 0
-            pylib_inc += pip3_pybind11_path
+            pylib_inc += include_directories(pip3_pybind11_path)
             pybind11_found = true
         endif
         pip3_pybind11_path = py3.get_install_dir().replace('site-packages', 'dist-packages') / 'pybind11' / 'include'
         if not pybind11_found and run_command('[', '-d', pip3_pybind11_path, ']', check: false).returncode() == 0
-            pylib_inc += pip3_pybind11_path
+            pylib_inc += include_directories(pip3_pybind11_path)
             pybind11_found = true
         endif
         ## @note: Temporary fix
         pip3_pybind11_path = py3.get_install_dir().replace('python3', 'python3.8') / 'pybind11' / 'include'
         if not pybind11_found and run_command('[', '-d', pip3_pybind11_path, ']', check: false).returncode() == 0
-            pylib_inc += pip3_pybind11_path
+            pylib_inc += include_directories(pip3_pybind11_path)
             pybind11_found = true
         endif
         if not pybind11_found
