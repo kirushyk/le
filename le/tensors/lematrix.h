@@ -24,15 +24,15 @@ gdouble             le_matrix_at_f64                        (const LeTensor *   
                                                             unsigned                y,
                                                             unsigned                x);   
 
-int8_t             le_matrix_at_i8                         (const LeTensor *        matrix,
+gint8             le_matrix_at_i8                         (const LeTensor *        matrix,
                                                             unsigned                y,
                                                             unsigned                x);
 
-int16_t            le_matrix_at_i16                        (const LeTensor *        matrix,
+gint16            le_matrix_at_i16                        (const LeTensor *        matrix,
                                                             unsigned                y,
                                                             unsigned                x);
 
-int32_t            le_matrix_at_i32                        (const LeTensor *        matrix,
+gint32            le_matrix_at_i32                        (const LeTensor *        matrix,
                                                             unsigned                y,
                                                             unsigned                x);
 
@@ -47,7 +47,7 @@ void               le_matrix_add                           (LeTensor *          
 void               le_matrix_set_i8                        (LeTensor *              matrix,
                                                             unsigned                y,
                                                             unsigned                x,
-                                                            int8_t                  value);
+                                                            gint8                  value);
 
 void               le_matrix_set_u8                        (LeTensor *              matrix,
                                                             unsigned                y,
@@ -57,7 +57,7 @@ void               le_matrix_set_u8                        (LeTensor *          
 void               le_matrix_set_i16                       (LeTensor *              matrix,
                                                             unsigned                y,
                                                             unsigned                x,
-                                                            int16_t                 value);
+                                                            gint16                 value);
 
 void               le_matrix_set_u16                       (LeTensor *              matrix,
                                                             unsigned                y,
@@ -67,7 +67,7 @@ void               le_matrix_set_u16                       (LeTensor *          
 void               le_matrix_set_i32                       (LeTensor *              matrix,
                                                             unsigned                y,
                                                             unsigned                x,
-                                                            int32_t                 value);
+                                                            gint32                 value);
 
 void               le_matrix_set_u32                       (LeTensor *              matrix,
                                                             unsigned                y,
@@ -92,11 +92,11 @@ void               le_matrix_set_f64                       (LeTensor *          
 /// @note: Half is not accepted here
 /// @note: Make sure to pass correct argument type here
 #define le_matrix_set(m, y, x, v) _Generic((v), \
-   int8_t: le_matrix_set_i8, \
+   gint8: le_matrix_set_i8, \
    guint8: le_matrix_set_u8, \
-   int16_t: le_matrix_set_i16, \
+   gint16: le_matrix_set_i16, \
    guint16: le_matrix_set_u16, \
-   int32_t: le_matrix_set_i32, \
+   gint32: le_matrix_set_i32, \
    guint32: le_matrix_set_u32, \
    gfloat: le_matrix_set_f32, \
    gdouble: le_matrix_set_f64 \

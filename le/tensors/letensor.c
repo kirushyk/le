@@ -53,8 +53,8 @@ le_tensor_new_from_va_list(LeType element_type, unsigned num_dimensions, va_list
         {
         case LE_TYPE_INT8:
             {
-                int8_t value = (int8_t)va_arg(dims_and_data, int);
-                ((int8_t *)self->data)[i] = value;
+                gint8 value = (gint8)va_arg(dims_and_data, int);
+                ((gint8 *)self->data)[i] = value;
             }
             break;
         case LE_TYPE_UINT8:
@@ -65,8 +65,8 @@ le_tensor_new_from_va_list(LeType element_type, unsigned num_dimensions, va_list
             break;
         case LE_TYPE_INT16:
             {
-                int16_t value = (int16_t)va_arg(dims_and_data, int);
-                ((int16_t *)self->data)[i] = value;
+                gint16 value = (gint16)va_arg(dims_and_data, int);
+                ((gint16 *)self->data)[i] = value;
             }
             break;
         case LE_TYPE_UINT16:
@@ -77,14 +77,14 @@ le_tensor_new_from_va_list(LeType element_type, unsigned num_dimensions, va_list
             break;
         case LE_TYPE_INT32:
             {
-                int32_t value = (int32_t)va_arg(dims_and_data, int);
-                ((int32_t *)self->data)[i] = value;
+                gint32 value = (gint32)va_arg(dims_and_data, int);
+                ((gint32 *)self->data)[i] = value;
             }
             break;
         case LE_TYPE_UINT32:
             {
-                int32_t value = (int32_t)va_arg(dims_and_data, int);
-                ((int32_t *)self->data)[i] = value;
+                gint32 value = (gint32)va_arg(dims_and_data, int);
+                ((gint32 *)self->data)[i] = value;
             }
             break;
         case LE_TYPE_FLOAT32:
@@ -249,15 +249,15 @@ le_tensor_new_zeros(LeType element_type, LeShape *shape)
         {
         case LE_TYPE_INT8:
         case LE_TYPE_UINT8:
-            ((int8_t *)self->data)[i] = 0;
+            ((gint8 *)self->data)[i] = 0;
             break;
         case LE_TYPE_INT16:
         case LE_TYPE_UINT16:
-            ((int16_t *)self->data)[i] = 0;
+            ((gint16 *)self->data)[i] = 0;
             break;
         case LE_TYPE_INT32:
         case LE_TYPE_UINT32:
-            ((int32_t *)self->data)[i] = 0;
+            ((gint32 *)self->data)[i] = 0;
             break;
         case LE_TYPE_FLOAT16:
             ((guint16 *)self->data)[i] = F16_0;
@@ -295,15 +295,15 @@ le_tensor_new_zeros_like(const LeTensor *another)
         {
         case LE_TYPE_INT8:
         case LE_TYPE_UINT8:
-            ((int8_t *)self->data)[i] = 0;
+            ((gint8 *)self->data)[i] = 0;
             break;
         case LE_TYPE_INT16:
         case LE_TYPE_UINT16:
-            ((int16_t *)self->data)[i] = 0;
+            ((gint16 *)self->data)[i] = 0;
             break;
         case LE_TYPE_INT32:
         case LE_TYPE_UINT32:
-            ((int32_t *)self->data)[i] = 0;
+            ((gint32 *)self->data)[i] = 0;
             break;
         case LE_TYPE_FLOAT16:
             ((guint16 *)self->data)[i] = F16_0;
@@ -1138,13 +1138,13 @@ le_tensor_apply_relu(LeTensor *self)
             APPLY_RELU(gdouble)
             break;
         case LE_TYPE_INT8:
-            APPLY_RELU(int8_t)
+            APPLY_RELU(gint8)
             break;
         case LE_TYPE_INT16:
-            APPLY_RELU(int16_t)
+            APPLY_RELU(gint16)
             break;
         case LE_TYPE_INT32:
-            APPLY_RELU(int32_t)
+            APPLY_RELU(gint32)
             break;
         default:
             return;
@@ -1192,13 +1192,13 @@ le_tensor_to_cstr(const LeTensor *self)
                     sprintf(ptr, "%u%n", (unsigned)((guint8 *)self->data)[y * self->shape->sizes[1] + x], &written);
                     break;
                 case LE_TYPE_INT8:
-                    sprintf(ptr, "%d%n", (int)((int8_t *)self->data)[y * self->shape->sizes[1] + x], &written);
+                    sprintf(ptr, "%d%n", (int)((gint8 *)self->data)[y * self->shape->sizes[1] + x], &written);
                     break;
                 case LE_TYPE_INT16:
-                    sprintf(ptr, "%d%n", (int)((int16_t *)self->data)[y * self->shape->sizes[1] + x], &written);
+                    sprintf(ptr, "%d%n", (int)((gint16 *)self->data)[y * self->shape->sizes[1] + x], &written);
                     break;
                 case LE_TYPE_INT32:
-                    sprintf(ptr, "%d%n", (int)((int32_t *)self->data)[y * self->shape->sizes[1] + x], &written);
+                    sprintf(ptr, "%d%n", (int)((gint32 *)self->data)[y * self->shape->sizes[1] + x], &written);
                     break;
                 case LE_TYPE_FLOAT32:
                     sprintf(ptr, "%f%n", ((gfloat *)self->data)[y * self->shape->sizes[1] + x], &written);

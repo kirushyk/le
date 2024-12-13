@@ -65,8 +65,8 @@ le_idx_read(const char *filename)
                 break;
             }
 
-            int32_t shape_bytes[header.dimensionality];
-            fread(shape_bytes, sizeof(int32_t), header.dimensionality, fin);
+            gint32 shape_bytes[header.dimensionality];
+            fread(shape_bytes, sizeof(gint32), header.dimensionality, fin);
 
             LeShape *shape = le_shape_new_uninitialized(header.dimensionality);
             for (guint8 i = 0; i < header.dimensionality; i++)
@@ -133,8 +133,8 @@ le_idx_gz_read(const char *filename)
                 break;
             }
             
-            int32_t shape_bytes[header.dimensionality];
-            gzread(fin, shape_bytes, sizeof(int32_t) * header.dimensionality);
+            gint32 shape_bytes[header.dimensionality];
+            gzread(fin, shape_bytes, sizeof(gint32) * header.dimensionality);
 
             LeShape *shape = le_shape_new_uninitialized(header.dimensionality);
             for (guint8 i = 0; i < header.dimensionality; i++)

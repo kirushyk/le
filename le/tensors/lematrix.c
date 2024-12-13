@@ -61,7 +61,7 @@ le_matrix_at_f64(const LeTensor *self, unsigned y, unsigned x)
     return ((gdouble *)self->data)[y * self->stride + x];
 }
 
-int8_t
+gint8
 le_matrix_at_i8(const LeTensor *self, unsigned y, unsigned x)
 {
     assert(self->device_type == LE_DEVICE_TYPE_CPU);
@@ -70,10 +70,10 @@ le_matrix_at_i8(const LeTensor *self, unsigned y, unsigned x)
     assert(y < self->shape->sizes[0]);
     assert(x < self->shape->sizes[1]);
     
-    return ((int8_t *)self->data)[y * self->stride + x];
+    return ((gint8 *)self->data)[y * self->stride + x];
 }
 
-int16_t
+gint16
 le_matrix_at_i16(const LeTensor *self, unsigned y, unsigned x)
 {
     assert(self->device_type == LE_DEVICE_TYPE_CPU);
@@ -82,10 +82,10 @@ le_matrix_at_i16(const LeTensor *self, unsigned y, unsigned x)
     assert(y < self->shape->sizes[0]);
     assert(x < self->shape->sizes[1]);
     
-    return ((int16_t *)self->data)[y * self->stride + x];
+    return ((gint16 *)self->data)[y * self->stride + x];
 }
 
-int32_t
+gint32
 le_matrix_at_i32(const LeTensor *self, unsigned y, unsigned x)
 {
     assert(self->device_type == LE_DEVICE_TYPE_CPU);
@@ -94,7 +94,7 @@ le_matrix_at_i32(const LeTensor *self, unsigned y, unsigned x)
     assert(y < self->shape->sizes[0]);
     assert(x < self->shape->sizes[1]);
     
-    return ((int32_t *)self->data)[y * self->stride + x];
+    return ((gint32 *)self->data)[y * self->stride + x];
 }
 
 guint32
@@ -143,7 +143,7 @@ le_matrix_add(LeTensor *self, const LeTensor *another)
 }
 
 void
-le_matrix_set_i8(LeTensor *self, unsigned y, unsigned x, int8_t value)
+le_matrix_set_i8(LeTensor *self, unsigned y, unsigned x, gint8 value)
 {
     assert(self->device_type == LE_DEVICE_TYPE_CPU);
     assert(self->element_type == LE_TYPE_INT8);
@@ -154,7 +154,7 @@ le_matrix_set_i8(LeTensor *self, unsigned y, unsigned x, int8_t value)
     assert(x < self->stride);
     
     /// @todo: Take stride into account
-    ((int8_t *)self->data)[y * self->stride + x] = value;
+    ((gint8 *)self->data)[y * self->stride + x] = value;
 }
 
 void
@@ -173,7 +173,7 @@ le_matrix_set_u8(LeTensor *self, unsigned y, unsigned x, guint8 value)
 }
 
 void
-le_matrix_set_i16(LeTensor *self, unsigned y, unsigned x, int16_t value)
+le_matrix_set_i16(LeTensor *self, unsigned y, unsigned x, gint16 value)
 {
     assert(self->device_type == LE_DEVICE_TYPE_CPU);
     assert(self->element_type == LE_TYPE_INT16);
@@ -184,7 +184,7 @@ le_matrix_set_i16(LeTensor *self, unsigned y, unsigned x, int16_t value)
     assert(x < self->stride);
     
     /// @todo: Take stride into account
-    ((int16_t *)self->data)[y * self->stride + x] = value;
+    ((gint16 *)self->data)[y * self->stride + x] = value;
 }
 
 void
@@ -203,7 +203,7 @@ le_matrix_set_u16(LeTensor *self, unsigned y, unsigned x, guint16 value)
 }
 
 void
-le_matrix_set_i32(LeTensor *self, unsigned y, unsigned x, int32_t value)
+le_matrix_set_i32(LeTensor *self, unsigned y, unsigned x, gint32 value)
 {
     assert(self->device_type == LE_DEVICE_TYPE_CPU);
     assert(self->element_type == LE_TYPE_INT32);
@@ -214,7 +214,7 @@ le_matrix_set_i32(LeTensor *self, unsigned y, unsigned x, int32_t value)
     assert(x < self->stride);
     
     /// @todo: Take stride into account
-    ((int32_t *)self->data)[y * self->stride + x] = value;
+    ((gint32 *)self->data)[y * self->stride + x] = value;
 }
 
 void
@@ -299,19 +299,19 @@ le_matrix_new_identity(LeType type, unsigned size)
             switch (type)
             {
             case LE_TYPE_INT8:
-                ((int8_t *)self->data)[y * size + x] = (x == y) ? 1 : 0;
+                ((gint8 *)self->data)[y * size + x] = (x == y) ? 1 : 0;
                 break;
             case LE_TYPE_UINT8:
                 ((guint8 *)self->data)[y * size + x] = (x == y) ? 1 : 0;
                 break;
             case LE_TYPE_INT16:
-                ((int16_t *)self->data)[y * size + x] = (x == y) ? 1 : 0;
+                ((gint16 *)self->data)[y * size + x] = (x == y) ? 1 : 0;
                 break;
             case LE_TYPE_UINT16:
                 ((guint16 *)self->data)[y * size + x] = (x == y) ? 1 : 0;
                 break;
             case LE_TYPE_INT32:
-                ((int32_t *)self->data)[y * size + x] = (x == y) ? 1 : 0;
+                ((gint32 *)self->data)[y * size + x] = (x == y) ? 1 : 0;
                 break;
             case LE_TYPE_UINT32:
                 ((guint32 *)self->data)[y * size + x] = (x == y) ? 1 : 0;
@@ -372,19 +372,19 @@ le_matrix_new_zeros(LeType type, unsigned height, unsigned width)
         switch (type)
         {
         case LE_TYPE_INT8:
-            ((int8_t *)self->data)[i] = 0;
+            ((gint8 *)self->data)[i] = 0;
             break;
         case LE_TYPE_UINT8:
             ((guint8 *)self->data)[i] = 0;
             break;
         case LE_TYPE_INT16:
-            ((int16_t *)self->data)[i] = 0;
+            ((gint16 *)self->data)[i] = 0;
             break;
         case LE_TYPE_UINT16:
             ((guint16 *)self->data)[i] = 0;
             break;
         case LE_TYPE_INT32:
-            ((int32_t *)self->data)[i] = 0;
+            ((gint32 *)self->data)[i] = 0;
             break;
         case LE_TYPE_UINT32:
             ((guint32 *)self->data)[i] = 0;
@@ -667,10 +667,10 @@ le_matrix_new_conv2d(const LeTensor *image, const LeTensor *filter)
     assert(image->element_type == LE_TYPE_FLOAT32);
     assert(filter->element_type == LE_TYPE_FLOAT32);
 
-    int32_t fh = le_matrix_get_height(filter);
-    int32_t height = le_matrix_get_height(image) - fh + 1;
-    int32_t fw = le_matrix_get_width(filter);
-    int32_t width = le_matrix_get_width(image) - le_matrix_get_width(filter) + 1;
+    gint32 fh = le_matrix_get_height(filter);
+    gint32 height = le_matrix_get_height(image) - fh + 1;
+    gint32 fw = le_matrix_get_width(filter);
+    gint32 width = le_matrix_get_width(image) - le_matrix_get_width(filter) + 1;
 
     assert(height > 1);
     assert(width > 1);
@@ -683,14 +683,14 @@ le_matrix_new_conv2d(const LeTensor *image, const LeTensor *filter)
     self->owns_data = true;
     self->data = g_new0 (gfloat, le_shape_get_elements_count(self->shape));
 
-    for (int32_t oy = 0; oy < height; oy++)
+    for (gint32 oy = 0; oy < height; oy++)
     {
-        for (int32_t ox = 0; ox < width; ox++)
+        for (gint32 ox = 0; ox < width; ox++)
         {
             gfloat value = 0.0f;
-            for (int32_t fy = 0; fy < fh; fy++)
+            for (gint32 fy = 0; fy < fh; fy++)
             {
-                for (int32_t fx = 0; fx < fw; fx++)
+                for (gint32 fx = 0; fx < fw; fx++)
                 {
                     value += le_matrix_at_f32(image, oy + fy, ox + fx) * le_matrix_at_f32(filter, fy, fx);
                 }

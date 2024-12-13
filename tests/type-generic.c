@@ -20,7 +20,7 @@ main()
     le_tensor_free(m);
 
     m = le_tensor_new(LE_TYPE_INT8, 2, 1, 1, 1);
-    le_matrix_set(m, 0, 0, (int8_t)2);
+    le_matrix_set(m, 0, 0, (gint8)2);
     le_tensor_free(m);
 
     m = le_tensor_new(LE_TYPE_UINT8, 2, 1, 1, 1);
@@ -28,7 +28,7 @@ main()
     le_tensor_free(m);
 
     m = le_tensor_new(LE_TYPE_INT16, 2, 1, 1, 1);
-    le_matrix_set(m, 0, 0, (int16_t)2);
+    le_matrix_set(m, 0, 0, (gint16)2);
     le_tensor_free(m);
 
     m = le_tensor_new(LE_TYPE_UINT16, 2, 1, 1, 1);
@@ -36,7 +36,7 @@ main()
     le_tensor_free(m);
 
     m = le_tensor_new(LE_TYPE_INT32, 2, 1, 1, 1);
-    le_matrix_set(m, 0, 0, (int32_t)2);
+    le_matrix_set(m, 0, 0, (gint32)2);
     le_tensor_free(m);
 
     m = le_tensor_new(LE_TYPE_UINT32, 2, 1, 1, 1);
