@@ -6,8 +6,8 @@
 G_BEGIN_DECLS
 
 gfloat le_clamp_f32 (gfloat v,
-                    gfloat min,
-                    gfloat max);
+                     gfloat min,
+                     gfloat max);
 
 G_END_DECLS
 
