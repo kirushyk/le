@@ -10,7 +10,7 @@ LeTensor *
 le_matrix_new_polynomia (const LeTensor * a)
 {
   /// @todo: Check tensor device
-  g_assert_cmpflt (a->element_type, ==, LE_TYPE_FLOAT32);
+  g_assert_cmpint (a->element_type, ==, LE_TYPE_FLOAT32);
 
   /// @todo: Use proper types
   int initial_features_count = le_matrix_get_height (a);
