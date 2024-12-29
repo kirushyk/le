@@ -35,15 +35,17 @@ if xcrun.found()
     else
         warning('Unable to find `metallib` command line tool.')
     endif
+else
+    warning('Xcode Command Line Tools not found. Please install full Xcode application.')
 endif
 
 if have_objc and metal.found() and not (metalc.found() and metallib.found())
-    warning('''Even if you have the command line tools installed, you still need Xcode.
-You might have installed the command line tools before installing Xcode. For instance, you might have set up Homebrew first.
-The command line tools are pointing to an incomplete SDK, rather than the one you installed with Xcode.
-sudo xcode-select --switch /Applications/Xcode.app/Contents/Developer
-To explicitly disable Metal backend, configure build/ folder with -Dmetal=disabled:
-meson setup -Dmetal=disabled build/''')
+    warning('''Xcode Command Line Tools are pointing to an incomplete SDK instead of the one distributed with Xcode. This can happen due to one of the following reasons:
+- Xcode is not installed: Even if you have the Xcode Command Line Tools installed, you still need the full Xcode application. Please install Xcode.
+- Command Line Tools were installed before Xcode: For example, you may have set up Homebrew first. To fix this issue, run the following command:
+    sudo xcode-select --switch /Applications/Xcode.app/Contents/Developer
+To explicitly disable the Metal backend, configure the build folder with:
+    meson setup -Dmetal=disabled build/''')
 endif
 
 have_metal = have_objc and metal.found() and metalc.found() and metallib.found()
