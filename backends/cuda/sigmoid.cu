@@ -1,3 +1,6 @@
+#include <cmath>
+#include <cuda_runtime.h>
+
 __device__ __forceinline__ float sigmoid(float a)
 {
     return 1.0 / (1.0 + exp(-a));

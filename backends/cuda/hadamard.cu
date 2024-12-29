@@ -1,3 +1,5 @@
+#include <cuda_runtime.h>
+
 __global__ void hadamardProductKernel(float *a, float *b, int l)
 {
     int index = blockIdx.x * blockDim.x + threadIdx.x;
