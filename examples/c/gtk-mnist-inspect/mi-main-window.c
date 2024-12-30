@@ -17,7 +17,7 @@ struct _LEMainWindow
     GtkApplicationWindow parent_instance;
     
     GtkWidget *drawing_area;
-    GtkWidget *set_selection_combo;
+    GtkWidget *set_selection_drop_down;
     GtkWidget *index_spin_button;
     GtkWidget *label_entry;
     
@@ -119,35 +119,35 @@ update_image(LEMainWindow *window)
 }
 
 static void
-set_changed(GtkComboBox *combo_box, gpointer data)
+set_changed (GtkDropDown * drop_down, gpointer data)
 {
-    LEMainWindow *window = LE_MAIN_WINDOW(data);
-    
-    if (window->data_set == NULL)
-        return;
+  LEMainWindow *window = LE_MAIN_WINDOW (data);
+  
+  if (window->data_set == NULL)
+    return;
 
-    if (window->data_set->train == NULL || window->data_set->test == NULL)
-        return;
-    
-    if (gtk_combo_box_get_active(combo_box)) {
-        window->input = le_data_set_get_input(window->data_set->test);
-        window->output = le_data_set_get_output(window->data_set->test);
-    } else {
-        window->input = le_data_set_get_input(window->data_set->train);
-        window->output = le_data_set_get_output(window->data_set->train);
-    }
+  if (window->data_set->train == NULL || window->data_set->test == NULL)
+    return;
+  
+  if (gtk_drop_down_get_selected (drop_down) == 1) {
+    window->input = le_data_set_get_input (window->data_set->test);
+    window->output = le_data_set_get_output (window->data_set->test);
+  } else {
+    window->input = le_data_set_get_input (window->data_set->train);
+    window->output = le_data_set_get_output (window->data_set->train);
+  }
 
-    if (window->output == NULL)
-        return;
+  if (window->output == NULL)
+    return;
 
-    int test_examples_count = le_shape_get_elements_count(window->output->shape);
-    if (window->index >= test_examples_count) {
-        window->index = test_examples_count - 1;
-    }
+  int test_examples_count = le_shape_get_elements_count (window->output->shape);
+  if (window->index >= test_examples_count) {
+    window->index = test_examples_count - 1;
+  }
 
-    gtk_spin_button_set_range(GTK_SPIN_BUTTON(window->index_spin_button), 0, test_examples_count - 1);
-    
-    update_image(window);
+  gtk_spin_button_set_range (GTK_SPIN_BUTTON (window->index_spin_button), 0, test_examples_count - 1);
+  
+  update_image (window);
 }
 
 static void
@@ -161,46 +161,45 @@ index_changed(GtkSpinButton *spin_button, gpointer data)
 }
 
 static void
-le_main_window_init(LEMainWindow *self)
+le_main_window_init (LEMainWindow * self)
 {
-    self->drawing_area = gtk_drawing_area_new();
-    gtk_drawing_area_set_draw_func(GTK_DRAWING_AREA(self->drawing_area), draw_callback, self, NULL);
-    gtk_widget_set_size_request(self->drawing_area, 112, 112);
+  self->drawing_area = gtk_drawing_area_new ();
+  gtk_drawing_area_set_draw_func (GTK_DRAWING_AREA(self->drawing_area), draw_callback, self, NULL);
+  gtk_widget_set_size_request (self->drawing_area, 112, 112);
 
-    GtkWidget *grid = gtk_grid_new();
-    gtk_grid_set_row_spacing(GTK_GRID(grid), 2);
-    gtk_grid_set_column_spacing(GTK_GRID(grid), 2);
-    gtk_grid_attach(GTK_GRID(grid), gtk_label_new("Set:"), 0, 0, 1, 1);
-    self->set_selection_combo = gtk_combo_box_text_new();
-    g_signal_connect(G_OBJECT(self->set_selection_combo), "changed", G_CALLBACK(set_changed), self);
-    gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(self->set_selection_combo), "Train");
-    gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(self->set_selection_combo), "Test");
-    gtk_combo_box_set_active(GTK_COMBO_BOX(self->set_selection_combo), 0);
-    gtk_grid_attach(GTK_GRID(grid), self->set_selection_combo, 1, 0, 1, 1);
-    gtk_grid_attach(GTK_GRID(grid), gtk_label_new("Index:"), 0, 1, 1, 1);
-    self->index_spin_button = gtk_spin_button_new_with_range(0, 59999, 1);
-    g_signal_connect(G_OBJECT(self->index_spin_button), "value-changed", G_CALLBACK(index_changed), self);
-    gtk_grid_attach(GTK_GRID(grid), self->index_spin_button, 1, 1, 1, 1);
-    gtk_grid_attach(GTK_GRID(grid), gtk_label_new("Label:"), 0, 2, 1, 1);
-    self->label_entry = gtk_entry_new();
-    g_object_set(self->label_entry, "editable", FALSE, NULL);
-    gtk_grid_attach(GTK_GRID(grid), self->label_entry, 1, 2, 1, 1);
+  GtkWidget *grid = gtk_grid_new ();
+  gtk_grid_set_row_spacing (GTK_GRID (grid), 2);
+  gtk_grid_set_column_spacing (GTK_GRID (grid), 2);
+  gtk_grid_attach (GTK_GRID (grid), gtk_label_new ("Set:"), 0, 0, 1, 1);
+  const gchar *set_names[] = {"Train", "Test"};
+  self->set_selection_drop_down = gtk_drop_down_new_from_strings (set_names);
+  g_signal_connect (G_OBJECT (self->set_selection_drop_down), "notify::selected-item", G_CALLBACK (set_changed), self);
+  gtk_drop_down_set_selected (GTK_DROP_DOWN (self->set_selection_drop_down), 0);
+  gtk_grid_attach (GTK_GRID (grid), self->set_selection_drop_down, 1, 0, 1, 1);
+  gtk_grid_attach (GTK_GRID (grid), gtk_label_new ("Index:"), 0, 1, 1, 1);
+  self->index_spin_button = gtk_spin_button_new_with_range (0, 59999, 1);
+  g_signal_connect (G_OBJECT (self->index_spin_button), "value-changed", G_CALLBACK (index_changed), self);
+  gtk_grid_attach (GTK_GRID (grid), self->index_spin_button, 1, 1, 1, 1);
+  gtk_grid_attach (GTK_GRID (grid), gtk_label_new ("Label:"), 0, 2, 1, 1);
+  self->label_entry = gtk_entry_new ();
+  g_object_set (self->label_entry, "editable", FALSE, NULL);
+  gtk_grid_attach (GTK_GRID (grid), self->label_entry, 1, 2, 1, 1);
 
-    GtkWidget *hbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 2);
-    gtk_box_append(GTK_BOX(hbox), self->drawing_area);
-    gtk_box_append(GTK_BOX(hbox), gtk_separator_new(GTK_ORIENTATION_VERTICAL));
-    gtk_box_append(GTK_BOX(hbox), grid);
-    
-    gtk_window_set_child(GTK_WINDOW(self), hbox);
-    
-    self->data_set = le_mnist_load(NULL);
-    self->image_visualisation = NULL;
-    self->input = NULL;
-    self->output = NULL;
-    index_changed(GTK_SPIN_BUTTON(self->index_spin_button), self);
-    set_changed(GTK_COMBO_BOX(self->set_selection_combo), self);
+  GtkWidget *hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 2);
+  gtk_box_append (GTK_BOX (hbox), self->drawing_area);
+  gtk_box_append (GTK_BOX (hbox), gtk_separator_new (GTK_ORIENTATION_VERTICAL));
+  gtk_box_append (GTK_BOX (hbox), grid);
 
-    g_action_map_add_action_entries(G_ACTION_MAP(self), win_entries, G_N_ELEMENTS(win_entries), self);
+  gtk_window_set_child (GTK_WINDOW (self), hbox);
+
+  self->data_set = le_mnist_load (NULL);
+  self->image_visualisation = NULL;
+  self->input = NULL;
+  self->output = NULL;
+  index_changed (GTK_SPIN_BUTTON (self->index_spin_button), self);
+  set_changed (GTK_DROP_DOWN (self->set_selection_drop_down), self);
+
+  g_action_map_add_action_entries (G_ACTION_MAP (self), win_entries, G_N_ELEMENTS (win_entries), self);
 }
 
 GtkWidget *
