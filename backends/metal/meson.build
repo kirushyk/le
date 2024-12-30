@@ -18,9 +18,18 @@ metal = dependency('appleframeworks',
     required: get_option('metal')
 )
 
-xcrun = find_program('xcrun', required: get_option('metal'))
+have_metal = false
 metalc = disabler()
 metallib = disabler()
+if get_option('metal').disabled()
+    if host_machine.system() == 'darwin'
+        warning('Metal backend is explicitly disabled.')
+    endif
+    subdir_done()
+endif
+
+xcrun = find_program('xcrun', required: get_option('metal'))
+
 if xcrun.found()
     r = run_command(xcrun, '--sdk', 'macosx', '-f', 'metal', check: false)
     if r.returncode() == 0
@@ -44,8 +53,8 @@ if have_objc and metal.found() and not (metalc.found() and metallib.found())
 - Xcode is not installed: Even if you have the Xcode Command Line Tools installed, you still need the full Xcode application. Please install Xcode.
 - Command Line Tools were installed before Xcode: For example, you may have set up Homebrew first. To fix this issue, run the following command:
     sudo xcode-select --switch /Applications/Xcode.app/Contents/Developer
-To explicitly disable the Metal backend, configure the build folder with:
-    meson setup -Dmetal=disabled build/''')
+To explicitly disable the Metal backend, configure the build folder with `-Dmetal=disabled`:
+    meson configure -Dmetal=disabled build/''')
 endif
 
 have_metal = have_objc and metal.found() and metalc.found() and metallib.found()
@@ -86,4 +95,8 @@ if have_metal
             glib
         ]
     )
+elif get_option('metal').enabled()
+    error('Metal backend is explicitly enabled but will not be built because Metal framework is not available on this system.')
+elif host_machine.system() == 'darwin'
+    warning('Metal backend will not be build, you may encounter suboptimal performance.')
 endif
