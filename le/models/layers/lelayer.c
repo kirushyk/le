@@ -57,7 +57,7 @@ le_layer_init (LeLayer * self)
 const gchar *
 le_layer_get_name (const LeLayer * self)
 {
-  LeLayerPrivate *priv = le_layer_get_instance_private (self);
+  LeLayerPrivate *priv = le_layer_get_instance_private ((LeLayer *)self);
   return priv->name;
 }
 
