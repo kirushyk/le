@@ -20,8 +20,8 @@ typedef struct _LeBGDPrivate
 {
   unsigned k;
   
-  LeTensor *input;
-  LeTensor *output;
+  const LeTensor *input;
+  const LeTensor *output;
 } LeBGDPrivate;
 
 static void le_bgd_class_init (LeBGDClass * klass);
@@ -186,7 +186,7 @@ le_bgd_new_simple(GList *parameters, GList *gradients, gfloat learning_rate)
 }
 
 LeBGD *
-le_bgd_new(LeModel *model, const LeTensor *input, const LeTensor *output, gfloat learning_rate)
+le_bgd_new(LeModel * model, const LeTensor * input, const LeTensor * output, gfloat learning_rate)
 {
   assert(model);
 
@@ -194,7 +194,7 @@ le_bgd_new(LeModel *model, const LeTensor *input, const LeTensor *output, gfloat
   LeBGDPrivate *priv = le_bgd_get_instance_private (self);
   if (learning_rate <= 0.0f)
   {
-    LE_WARNING("Learning rate = %f", learning_rate);
+    LE_WARNING ("Learning rate = %f", learning_rate);
   }
   le_optimizer_set_learning_rate (LE_OPTIMIZER (self), learning_rate);
   le_optimizer_set_model (LE_OPTIMIZER (self), model);
