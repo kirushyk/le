@@ -75,60 +75,60 @@ le_bgd_init (LeBGD * self)
 void
 le_bgd_step(LeOptimizer *optimizer)
 {
-    LeBGD *self = LE_BGD (optimizer);
-    LeBGDPrivate *priv = le_bgd_get_instance_private (self);
-    GList *parameters_iterator;
-    GList *gradients_iterator;
+  LeBGD *self = LE_BGD (optimizer);
+  LeBGDPrivate *priv = le_bgd_get_instance_private (self);
+  GList *parameters_iterator;
+  GList *gradients_iterator;
 
-    LE_INFO("Step");
+  LE_INFO("Step");
 
-    gfloat learning_rate = le_optimizer_get_learning_rate (optimizer);
+  gfloat learning_rate = le_optimizer_get_learning_rate (optimizer);
 
-    GList *gradients = NULL;
-    bool own_gradients = false;
+  GList *gradients = NULL;
+  bool own_gradients = false;
 
-    LeModel *model = le_optimizer_get_model (optimizer);
-    if (model)
-    {
-        gradients = le_model_get_gradients(model, priv->input, priv->output);
-        own_gradients = true;
-    }
-    else if (le_optimizer_get_gradients (optimizer))
-    {
-        gradients = le_optimizer_get_gradients (optimizer);
-    }
-    
+  LeModel *model = le_optimizer_get_model (optimizer);
+  if (model)
+  {
+    gradients = le_model_get_gradients(model, priv->input, priv->output);
+    own_gradients = true;
+  }
+  else if (le_optimizer_get_gradients (optimizer))
+  {
+    gradients = le_optimizer_get_gradients (optimizer);
+  }
+  
 
-    for (parameters_iterator = le_optimizer_get_parameters (optimizer), gradients_iterator = gradients;
-         parameters_iterator && gradients_iterator;
-         parameters_iterator = parameters_iterator->next, gradients_iterator = gradients_iterator->next)
-    {
-        LeTensor *parameter = (LeTensor *)parameters_iterator->data;
-        LE_INFO("Parameter %s:\n%s", le_shape_to_cstr(parameter->shape), le_tensor_to_cstr(parameter));
-        LeTensor *gradient = (LeTensor *)gradients_iterator->data;
-        LE_INFO("Gradient %s:\n%s", le_shape_to_cstr(gradient->shape), le_tensor_to_cstr(gradient));
-        le_tensor_sub_scaled_f32(parameter, learning_rate, gradient);
-        LeTensorStats gradient_stats = le_tensor_get_stats(gradient);
-        LE_INFO("Gradient stats:\n\tmin: %f\n\tmax: %f\n\tmean: %f\n\tdeviation: %f", gradient_stats.min, gradient_stats.max, gradient_stats.mean, gradient_stats.deviation);
-    }
+  for (parameters_iterator = le_optimizer_get_parameters (optimizer), gradients_iterator = gradients;
+        parameters_iterator && gradients_iterator;
+        parameters_iterator = parameters_iterator->next, gradients_iterator = gradients_iterator->next)
+  {
+    LeTensor *parameter = (LeTensor *)parameters_iterator->data;
+    LE_INFO("Parameter %s:\n%s", le_shape_to_cstr(parameter->shape), le_tensor_to_cstr(parameter));
+    LeTensor *gradient = (LeTensor *)gradients_iterator->data;
+    LE_INFO("Gradient %s:\n%s", le_shape_to_cstr(gradient->shape), le_tensor_to_cstr(gradient));
+    le_tensor_sub_scaled_f32(parameter, learning_rate, gradient);
+    LeTensorStats gradient_stats = le_tensor_get_stats(gradient);
+    LE_INFO("Gradient stats:\n\tmin: %f\n\tmax: %f\n\tmean: %f\n\tdeviation: %f", gradient_stats.min, gradient_stats.max, gradient_stats.mean, gradient_stats.deviation);
+  }
 
-    if (parameters_iterator)
-    {
-        LE_WARNING("Some gradients missing");
-    }
+  if (parameters_iterator)
+  {
+    LE_WARNING("Some gradients missing");
+  }
 
-    if (gradients_iterator)
-    {
-        LE_WARNING("Extra gradients passed");
-    }
+  if (gradients_iterator)
+  {
+    LE_WARNING("Extra gradients passed");
+  }
 
-    if (own_gradients)
-    {
-        g_list_free_full (gradients, (GDestroyNotify)le_tensor_free);
-    }
+  if (own_gradients)
+  {
+    g_list_free_full (gradients, (GDestroyNotify)le_tensor_free);
+  }
 
-    // LE_OPTIMIZER(self)->step++;
-    // LE_OPTIMIZER(self)->epoch++;
+  // LE_OPTIMIZER(self)->step++;
+  // LE_OPTIMIZER(self)->epoch++;
 }
 
 void
