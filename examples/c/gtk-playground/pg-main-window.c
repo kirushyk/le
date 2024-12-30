@@ -38,7 +38,7 @@ struct _LEMainWindow
     GtkWidget *nested_rb;
     GtkWidget *svb_rb;
     GtkWidget *spiral_rb;
-    GtkWidget *train_set_combo;
+    GtkWidget *train_set_size_drop_down;
     GtkWidget *test_set_combo;
     
     GtkWidget *gd_vbox;
@@ -324,7 +324,7 @@ create_model(LEMainWindow *self)
 static void
 generate_data(LEMainWindow *self, const gchar *pattern)
 {
-    unsigned examples_count = atoi(gtk_combo_box_text_get_active_text(GTK_COMBO_BOX_TEXT(self->train_set_combo)));
+    unsigned examples_count = atoi (gtk_string_object_get_string ((GtkStringObject *)gtk_drop_down_get_selected_item (GTK_DROP_DOWN (self->train_set_size_drop_down))));
     self->train_data = pg_generate_data(pattern, examples_count);
     examples_count = atoi(gtk_combo_box_text_get_active_text(GTK_COMBO_BOX_TEXT(self->test_set_combo)));
     self->test_data = pg_generate_data(pattern, examples_count);
@@ -540,14 +540,16 @@ le_main_window_init(LEMainWindow *self)
     self->rand_rb = gtk_check_button_new_with_label("Random");
     gtk_check_button_set_group(GTK_CHECK_BUTTON(self->rand_rb), GTK_CHECK_BUTTON(self->svb_rb));
     
-    self->train_set_combo = gtk_combo_box_text_new();
-    gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(self->train_set_combo), "256");
-    gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(self->train_set_combo), "128");
-    gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(self->train_set_combo), "64");
-    gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(self->train_set_combo), "32");
-    gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(self->train_set_combo), "16");
-    gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(self->train_set_combo), "8");
-    gtk_combo_box_set_active(GTK_COMBO_BOX(self->train_set_combo), 1);
+    
+    GtkStringList *train_set_list = gtk_string_list_new (NULL);
+    gtk_string_list_append (train_set_list, "256");
+    gtk_string_list_append (train_set_list, "128");
+    gtk_string_list_append (train_set_list, "64");
+    gtk_string_list_append (train_set_list, "32");
+    gtk_string_list_append (train_set_list, "16");
+    gtk_string_list_append (train_set_list, "8");
+    self->train_set_size_drop_down = gtk_drop_down_new (train_set_list, NULL);
+    gtk_drop_down_set_selected (GTK_DROP_DOWN (self->train_set_size_drop_down), 1);
     
     self->test_set_combo = gtk_combo_box_text_new();
     gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(self->test_set_combo), "32");
@@ -565,7 +567,7 @@ le_main_window_init(LEMainWindow *self)
     gtk_box_append(GTK_BOX(data_vbox), self->spiral_rb);
     gtk_box_append(GTK_BOX(data_vbox), self->rand_rb);
     gtk_box_append(GTK_BOX(data_vbox), gtk_label_new("Train Set Size"));
-    gtk_box_append(GTK_BOX(data_vbox), self->train_set_combo);
+    gtk_box_append(GTK_BOX(data_vbox), self->train_set_size_drop_down);
     gtk_box_append(GTK_BOX(data_vbox), gtk_label_new("Test Set Size"));
     gtk_box_append(GTK_BOX(data_vbox), self->test_set_combo);
     gtk_box_append(GTK_BOX(data_vbox), generate);
