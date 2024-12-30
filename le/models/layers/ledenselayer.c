@@ -103,32 +103,11 @@ le_dense_layer_get_description(LeLayer *self)
     return description;
 }
 
-static LeDenseLayerClass klass;
-
-// static void
-// le_dense_layer_class_ensure_init()
-// {
-//     static bool initialized = false;
-    
-//     if (!initialized)
-//     {
-//         klass.parent.forward_prop = le_dense_layer_forward_prop;
-//         klass.parent.backward_prop = le_dense_layer_backward_prop;
-//         klass.parent.get_output_shape = le_dense_layer_get_output_shape;
-//         klass.parent.get_description = le_dense_layer_get_description;
-//         initialized = true;
-//     }
-// }
-
 static void
 le_dense_layer_class_init (LeDenseLayerClass * klass)
 {
   G_OBJECT_CLASS (klass)->dispose = le_dense_layer_dispose;
   G_OBJECT_CLASS (klass)->finalize = le_dense_layer_finalize;
-  // LeTensor * (*forward_prop)(LeLayer *self, LeTensor *x);
-  // LeTensor * (*backward_prop)(LeLayer *self, LeTensor *x, LeTensor *y, LeTensor *dJ_dy, GList **dJ_dw);
-  // LeShape * (*get_output_shape)(LeLayer *self);
-  // const char * (*get_description)(LeLayer *self);
   LE_LAYER_CLASS (klass)->forward_prop = le_dense_layer_forward_prop;
   LE_LAYER_CLASS (klass)->backward_prop = le_dense_layer_backward_prop;
   LE_LAYER_CLASS (klass)->get_output_shape = le_dense_layer_get_output_shape;
