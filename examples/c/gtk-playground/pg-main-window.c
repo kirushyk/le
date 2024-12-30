@@ -403,45 +403,45 @@ generate_button_clicked(GtkButton *button, gpointer user_data)
 }
 
 void
-le_main_window_set_preffered_model(GtkWidget *window, PreferredModelType model_type)
+le_main_window_set_preffered_model (GtkWidget * window, PreferredModelType model_type)
 {
-    LEMainWindow *self = LE_MAIN_WINDOW(window);
+  LEMainWindow *self = LE_MAIN_WINDOW(window);
 
-    self->preferred_model_type = model_type;
+  self->preferred_model_type = model_type;
 
-    switch (self->preferred_model_type)
-    {
-    case 1:
-        gtk_widget_show(self->svm_vbox);
-        gtk_widget_hide(self->pr_vbox);
-        gtk_widget_hide(self->gd_vbox);
-        gtk_widget_hide(self->knn_vbox);
-        break;
-        
-    case 2:
-        gtk_widget_hide(self->svm_vbox);
-        gtk_widget_hide(self->pr_vbox);
-        gtk_widget_show(self->gd_vbox);
-        gtk_widget_hide(self->knn_vbox);
-        break;
+  switch (self->preferred_model_type)
+  {
+  case PREFERRED_MODEL_TYPE_SUPPORT_VECTOR_MACHINE:
+    gtk_widget_set_visible (self->svm_vbox, TRUE);
+    gtk_widget_set_visible (self->pr_vbox, FALSE);
+    gtk_widget_set_visible (self->gd_vbox, FALSE);
+    gtk_widget_set_visible (self->knn_vbox, FALSE);
+    break;
+      
+  case PREFERRED_MODEL_TYPE_NEURAL_NETWORK:
+    gtk_widget_set_visible (self->svm_vbox, FALSE);
+    gtk_widget_set_visible (self->pr_vbox, FALSE);
+    gtk_widget_set_visible (self->gd_vbox, TRUE);
+    gtk_widget_set_visible (self->knn_vbox, FALSE);
+    break;
 
-    case 3:
-        gtk_widget_hide(self->svm_vbox);
-        gtk_widget_hide(self->pr_vbox);
-        gtk_widget_hide(self->gd_vbox);
-        gtk_widget_show(self->knn_vbox);
-        break;
-        
-    case 0:
-    default:
-        gtk_widget_hide(self->svm_vbox);
-        gtk_widget_show(self->pr_vbox);
-        gtk_widget_show(self->gd_vbox);
-        gtk_widget_hide(self->knn_vbox);
-        break;
-    }
+  case PREFERRED_MODEL_TYPE_KNN:
+    gtk_widget_set_visible (self->svm_vbox, FALSE);
+    gtk_widget_set_visible (self->pr_vbox, FALSE);
+    gtk_widget_set_visible (self->gd_vbox, FALSE);
+    gtk_widget_set_visible (self->knn_vbox, TRUE);
+    break;
 
-    create_model(self);
+  case PREFERRED_MODEL_TYPE_POLYNOMIAL_REGRESSION:
+  default:
+    gtk_widget_set_visible (self->svm_vbox, FALSE);
+    gtk_widget_set_visible (self->pr_vbox, TRUE);
+    gtk_widget_set_visible (self->gd_vbox, TRUE);
+    gtk_widget_set_visible (self->knn_vbox, FALSE);
+    break;
+  }
+
+  create_model (self);
 }
 
 void
@@ -541,14 +541,7 @@ le_main_window_init(LEMainWindow *self)
     gtk_check_button_set_group(GTK_CHECK_BUTTON(self->rand_rb), GTK_CHECK_BUTTON(self->svb_rb));
     
     
-    GtkStringList *train_set_list = gtk_string_list_new (NULL);
-    gtk_string_list_append (train_set_list, "256");
-    gtk_string_list_append (train_set_list, "128");
-    gtk_string_list_append (train_set_list, "64");
-    gtk_string_list_append (train_set_list, "32");
-    gtk_string_list_append (train_set_list, "16");
-    gtk_string_list_append (train_set_list, "8");
-    self->train_set_size_drop_down = gtk_drop_down_new (train_set_list, NULL);
+    self->train_set_size_drop_down = gtk_drop_down_new_from_strings ({"256", "128", "64", "32", "16", "8"});
     gtk_drop_down_set_selected (GTK_DROP_DOWN (self->train_set_size_drop_down), 1);
     
     self->test_set_combo = gtk_combo_box_text_new();
