@@ -540,8 +540,8 @@ le_main_window_init(LEMainWindow *self)
     self->rand_rb = gtk_check_button_new_with_label("Random");
     gtk_check_button_set_group(GTK_CHECK_BUTTON(self->rand_rb), GTK_CHECK_BUTTON(self->svb_rb));
     
-    
-    self->train_set_size_drop_down = gtk_drop_down_new_from_strings ({"256", "128", "64", "32", "16", "8"});
+    const gchar *train_set_sizes[] = {"256", "128", "64", "32", "16", "8", NULL};
+    self->train_set_size_drop_down = gtk_drop_down_new_from_strings (train_set_sizes);
     gtk_drop_down_set_selected (GTK_DROP_DOWN (self->train_set_size_drop_down), 1);
     
     self->test_set_combo = gtk_combo_box_text_new();
