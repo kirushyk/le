@@ -171,7 +171,7 @@ le_main_window_init (LEMainWindow * self)
   gtk_grid_set_row_spacing (GTK_GRID (grid), 2);
   gtk_grid_set_column_spacing (GTK_GRID (grid), 2);
   gtk_grid_attach (GTK_GRID (grid), gtk_label_new ("Set:"), 0, 0, 1, 1);
-  const gchar *set_names[] = {"Train", "Test"};
+  const gchar *set_names[] = {"Train", "Test", NULL};
   self->set_selection_drop_down = gtk_drop_down_new_from_strings (set_names);
   g_signal_connect (G_OBJECT (self->set_selection_drop_down), "notify::selected-item", G_CALLBACK (set_changed), self);
   gtk_drop_down_set_selected (GTK_DROP_DOWN (self->set_selection_drop_down), 0);
@@ -203,9 +203,9 @@ le_main_window_init (LEMainWindow * self)
 }
 
 GtkWidget *
-le_main_window_new(GtkApplication *application)
+le_main_window_new(GtkApplication * application)
 {
-    LEMainWindow *window = g_object_new(LE_TYPE_MAIN_WINDOW, "application", application, NULL);
-    assert(LE_IS_MAIN_WINDOW(window));
-    return GTK_WIDGET(window);
+    LEMainWindow *window = g_object_new (LE_TYPE_MAIN_WINDOW, "application", application, NULL);
+    g_assert_true (LE_IS_MAIN_WINDOW (window));
+    return GTK_WIDGET (window);
 }
