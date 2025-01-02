@@ -1,7 +1,7 @@
 #include "lerand.h"
-#include <stdlib.h>
-#include <math.h>
 #include <glib.h>
+#include <math.h>
+#include <stdlib.h>
 
 gfloat
 le_random_uniform_f32 ()
@@ -10,7 +10,7 @@ le_random_uniform_f32 ()
 }
 
 gfloat
-le_random_normal_f32(void)
+le_random_normal_f32 (void)
 {
   gfloat u1 = le_random_uniform_f32 ();
   gfloat u2 = le_random_uniform_f32 ();
@@ -20,11 +20,10 @@ le_random_normal_f32(void)
 gfloat
 le_random_f32 (LeDistribution distribution)
 {
-  switch (distribution)
-  {
+  switch (distribution) {
   case LE_DISTRIBUTION_NORMAL:
     return le_random_normal_f32 ();
-  
+
   case LE_DISTRIBUTION_UNIFORM:
   default:
     return le_random_uniform_f32 ();
