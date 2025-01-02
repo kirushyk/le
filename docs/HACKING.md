@@ -12,20 +12,32 @@ For C code, we follow the GStreamer code style guidelines. Here are the key poin
 Example:
 ```c
 if (condition) {
-    do_something ();
+  do_something ();
 } else {
-    do_something_else ();
+  do_something_else ();
 }
 ```
 
 ## C++ Code Style
 
-For C++ code (also Metal and CUDA C++), we adhere to the Qt code style guidelines. Here are the key points:
+For C++ code, including Metal C++ and CUDA C++ code, we adhere to the Qt code style guidelines. Here are the key points:
 
-- **Indentation**: Use 4 spaces for indentation. Do not use tabs.
+- **Indentation**: Use 4 spaces per indentation level. Do not use tabs.
 - **Braces**:
     - Place the opening brace on the same line as the control statement or function definition.
     - The closing brace should be on its own line, aligned with the start of the control statement or function definition.
+- **Naming Conventions**: 
+  - Classes: CamelCase starting with an uppercase letter.
+  - Functions: camelCase starting with a lowercase letter.
+  - Variables: camelCase starting with a lowercase letter.
+  - Constants: ALL_CAPS with underscores separating words.
+- **Line Length**: Maximum of 100 characters per line.
+- **Comments**: Use C++ style (//) for single-line comments and C style (/* */) for multi-line comments.
+- **Spaces**: 
+  - After keywords (e.g., `if`, `for`, `while`).
+  - Around operators (e.g., `=`, `+`, `-`, `*`, `/`).
+- **Pointer and Reference Alignment**: Attach the `*` or `&` to the variable name (e.g., `int *ptr`).
+- **File Naming**: Use lowercase with underscores separating words (e.g., `my_class.cpp`).
 
 Example:
 ```cpp
@@ -37,7 +49,7 @@ if (condition) {
 
 void MyClass::myFunction()
 {
-    // function body
+    function body
 }
 ```
 
