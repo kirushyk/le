@@ -22,6 +22,6 @@ BraceWrapping:
   BeforeCatch: false
   BeforeElse: false
   IndentBraces: false
-ContinuationIndentWidth: 6
+ContinuationIndentWidth: 4
 AlignAfterOpenBracket: true
 AllowShortFunctionsOnASingleLine: Inline
