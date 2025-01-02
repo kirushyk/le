@@ -25,7 +25,7 @@ Supported backends:
 
 ## Installation
 
-* [From Source](BUILD.md)
+* [From Source](/docs/BUILD.md)
     
 ## Examples
 
