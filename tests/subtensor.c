@@ -3,19 +3,19 @@
 
 #define DEFAULT_LOG_CATEGORY "tests/subtensor"
 
+#include "test-config.h"
+#include <stdlib.h>
 #include <glib.h>
 #include <le/le.h>
-#include <stdlib.h>
-#include "test-config.h"
 
 int
 main ()
 {
-  LeTensor *tensor = le_tensor_new(LE_TYPE_UINT32, 2, 3, 3,
+  LeTensor *tensor = le_tensor_new (LE_TYPE_UINT32, 2, 3, 3, // clang-format off
     1, 2, 3,
     4, 5, 6,
     7, 8, 9
-  );
+  ); // clang-format on
 
   LeTensor *subtensor = le_tensor_pick (tensor, 1);
   g_assert_cmpint (le_tensor_at_u32 (subtensor, 0), ==, 4);
