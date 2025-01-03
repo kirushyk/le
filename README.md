@@ -1,4 +1,4 @@
-# Le - Machine Learning Framework.
+# Le - Machine Learning Library
 
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 ![Platforms](https://img.shields.io/badge/platform-macos%20%7C%20linux-lightgrey.svg)
@@ -35,7 +35,7 @@ Supported backends:
 
 * [C Examples](/examples/c)
 * [C++ Examples](/examples/cpp)
-* [Rust Examples](/examples/rust)
+<!-- * [Rust Examples](/examples/rust) -->
 * [Python Examples](/examples/python)
 
 ## Contribution
@@ -44,7 +44,7 @@ Supported backends:
 
 ## Tools
 
-* [Le Board](https://github.com/kirushyk/le-board);
+<!-- * [Le Board](https://github.com/kirushyk/le-board); -->
 * [Le Playground](/tools/playground);
 * [Le MNIST Inspect](/tools/mnist-inspect).
 
@@ -52,4 +52,4 @@ Supported backends:
 
 Copyright &copy; 2017 Kyrylo Polezhaiev. All rights reserved.
 
-Le is released under the [MIT](LICENSE) License.
+**Le** is released under the [MIT](LICENSE) License.
