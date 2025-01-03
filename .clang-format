@@ -25,3 +25,16 @@ BraceWrapping:
 ContinuationIndentWidth: 4
 AlignAfterOpenBracket: true
 AllowShortFunctionsOnASingleLine: Inline
+IncludeCategories:
+  - Regex: '^[<"].*config\.h[>"]' # Build configuration headers (e.g., "myconfig.h", <myconfig.h>)
+    Priority: 1
+  - Regex: '^<[^/]*>'             # Standard library headers (e.g., <stdio.h>, <stdlib.h>)
+    Priority: 2
+  - Regex: '^<le/.*\.h>$'         # Project-specific headers (e.g., <le/*.h>)
+    Priority: 3
+  - Regex: '^<ext/.*\.h>$'        # Extension headers (e.g., <ext/*.h>)
+    Priority: 4
+  - Regex: '^".*"'                # Relative headers (e.g., "myheader.h")
+    Priority: 5
+IncludeBlocks: Preserve
+IndentPPDirectives: AfterHash
