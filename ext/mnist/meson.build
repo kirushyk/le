@@ -19,7 +19,8 @@ if have_idx
         include_directories: incdir,
         link_with: [
             le,
-            idx
+            idx,
+            simple_dataset
         ]
     )
 

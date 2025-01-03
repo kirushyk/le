@@ -6,6 +6,7 @@
 #include <locale.h>
 #include <stdlib.h>
 #include <le/le.h>
+#include <ext/simple-dataset/ledataset.h>
 #include <math.h>
 #include "pg-generate-data.h"
 #include "pg-color.h"

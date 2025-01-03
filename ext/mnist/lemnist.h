@@ -2,6 +2,7 @@
    Released under the MIT license. See LICENSE file in the project root for full license information. */
 
 #include <le/le.h>
+#include <ext/simple-dataset/ledataset.h>
 
 #ifndef __LEMNIST_H__
 #define __LEMNIST_H__

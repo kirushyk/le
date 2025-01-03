@@ -1,3 +1,4 @@
 subdir('idx')
+subdir('simple-dataset')
 subdir('mnist')
 subdir('tensorlist')

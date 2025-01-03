@@ -2,7 +2,6 @@
 # Released under the MIT license. See LICENSE file in the project root for full license information.
 
 le_sources = [
-    'ledataset.c',
     'math/lerand.c',
     'math/leclamp.c',
     'math/lepolynomia.c',
@@ -60,7 +59,6 @@ config.set('HAVE_METAL', have_metal)
 configure_file(output: 'config.h', configuration: config)
 
 install_headers('leloss.h', subdir: 'le')
-install_headers('ledataset.h', subdir: 'le')
 install_headers('math/lepolynomia.h', subdir: 'le')
 install_headers('math/lerand.h', subdir: 'le/math')
 install_headers('math/leclamp.h', subdir: 'le/math')

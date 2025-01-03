@@ -11,7 +11,6 @@
 #include "tensors/lescalar.h"
 #include "tensors/lematrix.h"
 #include "glib.h"
-#include "ledataset.h"
 #include "models/lelogistic.h"
 #include "models/lesvm.h"
 #include "models/lesequential.h"

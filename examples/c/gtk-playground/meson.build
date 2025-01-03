@@ -13,7 +13,10 @@ if gtk.found()
     executable('le-playground', le_playground_sources,
         dependencies: gtk,
         include_directories: inc,
-        link_with: le,
+        link_with: [
+            le,
+            simple_dataset
+        ],
         install: true
     )
 endif
