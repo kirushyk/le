@@ -24,8 +24,8 @@ Optimization algorithms supported:
 * Sequential Minimal Optimization (SMO).
 
 Supported backends:
-* NVIDIA CUDA.
-* Apple Metal Performance Shaders (MPS).
+* Nvidia's CUDA.
+* Apple's Metal Performance Shaders (MPS).
 
 ## Installation
 
