@@ -50,6 +50,6 @@ Supported backends:
 
 ## License
 
-Copyright &copy; 2017 Kyrylo Polezhaiev. All rights reserved.
+Copyright &copy; 2017-2025 Kyrylo Polezhaiev. All rights reserved.
 
 **Le** is released under the [MIT](LICENSE) License.
