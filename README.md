@@ -35,8 +35,8 @@ Supported backends:
 
 * [C Examples](/examples/c)
 * [C++ Examples](/examples/cpp)
-<!-- * [Rust Examples](/examples/rust) -->
 * [Python Examples](/examples/python)
+<!-- * [Rust Examples](/examples/rust) -->
 
 ## Contribution
 
