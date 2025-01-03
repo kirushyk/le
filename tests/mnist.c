@@ -24,10 +24,10 @@ main()
     assert(train_images);
     assert(train_images->element_type == LE_TYPE_UINT8);
     assert(train_images->shape);
-    assert(train_images->shape->num_dimensions = 3);
-    assert(train_images->shape->sizes[0] = 60000);
-    assert(train_images->shape->sizes[1] = 28);
-    assert(train_images->shape->sizes[2] = 28);
+    assert(train_images->shape->num_dimensions == 3);
+    assert(train_images->shape->sizes[0] == 60000);
+    assert(train_images->shape->sizes[1] == 28);
+    assert(train_images->shape->sizes[2] == 28);
     assert(train_images->owns_data);
     assert(train_images->data);
 
@@ -36,8 +36,8 @@ main()
     assert(train_labels);
     assert(train_labels->element_type == LE_TYPE_UINT8);
     assert(train_labels->shape);
-    assert(train_labels->shape->num_dimensions = 1);
-    assert(train_labels->shape->sizes[0] = 60000);
+    assert(train_labels->shape->num_dimensions == 1);
+    assert(train_labels->shape->sizes[0] == 60000);
     assert(train_labels->owns_data);
     assert(train_labels->data);
 
@@ -46,10 +46,10 @@ main()
     assert(test_images);
     assert(test_images->element_type == LE_TYPE_UINT8);
     assert(test_images->shape);
-    assert(test_images->shape->num_dimensions = 3);
-    assert(test_images->shape->sizes[0] = 10000);
-    assert(test_images->shape->sizes[1] = 28);
-    assert(test_images->shape->sizes[2] = 28);
+    assert(test_images->shape->num_dimensions == 3);
+    assert(test_images->shape->sizes[0] == 10000);
+    assert(test_images->shape->sizes[1] == 28);
+    assert(test_images->shape->sizes[2] == 28);
     assert(test_images->owns_data);
     assert(test_images->data);
 
@@ -58,8 +58,8 @@ main()
     assert(test_labels);
     assert(test_labels->element_type == LE_TYPE_UINT8);
     assert(test_labels->shape);
-    assert(test_labels->shape->num_dimensions = 1);
-    assert(test_labels->shape->sizes[0] = 10000);
+    assert(test_labels->shape->num_dimensions == 1);
+    assert(test_labels->shape->sizes[0] == 10000);
     assert(test_labels->owns_data);
     assert(test_labels->data);
 
