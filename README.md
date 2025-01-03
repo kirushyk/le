@@ -25,7 +25,7 @@ Optimization algorithms supported:
 
 Supported backends:
 * NVIDIA CUDA.
-* Apple Metal.
+* Apple Metal Performance Shaders (MPS).
 
 ## Installation
 
