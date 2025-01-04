@@ -1,5 +1,7 @@
 # Code Style Guidelines
 
+To keep the code consistent and ensure high quality, it would be nice to use a workflow that includes automatic formatting and style checks wherever possible.
+
 ## C Code Style
 
 For C code, we follow the GStreamer code style guidelines. Here are the key points:
@@ -19,8 +21,7 @@ if (condition) {
 ```
 
 ## C++ Code Style
-
-For C++ code, including Metal C++ and CUDA C++ code, we adhere to the Qt code style guidelines. Here are the key points:
+For C++ code, including Metal and CUDA, we follow a style inspired by Qt guidelines. Here are the key points:
 
 - **Indentation**: Use 4 spaces per indentation level. Do not use tabs.
 - **Braces**:
