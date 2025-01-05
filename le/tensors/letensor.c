@@ -292,8 +292,7 @@ LeTensor *
 le_tensor_new_cast (LeTensor *another, LeType type)
 {
   g_assert_cmpint (another->device_type, ==, LE_DEVICE_TYPE_CPU);
-  g_assert_true ((le_cast_rawcpy[type][another->element_type] != NULL) ||
-                 (le_cast_fn[type][another->element_type] != NULL));
+  g_assert_true (le_cast_rawcpy[type][another->element_type] || (le_cast_fn[type][another->element_type] != NULL));
 
   LeTensor *self       = g_new0 (LeTensor, 1);
   self->device_type    = LE_DEVICE_TYPE_CPU;
