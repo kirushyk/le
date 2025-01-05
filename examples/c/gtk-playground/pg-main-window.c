@@ -405,7 +405,7 @@ le_main_window_set_preffered_model (GtkWidget *window, PreferredModelType model_
 }
 
 void
-model_combo_changed (GtkComboBox *widget, gpointer user_data)
+model_drop_down_changed (GtkComboBox *widget, gpointer user_data)
 {
   LEMainWindow *self = LE_MAIN_WINDOW (user_data);
 
@@ -524,14 +524,12 @@ le_main_window_init (LEMainWindow *self)
   label                 = gtk_label_new ("<b>MODEL</b>");
   gtk_label_set_use_markup (GTK_LABEL (label), TRUE);
   gtk_box_append (GTK_BOX (model_vbox), label);
-  GtkWidget *model_combo = gtk_combo_box_text_new ();
-  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (model_combo), "Polynomial Regression");
-  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (model_combo), "Support Vector Machine");
-  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (model_combo), "Shallow Neural Network");
-  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (model_combo), "k Nearest Neighbors");
-  gtk_combo_box_set_active (GTK_COMBO_BOX (model_combo), 2);
-  g_signal_connect (G_OBJECT (model_combo), "changed", G_CALLBACK (model_combo_changed), self);
-  gtk_box_append (GTK_BOX (model_vbox), model_combo);
+  const gchar *model_names[]   = { "Polynomial Regression", "Support Vector Machine (SVM)", "Shallow Neural Network",
+                                   "k-Nearest Neighbors (KNN)", NULL };
+  GtkWidget   *model_drop_down = gtk_drop_down_new_from_strings (model_names);
+  gtk_drop_down_set_selected (GTK_COMBO_BOX (model_drop_down), 2);
+  g_signal_connect (G_OBJECT (model_drop_down), "notify::selected-item", G_CALLBACK (model_drop_down_changed), self);
+  gtk_box_append (GTK_BOX (model_vbox), model_drop_down);
 
   gtk_box_append (GTK_BOX (model_vbox), gtk_separator_new (GTK_ORIENTATION_HORIZONTAL));
 
