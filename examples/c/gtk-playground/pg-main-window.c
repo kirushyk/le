@@ -289,7 +289,8 @@ generate_data (LEMainWindow *self, const gchar *pattern)
   unsigned examples_count = atoi (gtk_string_object_get_string (
       (GtkStringObject *)gtk_drop_down_get_selected_item (GTK_DROP_DOWN (self->train_set_size_drop_down))));
   self->train_data        = pg_generate_data (pattern, examples_count);
-  examples_count          = atoi (gtk_combo_box_text_get_active_text (GTK_COMBO_BOX_TEXT (self->test_set_combo)));
+  examples_count          = atoi (gtk_string_object_get_string (
+      (GtkStringObject *)gtk_drop_down_get_selected_item (GTK_DROP_DOWN (self->test_set_combo))));
   self->test_data         = pg_generate_data (pattern, examples_count);
 
   gtk_widget_queue_draw (GTK_WIDGET (self->drawing_area));
@@ -501,12 +502,9 @@ le_main_window_init (LEMainWindow *self)
   self->train_set_size_drop_down = gtk_drop_down_new_from_strings (train_set_sizes);
   gtk_drop_down_set_selected (GTK_DROP_DOWN (self->train_set_size_drop_down), 1);
 
-  self->test_set_combo = gtk_combo_box_text_new ();
-  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (self->test_set_combo), "32");
-  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (self->test_set_combo), "16");
-  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (self->test_set_combo), "8");
-  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (self->test_set_combo), "4");
-  gtk_combo_box_set_active (GTK_COMBO_BOX (self->test_set_combo), 2);
+  const gchar *test_set_sizes[] = { "32", "16", "8", "4", NULL };
+  self->test_set_combo          = gtk_drop_down_new_from_strings (test_set_sizes);
+  gtk_drop_down_set_selected (GTK_DROP_DOWN (self->test_set_combo), 2);
 
   GtkWidget *generate = gtk_button_new_with_label ("Generate");
   g_signal_connect (G_OBJECT (generate), "clicked", G_CALLBACK (generate_button_clicked), self);
