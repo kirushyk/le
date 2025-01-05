@@ -11,10 +11,6 @@
 #include "pg-color.h"
 #include "pg-generate-data.h"
 
-#ifndef M_PI
-#  define M_PI (3.14159265358979323846)
-#endif
-
 #define LE_TYPE_MAIN_WINDOW le_main_window_get_type ()
 G_DECLARE_FINAL_TYPE (LEMainWindow, le_main_window, LE, MAIN_WINDOW, GtkApplicationWindow);
 
@@ -81,11 +77,11 @@ draw_callback (GtkDrawingArea *drawing_area, cairo_t *cr, int width, int height,
       gdouble x = width * 0.5 + height * 0.5 * le_matrix_at_f32 (input, 0, i);
       gdouble y = height * 0.5 - height * 0.5 * le_matrix_at_f32 (input, 1, i);
       cairo_set_line_width (cr, 0.5);
-      cairo_arc (cr, x, y, 2., 0., 2 * M_PI);
+      cairo_arc (cr, x, y, 2., 0., 2 * G_PI);
       le_matrix_at_f32 (output, 0, i) > 0.5 ? cairo_set_source_rgba (cr, 1.0, 0.5, 0.0, 1.0)
                                             : cairo_set_source_rgba (cr, 0.0, 0.5, 1.0, 1.0);
       cairo_fill (cr);
-      cairo_arc (cr, x, y, 2., 0., 2 * M_PI);
+      cairo_arc (cr, x, y, 2., 0., 2 * G_PI);
       window->dark ? cairo_set_source_rgba (cr, 1.0, 1.0, 1.0, 1.0) : cairo_set_source_rgba (cr, 0.0, 0.0, 0.0, 1.0);
       cairo_stroke (cr);
     }
@@ -101,7 +97,7 @@ draw_callback (GtkDrawingArea *drawing_area, cairo_t *cr, int width, int height,
       gdouble y = height * 0.5 - height * 0.5 * le_matrix_at_f32 (input, 1, i);
       window->dark ? cairo_set_source_rgba (cr, 0.0, 1.0, 0.0, 1.0) : cairo_set_source_rgba (cr, 0.0, 0.5, 0.0, 1.0);
       cairo_set_line_width (cr, 0.5);
-      cairo_arc (cr, x, y, 2., 0., 2 * M_PI);
+      cairo_arc (cr, x, y, 2., 0., 2 * G_PI);
       le_matrix_at_f32 (output, 0, i) > 0.5 ? cairo_set_source_rgba (cr, 1.0, 0.5, 0.0, 1.0)
                                             : cairo_set_source_rgba (cr, 0.0, 0.5, 1.0, 1.0);
       cairo_stroke (cr);
