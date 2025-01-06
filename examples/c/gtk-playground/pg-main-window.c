@@ -129,8 +129,8 @@ render_predictions (LeModel *model, guint width, guint height)
 
     if (prediction != NULL) {
       for (gint x = 0; x < width; x++) {
-        ARGB32 color                      = color_for_logistic (le_matrix_at_f32 (prediction, 0, x));
-        ((ARGB32 *)pixmap)[y * width + x] = color;
+        BGRA32 color                      = color_for_logistic (le_matrix_at_f32 (prediction, 0, x));
+        ((BGRA32 *)pixmap)[y * width + x] = color;
       }
     }
   }

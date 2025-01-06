@@ -1,9 +1,9 @@
 /* Copyright (c) Kyrylo Polezhaiev and contributors. All rights reserved.
    Released under the MIT license. See LICENSE file in the project root for full license information. */
 
-#ifndef _LE_MAIN_WINDOW_
-# define _LE_MAIN_WINDOW_
-# include <gtk/gtk.h>
+#ifndef __GTK_PLAYGROUND_PG_MAIN_WINDOW_H__
+#define __GTK_PLAYGROUND_PG_MAIN_WINDOW_H__
+#include <gtk/gtk.h>
 
 typedef enum PreferredModelType
 {
@@ -13,9 +13,9 @@ typedef enum PreferredModelType
   PREFERRED_MODEL_TYPE_KNN
 } PreferredModelType;
 
-GtkWidget * le_main_window_new                 (GtkApplication     *app);
+GtkWidget * le_main_window_new                 (GtkApplication *   app);
 
-void        le_main_window_set_preffered_model (GtkWidget          *self,
-                                                PreferredModelType  model_type);
+void        le_main_window_set_preffered_model (GtkWidget *        self,
+                                                PreferredModelType model_type);
 
 #endif
