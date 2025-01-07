@@ -13,6 +13,7 @@ cuda = dependency('cuda', version: '>=10', modules: ['cublas'], required: get_op
 have_cuda = have_cuda and cuda.found()
 
 le_cuda_deps = [
+    glib,
     cuda
 ]
 
