@@ -14,7 +14,8 @@
 #define LE_TYPE_MAIN_WINDOW le_main_window_get_type ()
 G_DECLARE_FINAL_TYPE (LEMainWindow, le_main_window, LE, MAIN_WINDOW, GtkApplicationWindow);
 
-struct _LEMainWindow {
+struct _LEMainWindow
+{
   GtkApplicationWindow parent_instance;
 
   GtkWidget *drawing_area;
@@ -22,9 +23,9 @@ struct _LEMainWindow {
 
   gboolean dark;
 
-  LeDataSet   *train_data;
-  LeDataSet   *test_data;
-  LeModel     *model;
+  LeDataSet *train_data;
+  LeDataSet *test_data;
+  LeModel *model;
   LeOptimizer *optimizer;
 
   cairo_surface_t *classifier_visualisation;
@@ -70,9 +71,9 @@ draw_callback (GtkDrawingArea *drawing_area, cairo_t *cr, int width, int height,
   }
 
   if (window->train_data) {
-    LeTensor *input          = le_data_set_get_input (window->train_data);
-    LeTensor *output         = le_data_set_get_output (window->train_data);
-    gint      examples_count = le_matrix_get_width (input);
+    LeTensor *input = le_data_set_get_input (window->train_data);
+    LeTensor *output = le_data_set_get_output (window->train_data);
+    gint examples_count = le_matrix_get_width (input);
     for (gint i = 0; i < examples_count; i++) {
       gdouble x = width * 0.5 + height * 0.5 * le_matrix_at_f32 (input, 0, i);
       gdouble y = height * 0.5 - height * 0.5 * le_matrix_at_f32 (input, 1, i);
@@ -88,7 +89,7 @@ draw_callback (GtkDrawingArea *drawing_area, cairo_t *cr, int width, int height,
   }
 
   if (window->test_data) {
-    LeTensor *input  = le_data_set_get_input (window->test_data);
+    LeTensor *input = le_data_set_get_input (window->test_data);
     LeTensor *output = le_data_set_get_output (window->test_data);
     gint examples_count = le_matrix_get_width (input);
     for (gint i = 0; i < examples_count; i++) {
@@ -128,7 +129,7 @@ render_predictions (LeModel *model, guint width, guint height)
 
     if (prediction != NULL) {
       for (gint x = 0; x < width; x++) {
-        BGRA32 color                      = color_for_logistic (le_matrix_at_f32 (prediction, 0, x));
+        BGRA32 color = color_for_logistic (le_matrix_at_f32 (prediction, 0, x));
         ((BGRA32 *)pixmap)[y * width + x] = color;
       }
     }
@@ -169,8 +170,8 @@ train_current_model (LEMainWindow *self)
   if (self->train_data == NULL)
     return;
 
-  gfloat learning_rate     = 1.0f;
-  gchar  *learning_rate_str = gtk_string_object_get_string (
+  gfloat learning_rate = 1.0f;
+  const gchar *learning_rate_str = gtk_string_object_get_string (
       (GtkStringObject *)gtk_drop_down_get_selected_item (GTK_DROP_DOWN (self->alpha_drop_down)));
   setlocale (LC_NUMERIC, "C");
   sscanf (learning_rate_str, "%f", &learning_rate);
@@ -187,7 +188,9 @@ train_current_model (LEMainWindow *self)
       options.kernel = LE_KERNEL_LINEAR;
       break;
     }
-    sscanf (gtk_string_object_get_string ((GtkStringObject *)gtk_drop_down_get_selected_item (GTK_DROP_DOWN (self->svm_c_drop_down))), "%f", &options.c);
+    sscanf (gtk_string_object_get_string (
+                (GtkStringObject *)gtk_drop_down_get_selected_item (GTK_DROP_DOWN (self->svm_c_drop_down))),
+        "%f", &options.c);
     LeTensor *labels = le_tensor_new_copy (le_data_set_get_output (self->train_data));
     le_tensor_apply_sgn (labels);
     le_svm_train (LE_SVM (self->model), le_data_set_get_input (self->train_data), labels, options);
@@ -196,9 +199,9 @@ train_current_model (LEMainWindow *self)
 
   case PREFERRED_MODEL_TYPE_NEURAL_NETWORK: {
     if (self->optimizer == NULL) {
-      LeTensor *x      = le_data_set_get_input (self->train_data);
+      LeTensor *x = le_data_set_get_input (self->train_data);
       LeTensor *labels = le_tensor_new_copy (le_data_set_get_output (self->train_data));
-      self->optimizer  = LE_OPTIMIZER (le_bgd_new (self->model, x, labels, learning_rate));
+      self->optimizer = LE_OPTIMIZER (le_bgd_new (self->model, x, labels, learning_rate));
     }
     le_optimizer_set_learning_rate (self->optimizer, learning_rate);
     for (unsigned i = 0; i <= 400; i++) {
@@ -210,17 +213,18 @@ train_current_model (LEMainWindow *self)
   } break;
 
   case PREFERRED_MODEL_TYPE_KNN: {
-    unsigned k = atoi (gtk_string_object_get_string ((GtkStringObject *)gtk_drop_down_get_selected_item (GTK_DROP_DOWN (self->knn_k_drop_down))));
-    le_knn_train (LE_KNN (self->model), le_data_set_get_input (self->train_data),
-                  le_data_set_get_output (self->train_data), k);
+    unsigned k = atoi (gtk_string_object_get_string (
+        (GtkStringObject *)gtk_drop_down_get_selected_item (GTK_DROP_DOWN (self->knn_k_drop_down))));
+    le_knn_train (
+        LE_KNN (self->model), le_data_set_get_input (self->train_data), le_data_set_get_output (self->train_data), k);
   } break;
 
   case PREFERRED_MODEL_TYPE_POLYNOMIAL_REGRESSION:
   default: {
     LeLogisticClassifierTrainingOptions options;
     options.max_iterations = 400;
-    options.polynomia_degree =
-        atoi (gtk_string_object_get_string ((GtkStringObject *)gtk_drop_down_get_selected_item (GTK_DROP_DOWN (self->polynomia_degree_drop_down))));
+    options.polynomia_degree = atoi (gtk_string_object_get_string (
+        (GtkStringObject *)gtk_drop_down_get_selected_item (GTK_DROP_DOWN (self->polynomia_degree_drop_down))));
     options.learning_rate = learning_rate;
     switch (gtk_drop_down_get_selected (GTK_DROP_DOWN (self->regularization_drop_down))) {
     case 1:
@@ -234,15 +238,16 @@ train_current_model (LEMainWindow *self)
       options.regularization = LE_REGULARIZATION_NONE;
       break;
     }
-    sscanf (gtk_string_object_get_string ((GtkStringObject *)gtk_drop_down_get_selected_item (GTK_DROP_DOWN (self->lambda_drop_down))), "%f", &options.lambda);
+    sscanf (gtk_string_object_get_string (
+                (GtkStringObject *)gtk_drop_down_get_selected_item (GTK_DROP_DOWN (self->lambda_drop_down))),
+        "%f", &options.lambda);
     le_logistic_classifier_train (LE_LOGISTIC_CLASSIFIER (self->model), le_data_set_get_input (self->train_data),
-                                  le_data_set_get_output (self->train_data), options);
+        le_data_set_get_output (self->train_data), options);
   } break;
   }
 
-  self->classifier_visualisation =
-      render_predictions (self->model, gtk_widget_get_allocated_width (GTK_WIDGET (self->drawing_area)),
-                          gtk_widget_get_allocated_height (GTK_WIDGET (self->drawing_area)));
+  self->classifier_visualisation = render_predictions (self->model,
+      gtk_widget_get_width (GTK_WIDGET (self->drawing_area)), gtk_widget_get_height (GTK_WIDGET (self->drawing_area)));
 
   gtk_widget_queue_draw (GTK_WIDGET (self->drawing_area));
 
@@ -288,10 +293,10 @@ generate_data (LEMainWindow *self, const gchar *pattern)
 {
   unsigned examples_count = atoi (gtk_string_object_get_string (
       (GtkStringObject *)gtk_drop_down_get_selected_item (GTK_DROP_DOWN (self->train_set_size_drop_down))));
-  self->train_data        = pg_generate_data (pattern, examples_count);
-  examples_count          = atoi (gtk_string_object_get_string (
+  self->train_data = pg_generate_data (pattern, examples_count);
+  examples_count = atoi (gtk_string_object_get_string (
       (GtkStringObject *)gtk_drop_down_get_selected_item (GTK_DROP_DOWN (self->test_set_drop_down))));
-  self->test_data         = pg_generate_data (pattern, examples_count);
+  self->test_data = pg_generate_data (pattern, examples_count);
 
   gtk_widget_queue_draw (GTK_WIDGET (self->drawing_area));
 }
@@ -309,7 +314,7 @@ style_activated (GSimpleAction *action, GVariant *parameter, gpointer data)
   LEMainWindow *window = LE_MAIN_WINDOW (data);
   g_assert (LE_IS_MAIN_WINDOW (window));
   const gchar *style = g_variant_get_string (parameter, NULL);
-  window->dark       = 0 == g_strcmp0 (style, "dark");
+  window->dark = 0 == g_strcmp0 (style, "dark");
   gtk_widget_queue_draw (GTK_WIDGET (window->drawing_area));
 }
 
@@ -329,11 +334,8 @@ close_activated (GSimpleAction *action, GVariant *parameter, gpointer data)
   gtk_window_close (GTK_WINDOW (window));
 }
 
-static GActionEntry win_entries[] = { { "style", style_activated, "s" },
-                                      { "gen", generate_menu_activated, "s" },
-                                      { "style", style_activated, "s" },
-                                      { "view", view_activated, "s", "\"q\"" },
-                                      { "close", close_activated } };
+static GActionEntry win_entries[] = { { "style", style_activated, "s" }, { "gen", generate_menu_activated, "s" },
+  { "style", style_activated, "s" }, { "view", view_activated, "s", "\"q\"" }, { "close", close_activated } };
 
 static void
 le_main_window_constructed (GObject *object)
@@ -455,13 +457,13 @@ start_button_clicked (GtkButton *button, gpointer user_data)
 static void
 le_main_window_init (LEMainWindow *self)
 {
-  self->dark                     = FALSE;
-  self->train_data               = NULL;
-  self->test_data                = NULL;
-  self->model                    = NULL;
-  self->optimizer                = NULL;
+  self->dark = FALSE;
+  self->train_data = NULL;
+  self->test_data = NULL;
+  self->model = NULL;
+  self->optimizer = NULL;
   self->classifier_visualisation = NULL;
-  self->preferred_model_type     = PREFERRED_MODEL_TYPE_POLYNOMIAL_REGRESSION;
+  self->preferred_model_type = PREFERRED_MODEL_TYPE_POLYNOMIAL_REGRESSION;
 
   GtkWidget *reset = gtk_button_new_from_icon_name ("go-first");
   g_signal_connect (G_OBJECT (reset), "clicked", G_CALLBACK (reset_button_clicked), self);
@@ -484,7 +486,7 @@ le_main_window_init (LEMainWindow *self)
   gtk_box_append (GTK_BOX (learning_hbox), learning_grid);
 
   GtkWidget *data_vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 2);
-  GtkWidget *label     = gtk_label_new ("<b>DATA</b>");
+  GtkWidget *label = gtk_label_new ("<b>DATA</b>");
   gtk_label_set_use_markup (GTK_LABEL (label), TRUE);
 
   self->svb_rb = gtk_check_button_new_with_label ("Support Vectors");
@@ -503,7 +505,7 @@ le_main_window_init (LEMainWindow *self)
   gtk_drop_down_set_selected (GTK_DROP_DOWN (self->train_set_size_drop_down), 1);
 
   const gchar *test_set_sizes[] = { "32", "16", "8", "4", NULL };
-  self->test_set_drop_down      = gtk_drop_down_new_from_strings (test_set_sizes);
+  self->test_set_drop_down = gtk_drop_down_new_from_strings (test_set_sizes);
   gtk_drop_down_set_selected (GTK_DROP_DOWN (self->test_set_drop_down), 2);
 
   GtkWidget *generate = gtk_button_new_with_label ("Generate");
@@ -521,12 +523,12 @@ le_main_window_init (LEMainWindow *self)
   gtk_box_append (GTK_BOX (data_vbox), generate);
 
   GtkWidget *model_vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 2);
-  label                 = gtk_label_new ("<b>MODEL</b>");
+  label = gtk_label_new ("<b>MODEL</b>");
   gtk_label_set_use_markup (GTK_LABEL (label), TRUE);
   gtk_box_append (GTK_BOX (model_vbox), label);
-  const gchar *model_names[]   = { "Polynomial Regression", "Support Vector Machine (SVM)", "Shallow Neural Network",
-                                   "k-Nearest Neighbors (KNN)", NULL };
-  GtkWidget   *model_drop_down = gtk_drop_down_new_from_strings (model_names);
+  const gchar *model_names[] = { "Polynomial Regression", "Support Vector Machine (SVM)", "Shallow Neural Network",
+    "k-Nearest Neighbors (KNN)", NULL };
+  GtkWidget *model_drop_down = gtk_drop_down_new_from_strings (model_names);
   gtk_drop_down_set_selected (GTK_DROP_DOWN (model_drop_down), 2);
   g_signal_connect (G_OBJECT (model_drop_down), "notify::selected-item", G_CALLBACK (model_drop_down_changed), self);
   gtk_box_append (GTK_BOX (model_vbox), model_drop_down);
@@ -589,7 +591,7 @@ le_main_window_init (LEMainWindow *self)
   gtk_drawing_area_set_draw_func (GTK_DRAWING_AREA (self->drawing_area), draw_callback, self, NULL);
 
   GtkWidget *output_vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 2);
-  label                  = gtk_label_new ("<b>OUTPUT</b>");
+  label = gtk_label_new ("<b>OUTPUT</b>");
   gtk_label_set_use_markup (GTK_LABEL (label), TRUE);
   gtk_box_append (GTK_BOX (output_vbox), label);
   gtk_box_append (GTK_BOX (output_vbox), self->drawing_area);
