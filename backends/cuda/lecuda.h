@@ -1,15 +1,16 @@
 /* Copyright (c) Kyrylo Polezhaiev and contributors. All rights reserved.
    Released under the MIT license. See LICENSE file in the project root for full license information. */
 
-#include <le/le.h>
-
 #ifndef __BACKENDS_CUDA_LECUDA_H__
 #define __BACKENDS_CUDA_LECUDA_H__
 
+#include <le/le.h>
+#include <glib.h>
+
 LeTensor * le_cuda_matrix_new_product         (const LeTensor * a,
-                                               bool             transpose_a,
+                                               gboolean         transpose_a,
                                                const LeTensor * b,
-                                               bool             transpose_b);
+                                               gboolean         transpose_b);
 
 void       le_cuda_tensor_mul_tensor          (LeTensor *       self,
                                                const LeTensor * b);

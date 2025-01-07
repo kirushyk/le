@@ -10,7 +10,7 @@
 #include <le/tensors/letensor-imp.h>
 
 LeTensor *
-le_cuda_matrix_new_product (const LeTensor *a, bool transpose_a, const LeTensor *b, bool transpose_b)
+le_cuda_matrix_new_product (const LeTensor *a, gboolean transpose_a, const LeTensor *b, gboolean transpose_b)
 {
   g_assert_cmpint (a->device_type, ==, LE_DEVICE_TYPE_CUDA);
   g_assert_cmpint (b->device_type, ==, LE_DEVICE_TYPE_CUDA);
