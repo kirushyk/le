@@ -53,7 +53,7 @@ le_tensor_deserialize (FILE *fin)
 
   self->shape = g_new0 (LeShape, 1);
   fread ((guint8 *)&self->shape->num_dimensions, sizeof (guint8), 1, fin);
-  self->shape->sizes = g_new0 (guint32, self->shape->num_dimensions);
+  self->shape->sizes = g_new0 (gsize, self->shape->num_dimensions);
   fread (self->shape->sizes, sizeof (guint32), self->shape->num_dimensions, fin);
 
   if (self->shape->num_dimensions > 0)
