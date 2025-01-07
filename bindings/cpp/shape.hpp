@@ -13,7 +13,7 @@ public:
     ~Shape();
 
     LeShape *c_shape();
-    std::uint32_t & operator [](std::size_t index);
+    std::size_t & operator [](std::size_t index);
 
 private:
     struct Private;

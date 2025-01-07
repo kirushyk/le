@@ -24,7 +24,7 @@ LeShape *Shape::c_shape()
     return priv->c_shape;
 }
 
-std::uint32_t & Shape::operator [](std::size_t index)
+std::size_t & Shape::operator [](std::size_t index)
 {
     return priv->c_shape->sizes[index];
 }
