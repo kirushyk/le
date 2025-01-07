@@ -9,7 +9,7 @@ You will need C11 compiler. If you want Python bindings you should have C++14 co
 Use APT package manager to install dependencies:
 
     sudo apt install g++ python3-pip ninja-build libpython3-dev
-    sudo -H pip3 install meson pybind11
+    sudo -H pip3 install meson pybind11 numpy
 
 ### macOS
 
