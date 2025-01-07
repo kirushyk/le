@@ -2,7 +2,7 @@
 # Released under the MIT license
 
 project('le', 'c',
-    version: '0.2.0',
+    version: '0.2.2',
     meson_version: '>= 1.0.0',
     default_options: [
         'c_std=c11',
