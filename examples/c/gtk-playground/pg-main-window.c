@@ -41,14 +41,14 @@ struct _LEMainWindow {
   GtkWidget *pr_vbox;
   GtkWidget *svm_vbox;
   GtkWidget *knn_vbox;
-  GtkWidget *svm_kernel_combo;
-  GtkWidget *svm_c_combo;
-  GtkWidget *knn_k_combo;
+  GtkWidget *svm_kernel_drop_down;
+  GtkWidget *svm_c_drop_down;
+  GtkWidget *knn_k_drop_down;
 
-  GtkWidget *polynomia_degree_combo;
-  GtkWidget *alpha_combo;
-  GtkWidget *regularization_combo;
-  GtkWidget *lambda_combo;
+  GtkWidget *polynomia_degree_drop_down;
+  GtkWidget *alpha_drop_down;
+  GtkWidget *regularization_drop_down;
+  GtkWidget *lambda_drop_down;
 
   PreferredModelType preferred_model_type;
 };
@@ -90,7 +90,6 @@ draw_callback (GtkDrawingArea *drawing_area, cairo_t *cr, int width, int height,
   if (window->test_data) {
     LeTensor *input  = le_data_set_get_input (window->test_data);
     LeTensor *output = le_data_set_get_output (window->test_data);
-    ;
     gint examples_count = le_matrix_get_width (input);
     for (gint i = 0; i < examples_count; i++) {
       gdouble x = width * 0.5 + height * 0.5 * le_matrix_at_f32 (input, 0, i);
@@ -171,14 +170,15 @@ train_current_model (LEMainWindow *self)
     return;
 
   gfloat learning_rate     = 1.0f;
-  char  *learning_rate_str = gtk_combo_box_text_get_active_text (GTK_COMBO_BOX_TEXT (self->alpha_combo));
+  gchar  *learning_rate_str = gtk_string_object_get_string (
+      (GtkStringObject *)gtk_drop_down_get_selected_item (GTK_DROP_DOWN (self->alpha_drop_down)));
   setlocale (LC_NUMERIC, "C");
   sscanf (learning_rate_str, "%f", &learning_rate);
 
   switch (self->preferred_model_type) {
   case PREFERRED_MODEL_TYPE_SUPPORT_VECTOR_MACHINE: {
     LeSVMTrainingOptions options;
-    switch (gtk_combo_box_get_active (GTK_COMBO_BOX (self->svm_kernel_combo))) {
+    switch (gtk_drop_down_get_selected (GTK_DROP_DOWN (self->svm_kernel_drop_down))) {
     case 1:
       options.kernel = LE_KERNEL_RBF;
       break;
@@ -187,7 +187,7 @@ train_current_model (LEMainWindow *self)
       options.kernel = LE_KERNEL_LINEAR;
       break;
     }
-    sscanf (gtk_combo_box_text_get_active_text (GTK_COMBO_BOX_TEXT (self->svm_c_combo)), "%f", &options.c);
+    sscanf (gtk_string_object_get_string ((GtkStringObject *)gtk_drop_down_get_selected_item (GTK_DROP_DOWN (self->svm_c_drop_down))), "%f", &options.c);
     LeTensor *labels = le_tensor_new_copy (le_data_set_get_output (self->train_data));
     le_tensor_apply_sgn (labels);
     le_svm_train (LE_SVM (self->model), le_data_set_get_input (self->train_data), labels, options);
@@ -210,7 +210,7 @@ train_current_model (LEMainWindow *self)
   } break;
 
   case PREFERRED_MODEL_TYPE_KNN: {
-    unsigned k = atoi (gtk_combo_box_text_get_active_text (GTK_COMBO_BOX_TEXT (self->knn_k_combo)));
+    unsigned k = atoi (gtk_string_object_get_string ((GtkStringObject *)gtk_drop_down_get_selected_item (GTK_DROP_DOWN (self->knn_k_drop_down))));
     le_knn_train (LE_KNN (self->model), le_data_set_get_input (self->train_data),
                   le_data_set_get_output (self->train_data), k);
   } break;
@@ -220,9 +220,9 @@ train_current_model (LEMainWindow *self)
     LeLogisticClassifierTrainingOptions options;
     options.max_iterations = 400;
     options.polynomia_degree =
-        atoi (gtk_combo_box_text_get_active_text (GTK_COMBO_BOX_TEXT (self->polynomia_degree_combo)));
+        atoi (gtk_string_object_get_string ((GtkStringObject *)gtk_drop_down_get_selected_item (GTK_DROP_DOWN (self->polynomia_degree_drop_down))));
     options.learning_rate = learning_rate;
-    switch (gtk_combo_box_get_active (GTK_COMBO_BOX (self->regularization_combo))) {
+    switch (gtk_drop_down_get_selected (GTK_DROP_DOWN (self->regularization_drop_down))) {
     case 1:
       options.regularization = LE_REGULARIZATION_L1;
       break;
@@ -234,7 +234,7 @@ train_current_model (LEMainWindow *self)
       options.regularization = LE_REGULARIZATION_NONE;
       break;
     }
-    sscanf (gtk_combo_box_text_get_active_text (GTK_COMBO_BOX_TEXT (self->lambda_combo)), "%f", &options.lambda);
+    sscanf (gtk_string_object_get_string ((GtkStringObject *)gtk_drop_down_get_selected_item (GTK_DROP_DOWN (self->lambda_drop_down))), "%f", &options.lambda);
     le_logistic_classifier_train (LE_LOGISTIC_CLASSIFIER (self->model), le_data_set_get_input (self->train_data),
                                   le_data_set_get_output (self->train_data), options);
   } break;
@@ -405,11 +405,11 @@ le_main_window_set_preffered_model (GtkWidget *window, PreferredModelType model_
 }
 
 void
-model_drop_down_changed (GtkComboBox *widget, gpointer user_data)
+model_drop_down_changed (GtkDropDown *widget, gpointer user_data)
 {
   LEMainWindow *self = LE_MAIN_WINDOW (user_data);
 
-  switch (gtk_combo_box_get_active (widget)) {
+  switch (gtk_drop_down_get_selected (widget)) {
   case 1:
     le_main_window_set_preffered_model ((GtkWidget *)self, PREFERRED_MODEL_TYPE_SUPPORT_VECTOR_MACHINE);
     break;
@@ -527,7 +527,7 @@ le_main_window_init (LEMainWindow *self)
   const gchar *model_names[]   = { "Polynomial Regression", "Support Vector Machine (SVM)", "Shallow Neural Network",
                                    "k-Nearest Neighbors (KNN)", NULL };
   GtkWidget   *model_drop_down = gtk_drop_down_new_from_strings (model_names);
-  gtk_drop_down_set_selected (GTK_COMBO_BOX (model_drop_down), 2);
+  gtk_drop_down_set_selected (GTK_DROP_DOWN (model_drop_down), 2);
   g_signal_connect (G_OBJECT (model_drop_down), "notify::selected-item", G_CALLBACK (model_drop_down_changed), self);
   gtk_box_append (GTK_BOX (model_vbox), model_drop_down);
 
@@ -539,75 +539,49 @@ le_main_window_init (LEMainWindow *self)
 
   self->gd_vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
   gtk_box_append (GTK_BOX (self->gd_vbox), gtk_label_new ("Learning Rate α"));
-  self->alpha_combo = gtk_combo_box_text_new ();
-  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (self->alpha_combo), "0.01");
-  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (self->alpha_combo), "0.03");
-  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (self->alpha_combo), "0.1");
-  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (self->alpha_combo), "0.3");
-  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (self->alpha_combo), "1");
-  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (self->alpha_combo), "3");
-  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (self->alpha_combo), "10");
-  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (self->alpha_combo), "30");
-  gtk_combo_box_set_active (GTK_COMBO_BOX (self->alpha_combo), 4);
-  gtk_box_append (GTK_BOX (self->gd_vbox), self->alpha_combo);
+  const gchar *alphas[] = { "0.01", "0.03", "0.1", "0.3", "1", "3", "10", "30", NULL };
+  self->alpha_drop_down = gtk_drop_down_new_from_strings (alphas);
+  gtk_drop_down_set_selected (GTK_DROP_DOWN (self->alpha_drop_down), 4);
+  gtk_box_append (GTK_BOX (self->gd_vbox), self->alpha_drop_down);
   gtk_box_append (GTK_BOX (model_vbox), self->gd_vbox);
 
   self->pr_vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
   gtk_box_append (GTK_BOX (self->pr_vbox), gtk_label_new ("Polynomia Degree"));
-  self->polynomia_degree_combo = gtk_combo_box_text_new ();
-  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (self->polynomia_degree_combo), "0");
-  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (self->polynomia_degree_combo), "1");
-  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (self->polynomia_degree_combo), "2");
-  gtk_combo_box_set_active (GTK_COMBO_BOX (self->polynomia_degree_combo), 1);
-  gtk_box_append (GTK_BOX (self->pr_vbox), self->polynomia_degree_combo);
+  const gchar *polynomia_degrees[] = { "0", "1", "2", NULL };
+  self->polynomia_degree_drop_down = gtk_drop_down_new_from_strings (polynomia_degrees);
+  gtk_drop_down_set_selected (GTK_DROP_DOWN (self->polynomia_degree_drop_down), 1);
+  gtk_box_append (GTK_BOX (self->pr_vbox), self->polynomia_degree_drop_down);
   gtk_box_append (GTK_BOX (self->pr_vbox), gtk_label_new ("Regularization"));
-  self->regularization_combo = gtk_combo_box_text_new ();
-  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (self->regularization_combo), "None");
-  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (self->regularization_combo), "L1");
-  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (self->regularization_combo), "L2");
-  gtk_combo_box_set_active (GTK_COMBO_BOX (self->regularization_combo), 0);
-  gtk_box_append (GTK_BOX (self->pr_vbox), self->regularization_combo);
+  const gchar *regularizetion_options[] = { "None", "L1", "L2", NULL };
+  self->regularization_drop_down = gtk_drop_down_new_from_strings (regularizetion_options);
+  gtk_drop_down_set_selected (GTK_DROP_DOWN (self->regularization_drop_down), 0);
+  gtk_box_append (GTK_BOX (self->pr_vbox), self->regularization_drop_down);
   gtk_box_append (GTK_BOX (self->pr_vbox), gtk_label_new ("Regularization Rate λ"));
-  self->lambda_combo = gtk_combo_box_text_new ();
-  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (self->lambda_combo), "0");
-  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (self->lambda_combo), "0.001");
-  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (self->lambda_combo), "0.003");
-  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (self->lambda_combo), "0.01");
-  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (self->lambda_combo), "0.03");
-  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (self->lambda_combo), "0.1");
-  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (self->lambda_combo), "0.3");
-  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (self->lambda_combo), "1");
-  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (self->lambda_combo), "3");
-  gtk_combo_box_set_active (GTK_COMBO_BOX (self->lambda_combo), 0);
-  gtk_box_append (GTK_BOX (self->pr_vbox), self->lambda_combo);
+  const gchar *lambdas[] = { "0", "0.001", "0.003", "0.01", "0.03", "0.1", "0.3", "1", "3", NULL };
+  self->lambda_drop_down = gtk_drop_down_new_from_strings (lambdas);
+  gtk_drop_down_set_selected (GTK_DROP_DOWN (self->lambda_drop_down), 0);
+  gtk_box_append (GTK_BOX (self->pr_vbox), self->lambda_drop_down);
   gtk_box_append (GTK_BOX (model_vbox), self->pr_vbox);
 
   self->svm_vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
   gtk_box_append (GTK_BOX (self->svm_vbox), gtk_label_new ("Kernel"));
-  self->svm_kernel_combo = gtk_combo_box_text_new ();
-  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (self->svm_kernel_combo), "Linear");
-  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (self->svm_kernel_combo), "Radial Basis Function");
-  gtk_combo_box_set_active (GTK_COMBO_BOX (self->svm_kernel_combo), 1);
-  gtk_box_append (GTK_BOX (self->svm_vbox), self->svm_kernel_combo);
+  const gchar *svm_kernel_names[] = { "Linear", "Radial Basis Function", NULL };
+  self->svm_kernel_drop_down = gtk_drop_down_new_from_strings (svm_kernel_names);
+  gtk_drop_down_set_selected (GTK_DROP_DOWN (self->svm_kernel_drop_down), 1);
+  gtk_box_append (GTK_BOX (self->svm_vbox), self->svm_kernel_drop_down);
   gtk_box_append (GTK_BOX (self->svm_vbox), gtk_label_new ("Regularization Parameter C"));
-  self->svm_c_combo = gtk_combo_box_text_new ();
-  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (self->svm_c_combo), "1");
-  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (self->svm_c_combo), "3");
-  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (self->svm_c_combo), "10");
-  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (self->svm_c_combo), "30");
-  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (self->svm_c_combo), "100");
-  gtk_combo_box_set_active (GTK_COMBO_BOX (self->svm_c_combo), 2);
-  gtk_box_append (GTK_BOX (self->svm_vbox), self->svm_c_combo);
+  const gchar *svm_c_options[] = { "1", "3", "10", "30", "100", NULL };
+  self->svm_c_drop_down = gtk_drop_down_new_from_strings (svm_c_options);
+  gtk_drop_down_set_selected (GTK_DROP_DOWN (self->svm_c_drop_down), 2);
+  gtk_box_append (GTK_BOX (self->svm_vbox), self->svm_c_drop_down);
   gtk_box_append (GTK_BOX (model_vbox), self->svm_vbox);
 
   self->knn_vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
   gtk_box_append (GTK_BOX (self->knn_vbox), gtk_label_new ("Number of Nearest Neighbors k"));
-  self->knn_k_combo = gtk_combo_box_text_new ();
-  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (self->knn_k_combo), "1");
-  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (self->knn_k_combo), "3");
-  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (self->knn_k_combo), "10");
-  gtk_combo_box_set_active (GTK_COMBO_BOX (self->knn_k_combo), 0);
-  gtk_box_append (GTK_BOX (self->knn_vbox), self->knn_k_combo);
+  const gchar *knn_k_options[] = { "1", "3", "10", NULL };
+  self->knn_k_drop_down = gtk_drop_down_new_from_strings (knn_k_options);
+  gtk_drop_down_set_selected (GTK_DROP_DOWN (self->knn_k_drop_down), 0);
+  gtk_box_append (GTK_BOX (self->knn_vbox), self->knn_k_drop_down);
   gtk_box_append (GTK_BOX (model_vbox), self->knn_vbox);
 
   self->drawing_area = gtk_drawing_area_new ();
