@@ -11,17 +11,23 @@
 #include <le/tensors/letensor-imp.h>
 
 static void
-le_tensor_serialize (LeTensor *tensor, FILE *fout)
+le_tensor_serialize (LeTensor *self, FILE *fout)
 {
-  g_assert_cmpint (tensor->device_type, ==, LE_DEVICE_TYPE_CPU);
-  g_assert_nonnull (tensor);
+  g_assert_nonnull (self);
   g_assert_nonnull (fout);
+  g_assert_cmpint (self->device_type, ==, LE_DEVICE_TYPE_CPU);
 
-  fwrite ((guint8 *)&tensor->element_type, sizeof (guint8), 1, fout);
-  fwrite ((guint8 *)&tensor->shape->num_dimensions, sizeof (guint8), 1, fout);
-  fwrite (tensor->shape->sizes, sizeof (guint32), tensor->shape->num_dimensions, fout);
-  gsize elements_count = le_shape_get_elements_count (tensor->shape);
-  fwrite (tensor->data, le_type_size (tensor->element_type), elements_count, fout);
+  fwrite ((guint8 *)&self->element_type, sizeof (guint8), 1, fout);
+  fwrite ((guint8 *)&self->shape->num_dimensions, sizeof (guint8), 1, fout);
+  for (gsize i = 0; i < self->shape->num_dimensions; i++) {
+    /** @note: Not freading whole array because here sizes can be 64-bit,
+     * while in this version of this file format we force it 32-bit. */
+    fwrite ((guint32 *)(self->shape->sizes + i), sizeof (guint32), 1, fout);
+  }
+  /** @note: This works with 32-bit hosts or when dimension were forced to be 32-bit:
+   * fwrite (self->shape->sizes, sizeof (guint32), self->shape->num_dimensions, fout); */
+  gsize elements_count = le_shape_get_elements_count (self->shape);
+  fwrite (self->data, le_type_size (self->element_type), elements_count, fout);
 }
 
 void
@@ -54,16 +60,22 @@ le_tensor_deserialize (FILE *fin)
   self->shape = g_new0 (LeShape, 1);
   fread ((guint8 *)&self->shape->num_dimensions, sizeof (guint8), 1, fin);
   self->shape->sizes = g_new0 (gsize, self->shape->num_dimensions);
-  fread (self->shape->sizes, sizeof (guint32), self->shape->num_dimensions, fin);
+  for (gsize i = 0; i < self->shape->num_dimensions; i++) {
+    /** @note: Not freading whole array because here sizes can be 64-bit,
+     * while in this version of this file format we force it 32-bit. */
+    fread (self->shape->sizes + i, sizeof (guint32), 1, fin);
+  }
+  /** @note: This works with 32-bit hosts or when dimension were forced to be 32-bit:
+   * fread (self->shape->sizes, sizeof (guint32), self->shape->num_dimensions, fin); */
 
   if (self->shape->num_dimensions > 0)
     self->stride = le_shape_get_size (self->shape, -1);
   else
     self->stride = 0;
-  self->owns_data      = true;
-  self->device_type    = LE_DEVICE_TYPE_CPU;
+  self->owns_data = true;
+  self->device_type = LE_DEVICE_TYPE_CPU;
   gsize elements_count = le_shape_get_elements_count (self->shape);
-  self->data           = g_malloc (elements_count * le_type_size (self->element_type));
+  self->data = g_malloc (elements_count * le_type_size (self->element_type));
   fread (self->data, le_type_size (self->element_type), elements_count, fin);
 
   return self;
@@ -73,7 +85,7 @@ GList *
 le_tensorlist_load (const char *filename)
 {
   GList *list = NULL;
-  FILE  *fin  = fopen (filename, "rb");
+  FILE *fin = fopen (filename, "rb");
   if (fin) {
     guint8 version = 0;
     fread (&version, sizeof (version), 1, fin);
@@ -82,7 +94,7 @@ le_tensorlist_load (const char *filename)
       fread (&num_tensors, sizeof (num_tensors), 1, fin);
       for (guint16 i = 0; i < num_tensors; i++) {
         LeTensor *tensor = le_tensor_deserialize (fin);
-        list             = g_list_append (list, tensor);
+        list = g_list_append (list, tensor);
       }
     } else {
       LE_WARNING ("%s: Unknown version of .tensorlist file: %d", filename, (int)version);
