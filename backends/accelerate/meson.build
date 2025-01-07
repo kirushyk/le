@@ -13,6 +13,10 @@ accelerate = dependency('appleframeworks',
 if accelerate.found()
     le_accelerate = static_library('le_accelerate', le_accelerate_sources,
         include_directories: inc,
+        c_args: [
+            '-DACCELERATE_NEW_LAPACK',
+            '-DACCELERATE_LAPACK_ILP64',
+        ],
         dependencies: [
             accelerate,
             glib
