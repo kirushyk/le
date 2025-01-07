@@ -3,8 +3,8 @@ IndentWidth: 2
 TabWidth: 2
 UseTab: Never
 AllowShortIfStatementsOnASingleLine: false
-AlignConsecutiveDeclarations: true
-AlignConsecutiveAssignments: true
+AlignConsecutiveDeclarations: false
+AlignConsecutiveAssignments: false
 AlignTrailingComments: true
 ColumnLimit: 120
 PointerBindsToType: false
@@ -23,7 +23,7 @@ BraceWrapping:
   BeforeElse: false
   IndentBraces: false
 ContinuationIndentWidth: 4
-AlignAfterOpenBracket: true
+AlignAfterOpenBracket: false
 AllowShortFunctionsOnASingleLine: Inline
 IncludeCategories:
   - Regex: '^[<"].*config\.h[>"]' # Build configuration headers (usually auto-generated)
