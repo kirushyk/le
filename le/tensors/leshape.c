@@ -2,50 +2,49 @@
    Released under the MIT license. See LICENSE file in the project root for full license information. */
 
 #include "leshape.h"
-#include <stdlib.h>
-#include <stddef.h>
-#include <string.h>
-#include <stdarg.h>
 #include <assert.h>
+#include <stdarg.h>
+#include <stddef.h>
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
 LeShape *
-le_shape_new(unsigned num_dimensions, ...)
+le_shape_new (unsigned num_dimensions, ...)
 {
-    LeShape *self = le_shape_new_uninitialized(num_dimensions);
-    
-    va_list args;
-    va_start(args, num_dimensions);
-    
-    for (unsigned i = 0; i < num_dimensions; i++)
-    {
-        int size = va_arg(args, int);
-        self->sizes[i] = size;
-    }
-    
-    va_end(args);
-    
-    return self;
+  LeShape *self = le_shape_new_uninitialized (num_dimensions);
+
+  va_list args;
+  va_start (args, num_dimensions);
+
+  for (unsigned i = 0; i < num_dimensions; i++) {
+    int size = va_arg (args, int);
+    self->sizes[i] = size;
+  }
+
+  va_end (args);
+
+  return self;
 }
 
 LeShape *
-le_shape_new_uninitialized(unsigned num_dimensions)
+le_shape_new_uninitialized (unsigned num_dimensions)
 {
-    LeShape *self = g_new0 (LeShape, 1);
-    self->num_dimensions = num_dimensions;
-    self->sizes = g_new0 (guint32, num_dimensions);
-    
-    return self;
+  LeShape *self = g_new0 (LeShape, 1);
+  self->num_dimensions = num_dimensions;
+  self->sizes = g_new0 (gsize, num_dimensions);
+
+  return self;
 }
 
-guint32 *
-le_shape_get_data(LeShape *shape)
+gsize *
+le_shape_get_data (LeShape *shape)
 {
-    return shape->sizes;
+  return shape->sizes;
 }
 
-guint32
-le_shape_get_size(LeShape *shape, int dimension)
+gsize
+le_shape_get_size (LeShape *shape, int dimension)
 {
   g_assert_nonnull (shape);
   g_assert_cmpint (dimension, <, (int)shape->num_dimensions);
@@ -54,21 +53,21 @@ le_shape_get_size(LeShape *shape, int dimension)
 }
 
 void
-le_shape_set_size(LeShape *shape, unsigned dimension, guint32 size)
+le_shape_set_size (LeShape *shape, unsigned dimension, gsize size)
 {
-    assert(shape);
-    assert(dimension < shape->num_dimensions);
-    shape->sizes[dimension] = size;
+  assert (shape);
+  assert (dimension < shape->num_dimensions);
+  shape->sizes[dimension] = size;
 }
 
 LeShape *
-le_shape_copy (LeShape * another)
+le_shape_copy (LeShape *another)
 {
   g_assert_nonnull (another);
   LeShape *self = g_new (LeShape, 1);
   self->num_dimensions = another->num_dimensions;
   if (self->num_dimensions > 0) {
-    gsize size = self->num_dimensions * sizeof (guint32);
+    gsize size = self->num_dimensions * sizeof (gsize);
     self->sizes = g_malloc (size);
     memcpy (self->sizes, another->sizes, size);
   } else {
@@ -78,24 +77,23 @@ le_shape_copy (LeShape * another)
 }
 
 LeShape *
-le_shape_lower_dimension(LeShape *another)
+le_shape_lower_dimension (LeShape *another)
 {
-    /// @todo: Add assertions
-    LeShape *self = g_new0 (LeShape, 1);
-    self->num_dimensions = another->num_dimensions - 1;
-    gsize size = self->num_dimensions * sizeof(guint32);
-    self->sizes = g_malloc (size);
-    memcpy(self->sizes, another->sizes + 1, size);
-    return self;
+  /// @todo: Add assertions
+  LeShape *self = g_new0 (LeShape, 1);
+  self->num_dimensions = another->num_dimensions - 1;
+  gsize size = self->num_dimensions * sizeof (gsize);
+  self->sizes = g_malloc (size);
+  memcpy (self->sizes, another->sizes + 1, size);
+  return self;
 }
 
 void
-le_shape_free (LeShape * self)
+le_shape_free (LeShape *self)
 {
-  if (self)
-  {
+  if (self) {
     g_assert_cmpint (self->num_dimensions > 0, ==, self->sizes != NULL);
-    
+
     if (self->sizes)
       g_free (self->sizes);
     g_free (self);
@@ -103,90 +101,77 @@ le_shape_free (LeShape * self)
 }
 
 const char *
-le_shape_to_cstr(LeShape *shape)
+le_shape_to_cstr (LeShape *shape)
 {
-    static char buffer[1024];
+  static char buffer[1024];
 
-    if (shape)
-    {
-        char *ptr = buffer;
-        ptr[0] = '(';
-        /// @todo: Add overflow check
-        ptr++;
-        for (unsigned i = 0; i < shape->num_dimensions; i++)
-        {
-            int written = 0;
-            if (shape->sizes[i])
-            {
-                sprintf(ptr, "%d%n", shape->sizes[i], &written);
-            }
-            else
-            {
-                sprintf(ptr, "?");
-                written = 1;
-            }
-            ptr += written;
-            
-            sprintf(ptr, "%s%n",
-                    i == (shape->num_dimensions - 1) ? ")" : ", ",
-                    &written);
-            ptr += written;
-        }
-    }
-    else
-    {
-        sprintf(buffer, "(null)");
-    }
+  if (shape) {
+    char *ptr = buffer;
+    ptr[0] = '(';
+    /// @todo: Add overflow check
+    ptr++;
+    for (unsigned i = 0; i < shape->num_dimensions; i++) {
+      int written = 0;
+      if (shape->sizes[i]) {
+        sprintf (ptr, "%d%n", shape->sizes[i], &written);
+      } else {
+        sprintf (ptr, "?");
+        written = 1;
+      }
+      ptr += written;
 
-    return buffer;
+      sprintf (ptr, "%s%n", i == (shape->num_dimensions - 1) ? ")" : ", ", &written);
+      ptr += written;
+    }
+  } else {
+    sprintf (buffer, "(null)");
+  }
+
+  return buffer;
 }
 
-guint32
-le_shape_get_elements_count(LeShape * shape)
+gsize
+le_shape_get_elements_count (LeShape *shape)
 {
-  guint32 count = 0;
-  if (shape)
-  {
+  gsize count = 0;
+  if (shape) {
     g_assert_cmpint (shape->num_dimensions > 0, ==, shape->sizes != NULL);
     count = 1;
-    for (unsigned i = 0; i < shape->num_dimensions; i++)
-    {
+    for (unsigned i = 0; i < shape->num_dimensions; i++) {
       count *= shape->sizes[i];
     }
   }
   return count;
 }
 
-guint32
-le_shape_get_regions_count(LeShape *shape)
+gsize
+le_shape_get_regions_count (LeShape *shape)
 {
-  guint32 count = 0;
-  if (shape)
-  {
+  gsize count = 0;
+  if (shape) {
     g_assert_cmpint (shape->num_dimensions > 0, ==, shape->sizes != NULL);
     count = 1;
-    for (unsigned i = 0; i < shape->num_dimensions - 1; i++)
-    {
+    for (unsigned i = 0; i < shape->num_dimensions - 1; i++) {
       count *= shape->sizes[i];
     }
   }
   return count;
 }
 
-bool
-le_shape_equal(LeShape *a, LeShape *b)
+gboolean
+le_shape_equal (LeShape *a, LeShape *b)
 {
-    assert(a);
-    assert(b);
-    
-    if (a->num_dimensions != b->num_dimensions)
-        return false;
-    
-    for (unsigned i = 0; i < a->num_dimensions; i++)
-    {
-        if (a->sizes[i] != b->sizes[i])
-            return false;
+  g_assert_nonnull (a);
+  g_assert_nonnull (b);
+
+  if (a->num_dimensions != b->num_dimensions)
+    return FALSE;
+
+  for (unsigned i = 0; i < a->num_dimensions; i++) {
+    if (a->sizes[i] != b->sizes[i]) {
+      return FALSE;
     }
-    
-    return true;
+  }
+
+  return TRUE;
 }
