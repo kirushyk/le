@@ -1060,7 +1060,7 @@ le_tensor_to_cstr (const LeTensor *self)
   static char buffer[BUFFER_SIZE];
 
   if (self->shape->num_dimensions != 2) {
-    sprintf (buffer, "<%dD tensor>\n", self->shape->num_dimensions);
+    sprintf (buffer, "<%" G_GSIZE_FORMAT "D tensor>\n", self->shape->num_dimensions);
     return buffer;
   }
 
@@ -1136,7 +1136,7 @@ le_tensor_print (const LeTensor *self, FILE *stream)
   g_assert_cmpint (self->device_type, ==, LE_DEVICE_TYPE_CPU);
   /// @todo: Take stride into account
   if (self->shape->num_dimensions != 2) {
-    fprintf (stream, "<%dD tensor>\n", self->shape->num_dimensions);
+    fprintf (stream, "<%" G_GSIZE_FORMAT "D tensor>\n", self->shape->num_dimensions);
     return;
   }
 

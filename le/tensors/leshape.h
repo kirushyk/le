@@ -15,6 +15,7 @@ typedef struct LeShape
   gsize *sizes;
 } LeShape;
 
+/// @todo: Rename, update tensorlist
 LeShape *    le_shape_new_uninitialized  (unsigned  num_dimensions);
 
 LeShape *    le_shape_new                (unsigned  num_dimensions,
