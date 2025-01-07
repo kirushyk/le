@@ -48,8 +48,8 @@ main ()
     g_assert_true (le_tensor_equal (original, loaded));
   }
 
-  g_assert_cmphex (i, ==, NULL);
-  g_assert_cmphex (j, ==, NULL);
+  g_assert_null (i);
+  g_assert_null (j);
 
   g_list_free_full (loaded_tensorlist, (GDestroyNotify)le_tensor_free);
   g_list_free_full (tensorlist, (GDestroyNotify)le_tensor_free);
