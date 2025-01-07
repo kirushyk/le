@@ -3,6 +3,7 @@
 
 #include <stdlib.h>
 #include <cublas_v2.h>
+#include <cuda_runtime.h>
 #include "lecuda.h"
 #include <assert.h>
 #include <le/le.h>
