@@ -34,7 +34,10 @@ le_deps = [
     gobject
 ]
 
-le_libs = []
+subdir('devices')
+le_libs = [
+    le_devices
+]
 
 if accelerate.found()
     le_libs += le_accelerate
