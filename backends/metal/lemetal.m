@@ -34,6 +34,18 @@ le_metal_init(void)
     }
 }
 
+GList * le_metal_get_all_devices (void)
+{
+    GList *devices = NULL;
+    NSArray<id<MTLDevice>> *allDevices = MTLCopyAllDevices();
+    for (id<MTLDevice> device in allDevices)
+    {
+        gchar *device_name = g_strdup (device.name.UTF8String);
+        devices = g_list_prepend (devices, device_name);
+    }
+    return devices;
+}
+
 LeTensor *
 le_metal_matrix_new_product(const LeTensor *a, bool transpose_a, const LeTensor *b, bool transpose_b)
 {
