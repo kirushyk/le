@@ -28,15 +28,12 @@ le_sources = [
     'lelog.c'
 ]
 
+le_libs = []
+
 le_deps = [
     cc.find_library('m'),
     glib,
     gobject
-]
-
-subdir('devices')
-le_libs = [
-    le_devices
 ]
 
 if accelerate.found()
@@ -60,6 +57,9 @@ config.set('HAVE_OPENBLAS', have_openblas)
 config.set('HAVE_CUDA', have_cuda)
 config.set('HAVE_METAL', have_metal)
 configure_file(output: 'config.h', configuration: config)
+
+subdir('devices')
+le_libs += le_devices
 
 install_headers('leloss.h', subdir: 'le')
 install_headers('math/lepolynomia.h', subdir: 'le')
