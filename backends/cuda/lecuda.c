@@ -9,6 +9,24 @@
 #include <le/le.h>
 #include <le/tensors/letensor-imp.h>
 
+GList *
+le_cuda_get_all_devices (void)
+{
+  GList *devices = NULL;
+
+  gint num_devices = 0;
+  cudaGetDeviceCount (&num_devices);
+
+  for (gint i = 0; i < num_devices; i++) {
+    struct cudaDeviceProp device_properties;
+    cudaGetDeviceProperties (&device_properties, i);
+    gchar *device_name = g_strdup (device_properties.name);
+    devices = g_list_prepend (devices, device_name);
+  }
+
+  return devices;
+}
+
 LeTensor *
 le_cuda_matrix_new_product (const LeTensor *a, gboolean transpose_a, const LeTensor *b, gboolean transpose_b)
 {

@@ -7,6 +7,10 @@
 #include <le/le.h>
 #include <glib.h>
 
+G_BEGIN_DECLS
+
+GList *    le_cuda_get_all_devices            (void);
+
 LeTensor * le_cuda_matrix_new_product         (const LeTensor * a,
                                                gboolean         transpose_a,
                                                const LeTensor * b,
@@ -27,5 +31,7 @@ void *     le_cuda_data_copy                  (void *           data,
                                                gsize            bytes);
 
 void       le_cuda_data_free                  (void *           data);
+
+G_END_DECLS
 
 #endif
