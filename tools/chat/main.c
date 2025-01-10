@@ -1,13 +1,15 @@
 #include <stdlib.h>
 #include <glib.h>
+#include <readline/history.h>
+#include <readline/readline.h>
 
 int
 main (int argc, char *argv[])
 {
-  static GOptionEntry option_entries[] = {
+  static GOptionEntry option_entries[] = { // clang-format off
     { "model", 'm', 0, G_OPTION_ARG_STRING, NULL, "Model filename", "FILENAME" },
     { NULL }
-  };
+  }; // clang-format on
   g_set_prgname ("le-chat");
   g_set_application_name ("Le Chat");
   GOptionContext *option_context = g_option_context_new (NULL);
@@ -19,6 +21,12 @@ main (int argc, char *argv[])
     g_print ("%s\n", error->message);
     g_error_free (error);
     return EXIT_FAILURE;
+  }
+  while (TRUE) {
+    gchar *prompt = readline ("> ");
+    if (prompt == NULL) {
+      break;
+    }
   }
   g_option_context_free (option_context);
   return EXIT_SUCCESS;
