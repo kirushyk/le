@@ -27,6 +27,7 @@ main (int argc, char *argv[])
     if (prompt == NULL) {
       break;
     }
+    add_history (prompt);
   }
   g_option_context_free (option_context);
   return EXIT_SUCCESS;
