@@ -8,5 +8,8 @@ tokenizer_sources = [
 tokenizer = static_library('le_tokenizer', tokenizer_sources,
     include_directories: inc,
     link_with: le,
-    dependencies: glib
+    dependencies: [
+        glib,
+        dependency('json-glib-1.0')
+    ]
 )

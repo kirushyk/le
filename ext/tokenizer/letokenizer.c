@@ -1,4 +1,5 @@
 #include "letokenizer.h"
+#include <json-glib/json-glib.h>
 
 struct _LeTokenizer
 {
@@ -38,6 +39,20 @@ le_tokenizer_init (LeTokenizer *self)
 LeTokenizer *
 le_tokenizer_new (const gchar *filename)
 {
+  JsonParser *parser = json_parser_new_immutable ();
+  GError *error = NULL;
+  if (!json_parser_load_from_file (parser, filename, &error))
+  {
+    if (error != NULL)
+    {
+      g_printerr ("%s\n", error->message);
+      g_error_free (error);
+      error = NULL;
+    }
+    return NULL;
+  }
+  g_object_unref (parser);
+
   LeTokenizer *self = g_object_new (le_tokenizer_get_type (), NULL);
   return self;
 }
