@@ -8,14 +8,14 @@ You will need C11 compiler. If you want Python bindings you should have C++14 co
 
 Use APT package manager to install dependencies:
 
-    sudo apt install g++ python3-pip ninja-build libpython3-dev sudo apt install libreadline-dev
+    sudo apt install g++ python3-pip ninja-build libpython3-dev sudo apt install libreadline-dev libjson-glib-dev
     sudo -H pip3 install meson pybind11 numpy
 
 ### macOS
 
 Use [Homebrew](https://brew.sh) to install packages needed:
 
-    brew install meson pybind11 readline gtk4
+    brew install meson pybind11 readline gtk4 json-glib
 
 ## Configuration
 
