@@ -1,0 +1,10 @@
+#include <stdlib.h>
+#include <ext/tokenizer/letokenizer.h>
+
+int
+main ()
+{
+  LeTokenizer *tokenizer = le_tokenizer_new ("test.txt");
+  g_object_unref (tokenizer);
+  return EXIT_SUCCESS;
+}

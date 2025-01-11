@@ -63,3 +63,4 @@ endforeach
 
 subdir('cpp')
 subdir('python')
+subdir('ext')
