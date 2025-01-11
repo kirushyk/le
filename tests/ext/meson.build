@@ -7,5 +7,6 @@ foreach test_name : le_ext_tests
     test(test_name, ext_test,
         timeout : 3 * 60,
         suite: 'Ext',
+        workdir: meson.current_source_dir() / test_name
     )
 endforeach
