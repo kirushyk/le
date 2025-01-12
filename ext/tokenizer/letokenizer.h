@@ -8,7 +8,13 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (LeTokenizer, le_tokenizer, LE, TOKENIZER, GObject);
 
-LeTokenizer * le_tokenizer_new (const gchar * filename);
+LeTokenizer * le_tokenizer_new    (const gchar * filename);
+
+GList *       le_tokenizer_encode (LeTokenizer * self,
+                                   const gchar * text);
+
+gchar *       le_tokenizer_decode (LeTokenizer * self,
+                                   GList *       tokens);
 
 G_END_DECLS
 
