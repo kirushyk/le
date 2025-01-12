@@ -12,6 +12,7 @@ main ()
   LeTokenizer *tokenizer = le_tokenizer_new ("tokenizer.json");
   g_assert_nonnull (tokenizer);
   gchar *string = le_tokenizer_decode (tokenizer, tokens);
+  g_assert_cmpstr (string, ==, "?5+");
   g_print ("%s\n", string);
   g_free (string);
   g_list_free (tokens);
