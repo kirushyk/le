@@ -84,7 +84,16 @@ error:
 GList *
 le_tokenizer_encode (LeTokenizer *self, const gchar *text)
 {
-  return NULL;
+  GList *tokens = NULL;
+  for (gsize i = 0; text != NULL && text[i] != '\0'; i++) {
+    gchar *token = g_strndup (text + i, 1);
+    gint64 id = GPOINTER_TO_INT (g_hash_table_lookup (self->text_to_id, token));
+    if (id) {
+      tokens = g_list_prepend (tokens, GINT_TO_POINTER (id));
+    }
+    g_free (token);
+  }
+  return g_list_reverse (tokens);
 }
 
 gchar *

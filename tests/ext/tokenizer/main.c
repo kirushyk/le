@@ -14,7 +14,6 @@ main ()
   g_assert_nonnull (tokenizer);
   gchar *string = le_tokenizer_decode (tokenizer, tokens);
   g_assert_cmpstr (string, ==, "?5+");
-  g_print ("%s\n", string);
   g_free (string);
   g_list_free (tokens);
   tokens = NULL;
@@ -24,6 +23,7 @@ main ()
 
   tokens = le_tokenizer_encode (tokenizer, "?5+");
   g_assert_nonnull (tokens);
+  g_assert_cmpstr (le_tokenizer_decode (tokenizer, tokens), ==, "?5+");
   g_list_free (tokens);
 
   g_object_unref (tokenizer);
