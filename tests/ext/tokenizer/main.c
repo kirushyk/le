@@ -19,6 +19,9 @@ main ()
   g_list_free (tokens);
   tokens = NULL;
 
+  tokens = le_tokenizer_encode (tokenizer, NULL);
+  g_assert_null (tokens);
+
   tokens = le_tokenizer_encode (tokenizer, "?5+");
   g_assert_nonnull (tokens);
   g_list_free (tokens);
