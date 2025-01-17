@@ -6,7 +6,24 @@ struct _LeTokenizer
   GObject parent;
   GHashTable *text_to_id;
   GHashTable *id_to_text;
+  GList *merges;
 };
+
+typedef struct MergePair
+{
+  gchar *first;
+  gchar *second;
+} MergePair;
+
+void
+merge_pair_free (MergePair *pair)
+{
+  if (pair) {
+    g_free (pair->first);
+    g_free (pair->second);
+  }
+  g_free (pair);
+}
 
 static void le_tokenizer_class_init (LeTokenizerClass *klass);
 static void le_tokenizer_init (LeTokenizer *self);
@@ -21,6 +38,7 @@ le_tokenizer_dispose (GObject *object)
   g_hash_table_unref (self->text_to_id);
   g_assert_nonnull (self->id_to_text);
   g_hash_table_unref (self->id_to_text);
+  g_list_free_full (self->merges, (GDestroyNotify)merge_pair_free);
   G_OBJECT_CLASS (le_tokenizer_parent_class)->dispose (object);
 }
 
@@ -75,6 +93,22 @@ le_tokenizer_new (const gchar *filename)
     g_hash_table_insert (self->id_to_text, GINT_TO_POINTER (id), g_strdup (key));
   }
   g_list_free (vocam_members);
+
+  self->merges = NULL;
+  JsonArray *merges_array = json_object_get_array_member (model_object, "merges");
+  if (merges_array != NULL) {
+    for (gsize i = 0; i < json_array_get_length (merges_array); i++) {
+      const gchar *merge_string = json_array_get_string_element (merges_array, i);
+      if (merge_string != NULL) {
+        gchar **merge_item = g_strsplit (merge_string, " ", 2);
+        MergePair *pair = g_new (MergePair, 1);
+        pair->first = g_strdup (merge_item[0]);
+        pair->second = g_strdup (merge_item[1]);
+        g_strfreev (merge_item);
+        self->merges = g_list_prepend (self->merges, pair);
+      }
+    }
+  }
 
 error:
   g_object_unref (parser);
