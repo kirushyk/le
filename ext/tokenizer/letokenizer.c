@@ -156,3 +156,10 @@ le_tokenizer_decode (LeTokenizer *self, GList *tokens)
   }
   return g_string_free_and_steal (result);
 }
+
+const gchar *
+le_tokenizer_decode_1 (LeTokenizer *self, guint32 token)
+{
+  const gchar *text = g_hash_table_lookup (self->id_to_text, GINT_TO_POINTER (token));
+  return text;
+}
