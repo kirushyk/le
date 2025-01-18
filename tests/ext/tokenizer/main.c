@@ -23,7 +23,32 @@ main ()
 
   tokens = le_tokenizer_encode (tokenizer, "?5+");
   g_assert_nonnull (tokens);
+  g_assert_cmpint (g_list_length (tokens), ==, 3);
   g_assert_cmpstr (le_tokenizer_decode (tokenizer, tokens), ==, "?5+");
+  g_list_free (tokens);
+
+  tokens = le_tokenizer_encode (tokenizer, "es");
+  g_assert_nonnull (tokens);
+  g_assert_cmpint (g_list_length (tokens), ==, 1);
+  g_assert_cmpstr (le_tokenizer_decode (tokenizer, tokens), ==, "es");
+  g_list_free (tokens);
+
+  tokens = le_tokenizer_encode (tokenizer, "et");
+  g_assert_nonnull (tokens);
+  g_assert_cmpint (g_list_length (tokens), ==, 2);
+  g_assert_cmpstr (le_tokenizer_decode (tokenizer, tokens), ==, "et");
+  g_list_free (tokens);
+
+  tokens = le_tokenizer_encode (tokenizer, "ky");
+  g_assert_nonnull (tokens);
+  g_assert_cmpint (g_list_length (tokens), ==, 1);
+  g_assert_cmpstr (le_tokenizer_decode (tokenizer, tokens), ==, "ky");
+  g_list_free (tokens);
+
+  tokens = le_tokenizer_encode (tokenizer, "kz");
+  g_assert_nonnull (tokens);
+  g_assert_cmpint (g_list_length (tokens), ==, 2);
+  g_assert_cmpstr (le_tokenizer_decode (tokenizer, tokens), ==, "kz");
   g_list_free (tokens);
 
   g_object_unref (tokenizer);
