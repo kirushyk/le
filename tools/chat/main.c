@@ -37,6 +37,12 @@ main (int argc, char *argv[])
       break;
     }
     add_history (prompt);
+    GList *tokens = le_tokenizer_encode (tokenizer, prompt);
+    for (GList *iter = tokens; iter != NULL; iter = iter->next) {
+      const guint32 id = GPOINTER_TO_INT (iter->data);
+      g_print ("%" G_GUINT32_FORMAT " %s%c", id, le_tokenizer_decode_1 (tokenizer, id), iter->next ? ' ' : '\n');
+    }
+    g_list_free (tokens);
   }
 
   g_object_unref (tokenizer);
