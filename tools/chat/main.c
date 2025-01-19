@@ -8,8 +8,10 @@ int
 main (int argc, char *argv[])
 {
   static gchar *tokenizer_config_filename = NULL;
+  static gboolean debug_tokenizer = FALSE;
   static GOptionEntry option_entries[] = { // clang-format off
     { "tokenizer-config", 't', 0, G_OPTION_ARG_STRING, &tokenizer_config_filename, "Tokenizer config", "TOKENIZER.JSON" },
+    { "debug-tokenizer", '\0', 0, G_OPTION_ARG_NONE, &debug_tokenizer, "Whether to debug tokenization", NULL },
     { NULL }
   }; // clang-format on
   g_set_prgname ("le-chat");
@@ -38,9 +40,19 @@ main (int argc, char *argv[])
     }
     add_history (prompt);
     GList *tokens = le_tokenizer_encode (tokenizer, prompt);
-    for (GList *iter = tokens; iter != NULL; iter = iter->next) {
-      const guint32 id = GPOINTER_TO_INT (iter->data);
-      g_print ("%" G_GUINT32_FORMAT " %s%c", id, le_tokenizer_decode_1 (tokenizer, id), iter->next ? ' ' : '\n');
+    if (debug_tokenizer) {
+      g_print ("t ");
+      gint prev_color = -1;
+      gint prev_underline = 0;
+      for (GList *iter = tokens; iter != NULL; iter = iter->next) {
+        const guint32 id = GPOINTER_TO_INT (iter->data);
+        gint color = 41 + (id % 6);
+        gint underline = prev_underline ? 0 : (color == prev_color ? 4 : 0);
+        g_print ("\033[%d;%dm%s\033[0m", underline, color, le_tokenizer_decode_1 (tokenizer, id));
+        prev_color = color;
+        prev_underline = underline;
+      }
+      g_print ("\n");
     }
     gchar *prompt_decoded = le_tokenizer_decode (tokenizer, tokens);
     g_print ("> %s\n", prompt_decoded);
