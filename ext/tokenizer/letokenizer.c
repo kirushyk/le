@@ -126,20 +126,25 @@ le_tokenizer_encode (LeTokenizer *self, const gchar *text)
     g_free (token);
   }
   tokens = g_list_reverse (tokens);
-  for (GList *iter = tokens; iter != NULL; iter = iter->next) {
-    GList *next_iter = iter->next;
-    if (next_iter != NULL) {
-      gint64 id = GPOINTER_TO_INT (iter->data);
-      gint64 next_id = GPOINTER_TO_INT (next_iter->data);
-      for (gsize i = 0; i < self->num_merge_pairs; i++) {
-        if (self->merge_indices[i].first == id && self->merge_indices[i].second == next_id) {
-          iter->data = GINT_TO_POINTER (self->merge_indices[i].merged);
-          tokens = g_list_delete_link (tokens, next_iter);
-          break;
+  guint num_tokens_merged;
+  do {
+    num_tokens_merged = 0;
+    for (GList *iter = tokens; iter != NULL; iter = iter->next) {
+      GList *next_iter = iter->next;
+      if (next_iter != NULL) {
+        gint64 id = GPOINTER_TO_INT (iter->data);
+        gint64 next_id = GPOINTER_TO_INT (next_iter->data);
+        for (gsize i = 0; i < self->num_merge_pairs; i++) {
+          if (self->merge_indices[i].first == id && self->merge_indices[i].second == next_id) {
+            iter->data = GINT_TO_POINTER (self->merge_indices[i].merged);
+            tokens = g_list_delete_link (tokens, next_iter);
+            num_tokens_merged++;
+            break;
+          }
         }
       }
     }
-  }
+  } while (num_tokens_merged > 0);
   return tokens;
 }
 
