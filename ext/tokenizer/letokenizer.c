@@ -82,10 +82,10 @@ le_tokenizer_new (const gchar *filename)
   for (GList *iter = vocab_members; iter != NULL; iter = iter->next) {
     const gchar *key = (const gchar *)iter->data;
     gint64 id = json_object_get_int_member (vocab_object, key);
-    gchar *text_with_space = g_strdup (key);
-    g_hash_table_insert (self->text_to_id, g_strdup (text_with_space), GINT_TO_POINTER (id));
-    g_hash_table_insert (self->id_to_text, GINT_TO_POINTER (id), g_strdup (text_with_space));
-    g_free (text_with_space)
+    GString *text_with_space = g_string_new (key);
+    g_string_replace (text_with_space, "Ġ", " ", 0);
+    g_hash_table_insert (self->text_to_id, g_strdup (text_with_space->str), GINT_TO_POINTER (id));
+    g_hash_table_insert (self->id_to_text, GINT_TO_POINTER (id), g_string_free_and_steal (text_with_space));
   }
   g_list_free (vocab_members);
 
