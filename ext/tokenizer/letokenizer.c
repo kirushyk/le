@@ -133,19 +133,44 @@ le_tokenizer_encode (LeTokenizer *self, const gchar *text)
   while (g_match_info_matches (match_info)) {
     gchar *chunk = g_match_info_fetch (match_info, 0);
     g_assert_nonnull (chunk);
-    // g_print ("Token: %s\n", chunk);
     gint64 id = GPOINTER_TO_INT (g_hash_table_lookup (self->text_to_id, chunk));
     if (id) {
       tokens = g_list_prepend (tokens, GINT_TO_POINTER (id));
     } else {
+      GList *chunk_tokens = NULL;
       for (gsize i = 0; chunk[i] != '\0'; i++) {
         gchar *token = g_strndup (chunk + i, 1);
         gint64 id = GPOINTER_TO_INT (g_hash_table_lookup (self->text_to_id, token));
         if (id) {
-          tokens = g_list_prepend (tokens, GINT_TO_POINTER (id));
+          chunk_tokens = g_list_prepend (chunk_tokens, GINT_TO_POINTER (id));
         }
         g_free (token);
       }
+
+      chunk_tokens = g_list_reverse (chunk_tokens);
+
+      guint num_tokens_merged;
+      do {
+        num_tokens_merged = 0;
+        for (GList *iter = chunk_tokens; iter != NULL; iter = iter->next) {
+          GList *next_iter = iter->next;
+          if (next_iter != NULL) {
+            gint64 id = GPOINTER_TO_INT (iter->data);
+            gint64 next_id = GPOINTER_TO_INT (next_iter->data);
+            for (gsize i = 0; i < self->num_merge_pairs; i++) {
+              if (self->merge_indices[i].first == id && self->merge_indices[i].second == next_id) {
+                iter->data = GINT_TO_POINTER (self->merge_indices[i].merged);
+                chunk_tokens = g_list_delete_link (chunk_tokens, next_iter);
+                num_tokens_merged++;
+                break;
+              }
+            }
+          }
+        }
+      } while (num_tokens_merged > 0);
+
+      chunk_tokens = g_list_reverse (chunk_tokens);
+      tokens = g_list_concat (chunk_tokens, tokens);
     }
     g_free (chunk);
     g_match_info_next (match_info, NULL);
@@ -155,25 +180,6 @@ le_tokenizer_encode (LeTokenizer *self, const gchar *text)
 
   tokens = g_list_reverse (tokens);
 
-  // guint num_tokens_merged;
-  // do {
-  //   num_tokens_merged = 0;
-  //   for (GList *iter = tokens; iter != NULL; iter = iter->next) {
-  //     GList *next_iter = iter->next;
-  //     if (next_iter != NULL) {
-  //       gint64 id = GPOINTER_TO_INT (iter->data);
-  //       gint64 next_id = GPOINTER_TO_INT (next_iter->data);
-  //       for (gsize i = 0; i < self->num_merge_pairs; i++) {
-  //         if (self->merge_indices[i].first == id && self->merge_indices[i].second == next_id) {
-  //           iter->data = GINT_TO_POINTER (self->merge_indices[i].merged);
-  //           tokens = g_list_delete_link (tokens, next_iter);
-  //           num_tokens_merged++;
-  //           break;
-  //         }
-  //       }
-  //     }
-  //   }
-  // } while (num_tokens_merged > 0);
   return tokens;
 }
 
