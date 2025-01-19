@@ -42,6 +42,8 @@ main (int argc, char *argv[])
       const guint32 id = GPOINTER_TO_INT (iter->data);
       g_print ("%" G_GUINT32_FORMAT " %s%c", id, le_tokenizer_decode_1 (tokenizer, id), iter->next ? ' ' : '\n');
     }
+    gchar *prompt_decoded = le_tokenizer_decode (tokenizer, tokens);
+    g_print ("> %s\n", prompt_decoded);
     g_list_free (tokens);
   }
 
