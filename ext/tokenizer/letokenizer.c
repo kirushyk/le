@@ -82,8 +82,10 @@ le_tokenizer_new (const gchar *filename)
   for (GList *iter = vocab_members; iter != NULL; iter = iter->next) {
     const gchar *key = (const gchar *)iter->data;
     gint64 id = json_object_get_int_member (vocab_object, key);
-    g_hash_table_insert (self->text_to_id, g_strdup (key), GINT_TO_POINTER (id));
-    g_hash_table_insert (self->id_to_text, GINT_TO_POINTER (id), g_strdup (key));
+    gchar *text_with_space = g_strdup (key);
+    g_hash_table_insert (self->text_to_id, g_strdup (text_with_space), GINT_TO_POINTER (id));
+    g_hash_table_insert (self->id_to_text, GINT_TO_POINTER (id), g_strdup (text_with_space));
+    g_free (text_with_space)
   }
   g_list_free (vocab_members);
 
@@ -116,35 +118,62 @@ error:
 GList *
 le_tokenizer_encode (LeTokenizer *self, const gchar *text)
 {
+  g_assert_nonnull (self);
+  if (text == NULL)
+    return NULL;
+
   GList *tokens = NULL;
-  for (gsize i = 0; text != NULL && text[i] != '\0'; i++) {
-    gchar *token = g_strndup (text + i, 1);
-    gint64 id = GPOINTER_TO_INT (g_hash_table_lookup (self->text_to_id, token));
+
+  GRegex *regex = g_regex_new ("(?i:'s|'t|'re|'ve|'m|'ll|'d)|[^\\r\\n\\p{L}\\p{N}]?\\p{L}+|\\p{N}{1,3}| "
+                               "?[^\\s\\p{L}\\p{N}]+[\\r\\n]*|\\s*[\\r\\n]+|\\s+(?!\\S)|\\s+",
+      G_REGEX_DEFAULT, G_REGEX_MATCH_DEFAULT, NULL);
+  g_assert_nonnull (regex);
+  GMatchInfo *match_info;
+  g_regex_match (regex, text, 0, &match_info);
+  while (g_match_info_matches (match_info)) {
+    gchar *chunk = g_match_info_fetch (match_info, 0);
+    g_assert_nonnull (chunk);
+    // g_print ("Token: %s\n", chunk);
+    gint64 id = GPOINTER_TO_INT (g_hash_table_lookup (self->text_to_id, chunk));
     if (id) {
       tokens = g_list_prepend (tokens, GINT_TO_POINTER (id));
-    }
-    g_free (token);
-  }
-  tokens = g_list_reverse (tokens);
-  guint num_tokens_merged;
-  do {
-    num_tokens_merged = 0;
-    for (GList *iter = tokens; iter != NULL; iter = iter->next) {
-      GList *next_iter = iter->next;
-      if (next_iter != NULL) {
-        gint64 id = GPOINTER_TO_INT (iter->data);
-        gint64 next_id = GPOINTER_TO_INT (next_iter->data);
-        for (gsize i = 0; i < self->num_merge_pairs; i++) {
-          if (self->merge_indices[i].first == id && self->merge_indices[i].second == next_id) {
-            iter->data = GINT_TO_POINTER (self->merge_indices[i].merged);
-            tokens = g_list_delete_link (tokens, next_iter);
-            num_tokens_merged++;
-            break;
-          }
+    } else {
+      for (gsize i = 0; chunk[i] != '\0'; i++) {
+        gchar *token = g_strndup (chunk + i, 1);
+        gint64 id = GPOINTER_TO_INT (g_hash_table_lookup (self->text_to_id, token));
+        if (id) {
+          tokens = g_list_prepend (tokens, GINT_TO_POINTER (id));
         }
+        g_free (token);
       }
     }
-  } while (num_tokens_merged > 0);
+    g_free (chunk);
+    g_match_info_next (match_info, NULL);
+  }
+  g_match_info_free (match_info);
+  g_regex_unref (regex);
+
+  tokens = g_list_reverse (tokens);
+
+  // guint num_tokens_merged;
+  // do {
+  //   num_tokens_merged = 0;
+  //   for (GList *iter = tokens; iter != NULL; iter = iter->next) {
+  //     GList *next_iter = iter->next;
+  //     if (next_iter != NULL) {
+  //       gint64 id = GPOINTER_TO_INT (iter->data);
+  //       gint64 next_id = GPOINTER_TO_INT (next_iter->data);
+  //       for (gsize i = 0; i < self->num_merge_pairs; i++) {
+  //         if (self->merge_indices[i].first == id && self->merge_indices[i].second == next_id) {
+  //           iter->data = GINT_TO_POINTER (self->merge_indices[i].merged);
+  //           tokens = g_list_delete_link (tokens, next_iter);
+  //           num_tokens_merged++;
+  //           break;
+  //         }
+  //       }
+  //     }
+  //   }
+  // } while (num_tokens_merged > 0);
   return tokens;
 }
 
