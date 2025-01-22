@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <glib.h>
+#include <le/le.h>
 #include <ext/tokenizer/letokenizer.h>
 #include <readline/history.h>
 #include <readline/readline.h>
@@ -32,6 +33,8 @@ main (int argc, char *argv[])
     g_printerr ("Can not initialize tokenizer.\n");
     return EXIT_FAILURE;
   }
+  
+  LeTensor *tokens_embeddings = le_matrix_new_rand_f32 (LE_DISTRIBUTION_UNIFORM, 2048, 128256);
 
   while (TRUE) {
     gchar *prompt = readline ("> ");
@@ -59,6 +62,7 @@ main (int argc, char *argv[])
     g_list_free (tokens);
   }
 
+  le_tensor_free (tokens_embeddings);
   g_object_unref (tokenizer);
 
   g_option_context_free (option_context);
