@@ -124,13 +124,13 @@ main (int argc, char *argv[])
         gfloat    train_set_error    = le_cross_entropy_loss (train_prediction, train_output);
         gfloat    train_set_accuracy = 1.0f - le_one_hot_misclassification (train_prediction, train_output);
         printf ("Train Set Error: %f, Accuracy: %.1f%%\n", train_set_error, train_set_accuracy * 100.0f);
-        le_tensor_free (train_prediction);
+        le_tensor_unref (train_prediction);
 
         LeTensor *test_prediction   = le_model_predict (LE_MODEL (neural_network), test_input_f32);
         gfloat    test_set_error    = le_cross_entropy_loss (test_prediction, test_output);
         gfloat    test_set_accuracy = 1.0f - le_one_hot_misclassification (test_prediction, test_output);
         printf ("Test Set Error: %f, Accuracy: %.1f%%\n", test_set_error, test_set_accuracy * 100.0f);
-        le_tensor_free (test_prediction);
+        le_tensor_unref (test_prediction);
       } else {
         putc ('.', stdout);
         fflush (stdout);
@@ -145,12 +145,12 @@ main (int argc, char *argv[])
   }
 
   g_object_unref (neural_network);
-  le_tensor_free (test_output);
-  le_tensor_free (test_input_f32);
-  le_tensor_free (test_input);
-  le_tensor_free (train_output);
-  le_tensor_free (train_input_f32);
-  le_tensor_free (train_input);
+  le_tensor_unref (test_output);
+  le_tensor_unref (test_input_f32);
+  le_tensor_unref (test_input);
+  le_tensor_unref (train_output);
+  le_tensor_unref (train_input_f32);
+  le_tensor_unref (train_input);
   le_mnist_free (mnist);
 
   return EXIT_SUCCESS;

@@ -32,11 +32,11 @@ main()
   LeTensor *a_t_computed = le_matrix_new_transpose (a);
   assert (le_tensor_equal (a_as_view_t, a_t));
   assert (le_tensor_equal (a_as_view_t, a_t_computed));
-  le_tensor_free (a_as_view_t);
-  le_tensor_free (a_t_computed);
-  le_tensor_free (a_as_view);
-  le_tensor_free (greater_a);
-  le_tensor_free (a_t);
-  le_tensor_free (a);
+  le_tensor_unref (a_as_view_t);
+  le_tensor_unref (a_t_computed);
+  le_tensor_unref (a_as_view);
+  le_tensor_unref (greater_a);
+  le_tensor_unref (a_t);
+  le_tensor_unref (a);
   return EXIT_SUCCESS;
 }

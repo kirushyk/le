@@ -124,7 +124,7 @@ le_bgd_step(LeOptimizer *optimizer)
 
   if (own_gradients)
   {
-    g_list_free_full (gradients, (GDestroyNotify)le_tensor_free);
+    g_list_free_full (gradients, (GDestroyNotify)le_tensor_unref);
   }
 
   // LE_OPTIMIZER(self)->step++;

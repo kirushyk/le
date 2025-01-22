@@ -36,9 +36,9 @@ print_case (LeTensor *X, LeTensor *Y, unsigned index, LeModel *model)
 
   printf ("%u) Label: %d, Pred: %d (%f)\n", index, label, pred, pred_prob);
 
-  le_tensor_free (h);
-  le_tensor_free (y);
-  le_tensor_free (x);
+  le_tensor_unref (h);
+  le_tensor_unref (y);
+  le_tensor_unref (x);
 }
 
 int
@@ -90,14 +90,14 @@ main ()
       gfloat train_loss              = le_loss (loss, train_prediction, train_output);
       gfloat train_misclassification = le_one_hot_misclassification (train_prediction, train_output);
       printf ("Train Set Loss: %f, Misclassification: %f\n", train_loss, train_misclassification);
-      le_tensor_free (train_prediction);
+      le_tensor_unref (train_prediction);
 
       LeTensor *test_prediction = le_model_predict (LE_MODEL (neural_network), test_input_f32);
 
       gfloat test_loss              = le_loss (loss, test_prediction, test_output);
       gfloat test_misclassification = le_one_hot_misclassification (test_prediction, test_output);
       printf ("Test Set Loss: %f, Misclassification: %f\n", test_loss, test_misclassification);
-      le_tensor_free (test_prediction);
+      le_tensor_unref (test_prediction);
     }
   }
 
@@ -107,12 +107,12 @@ main ()
 
   g_object_unref (LE_SGD (optimizer));
   g_object_unref (neural_network);
-  le_tensor_free (test_output);
-  le_tensor_free (test_input_f32);
-  le_tensor_free (test_input);
-  le_tensor_free (train_output);
-  le_tensor_free (train_input_f32);
-  le_tensor_free (train_input);
+  le_tensor_unref (test_output);
+  le_tensor_unref (test_input_f32);
+  le_tensor_unref (test_input);
+  le_tensor_unref (train_output);
+  le_tensor_unref (train_input_f32);
+  le_tensor_unref (train_input);
   le_mnist_free (mnist);
 
   return EXIT_SUCCESS;

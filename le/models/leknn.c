@@ -33,9 +33,9 @@ le_knn_dispose (GObject *object)
   LeKNNPrivate *priv = le_knn_get_instance_private (self);
   g_assert_nonnull (priv);
   if (priv->x)
-    le_tensor_free (priv->x);
+    le_tensor_unref (priv->x);
   if (priv->y)
-    le_tensor_free (priv->y);
+    le_tensor_unref (priv->y);
   G_OBJECT_CLASS (le_knn_parent_class)->dispose (object);
 }
 

@@ -42,12 +42,12 @@ main ()
   le_logistic_classifier_train (classifier, train_input_f32, train_output, options);
   g_object_unref (classifier);
 
-  le_tensor_free (test_output);
-  le_tensor_free (test_input_f32);
-  le_tensor_free (test_input);
-  le_tensor_free (train_output);
-  le_tensor_free (train_input_f32);
-  le_tensor_free (train_input);
+  le_tensor_unref (test_output);
+  le_tensor_unref (test_input_f32);
+  le_tensor_unref (test_input);
+  le_tensor_unref (train_output);
+  le_tensor_unref (train_input_f32);
+  le_tensor_unref (train_input);
   le_mnist_free (mnist);
 
   return EXIT_SUCCESS;

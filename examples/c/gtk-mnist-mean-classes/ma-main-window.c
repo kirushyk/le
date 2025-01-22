@@ -104,7 +104,7 @@ le_main_window_init(LEMainWindow *self)
         guint8 label = le_tensor_at_u8(le_data_set_get_output(self->mnist->train), i);
         LeTensor *mean_image_u32 = le_tensor_pick(mean_inputs_u32, label);
         le_tensor_add_tensor(mean_image_u32, current_image_u32);
-        le_tensor_free(current_image_u32);
+        le_tensor_unref(current_image_u32);
     }
     self->mean_inputs = le_tensor_new_uninitialized (LE_TYPE_UINT8, le_shape_new(3, CLASSES_COUNT, 28, 28));
     for (guint32 i = 0; i < 10; i++)
@@ -115,7 +115,7 @@ le_main_window_init(LEMainWindow *self)
         LeTensor *current_mean_image_u8 = le_tensor_pick(self->mean_inputs, i);
         le_tensor_assign(current_mean_image_u8, mean_image_u8);
     }
-    le_tensor_free(mean_inputs_u32);
+    le_tensor_unref(mean_inputs_u32);
 
     g_action_map_add_action_entries(G_ACTION_MAP(self), win_entries, G_N_ELEMENTS(win_entries), self);
 }

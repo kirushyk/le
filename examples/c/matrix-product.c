@@ -23,10 +23,10 @@ main (int argc, const char *argv[])
   printf ("d = c' =\n");
   le_tensor_print (d, stdout);
 
-  le_tensor_free (d);
-  le_tensor_free (c);
-  le_tensor_free (b);
-  le_tensor_free (a);
+  le_tensor_unref (d);
+  le_tensor_unref (c);
+  le_tensor_unref (b);
+  le_tensor_unref (a);
 
   return 0;
 }

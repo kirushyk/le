@@ -10,9 +10,9 @@ int main(int argc, char *argv[])
     LeTensor *ri = le_cuda_tensor_to_cpu(gi);
     le_tensor_print(ri, stdout);
     assert(le_tensor_equal(ci, ri));
-    le_tensor_free(ri);
-    le_tensor_free(gi);
-    le_tensor_free(ci);
+    le_tensor_unref(ri);
+    le_tensor_unref(gi);
+    le_tensor_unref(ci);
     
     LeTensor *cx = le_matrix_new_rand_f32(LE_DISTRIBUTION_UNIFORM, 8, 8);
 
@@ -32,16 +32,16 @@ int main(int argc, char *argv[])
     gfloat l2 = le_tensor_l2_f32(result);
     assert(l2 < 1e-4f);
     
-    le_tensor_free(result);
-    le_tensor_free(gmul);
+    le_tensor_unref(result);
+    le_tensor_unref(gmul);
 
-    le_tensor_free(my);
-    le_tensor_free(mx);
+    le_tensor_unref(my);
+    le_tensor_unref(mx);
 
-    le_tensor_free(cmul);
+    le_tensor_unref(cmul);
 
-    le_tensor_free(cy);
-    le_tensor_free(cx);
+    le_tensor_unref(cy);
+    le_tensor_unref(cx);
 
     return EXIT_SUCCESS;
 }

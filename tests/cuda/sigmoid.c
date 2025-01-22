@@ -22,9 +22,9 @@ int main(int argc, char *argv[])
     gfloat l2 = le_tensor_l2_f32(result);
     assert(l2 < 1e-4f);
 
-    le_tensor_free(result);
-    le_tensor_free(ca);
-    le_tensor_free(a);
+    le_tensor_unref(result);
+    le_tensor_unref(ca);
+    le_tensor_unref(a);
 
     a = le_tensor_new(LE_TYPE_FLOAT32, 2, 4, 4,
         0.0, 0.1, 0.2, 0.3,
@@ -43,9 +43,9 @@ int main(int argc, char *argv[])
     l2 = le_tensor_l2_f32(result);
     assert(l2 < 1e-4f);
 
-    le_tensor_free(result);
-    le_tensor_free(ca);
-    le_tensor_free(a);
+    le_tensor_unref(result);
+    le_tensor_unref(ca);
+    le_tensor_unref(a);
 
     return EXIT_SUCCESS;
 }

@@ -19,9 +19,9 @@ main (int argc, const char *argv[])
   printf ("poly(poly(a)) =\n");
   le_tensor_print (c, stdout);
 
-  le_tensor_free (c);
-  le_tensor_free (b);
-  le_tensor_free (a);
+  le_tensor_unref (c);
+  le_tensor_unref (b);
+  le_tensor_unref (a);
 
   return 0;
 }

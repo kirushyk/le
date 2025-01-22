@@ -67,7 +67,7 @@ le_dense_layer_backward_prop(LeLayer *layer, LeTensor *cached_input, LeTensor *c
     le_tensor_mul(h, 1.0f / examples_count);
     LeTensor *dw = le_matrix_new_product_full(h, false, cached_input, true);
     LeTensor *db = le_matrix_new_sum(h, 1);
-    le_tensor_free(h);
+    le_tensor_unref(h);
     *parameters_gradient = g_list_append(*parameters_gradient, db);
     *parameters_gradient = g_list_append(*parameters_gradient, dw);
   }

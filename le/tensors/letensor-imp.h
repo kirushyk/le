@@ -9,15 +9,16 @@
 #include "leshape.h"
 #include "../../backends/ledevice.h"
 
-struct LeTensor
+struct _LeTensor
 {
-    LeType        element_type;
-    LeShape      *shape;
-    bool          owns_data;
-    /// @note: In dimension of lowest order
-    guint32      stride;
-    LeDeviceType  device_type;
-    void         *data;
+  GObject       parent;
+  LeType        element_type;
+  LeShape      *shape;
+  bool          owns_data;
+  /// @note: In dimension of lowest order
+  guint32       stride;
+  LeDeviceType  device_type;
+  void         *data;
 };
 
 #endif

@@ -3,6 +3,8 @@
 
 #include <stdarg.h>
 #include <stdbool.h>
+#include <glib.h>
+#include <glib-object.h>
 #include "letype.h"
 #include "leshape.h"
 
@@ -12,9 +14,7 @@
 G_BEGIN_DECLS
 
 /// Tensors are multi-dimensional arrays containing elements of a uniform type
-typedef struct LeTensor LeTensor;
-
-#define LE_TENSOR(tensor) ((LeTensor *)(tensor))
+G_DECLARE_FINAL_TYPE (LeTensor, le_tensor, LE, TENSOR, GObject);
 
 /// @note: Make sure to pass correct number of parameters
 LeTensor *         le_tensor_new                 (LeType           element_type,
@@ -167,7 +167,9 @@ void               le_tensor_apply_sgn           (LeTensor *       tensor);
 
 void               le_tensor_apply_relu          (LeTensor *       tensor);
 
-void               le_tensor_free                (LeTensor *       tensor);
+LeTensor *         le_tensor_ref                 (LeTensor *       tensor);
+
+void               le_tensor_unref               (LeTensor *       tensor);
 
 /** @section ugly */
 #include <stdio.h>

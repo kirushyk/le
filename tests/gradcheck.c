@@ -59,8 +59,8 @@ main(int argc, char *argv[])
     failed |= (average_normalized_distance > epsilon);
     g_object_unref(nn);
 
-    le_tensor_free(y);
-    le_tensor_free(x);
+    le_tensor_unref(y);
+    le_tensor_unref(x);
         
     return failed ? EXIT_FAILURE : EXIT_SUCCESS;
 }

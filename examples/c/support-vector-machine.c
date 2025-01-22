@@ -33,9 +33,9 @@ main(int argc, const char *argv[])
     printf("Predicted value =\n");
     le_tensor_print(h, stdout);
     
-    le_tensor_free(h);
-    le_tensor_free(y);
-    le_tensor_free(x);
+    le_tensor_unref(h);
+    le_tensor_unref(y);
+    le_tensor_unref(x);
     
     return 0;
 }

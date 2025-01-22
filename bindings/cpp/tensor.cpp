@@ -48,7 +48,7 @@ Tensor::Tensor(LeTensor *c_tensor):
 
 Tensor::~Tensor()
 {
-    le_tensor_free(priv->tensor);
+    le_tensor_unref(priv->tensor);
 }
 
 const LeTensor *Tensor::c_tensor() const

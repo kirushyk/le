@@ -64,7 +64,7 @@ main(int argc, const char *argv[])
             LE_INFO("Iteration %u", i);
             LeTensor *h = le_model_predict(LE_MODEL(neural_network), x);
             LE_INFO("Training Error = %f", le_logistic_loss(h, y));
-            le_tensor_free(h);
+            le_tensor_unref(h);
             LE_INFO("Gradcheck. Average Normalized Euclidian Distance = %f", le_sequential_check_gradients(neural_network, x, y, 1e-2f));
         }
     }
@@ -75,9 +75,9 @@ main(int argc, const char *argv[])
     printf("Predicted value =\n");
     le_tensor_print(h, stdout);
     
-    le_tensor_free(h);
-    le_tensor_free(y);
-    le_tensor_free(x);
+    le_tensor_unref(h);
+    le_tensor_unref(y);
+    le_tensor_unref(x);
     
     return 0;
 }

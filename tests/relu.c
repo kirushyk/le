@@ -20,7 +20,7 @@ main()
     assert(le_matrix_at_f32(m, 0, 0) == -2.0f);
     le_tensor_apply_relu(m);
     assert(le_matrix_at_f32(m, 0, 0) == 0);
-    le_tensor_free(m);
+    le_tensor_unref(m);
     
     m = le_tensor_new(LE_TYPE_FLOAT64, 2, 1, 1, 1.0);
     le_matrix_set(m, 0, 0, 2.0);
@@ -31,7 +31,7 @@ main()
     assert(le_matrix_at_f64(m, 0, 0) == -2.0);
     le_tensor_apply_relu(m);
     assert(le_matrix_at_f64(m, 0, 0) == 0);
-    le_tensor_free(m);
+    le_tensor_unref(m);
 
     m = le_tensor_new(LE_TYPE_INT8, 2, 1, 1, 1);
     le_matrix_set(m, 0, 0, (gint8)2);
@@ -42,7 +42,7 @@ main()
     assert(le_matrix_at_i8(m, 0, 0) == -2);
     le_tensor_apply_relu(m);
     assert(le_matrix_at_i8(m, 0, 0) == 0);
-    le_tensor_free(m);
+    le_tensor_unref(m);
 
     m = le_tensor_new(LE_TYPE_INT16, 2, 1, 1, 1);
     le_matrix_set(m, 0, 0, (gint16)2);
@@ -53,7 +53,7 @@ main()
     assert(le_matrix_at_i16(m, 0, 0) == -2);
     le_tensor_apply_relu(m);
     assert(le_matrix_at_i16(m, 0, 0) == 0);
-    le_tensor_free(m);
+    le_tensor_unref(m);
 
     m = le_tensor_new(LE_TYPE_INT32, 2, 1, 1, 1);
     le_matrix_set(m, 0, 0, (gint32)2);
@@ -64,7 +64,7 @@ main()
     assert(le_matrix_at_i32(m, 0, 0) == -2);
     le_tensor_apply_relu(m);
     assert(le_matrix_at_i32(m, 0, 0) == 0);
-    le_tensor_free(m);
+    le_tensor_unref(m);
     
     return EXIT_SUCCESS;
 }

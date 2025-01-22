@@ -36,13 +36,13 @@ int main(int argc, char *argv[])
     gfloat l2 = le_tensor_l2_f32(result);
     assert(l2 < 1e-4f);
     
-    le_tensor_free(result);
-    le_tensor_free(ma_copy);
-    le_tensor_free(ma);
-    le_tensor_free(mb);
-    le_tensor_free(a_copy);
-    le_tensor_free(a);
-    le_tensor_free(b);
+    le_tensor_unref(result);
+    le_tensor_unref(ma_copy);
+    le_tensor_unref(ma);
+    le_tensor_unref(mb);
+    le_tensor_unref(a_copy);
+    le_tensor_unref(a);
+    le_tensor_unref(b);
 
     return EXIT_SUCCESS;
 }

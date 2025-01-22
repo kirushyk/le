@@ -28,11 +28,11 @@ main()
             {
                 b = le_matrix_new_rand_f32(LE_DISTRIBUTION_UNIFORM, width, second_width);
                 c = le_matrix_new_product(a, b);
-                le_tensor_free(c);
-                le_tensor_free(b);
+                le_tensor_unref(c);
+                le_tensor_unref(b);
             }
             
-            le_tensor_free(a);
+            le_tensor_unref(a);
         }
     }
     return EXIT_SUCCESS;

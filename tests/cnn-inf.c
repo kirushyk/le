@@ -30,8 +30,8 @@ main(int argc, char *argv[])
     LeShape *expected_shape = le_shape_new(4, 1, 4, 4, 1);
     assert(le_shape_equal(output->shape, expected_shape));
     le_shape_free(expected_shape);
-    le_tensor_free(output);
-    le_tensor_free(input);
+    le_tensor_unref(output);
+    le_tensor_unref(input);
 
     return EXIT_SUCCESS;
 }

@@ -27,16 +27,16 @@ main()
   LeTensor *c1 = le_matrix_new_product (b, a);
   LeTensor *c2 = le_matrix_new_product (b, a_as_view);
   assert (le_tensor_equal (c1, c2));
-  le_tensor_free (c2);
-  le_tensor_free (c1);
+  le_tensor_unref (c2);
+  le_tensor_unref (c1);
   LeTensor *c3 = le_matrix_new_product_full (a, true, b, true);
   LeTensor *c4 = le_matrix_new_product_full (a_as_view, true, b, true);
   assert (le_tensor_equal (c3, c4));
-  le_tensor_free (c4);
-  le_tensor_free (c3);
-  le_tensor_free (a_as_view);
-  le_tensor_free (greater_a);
-  le_tensor_free (b);
-  le_tensor_free (a);
+  le_tensor_unref (c4);
+  le_tensor_unref (c3);
+  le_tensor_unref (a_as_view);
+  le_tensor_unref (greater_a);
+  le_tensor_unref (b);
+  le_tensor_unref (a);
   return EXIT_SUCCESS;
 }

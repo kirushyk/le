@@ -139,7 +139,7 @@ forward_propagation(LeSequential *self, const LeTensor *x, GList **inputs)
         // LE_INFO("signal =\n%s", le_tensor_to_cstr(signal));
         // LE_INFO("Layer %s Forward", le_layer_get_name (current_layer));
         LeTensor *output = le_layer_forward_prop(current_layer, signal);
-        le_tensor_free(signal);
+        le_tensor_unref(signal);
         signal = output;
     }
 
@@ -159,7 +159,7 @@ le_sequential_compute_cost(LeSequential *self, const LeTensor *x, const LeTensor
     /// @todo: Take regularization term into account;
     LeTensor *h = forward_propagation(self, x, NULL);
     const gfloat j = le_loss(priv->loss, h, y);
-    le_tensor_free(h);
+    le_tensor_unref(h);
     return j;
 }
 
@@ -245,7 +245,7 @@ le_sequential_get_gradients(LeSequential *self, const LeTensor *x, const LeTenso
         }
         /// @todo: Use cached output of last layer to speed-up backprop.
         LeTensor *input_gradient = le_layer_backward_prop(current_layer, cached_input, cached_output, signal, &current_layer_param_gradients); 
-        le_tensor_free(signal);
+        le_tensor_unref(signal);
         signal = input_gradient;
         LE_INFO("signal =\n%s", le_tensor_to_cstr(signal));
         // LeTensorStats signal_stats = le_tensor_get_stats(signal);
@@ -263,8 +263,8 @@ le_sequential_get_gradients(LeSequential *self, const LeTensor *x, const LeTenso
     assert(current_layer_iterator == NULL);
     assert(cached_inputs_iterator == NULL);
 
-    g_list_free_full (cached_inputs, (GDestroyNotify)le_tensor_free);
-    le_tensor_free(signal);
+    g_list_free_full (cached_inputs, (GDestroyNotify)le_tensor_unref);
+    le_tensor_unref(signal);
 
     return gradients;
 }
@@ -345,8 +345,8 @@ le_sequential_check_gradients(LeSequential *self, const LeTensor *x, const LeTen
     {
         LE_ERROR("Some gradients missing or extra gradients estimations present");
     }
-    g_list_free_full (gradients_estimations, (GDestroyNotify)le_tensor_free);
-    g_list_free_full (gradients, (GDestroyNotify)le_tensor_free);
+    g_list_free_full (gradients_estimations, (GDestroyNotify)le_tensor_unref);
+    g_list_free_full (gradients, (GDestroyNotify)le_tensor_unref);
     return average_normalized_distance;
 }
 

@@ -62,7 +62,7 @@ main (int argc, char *argv[])
     g_list_free (tokens);
   }
 
-  le_tensor_free (tokens_embeddings);
+  le_tensor_unref (tokens_embeddings);
   g_object_unref (tokenizer);
 
   g_option_context_free (option_context);

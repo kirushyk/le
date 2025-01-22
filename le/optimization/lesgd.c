@@ -41,7 +41,7 @@ le_sgd_dispose (GObject * object)
   g_assert_nonnull (self);
   LeSGDPrivate *priv = le_sgd_get_instance_private (self);
   g_assert_nonnull (priv);
-  g_list_free_full (priv->momenta, (GDestroyNotify)le_tensor_free);
+  g_list_free_full (priv->momenta, (GDestroyNotify)le_tensor_unref);
   G_OBJECT_CLASS (le_sgd_parent_class)->dispose (object);
 }
 
@@ -134,8 +134,8 @@ le_sgd_step(LeOptimizer *optimizer)
         priv->momenta = le_sgd_init_momenta(le_optimizer_get_gradients (optimizer));
     }
 
-    le_tensor_free(output);
-    le_tensor_free(input);
+    le_tensor_unref(output);
+    le_tensor_unref(input);
 
     for (parameters_iterator = le_optimizer_get_parameters (optimizer),
             gradients_iterator = le_optimizer_get_gradients (optimizer),
@@ -182,7 +182,7 @@ le_sgd_step(LeOptimizer *optimizer)
         LE_WARNING("Extra momenta passed");
     }
     
-    g_list_free_full (le_optimizer_get_gradients (optimizer), (GDestroyNotify)le_tensor_free);
+    g_list_free_full (le_optimizer_get_gradients (optimizer), (GDestroyNotify)le_tensor_unref);
     le_optimizer_set_gradients (optimizer, NULL);
     
     // optimizer->step++;

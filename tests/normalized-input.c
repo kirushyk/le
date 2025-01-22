@@ -36,7 +36,7 @@ train_until_convergence(bool use_normalization)
         le_optimizer_step(LE_OPTIMIZER(optimizer));
         LeTensor *h = le_model_predict(LE_MODEL(nn), x);
         gfloat loss = le_logistic_loss(h, y);
-        le_tensor_free(h);
+        le_tensor_unref(h);
         if (loss < 1.0f)
         {
             steps_count = i;
@@ -47,8 +47,8 @@ train_until_convergence(bool use_normalization)
     g_object_unref(optimizer);
     g_object_unref(nn);
 
-    le_tensor_free(y);
-    le_tensor_free(x);
+    le_tensor_unref(y);
+    le_tensor_unref(x);
 
     return steps_count;
 }

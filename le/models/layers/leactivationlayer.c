@@ -13,7 +13,7 @@
 
 struct _LeActivationLayer
 {
-    LeLayer parent;
+  LeLayer parent;
 };
 
 // typedef struct LeActivationLayerClass
@@ -216,7 +216,7 @@ le_activation_layer_backward_prop (LeLayer * layer, LeTensor * cached_input, LeT
       LeTensor *computed_output = le_tensor_new_copy(cached_input);
       le_matrix_apply_softmax(computed_output);
       activation_jacobians = le_tensor_new_softmax_jacobians_stacked(computed_output);
-      le_tensor_free(computed_output);
+      le_tensor_unref(computed_output);
     }
     break;
       
@@ -235,7 +235,7 @@ le_activation_layer_backward_prop (LeLayer * layer, LeTensor * cached_input, LeT
     /// Hadamard is used for chain rule.
     input_gradient = le_tensor_new_copy(output_gradient);
     le_tensor_mul(input_gradient, activation_primes);
-    le_tensor_free(activation_primes);
+    le_tensor_unref(activation_primes);
   } 
   else if (activation_jacobians)
   {
@@ -262,9 +262,9 @@ le_activation_layer_backward_prop (LeLayer * layer, LeTensor * cached_input, LeT
     
         le_matrix_set_f32(input_gradient, input, example, dJ_dz);
       }
-      le_tensor_free(jacobian);
+      le_tensor_unref(jacobian);
     }
-    le_tensor_free(activation_jacobians);
+    le_tensor_unref(activation_jacobians);
   }
   else
   {

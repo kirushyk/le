@@ -63,7 +63,7 @@ main()
     printf("ab_check = ");
     le_tensor_print(ab_check, stdout);
     assert(le_tensor_equal(ab, ab_check));
-    le_tensor_free(ab);
+    le_tensor_unref(ab);
 
     bt = le_matrix_new_transpose(b);
     ab = le_matrix_new_product_full(a, false, bt, true);
@@ -73,8 +73,8 @@ main()
     le_tensor_print(ab_check, stdout);
     printf ("sad afbt %f\n", le_tensor_sad_f32(ab, ab_check));
     assert(le_tensor_sad_f32(ab, ab_check) < 1e-3f);
-    le_tensor_free(ab);
-    le_tensor_free(bt);
+    le_tensor_unref(ab);
+    le_tensor_unref(bt);
 
     at = le_matrix_new_transpose(a);
     ab = le_matrix_new_product_full(at, true, b, false);
@@ -84,10 +84,10 @@ main()
     le_tensor_print(ab_check, stdout);
     printf ("sad atbf %f\n", le_tensor_sad_f32(ab, ab_check));
     assert(le_tensor_sad_f32(ab, ab_check) < 1e-3f);
-    le_tensor_free(ab);
-    le_tensor_free(at);
+    le_tensor_unref(ab);
+    le_tensor_unref(at);
 
-    le_tensor_free(ab_check);
+    le_tensor_unref(ab_check);
 
     ba = le_matrix_new_product(b, a);
     ba_check = le_tensor_new(LE_TYPE_FLOAT32, 2, 2, 2,
@@ -95,23 +95,23 @@ main()
         49.0, 64.0
     );
     assert(le_tensor_equal(ba, ba_check));
-    le_tensor_free(ba_check);
-    le_tensor_free(ba);
+    le_tensor_unref(ba_check);
+    le_tensor_unref(ba);
 
-    le_tensor_free(b);
-    le_tensor_free(a);
+    le_tensor_unref(b);
+    le_tensor_unref(a);
 
     for (height = 1; height < MAX_DIMENSION; height++)
     {
         a = le_matrix_new_identity(LE_TYPE_FLOAT32, height);
         assert(le_test_ensure_matrix_size(a, height, height));
-        le_tensor_free(a);
+        le_tensor_unref(a);
         
         for (width = 1; width < MAX_DIMENSION; width++)
         {
             a = le_matrix_new_zeros(LE_TYPE_FLOAT32, height, width);
             assert(le_test_ensure_matrix_size(a, height, width));
-            le_tensor_free(a);
+            le_tensor_unref(a);
             
             a = le_matrix_new_rand_f32(LE_DISTRIBUTION_UNIFORM, height, width);
             assert(le_test_ensure_matrix_size(a, height, width));
@@ -121,11 +121,11 @@ main()
                 b = le_matrix_new_rand_f32(LE_DISTRIBUTION_UNIFORM, width, second_width);
                 c = le_matrix_new_product(a, b);
                 assert(le_test_ensure_matrix_size(c, height, second_width));
-                le_tensor_free(c);
-                le_tensor_free(b);
+                le_tensor_unref(c);
+                le_tensor_unref(b);
             }
             
-            le_tensor_free(a);
+            le_tensor_unref(a);
         }
     }
 
@@ -140,17 +140,17 @@ main()
     le_tensor_print(d, stdout);
     printf ("sad atbf %f\n", le_tensor_sad_f32(c, d));
     assert(le_tensor_sad_f32(c, d) < 1e-3f);
-    le_tensor_free(d);
-    le_tensor_free(c);
-    le_tensor_free(at);
+    le_tensor_unref(d);
+    le_tensor_unref(c);
+    le_tensor_unref(at);
     bt = le_matrix_new_transpose(b);
     c = le_matrix_new_product(a, bt);
     d = le_matrix_new_product_full(a, false, b, true);
     printf ("sad afbt %f\n", le_tensor_sad_f32(c, d));
     assert(le_tensor_sad_f32(c, d) < 1e-3f);
-    le_tensor_free(bt);
-    le_tensor_free(b);
-    le_tensor_free(a);
+    le_tensor_unref(bt);
+    le_tensor_unref(b);
+    le_tensor_unref(a);
     
     return EXIT_SUCCESS;
 }

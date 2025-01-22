@@ -32,9 +32,9 @@ main ()
   g_assert_cmpint (le_tensor_at_u32 (subtensor_direct_copy, 2), ==, 6);
   g_assert_true (le_tensor_equal (subtensor, subtensor_direct_copy));
   g_assert_true (le_tensor_equal (subtensor_direct_copy, subtensor_copy));
-  le_tensor_free (subtensor_direct_copy);
-  le_tensor_free (subtensor_copy);
-  le_tensor_free (subtensor);
+  le_tensor_unref (subtensor_direct_copy);
+  le_tensor_unref (subtensor_copy);
+  le_tensor_unref (subtensor);
 
   LeTensor *middle_column = le_matrix_get_column (tensor, 1);
   g_assert_cmpint (le_matrix_at_u32 (middle_column, 0, 0), ==, 2);
@@ -77,12 +77,12 @@ main ()
   g_assert_true (le_tensor_equal (twice_transposed_column, middle_column));
   g_assert_true (le_tensor_equal (twice_transposed_column, middle_column_copy));
   g_assert_true (le_tensor_equal (twice_transposed_column, middle_column_direct_copy));
-  le_tensor_free (twice_transposed_column);
-  le_tensor_free (transposed_column);
-  le_tensor_free (middle_column_direct_copy);
-  le_tensor_free (middle_column_copy);
-  le_tensor_free (middle_column);
+  le_tensor_unref (twice_transposed_column);
+  le_tensor_unref (transposed_column);
+  le_tensor_unref (middle_column_direct_copy);
+  le_tensor_unref (middle_column_copy);
+  le_tensor_unref (middle_column);
 
-  le_tensor_free (tensor);
+  le_tensor_unref (tensor);
   return 0;
 }

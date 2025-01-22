@@ -1,8 +1,8 @@
-# Copyright (c) 2017 Kyrylo Polezhaiev
+# Copyright (c) 2017 Kyrylo V. Polezhaiev
 # Released under the MIT license
 
 project('le', 'c',
-    version: '0.2.2',
+    version: '0.3.1',
     meson_version: '>= 1.0.0',
     default_options: [
         'c_std=c11',

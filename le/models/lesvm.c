@@ -42,13 +42,13 @@ le_svm_dispose (GObject * object)
   LeSVMPrivate *priv = le_svm_get_instance_private (self);
   g_assert_nonnull (priv);
   if (priv->x)
-    le_tensor_free (priv->x);
+    le_tensor_unref (priv->x);
   if (priv->y)
-    le_tensor_free (priv->y);
+    le_tensor_unref (priv->y);
   if (priv->weights)
-    le_tensor_free (priv->weights);
+    le_tensor_unref (priv->weights);
   if (priv->alphas)
-    le_tensor_free (priv->alphas);
+    le_tensor_unref (priv->alphas);
   G_OBJECT_CLASS (le_svm_parent_class)->dispose (object);
 }
 
@@ -113,7 +113,7 @@ le_svm_margins(LeSVM *self, const LeTensor *x)
   {
     LeTensor *weights_transposed = le_matrix_new_transpose (priv->weights);
     LeTensor *margins = le_matrix_new_product (weights_transposed, x);
-    le_tensor_free (weights_transposed);
+    le_tensor_unref (weights_transposed);
     le_tensor_add (margins, priv->bias);
     return margins;
   }
@@ -139,12 +139,12 @@ le_svm_margins(LeSVM *self, const LeTensor *x)
           {
               margin += alphaj * le_matrix_at_f32 (priv->y, 0, j) * kernel_function (x_train_j, example, priv->kernel);
           }
-          le_tensor_free (x_train_j);
+          le_tensor_unref (x_train_j);
       }
       margin += priv->bias;
       
       le_matrix_set (margins, 0, i, margin);
-      le_tensor_free (example);
+      le_tensor_unref (example);
     }
     return margins;
   }
@@ -168,10 +168,10 @@ le_svm_train (LeSVM * self, const LeTensor * x_train, const LeTensor * y_train, 
 
   /// @todo: Add checks
   if (priv->x)
-    le_tensor_free (priv->x); 
+    le_tensor_unref (priv->x); 
   priv->x = le_tensor_new_copy ((LeTensor *)x_train);
   if (priv->y)
-    le_tensor_free (priv->y);
+    le_tensor_unref (priv->y);
   priv->y = le_tensor_new_copy ((LeTensor *)y_train);
   priv->kernel = options.kernel;
   /// @todo: Add cleanup here
@@ -196,7 +196,7 @@ le_svm_train (LeSVM * self, const LeTensor * x_train, const LeTensor * y_train, 
           /// @note: We will have 1x1 matrix here
           LeTensor *shallow_margin_matrix = le_svm_margins(self, x_train_i);
           gfloat margin = le_matrix_at_f32(shallow_margin_matrix, 0, 0);
-          le_tensor_free(shallow_margin_matrix);
+          le_tensor_unref(shallow_margin_matrix);
           gfloat Ei = margin - le_matrix_at_f32(y_train, 0, i);
           if ((le_matrix_at_f32(y_train, 0, i) * Ei < -tol && le_matrix_at_f32(priv->alphas, 0, i) < C) ||
               (le_matrix_at_f32(y_train, 0, i) * Ei > tol && le_matrix_at_f32(priv->alphas, 0, i) > 0.0f))
@@ -209,7 +209,7 @@ le_svm_train (LeSVM * self, const LeTensor * x_train, const LeTensor * y_train, 
               /// @note: We will have 1x1 matrix here
               LeTensor *shallow_margin_matrix = le_svm_margins(self, x_train_j);
               gfloat margin = le_matrix_at_f32(shallow_margin_matrix, 0, 0);
-              le_tensor_free(shallow_margin_matrix);
+              le_tensor_unref(shallow_margin_matrix);
               gfloat Ej = margin - le_matrix_at_f32(y_train, 0, j);
               
               gfloat ai = le_matrix_at_f32(priv->alphas, 0, i);
@@ -258,9 +258,9 @@ le_svm_train (LeSVM * self, const LeTensor * x_train, const LeTensor * y_train, 
                       }
                   }
               }
-              le_tensor_free(x_train_j);
+              le_tensor_unref(x_train_j);
           }
-          le_tensor_free(x_train_i);
+          le_tensor_unref(x_train_i);
       }
 
       if (num_changed_alphas == 0)
@@ -311,7 +311,7 @@ le_svm_train (LeSVM * self, const LeTensor * x_train, const LeTensor * y_train, 
           }
       }
       
-      le_tensor_free(priv->alphas);
+      le_tensor_unref(priv->alphas);
       priv->alphas = new_alphas;
   }
 }

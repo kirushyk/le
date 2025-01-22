@@ -39,7 +39,7 @@ le_logistic_classifier_dispose (GObject * object)
   LeLogisticClassifierPrivate *priv = le_logistic_classifier_get_instance_private (self);
   g_assert_nonnull (priv);
   if (priv->weights)
-    le_tensor_free (priv->weights);
+    le_tensor_unref (priv->weights);
   G_OBJECT_CLASS (le_logistic_classifier_parent_class)->dispose (object);
 }
 
@@ -115,14 +115,14 @@ le_logistic_classifier_predict (LeModel * model, const LeTensor * x)
   {
     /// @note: Refrain from init x_prev = x to prevent const
     x_poly = le_matrix_new_polynomia (x_prev ? x_prev : x);
-    le_tensor_free (x_prev);
+    le_tensor_unref (x_prev);
     x_prev = x_poly;
   }
   LeTensor *a = le_matrix_new_product (wt, x_poly ? x_poly : x);
-  le_tensor_free (wt);
+  le_tensor_unref (wt);
   if (x_poly != x)
   {
-    le_tensor_free (x_poly);
+    le_tensor_unref (x_poly);
   }
   le_tensor_add (a, priv->bias);
   le_tensor_apply_sigmoid (a);
@@ -139,14 +139,14 @@ le_logistic_classifier_train(LeLogisticClassifier * self, const LeTensor * x_tra
   assert(le_matrix_get_width(y_train) == examples_count);
   
   const LeTensor *x = x_train;
-  const LeTensor *x_prev = x_train;
+  LeTensor *x_prev = x_train;
   
   for (i = 0; i < options.polynomia_degree; i++)
   {
       x = le_matrix_new_polynomia(x_prev);
       if (x_prev != x_train)
       {
-          le_tensor_free(LE_TENSOR(x_prev));
+          le_tensor_unref(LE_TENSOR(x_prev));
       }
       x_prev = x;
   }
@@ -156,7 +156,7 @@ le_logistic_classifier_train(LeLogisticClassifier * self, const LeTensor * x_tra
   /*
   if (x != x_train)
   {
-      le_tensor_free(x);
+      le_tensor_unref(x);
   }
   */
     
@@ -181,10 +181,10 @@ le_logistic_classifier_train(LeLogisticClassifier * self, const LeTensor * x_tra
     le_tensor_mul(dw, options.learning_rate);
     gfloat db = le_tensor_sum_f32(h);
     
-    le_tensor_free(dwt);
-    le_tensor_free(h);
+    le_tensor_unref(dwt);
+    le_tensor_unref(h);
     le_tensor_sub(priv->weights, dw);
-    le_tensor_free(dw);
+    le_tensor_unref(dw);
     priv->bias -= options.learning_rate * db;
     
     printf("Train Set Error: %f\n", train_set_error);

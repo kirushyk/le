@@ -51,8 +51,8 @@ main ()
   g_assert_null (i);
   g_assert_null (j);
 
-  g_list_free_full (loaded_tensorlist, (GDestroyNotify)le_tensor_free);
-  g_list_free_full (tensorlist, (GDestroyNotify)le_tensor_free);
+  g_list_free_full (loaded_tensorlist, (GDestroyNotify)le_tensor_unref);
+  g_list_free_full (tensorlist, (GDestroyNotify)le_tensor_unref);
 
   return EXIT_SUCCESS;
 }

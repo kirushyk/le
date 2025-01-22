@@ -125,7 +125,7 @@ render_predictions (LeModel *model, guint width, guint height)
 
     LeTensor *prediction = le_model_predict (model, row);
 
-    le_tensor_free (row);
+    le_tensor_unref (row);
 
     if (prediction != NULL) {
       for (gint x = 0; x < width; x++) {
@@ -194,7 +194,7 @@ train_current_model (LEMainWindow *self)
     LeTensor *labels = le_tensor_new_copy (le_data_set_get_output (self->train_data));
     le_tensor_apply_sgn (labels);
     le_svm_train (LE_SVM (self->model), le_data_set_get_input (self->train_data), labels, options);
-    le_tensor_free (labels);
+    le_tensor_unref (labels);
   } break;
 
   case PREFERRED_MODEL_TYPE_NEURAL_NETWORK: {
@@ -209,7 +209,7 @@ train_current_model (LEMainWindow *self)
     }
     /// g_object_unref(LE_BGD(self->optimizer));
     /// @todo: g_free
-    /// le_tensor_free(labels);
+    /// le_tensor_unref(labels);
   } break;
 
   case PREFERRED_MODEL_TYPE_KNN: {
