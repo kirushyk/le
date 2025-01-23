@@ -6,35 +6,39 @@
 
 #include <stdint.h>
 #include <glib.h>
+#include <glib-object.h>
 
 G_BEGIN_DECLS
 
-typedef struct LeShape
+G_DECLARE_FINAL_TYPE (LeShape, le_shape, LE, SHAPE, GObject);
+
+struct _LeShape
 {
-  gsize  num_dimensions;
-  gsize *sizes;
-} LeShape;
+  GObject  parent;
+  gsize    num_dimensions;
+  gsize   *sizes;
+};
 
 /// @todo: Rename, update tensorlist
-LeShape *    le_shape_new_uninitialized  (unsigned  num_dimensions);
+LeShape *    le_shape_new_uninitialized  (gsize     num_dimensions);
 
-LeShape *    le_shape_new                (unsigned  num_dimensions,
+LeShape *    le_shape_new                (gsize     num_dimensions,
                                           ...);
 
 gsize *      le_shape_get_data           (LeShape  *shape);
 
 gsize        le_shape_get_size           (LeShape  *shape,
-                                          int       dimension);
+                                          gint      dimension);
 
 void         le_shape_set_size           (LeShape  *shape,
-                                          unsigned  dimension,
+                                          gsize     dimension,
                                           gsize     size);
 
 LeShape *    le_shape_copy               (LeShape  *shape);
 
 LeShape *    le_shape_lower_dimension    (LeShape  *shape);
 
-void         le_shape_free               (LeShape  *shape);
+void         le_shape_unref              (LeShape  *shape);
 
 const char * le_shape_to_cstr            (LeShape  *shape);
 

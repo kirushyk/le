@@ -31,5 +31,5 @@ std::size_t & Shape::operator [](std::size_t index)
 
 Shape::~Shape()
 {
-    le_shape_free(priv->c_shape);
+    le_shape_unref(priv->c_shape);
 }

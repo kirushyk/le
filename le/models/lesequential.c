@@ -385,7 +385,7 @@ le_sequential_to_dot(LeSequential *self, const char *filename)
         fprintf(fout, "%s -> %s [label=\"%s\"];\n", 
             le_layer_get_name (current_layer), next_node,
             le_shape_to_cstr(current_laye_output_shape));
-        le_shape_free(current_laye_output_shape);
+        le_shape_unref(current_laye_output_shape);
 
     }
 

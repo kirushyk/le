@@ -57,7 +57,7 @@ le_tensor_dispose (GObject *object)
     }
   }
 
-  le_shape_free (self->shape);
+  g_object_unref (self->shape);
   G_OBJECT_CLASS (le_tensor_parent_class)->dispose (object);
 }
 
@@ -453,14 +453,14 @@ le_tensor_reshape (LeTensor *self, gsize num_dimensions, ...)
   va_end (args);
 
   if (le_shape_get_elements_count (new_shape) == le_shape_get_elements_count (self->shape)) {
-    le_shape_free (self->shape);
+    le_shape_unref (self->shape);
     self->shape = new_shape;
 
     self->stride = le_shape_get_size (self->shape, -1);
 
     return true;
   } else {
-    le_shape_free (self->shape);
+    le_shape_unref (self->shape);
 
     return false;
   }
@@ -590,7 +590,7 @@ le_matrix_empty (LeTensor *self)
     g_assert_not_reached ();
     break;
   }
-  le_shape_free (self->shape);
+  le_shape_unref (self->shape);
   self->shape = NULL;
   self->element_type = LE_TYPE_VOID;
 }
