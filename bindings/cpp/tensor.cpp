@@ -51,7 +51,7 @@ Tensor::~Tensor()
     le_tensor_unref(priv->tensor);
 }
 
-const LeTensor *Tensor::c_tensor() const
+LeTensor *Tensor::c_tensor() const
 {
     return priv->tensor;
 }

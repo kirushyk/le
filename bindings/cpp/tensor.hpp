@@ -17,7 +17,7 @@ public:
     Tensor(LeTensor *c_tensor);
     ~Tensor();
 
-    const LeTensor * c_tensor() const;
+    LeTensor * c_tensor() const;
     void * data() const;
 
     friend std::ostream & operator << (std::ostream &out, const Tensor &tensor);
