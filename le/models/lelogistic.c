@@ -125,7 +125,7 @@ le_logistic_classifier_predict (LeModel *model, const LeTensor *x)
 }
 
 void
-le_logistic_classifier_train (LeLogisticClassifier *self, const LeTensor *x_train, const LeTensor *y_train,
+le_logistic_classifier_train (LeLogisticClassifier *self, LeTensor *x_train, LeTensor *y_train,
     LeLogisticClassifierTrainingOptions options)
 {
   unsigned examples_count = le_matrix_get_width (x_train);
@@ -134,25 +134,19 @@ le_logistic_classifier_train (LeLogisticClassifier *self, const LeTensor *x_trai
 
   assert (le_matrix_get_width (y_train) == examples_count);
 
-  LeTensor *x = x_train;
-  LeTensor *x_prev = x_train;
+  LeTensor *x = le_tensor_ref (x_train);
+  LeTensor *x_prev = le_tensor_ref (x_train);
 
   for (i = 0; i < options.polynomia_degree; i++) {
+    le_tensor_unref (x);
     x = le_matrix_new_polynomia (x_prev);
-    if (x_prev != x_train) {
-      le_tensor_unref (LE_TENSOR (x_prev));
-    }
-    x_prev = x;
+    le_tensor_unref (x_prev);
+    x_prev = le_tensor_ref (x);
   }
+  le_tensor_unref (x_prev);
+  x_prev = NULL;
 
   unsigned features_count = le_matrix_get_height (x);
-
-  /*
-  if (x != x_train)
-  {
-      le_tensor_unref(x);
-  }
-  */
 
   LeLogisticClassifierPrivate *priv = le_logistic_classifier_get_instance_private (self);
   g_assert_nonnull (priv);
@@ -182,4 +176,5 @@ le_logistic_classifier_train (LeLogisticClassifier *self, const LeTensor *x_trai
 
     printf ("Train Set Error: %f\n", train_set_error);
   }
+  le_tensor_unref (x);
 }
