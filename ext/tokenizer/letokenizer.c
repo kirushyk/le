@@ -126,7 +126,7 @@ le_tokenizer_encode (LeTokenizer *self, const gchar *text)
 
   GRegex *regex = g_regex_new ("(?i:'s|'t|'re|'ve|'m|'ll|'d)|[^\\r\\n\\p{L}\\p{N}]?\\p{L}+|\\p{N}{1,3}| "
                                "?[^\\s\\p{L}\\p{N}]+[\\r\\n]*|\\s*[\\r\\n]+|\\s+(?!\\S)|\\s+",
-      G_REGEX_DEFAULT, G_REGEX_MATCH_DEFAULT, NULL);
+      0, 0, NULL);
   g_assert_nonnull (regex);
   GMatchInfo *match_info;
   g_regex_match (regex, text, 0, &match_info);
