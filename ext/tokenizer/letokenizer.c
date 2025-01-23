@@ -85,7 +85,8 @@ le_tokenizer_new (const gchar *filename)
     GString *text_with_space = g_string_new (key);
     g_string_replace (text_with_space, "Ġ", " ", 0);
     g_hash_table_insert (self->text_to_id, g_strdup (text_with_space->str), GINT_TO_POINTER (id));
-    g_hash_table_insert (self->id_to_text, GINT_TO_POINTER (id), g_string_free_and_steal (text_with_space));
+    /// @todo: `g_string_free_and_steal` is not available in previous versions of GLib
+    g_hash_table_insert (self->id_to_text, GINT_TO_POINTER (id), g_string_free (text_with_space, FALSE));
   }
   g_list_free (vocab_members);
 
@@ -191,7 +192,8 @@ le_tokenizer_decode (LeTokenizer *self, GList *tokens)
       g_string_append (result, token);
     }
   }
-  return g_string_free_and_steal (result);
+  /// @todo: `g_string_free_and_steal` is not available in previous versions of GLib
+  return g_string_free (result, FALSE);
 }
 
 const gchar *
