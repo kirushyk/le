@@ -15,7 +15,7 @@ Use APT package manager to install dependencies:
 
 Use [Homebrew](https://brew.sh) to install packages needed:
 
-    brew install meson pybind11 readline gtk4 json-glib
+    brew install meson pybind11 numpy readline gtk4 json-glib
 
 ## Configuration
 
