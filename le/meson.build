@@ -2,6 +2,7 @@
 # Released under the MIT license. See LICENSE file in the project root for full license information.
 
 le_sources = [
+    'lebackend.c',
     'math/lerand.c',
     'math/leclamp.c',
     'math/lepolynomia.c',
