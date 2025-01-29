@@ -10,6 +10,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include <glib.h>
+#include "../backends/cpu/lecpu.h"
+#include <le/lebackend.h>
 #include <le/lelog.h>
 #include "letensor-cast.h"
 #include "letensor-imp.h"
@@ -75,6 +77,7 @@ le_tensor_init (LeTensor *self)
   self->owns_data = FALSE;
   self->stride = 0;
   self->device_type = LE_DEVICE_TYPE_CPU;
+  self->backend_interface = LE_BACKEND_GET_IFACE (le_cpu_backend_get_instance ());
   self->data = NULL;
 }
 

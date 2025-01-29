@@ -8,7 +8,7 @@ G_BEGIN_DECLS
 
 typedef struct _LeTensor LeTensor;
 
-G_DECLARE_INTERFACE (LeBackend, le_backend, LE, BACKEND, GObject);
+G_DECLARE_INTERFACE (LeBackend, le_backend, LE, BACKEND, GInitiallyUnowned);
 
 struct _LeBackendInterface
 {

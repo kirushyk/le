@@ -29,12 +29,14 @@ le_sources = [
     'lelog.c'
 ]
 
-le_libs = []
-
 le_deps = [
     cc.find_library('m'),
     glib,
     gobject
+]
+
+le_libs = [
+    le_cpu_backend
 ]
 
 if accelerate.found()
