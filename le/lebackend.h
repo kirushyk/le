@@ -14,7 +14,7 @@ struct _LeBackendInterface
 {
   GTypeInterface parent_class;
   
-  gfloat (*dot_product) (LeTensor *a, LeTensor *b);
+  gfloat (*dot_product) (const LeTensor *a, const LeTensor *b);
 };
 
 G_END_DECLS
