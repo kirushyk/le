@@ -131,7 +131,7 @@ le_dense_layer_new (const char *name, unsigned inputs, unsigned units)
   /// @todo: Optimize
   gfloat variance = sqrtf (1.0f / inputs);
   le_tensor_mul (priv->w, variance);
-  priv->b = le_matrix_new_zeros (LE_TYPE_FLOAT32, units, 1);
+  priv->b = le_matrix_new_zeros (LE_TYPE_F32, units, 1);
   le_layer_append_parameter (LE_LAYER (self), priv->w);
   le_layer_append_parameter (LE_LAYER (self), priv->b);
   return self;

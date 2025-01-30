@@ -37,18 +37,18 @@ main ()
 
   LeTensor *a, *at, *b, *bt, *c, *d, *ab, *ab_check, *ba, *ba_check;
 
-  a = le_tensor_new (LE_TYPE_FLOAT32, 2, 3, 2, // clang-format off
+  a = le_tensor_new (LE_TYPE_F32, 2, 3, 2, // clang-format off
       1.0, 2.0,
       3.0, 4.0,
       5.0, 6.0
   ); // clang-format on
 
-  b = le_tensor_new (LE_TYPE_FLOAT32, 2, 2, 3, // clang-format off
+  b = le_tensor_new (LE_TYPE_F32, 2, 2, 3, // clang-format off
       1.0, 2.0, 3.0,
       4.0, 5.0, 6.0
   ); // clang-format on
 
-  ab_check = le_tensor_new (LE_TYPE_FLOAT32, 2, 3, 3, // clang-format off
+  ab_check = le_tensor_new (LE_TYPE_F32, 2, 3, 3, // clang-format off
       9.0,  12.0, 15.0,
       19.0, 26.0, 33.0,
       29.0, 40.0, 51.0
@@ -87,7 +87,7 @@ main ()
   le_tensor_unref (ab_check);
 
   ba = le_matrix_new_product (b, a);
-  ba_check = le_tensor_new (LE_TYPE_FLOAT32, 2, 2, 2, // clang-format off
+  ba_check = le_tensor_new (LE_TYPE_F32, 2, 2, 2, // clang-format off
       22.0, 28.0,
       49.0, 64.0
   ); // clang-format on
@@ -99,12 +99,12 @@ main ()
   le_tensor_unref (a);
 
   for (height = 1; height < MAX_DIMENSION; height++) {
-    a = le_matrix_new_identity (LE_TYPE_FLOAT32, height);
+    a = le_matrix_new_identity (LE_TYPE_F32, height);
     assert (le_test_ensure_matrix_size (a, height, height));
     le_tensor_unref (a);
 
     for (width = 1; width < MAX_DIMENSION; width++) {
-      a = le_matrix_new_zeros (LE_TYPE_FLOAT32, height, width);
+      a = le_matrix_new_zeros (LE_TYPE_F32, height, width);
       assert (le_test_ensure_matrix_size (a, height, width));
       le_tensor_unref (a);
 

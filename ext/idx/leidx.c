@@ -33,27 +33,27 @@ le_idx_read (const gchar *filename)
       LeType type = LE_TYPE_VOID;
       switch (header.type) {
       case 0x08:
-        type = LE_TYPE_UINT8;
+        type = LE_TYPE_U8;
         break;
 
       case 0x09:
-        type = LE_TYPE_INT8;
+        type = LE_TYPE_I8;
         break;
 
       case 0x0B:
-        type = LE_TYPE_INT16;
+        type = LE_TYPE_I16;
         break;
 
       case 0x0C:
-        type = LE_TYPE_INT32;
+        type = LE_TYPE_I32;
         break;
 
       case 0x0D:
-        type = LE_TYPE_FLOAT32;
+        type = LE_TYPE_F32;
         break;
 
       case 0x0E:
-        type = LE_TYPE_FLOAT64;
+        type = LE_TYPE_F64;
         break;
 
       default:
@@ -96,27 +96,27 @@ le_idx_gz_read (const gchar *filename)
       LeType type = LE_TYPE_VOID;
       switch (header.type) {
       case 0x08:
-        type = LE_TYPE_UINT8;
+        type = LE_TYPE_U8;
         break;
 
       case 0x09:
-        type = LE_TYPE_INT8;
+        type = LE_TYPE_I8;
         break;
 
       case 0x0B:
-        type = LE_TYPE_INT16;
+        type = LE_TYPE_I16;
         break;
 
       case 0x0C:
-        type = LE_TYPE_INT32;
+        type = LE_TYPE_I32;
         break;
 
       case 0x0D:
-        type = LE_TYPE_FLOAT32;
+        type = LE_TYPE_F32;
         break;
 
       case 0x0E:
-        type = LE_TYPE_FLOAT64;
+        type = LE_TYPE_F64;
         break;
 
       default:

@@ -49,8 +49,8 @@ GList * le_metal_get_all_devices (void)
 LeTensor *
 le_metal_matrix_new_product(const LeTensor *a, bool transpose_a, const LeTensor *b, bool transpose_b)
 {
-    assert(a->element_type == LE_TYPE_FLOAT32);
-    assert(b->element_type == LE_TYPE_FLOAT32);
+    assert(a->element_type == LE_TYPE_F32);
+    assert(b->element_type == LE_TYPE_F32);
     assert(a->shape->num_dimensions == 2);
     assert(b->shape->num_dimensions == 2);
     assert(le_tensor_contiguous(a));
@@ -65,7 +65,7 @@ le_metal_matrix_new_product(const LeTensor *a, bool transpose_a, const LeTensor 
         
     LeTensor *c = g_new0 (LeTensor, 1);
     c->device_type = LE_DEVICE_TYPE_METAL;
-    c->element_type = LE_TYPE_FLOAT32;
+    c->element_type = LE_TYPE_F32;
     c->shape = le_shape_new(2, c_height, c_width);
     c->stride = le_shape_get_size(c->shape, -1);
     c->owns_data = true;

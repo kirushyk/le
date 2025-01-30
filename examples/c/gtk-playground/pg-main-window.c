@@ -117,7 +117,7 @@ render_predictions (LeModel *model, guint width, guint height)
   cairo_surface_flush (surface);
   guint8 *pixmap = cairo_image_surface_get_data (surface);
   for (gint y = 0; y < height; y++) {
-    LeTensor *row = le_matrix_new_uninitialized (LE_TYPE_FLOAT32, 2, width);
+    LeTensor *row = le_matrix_new_uninitialized (LE_TYPE_F32, 2, width);
     for (gint x = 0; x < width; x++) {
       le_matrix_set (row, 0, x, x * 2.0f / width - 1.0f);
       le_matrix_set (row, 1, x, y * -2.0f / height + 1.0f);

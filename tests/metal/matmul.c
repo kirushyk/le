@@ -7,7 +7,7 @@ int main(int argc, char *argv[])
 {
     le_metal_init();
     
-    LeTensor *ci = le_matrix_new_identity(LE_TYPE_FLOAT32, 5);
+    LeTensor *ci = le_matrix_new_identity(LE_TYPE_F32, 5);
     LeTensor *gi = le_tensor_to_metal(ci);
     LeTensor *ri = le_tensor_to_cpu(gi);
     le_tensor_print(ri, stdout);

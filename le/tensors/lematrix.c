@@ -41,7 +41,7 @@ gfloat
 le_matrix_at_f32 (const LeTensor *self, unsigned y, unsigned x)
 {
   assert (self->device_type == LE_DEVICE_TYPE_CPU);
-  assert (self->element_type == LE_TYPE_FLOAT32);
+  assert (self->element_type == LE_TYPE_F32);
   assert (self->shape->num_dimensions == 2);
   assert (y < self->shape->sizes[0]);
   assert (x < self->shape->sizes[1]);
@@ -53,7 +53,7 @@ gdouble
 le_matrix_at_f64 (const LeTensor *self, unsigned y, unsigned x)
 {
   assert (self->device_type == LE_DEVICE_TYPE_CPU);
-  assert (self->element_type == LE_TYPE_FLOAT64);
+  assert (self->element_type == LE_TYPE_F64);
   assert (self->shape->num_dimensions == 2);
   assert (y < self->shape->sizes[0]);
   assert (x < self->shape->sizes[1]);
@@ -65,7 +65,7 @@ gint8
 le_matrix_at_i8 (const LeTensor *self, unsigned y, unsigned x)
 {
   assert (self->device_type == LE_DEVICE_TYPE_CPU);
-  assert (self->element_type == LE_TYPE_INT8);
+  assert (self->element_type == LE_TYPE_I8);
   assert (self->shape->num_dimensions == 2);
   assert (y < self->shape->sizes[0]);
   assert (x < self->shape->sizes[1]);
@@ -77,7 +77,7 @@ gint16
 le_matrix_at_i16 (const LeTensor *self, unsigned y, unsigned x)
 {
   assert (self->device_type == LE_DEVICE_TYPE_CPU);
-  assert (self->element_type == LE_TYPE_INT16);
+  assert (self->element_type == LE_TYPE_I16);
   assert (self->shape->num_dimensions == 2);
   assert (y < self->shape->sizes[0]);
   assert (x < self->shape->sizes[1]);
@@ -89,7 +89,7 @@ gint32
 le_matrix_at_i32 (const LeTensor *self, unsigned y, unsigned x)
 {
   assert (self->device_type == LE_DEVICE_TYPE_CPU);
-  assert (self->element_type == LE_TYPE_INT32);
+  assert (self->element_type == LE_TYPE_I32);
   assert (self->shape->num_dimensions == 2);
   assert (y < self->shape->sizes[0]);
   assert (x < self->shape->sizes[1]);
@@ -114,7 +114,7 @@ le_matrix_add (LeTensor *self, const LeTensor *another)
 {
   assert (self->device_type == LE_DEVICE_TYPE_CPU);
   assert (another->device_type == LE_DEVICE_TYPE_CPU);
-  assert (self->element_type == LE_TYPE_FLOAT32);
+  assert (self->element_type == LE_TYPE_F32);
   assert (self->stride == le_shape_get_size (self->shape, -1));
   assert (another->stride == le_shape_get_size (another->shape, -1));
   assert (self->shape->num_dimensions == 2);
@@ -139,7 +139,7 @@ void
 le_matrix_set_i8 (LeTensor *self, unsigned y, unsigned x, gint8 value)
 {
   assert (self->device_type == LE_DEVICE_TYPE_CPU);
-  assert (self->element_type == LE_TYPE_INT8);
+  assert (self->element_type == LE_TYPE_I8);
   assert (self->shape->num_dimensions == 2);
 
   assert (y < self->shape->sizes[0]);
@@ -154,7 +154,7 @@ void
 le_matrix_set_u8 (LeTensor *self, unsigned y, unsigned x, guint8 value)
 {
   assert (self->device_type == LE_DEVICE_TYPE_CPU);
-  assert (self->element_type == LE_TYPE_UINT8);
+  assert (self->element_type == LE_TYPE_U8);
   assert (self->shape->num_dimensions == 2);
 
   assert (y < self->shape->sizes[0]);
@@ -169,7 +169,7 @@ void
 le_matrix_set_i16 (LeTensor *self, unsigned y, unsigned x, gint16 value)
 {
   assert (self->device_type == LE_DEVICE_TYPE_CPU);
-  assert (self->element_type == LE_TYPE_INT16);
+  assert (self->element_type == LE_TYPE_I16);
   assert (self->shape->num_dimensions == 2);
 
   assert (y < self->shape->sizes[0]);
@@ -199,7 +199,7 @@ void
 le_matrix_set_i32 (LeTensor *self, unsigned y, unsigned x, gint32 value)
 {
   assert (self->device_type == LE_DEVICE_TYPE_CPU);
-  assert (self->element_type == LE_TYPE_INT32);
+  assert (self->element_type == LE_TYPE_I32);
   assert (self->shape->num_dimensions == 2);
 
   assert (y < self->shape->sizes[0]);
@@ -244,7 +244,7 @@ void
 le_matrix_set_f32 (LeTensor *self, unsigned y, unsigned x, gfloat value)
 {
   assert (self->device_type == LE_DEVICE_TYPE_CPU);
-  assert (self->element_type == LE_TYPE_FLOAT32);
+  assert (self->element_type == LE_TYPE_F32);
   assert (self->shape->num_dimensions == 2);
 
   assert (y < self->shape->sizes[0]);
@@ -259,7 +259,7 @@ void
 le_matrix_set_f64 (LeTensor *self, unsigned y, unsigned x, gdouble value)
 {
   assert (self->device_type == LE_DEVICE_TYPE_CPU);
-  assert (self->element_type == LE_TYPE_FLOAT64);
+  assert (self->element_type == LE_TYPE_F64);
   assert (self->shape->num_dimensions == 2);
 
   assert (y < self->shape->sizes[0]);
@@ -279,7 +279,7 @@ le_matrix_new_identity (LeType type, unsigned size)
 
   self = g_object_new (le_tensor_get_type (), NULL);
   self->device_type = LE_DEVICE_TYPE_CPU;
-  self->element_type = LE_TYPE_FLOAT32;
+  self->element_type = LE_TYPE_F32;
   self->shape = le_shape_new (2, size, size);
   self->stride = size;
   self->owns_data = true;
@@ -288,19 +288,19 @@ le_matrix_new_identity (LeType type, unsigned size)
   for (y = 0; y < size; y++) {
     for (x = 0; x < size; x++) {
       switch (type) {
-      case LE_TYPE_INT8:
+      case LE_TYPE_I8:
         ((gint8 *)self->data)[y * size + x] = (x == y) ? 1 : 0;
         break;
-      case LE_TYPE_UINT8:
+      case LE_TYPE_U8:
         ((guint8 *)self->data)[y * size + x] = (x == y) ? 1 : 0;
         break;
-      case LE_TYPE_INT16:
+      case LE_TYPE_I16:
         ((gint16 *)self->data)[y * size + x] = (x == y) ? 1 : 0;
         break;
       case LE_TYPE_UINT16:
         ((guint16 *)self->data)[y * size + x] = (x == y) ? 1 : 0;
         break;
-      case LE_TYPE_INT32:
+      case LE_TYPE_I32:
         ((gint32 *)self->data)[y * size + x] = (x == y) ? 1 : 0;
         break;
       case LE_TYPE_UINT32:
@@ -309,10 +309,10 @@ le_matrix_new_identity (LeType type, unsigned size)
       case LE_TYPE_FLOAT16:
         ((guint16 *)self->data)[y * size + x] = (x == y) ? F16_1 : F16_0;
         break;
-      case LE_TYPE_FLOAT32:
+      case LE_TYPE_F32:
         ((gfloat *)self->data)[y * size + x] = (x == y) ? 1.0f : 0.0f;
         break;
-      case LE_TYPE_FLOAT64:
+      case LE_TYPE_F64:
         ((gdouble *)self->data)[y * size + x] = (x == y) ? 1.0 : 0.0;
         break;
       case LE_TYPE_VOID:
@@ -351,7 +351,7 @@ le_matrix_new_zeros (LeType type, unsigned height, unsigned width)
   self = g_object_new (le_tensor_get_type (), NULL);
   self->device_type = LE_DEVICE_TYPE_CPU;
   self->shape = le_shape_new (2, height, width);
-  self->element_type = LE_TYPE_FLOAT32;
+  self->element_type = LE_TYPE_F32;
   self->stride = width;
   self->owns_data = true;
   self->data = g_new0 (gfloat, height * width);
@@ -359,19 +359,19 @@ le_matrix_new_zeros (LeType type, unsigned height, unsigned width)
 
   for (i = 0; i < elements_count; i++) {
     switch (type) {
-    case LE_TYPE_INT8:
+    case LE_TYPE_I8:
       ((gint8 *)self->data)[i] = 0;
       break;
-    case LE_TYPE_UINT8:
+    case LE_TYPE_U8:
       ((guint8 *)self->data)[i] = 0;
       break;
-    case LE_TYPE_INT16:
+    case LE_TYPE_I16:
       ((gint16 *)self->data)[i] = 0;
       break;
     case LE_TYPE_UINT16:
       ((guint16 *)self->data)[i] = 0;
       break;
-    case LE_TYPE_INT32:
+    case LE_TYPE_I32:
       ((gint32 *)self->data)[i] = 0;
       break;
     case LE_TYPE_UINT32:
@@ -380,10 +380,10 @@ le_matrix_new_zeros (LeType type, unsigned height, unsigned width)
     case LE_TYPE_FLOAT16:
       ((guint16 *)self->data)[i] = F16_0;
       break;
-    case LE_TYPE_FLOAT32:
+    case LE_TYPE_F32:
       ((gfloat *)self->data)[i] = 0.0f;
       break;
-    case LE_TYPE_FLOAT64:
+    case LE_TYPE_F64:
       ((gdouble *)self->data)[i] = 0.0;
       break;
     case LE_TYPE_VOID:
@@ -404,7 +404,7 @@ le_matrix_new_rand_f32 (LeDistribution distribution, unsigned height, unsigned w
 
   self = g_object_new (le_tensor_get_type (), NULL);
   self->device_type = LE_DEVICE_TYPE_CPU;
-  self->element_type = LE_TYPE_FLOAT32;
+  self->element_type = LE_TYPE_F32;
   self->shape = le_shape_new (2, height, width);
   self->stride = width;
   self->owns_data = true;
@@ -479,7 +479,7 @@ le_matrix_new_sum (const LeTensor *a, unsigned dimension)
 
   LeTensor *self = g_object_new (le_tensor_get_type (), NULL);
   self->device_type = LE_DEVICE_TYPE_CPU;
-  self->element_type = LE_TYPE_FLOAT32;
+  self->element_type = LE_TYPE_F32;
   self->shape = le_shape_new (2, a->shape->sizes[0], 1 /*a->shape->sizes[1]*/);
   self->stride = le_shape_get_size (self->shape, -1);
   self->owns_data = true;
@@ -519,19 +519,19 @@ le_matrix_new_one_hot (LeType type, const LeTensor *a, unsigned num_classes)
     for (klass = 0; klass < num_classes; klass++) {
       bool hot = (klass == le_tensor_at_u8 (a, example));
       switch (type) {
-      case LE_TYPE_INT8:
+      case LE_TYPE_I8:
         le_matrix_set_i8 (self, klass, example, hot ? 1 : 0);
         break;
-      case LE_TYPE_UINT8:
+      case LE_TYPE_U8:
         le_matrix_set_u8 (self, klass, example, hot ? 1 : 0);
         break;
-      case LE_TYPE_INT16:
+      case LE_TYPE_I16:
         le_matrix_set_i16 (self, klass, example, hot ? 1 : 0);
         break;
       case LE_TYPE_UINT16:
         le_matrix_set_u16 (self, klass, example, hot ? 1 : 0);
         break;
-      case LE_TYPE_INT32:
+      case LE_TYPE_I32:
         le_matrix_set_i32 (self, klass, example, hot ? 1 : 0);
         break;
       case LE_TYPE_UINT32:
@@ -540,10 +540,10 @@ le_matrix_new_one_hot (LeType type, const LeTensor *a, unsigned num_classes)
       case LE_TYPE_FLOAT16:
         le_matrix_set_f16 (self, klass, example, hot ? F16_1 : F16_0);
         break;
-      case LE_TYPE_FLOAT32:
+      case LE_TYPE_F32:
         le_matrix_set_f32 (self, klass, example, hot ? 1.0f : 0.0f);
         break;
-      case LE_TYPE_FLOAT64:
+      case LE_TYPE_F64:
         le_matrix_set_f32 (self, klass, example, hot ? 1.0 : 0.0);
         break;
       case LE_TYPE_VOID:
@@ -639,8 +639,8 @@ le_matrix_new_conv2d (const LeTensor *image, const LeTensor *filter)
   assert (filter->device_type == LE_DEVICE_TYPE_CPU);
   assert (image->shape->num_dimensions == 2);
   assert (filter->shape->num_dimensions == 2);
-  assert (image->element_type == LE_TYPE_FLOAT32);
-  assert (filter->element_type == LE_TYPE_FLOAT32);
+  assert (image->element_type == LE_TYPE_F32);
+  assert (filter->element_type == LE_TYPE_F32);
 
   gint32 fh = le_matrix_get_height (filter);
   gint32 height = le_matrix_get_height (image) - fh + 1;
@@ -698,7 +698,7 @@ le_matrix_get_column_copy (const LeTensor *self, unsigned x)
   /// @todo: Take stride into account
   assert (self->device_type == LE_DEVICE_TYPE_CPU);
   assert (self->shape->num_dimensions == 2);
-  assert (self->element_type == LE_TYPE_FLOAT32);
+  assert (self->element_type == LE_TYPE_F32);
   /// @todo: Add dimension checks
 
   unsigned y;

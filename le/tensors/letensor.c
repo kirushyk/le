@@ -72,7 +72,7 @@ le_tensor_class_init (LeTensorClass *klass)
 static void
 le_tensor_init (LeTensor *self)
 {
-  self->element_type = LE_TYPE_FLOAT32;
+  self->element_type = LE_TYPE_F32;
   self->shape = NULL;
   self->owns_data = FALSE;
   self->stride = 0;
@@ -104,15 +104,15 @@ le_tensor_new_from_va_list (LeType element_type, gsize num_dimensions, va_list d
 
   for (gsize i = 0; i < elements_count; i++) {
     switch (self->element_type) {
-    case LE_TYPE_INT8: {
+    case LE_TYPE_I8: {
       gint8 value = (gint8)va_arg (dims_and_data, int);
       ((gint8 *)self->data)[i] = value;
     } break;
-    case LE_TYPE_UINT8: {
+    case LE_TYPE_U8: {
       guint8 value = (guint8)va_arg (dims_and_data, int);
       ((guint8 *)self->data)[i] = value;
     } break;
-    case LE_TYPE_INT16: {
+    case LE_TYPE_I16: {
       gint16 value = (gint16)va_arg (dims_and_data, int);
       ((gint16 *)self->data)[i] = value;
     } break;
@@ -120,7 +120,7 @@ le_tensor_new_from_va_list (LeType element_type, gsize num_dimensions, va_list d
       guint16 value = (guint16)va_arg (dims_and_data, int);
       ((guint16 *)self->data)[i] = value;
     } break;
-    case LE_TYPE_INT32: {
+    case LE_TYPE_I32: {
       gint32 value = (gint32)va_arg (dims_and_data, int);
       ((gint32 *)self->data)[i] = value;
     } break;
@@ -128,11 +128,11 @@ le_tensor_new_from_va_list (LeType element_type, gsize num_dimensions, va_list d
       gint32 value = (gint32)va_arg (dims_and_data, int);
       ((gint32 *)self->data)[i] = value;
     } break;
-    case LE_TYPE_FLOAT32: {
+    case LE_TYPE_F32: {
       gfloat value = (gfloat)va_arg (dims_and_data, gdouble);
       ((gfloat *)self->data)[i] = value;
     } break;
-    case LE_TYPE_FLOAT64: {
+    case LE_TYPE_F64: {
       gdouble value = (gdouble)va_arg (dims_and_data, gdouble);
       ((gdouble *)self->data)[i] = value;
     } break;
@@ -162,7 +162,7 @@ le_tensor_new_rand_f32 (LeShape *shape)
 {
   LeTensor *self = g_object_new (le_tensor_get_type (), NULL);
   self->device_type = LE_DEVICE_TYPE_CPU;
-  self->element_type = LE_TYPE_FLOAT32;
+  self->element_type = LE_TYPE_F32;
   self->shape = shape;
   self->stride = le_shape_get_size (self->shape, -1);
   self->owns_data = true;
@@ -272,25 +272,25 @@ le_tensor_new_zeros (LeType element_type, LeShape *shape)
   self->data = g_malloc (data_size);
   for (gsize i = 0; i < elements_count; i++) {
     switch (self->element_type) {
-    case LE_TYPE_INT8:
-    case LE_TYPE_UINT8:
+    case LE_TYPE_I8:
+    case LE_TYPE_U8:
       ((gint8 *)self->data)[i] = 0;
       break;
-    case LE_TYPE_INT16:
+    case LE_TYPE_I16:
     case LE_TYPE_UINT16:
       ((gint16 *)self->data)[i] = 0;
       break;
-    case LE_TYPE_INT32:
+    case LE_TYPE_I32:
     case LE_TYPE_UINT32:
       ((gint32 *)self->data)[i] = 0;
       break;
     case LE_TYPE_FLOAT16:
       ((guint16 *)self->data)[i] = F16_0;
       break;
-    case LE_TYPE_FLOAT32:
+    case LE_TYPE_F32:
       ((gfloat *)self->data)[i] = 0.0f;
       break;
-    case LE_TYPE_FLOAT64:
+    case LE_TYPE_F64:
       ((gdouble *)self->data)[i] = 0.0;
       break;
     default:
@@ -316,25 +316,25 @@ le_tensor_new_zeros_like (const LeTensor *another)
   self->data = g_malloc (data_size);
   for (gsize i = 0; i < elements_count; i++) {
     switch (self->element_type) {
-    case LE_TYPE_INT8:
-    case LE_TYPE_UINT8:
+    case LE_TYPE_I8:
+    case LE_TYPE_U8:
       ((gint8 *)self->data)[i] = 0;
       break;
-    case LE_TYPE_INT16:
+    case LE_TYPE_I16:
     case LE_TYPE_UINT16:
       ((gint16 *)self->data)[i] = 0;
       break;
-    case LE_TYPE_INT32:
+    case LE_TYPE_I32:
     case LE_TYPE_UINT32:
       ((gint32 *)self->data)[i] = 0;
       break;
     case LE_TYPE_FLOAT16:
       ((guint16 *)self->data)[i] = F16_0;
       break;
-    case LE_TYPE_FLOAT32:
+    case LE_TYPE_F32:
       ((gfloat *)self->data)[i] = 0.0f;
       break;
-    case LE_TYPE_FLOAT64:
+    case LE_TYPE_F64:
       ((gdouble *)self->data)[i] = 0.0;
       break;
     default:
@@ -387,7 +387,7 @@ le_tensor_new_equal_u8 (LeType type, LeTensor *another, guint8 scalar)
   gsize data_size = elements_count * le_type_size (self->element_type);
   self->data = g_malloc (data_size);
 
-  /// @todo: Add support for types other than UINT8
+  /// @todo: Add support for types other than U8
   for (gsize i = 0; i < elements_count; i++) {
     bool equal = (((guint8 *)another->data)[i] == scalar);
     ((gfloat *)self->data)[i] = equal ? 1.0f : 0.0f;
@@ -533,7 +533,7 @@ le_tensor_at (const LeTensor *tensor, guint32 index)
 guint8
 le_tensor_at_u8 (const LeTensor *tensor, guint32 index)
 {
-  g_assert_cmpint (tensor->element_type, ==, LE_TYPE_UINT8);
+  g_assert_cmpint (tensor->element_type, ==, LE_TYPE_U8);
   g_assert_cmpint (tensor->device_type, ==, LE_DEVICE_TYPE_CPU);
 
   return ((guint8 *)tensor->data)[virtual_index (index, le_shape_get_size (tensor->shape, -1), tensor->stride)];
@@ -551,7 +551,7 @@ le_tensor_at_u32 (const LeTensor *tensor, guint32 index)
 gfloat
 le_tensor_at_f32 (const LeTensor *tensor, guint32 index)
 {
-  g_assert_cmpint (tensor->element_type, ==, LE_TYPE_FLOAT32);
+  g_assert_cmpint (tensor->element_type, ==, LE_TYPE_F32);
   g_assert_cmpint (tensor->device_type, ==, LE_DEVICE_TYPE_CPU);
 
   return ((gfloat *)tensor->data)[virtual_index (index, le_shape_get_size (tensor->shape, -1), tensor->stride)];
@@ -575,7 +575,7 @@ le_tensor_assign (LeTensor *tensor, const LeTensor *another)
 void
 le_tensor_set_f32 (LeTensor *tensor, guint32 index, gfloat value)
 {
-  g_assert_cmpint (tensor->element_type, ==, LE_TYPE_FLOAT32);
+  g_assert_cmpint (tensor->element_type, ==, LE_TYPE_F32);
   g_assert_cmpint (tensor->device_type, ==, LE_DEVICE_TYPE_CPU);
 
   ((gfloat *)tensor->data)[virtual_index (index, le_shape_get_size (tensor->shape, -1), tensor->stride)] = value;
@@ -601,6 +601,19 @@ le_matrix_empty (LeTensor *self)
 gfloat
 le_dot_product (const LeTensor *a, const LeTensor *b)
 {
+  g_assert_cmpint (a->element_type, ==, LE_TYPE_F32);
+  g_assert_cmpint (b->element_type, ==, LE_TYPE_F32);
+  g_assert_cmpint (a->shape->num_dimensions, ==, 2);
+  g_assert_cmpint (b->shape->num_dimensions, ==, 2);
+  /** @todo: Test results against transposed a multiplied by b */
+  g_assert_cmpint (a->shape->sizes[0], ==, b->shape->sizes[0]);
+  g_assert_cmpint (a->shape->sizes[1], ==, 1);
+  g_assert_cmpint (b->shape->sizes[1], ==, 1);
+
+  g_assert_cmpint (a->element_type, ==, b->element_type);
+  g_assert_true (a->backend_interface == b->backend_interface);
+  return a->backend_interface->dot_product (a, b);
+
   g_assert_cmpint (a->device_type, ==, LE_DEVICE_TYPE_CPU);
   g_assert_cmpint (b->device_type, ==, LE_DEVICE_TYPE_CPU);
 
@@ -609,8 +622,8 @@ le_dot_product (const LeTensor *a, const LeTensor *b)
 #elif defined(HAVE_OPENBLAS)
   return le_openblas_dot_product (a, b);
 #else
-  g_assert_cmpint (a->element_type, ==, LE_TYPE_FLOAT32);
-  g_assert_cmpint (b->element_type, ==, LE_TYPE_FLOAT32);
+  g_assert_cmpint (a->element_type, ==, LE_TYPE_F32);
+  g_assert_cmpint (b->element_type, ==, LE_TYPE_F32);
   g_assert_cmpint (a->shape->num_dimensions, ==, 2);
   g_assert_cmpint (b->shape->num_dimensions, ==, 2);
 
@@ -674,7 +687,7 @@ le_tensor_add_tensor (LeTensor *a, const LeTensor *b)
   gsize elements_count = le_shape_get_elements_count (a->shape);
 
   switch (a->element_type) {
-  case LE_TYPE_FLOAT32:
+  case LE_TYPE_F32:
     for (gsize i = 0; i < elements_count; i++) {
       ((gfloat *)a->data)[i] += ((gfloat *)b->data)[i];
     }
@@ -694,7 +707,7 @@ void
 le_tensor_sub_f32 (LeTensor *self, gfloat b)
 {
   g_assert_cmpint (self->device_type, ==, LE_DEVICE_TYPE_CPU);
-  g_assert_cmpint (self->element_type, ==, LE_TYPE_FLOAT32);
+  g_assert_cmpint (self->element_type, ==, LE_TYPE_F32);
 
   /// @todo: Take stride into account
   gsize elements_count = le_shape_get_elements_count (self->shape);
@@ -710,8 +723,8 @@ le_tensor_sub_tensor (LeTensor *a, const LeTensor *b)
   /// @todo: Take stride into account
   g_assert_cmpint (a->device_type, ==, LE_DEVICE_TYPE_CPU);
   g_assert_cmpint (b->device_type, ==, LE_DEVICE_TYPE_CPU);
-  g_assert_cmpint (a->element_type, ==, LE_TYPE_FLOAT32);
-  g_assert_cmpint (b->element_type, ==, LE_TYPE_FLOAT32);
+  g_assert_cmpint (a->element_type, ==, LE_TYPE_F32);
+  g_assert_cmpint (b->element_type, ==, LE_TYPE_F32);
   g_assert_true (le_shape_equal (a->shape, b->shape));
 
   gsize elements_count = le_shape_get_elements_count (a->shape);
@@ -740,7 +753,7 @@ void
 le_tensor_mul_f32 (LeTensor *self, gfloat b)
 {
   g_assert_cmpint (self->device_type, ==, LE_DEVICE_TYPE_CPU);
-  g_assert_cmpint (self->element_type, ==, LE_TYPE_FLOAT32);
+  g_assert_cmpint (self->element_type, ==, LE_TYPE_F32);
 
   /// @todo: Take stride into account
   gsize elements_count = le_shape_get_elements_count (self->shape);
@@ -753,8 +766,8 @@ le_tensor_mul_f32 (LeTensor *self, gfloat b)
 void
 le_tensor_mul_tensor (LeTensor *self, const LeTensor *b)
 {
-  g_assert_cmpint (self->element_type, ==, LE_TYPE_FLOAT32);
-  g_assert_cmpint (b->element_type, ==, LE_TYPE_FLOAT32);
+  g_assert_cmpint (self->element_type, ==, LE_TYPE_F32);
+  g_assert_cmpint (b->element_type, ==, LE_TYPE_F32);
   g_assert_true (le_shape_equal (self->shape, b->shape));
 
   /// @todo: Take stride into account
@@ -798,7 +811,7 @@ void
 le_tensor_add_f32 (LeTensor *self, gfloat b)
 {
   g_assert_cmpint (self->device_type, ==, LE_DEVICE_TYPE_CPU);
-  g_assert_cmpint (self->element_type, ==, LE_TYPE_FLOAT32);
+  g_assert_cmpint (self->element_type, ==, LE_TYPE_F32);
 
   /// @todo: Take stride into account
   gsize elements_count = le_shape_get_elements_count (self->shape);
@@ -812,7 +825,7 @@ gfloat
 le_tensor_sum_f32 (const LeTensor *self)
 {
   g_assert_cmpint (self->device_type, ==, LE_DEVICE_TYPE_CPU);
-  g_assert_cmpint (self->element_type, ==, LE_TYPE_FLOAT32);
+  g_assert_cmpint (self->element_type, ==, LE_TYPE_F32);
   /// @todo: Take stride into account
   gfloat sum = 0.0;
   gsize elements_count = le_shape_get_elements_count (self->shape);
@@ -829,8 +842,8 @@ le_tensor_sad_f32 (const LeTensor *a, const LeTensor *b)
 {
   g_assert_cmpint (a->device_type, ==, LE_DEVICE_TYPE_CPU);
   g_assert_cmpint (b->device_type, ==, LE_DEVICE_TYPE_CPU);
-  g_assert_cmpint (a->element_type, ==, LE_TYPE_FLOAT32);
-  g_assert_cmpint (b->element_type, ==, LE_TYPE_FLOAT32);
+  g_assert_cmpint (a->element_type, ==, LE_TYPE_F32);
+  g_assert_cmpint (b->element_type, ==, LE_TYPE_F32);
   g_assert_true (le_shape_equal (a->shape, b->shape));
 
   gfloat sad = 0.0;
@@ -848,7 +861,7 @@ gfloat
 le_tensor_l2_f32 (const LeTensor *tensor)
 {
   g_assert_cmpint (tensor->device_type, ==, LE_DEVICE_TYPE_CPU);
-  g_assert_cmpint (tensor->element_type, ==, LE_TYPE_FLOAT32);
+  g_assert_cmpint (tensor->element_type, ==, LE_TYPE_F32);
 
   gfloat l2 = 0.0;
   gsize elements_count = le_shape_get_elements_count (tensor->shape);
@@ -879,7 +892,7 @@ le_tensor_apply_sigmoid (LeTensor *self)
 #ifdef __APPLE__
     return le_accelerate_tensor_apply_sigmoid (self);
 #else
-    g_assert_cmpint (self->element_type, ==, LE_TYPE_FLOAT32);
+    g_assert_cmpint (self->element_type, ==, LE_TYPE_F32);
     gsize elements_count = le_shape_get_elements_count (self->shape);
     for (gsize i = 0; i < elements_count; i++) {
       ((gfloat *)self->data)[i] = le_sigmoid (((gfloat *)self->data)[i]);
@@ -910,7 +923,7 @@ le_tensor_apply_sigmoid_prime (LeTensor *self)
 #ifdef __APPLE__
     return le_accelerate_tensor_apply_sigmoid_prime (self);
 #else
-    g_assert_cmpint (self->element_type, ==, LE_TYPE_FLOAT32);
+    g_assert_cmpint (self->element_type, ==, LE_TYPE_F32);
     gsize elements_count = le_shape_get_elements_count (self->shape);
     for (gsize i = 0; i < elements_count; i++) {
       gfloat sigmoid = le_sigmoid (((gfloat *)self->data)[i]);
@@ -938,16 +951,16 @@ void
 le_tensor_apply_tanh (LeTensor *self)
 {
   g_assert_cmpint (self->device_type, ==, LE_DEVICE_TYPE_CPU);
-  g_assert_true (self->element_type == LE_TYPE_FLOAT32 || self->element_type == LE_TYPE_FLOAT64);
+  g_assert_true (self->element_type == LE_TYPE_F32 || self->element_type == LE_TYPE_F64);
 
   gsize elements_count = le_shape_get_elements_count (self->shape);
 
   for (gsize i = 0; i < elements_count; i++) {
     switch (self->element_type) {
-    case LE_TYPE_FLOAT32:
+    case LE_TYPE_F32:
       ((gfloat *)self->data)[i] = tanhf (((gfloat *)self->data)[i]);
       break;
-    case LE_TYPE_FLOAT64:
+    case LE_TYPE_F64:
       ((gdouble *)self->data)[i] = tanh (((gdouble *)self->data)[i]);
       break;
     default:
@@ -960,16 +973,16 @@ void
 le_tensor_apply_sqr (LeTensor *self)
 {
   g_assert_cmpint (self->device_type, ==, LE_DEVICE_TYPE_CPU);
-  g_assert_true (self->element_type == LE_TYPE_FLOAT32 || self->element_type == LE_TYPE_FLOAT64);
+  g_assert_true (self->element_type == LE_TYPE_F32 || self->element_type == LE_TYPE_F64);
 
   gsize elements_count = le_shape_get_elements_count (self->shape);
 
   for (gsize i = 0; i < elements_count; i++) {
     switch (self->element_type) {
-    case LE_TYPE_FLOAT32:
+    case LE_TYPE_F32:
       ((gfloat *)self->data)[i] = ((gfloat *)self->data)[i] * ((gfloat *)self->data)[i];
       break;
-    case LE_TYPE_FLOAT64:
+    case LE_TYPE_F64:
       ((gdouble *)self->data)[i] = ((gdouble *)self->data)[i] * ((gdouble *)self->data)[i];
       break;
     default:
@@ -982,16 +995,16 @@ void
 le_tensor_apply_1_minus (LeTensor *self)
 {
   g_assert_cmpint (self->device_type, ==, LE_DEVICE_TYPE_CPU);
-  g_assert_true (self->element_type == LE_TYPE_FLOAT32 || self->element_type == LE_TYPE_FLOAT64);
+  g_assert_true (self->element_type == LE_TYPE_F32 || self->element_type == LE_TYPE_F64);
 
   gsize elements_count = le_shape_get_elements_count (self->shape);
 
   for (gsize i = 0; i < elements_count; i++) {
     switch (self->element_type) {
-    case LE_TYPE_FLOAT32:
+    case LE_TYPE_F32:
       ((gfloat *)self->data)[i] = 1.0f - ((gfloat *)self->data)[i];
       break;
-    case LE_TYPE_FLOAT64:
+    case LE_TYPE_F64:
       ((gdouble *)self->data)[i] = 1.0f - ((gdouble *)self->data)[i];
       break;
     default:
@@ -1004,17 +1017,17 @@ void
 le_tensor_apply_x_minus_sqr_x (LeTensor *self)
 {
   g_assert_cmpint (self->device_type, ==, LE_DEVICE_TYPE_CPU);
-  g_assert_true (self->element_type == LE_TYPE_FLOAT32 || self->element_type == LE_TYPE_FLOAT64);
+  g_assert_true (self->element_type == LE_TYPE_F32 || self->element_type == LE_TYPE_F64);
 
   gsize elements_count = le_shape_get_elements_count (self->shape);
 
   for (gsize i = 0; i < elements_count; i++) {
     switch (self->element_type) {
-    case LE_TYPE_FLOAT32: {
+    case LE_TYPE_F32: {
       gfloat x = ((gfloat *)self->data)[i];
       ((gfloat *)self->data)[i] = x * (1 - x);
     } break;
-    case LE_TYPE_FLOAT64: {
+    case LE_TYPE_F64: {
       gdouble x = ((gdouble *)self->data)[i];
       ((gdouble *)self->data)[i] = x * (1 - x);
     } break;
@@ -1028,17 +1041,17 @@ void
 le_tensor_apply_gt_f32 (LeTensor *self, gfloat scalar)
 {
   g_assert_cmpint (self->device_type, ==, LE_DEVICE_TYPE_CPU);
-  g_assert_true (self->element_type == LE_TYPE_FLOAT32 || self->element_type == LE_TYPE_FLOAT64);
+  g_assert_true (self->element_type == LE_TYPE_F32 || self->element_type == LE_TYPE_F64);
 
   /// @todo: Take stride into account
   gsize elements_count = le_shape_get_elements_count (self->shape);
 
   for (gsize i = 0; i < elements_count; i++) {
     switch (self->element_type) {
-    case LE_TYPE_FLOAT32:
+    case LE_TYPE_F32:
       ((gfloat *)self->data)[i] = ((gfloat *)self->data)[i] > scalar ? 1.0f : 0.0f;
       break;
-    case LE_TYPE_FLOAT64:
+    case LE_TYPE_F64:
       ((gdouble *)self->data)[i] = ((gdouble *)self->data)[i] > scalar ? 1.0 : 0.0;
       break;
     default:
@@ -1051,7 +1064,7 @@ void
 le_tensor_apply_sgn (LeTensor *self)
 {
   g_assert_cmpint (self->device_type, ==, LE_DEVICE_TYPE_CPU);
-  g_assert_cmpint (self->element_type, ==, LE_TYPE_FLOAT32);
+  g_assert_cmpint (self->element_type, ==, LE_TYPE_F32);
 
   /// @todo: Take stride into account
   gsize elements_count = le_shape_get_elements_count (self->shape);
@@ -1067,9 +1080,9 @@ le_tensor_apply_relu (LeTensor *self)
   g_assert_cmpint (self->device_type, ==, LE_DEVICE_TYPE_CPU);
   /// @note: Not implemented for half precision floating point values (float16)
   /// @note: There is no sense in applying ReLU to Tensors of unsigned integers.
-  g_assert_true (self->element_type == LE_TYPE_FLOAT32 || self->element_type == LE_TYPE_FLOAT64 ||
-                 self->element_type == LE_TYPE_INT8 || self->element_type == LE_TYPE_INT16 ||
-                 self->element_type == LE_TYPE_INT32);
+  g_assert_true (self->element_type == LE_TYPE_F32 || self->element_type == LE_TYPE_F64 ||
+                 self->element_type == LE_TYPE_I8 || self->element_type == LE_TYPE_I16 ||
+                 self->element_type == LE_TYPE_I32);
 
   /// @todo: Take stride into account
   gsize elements_count = le_shape_get_elements_count (self->shape);
@@ -1081,19 +1094,19 @@ le_tensor_apply_relu (LeTensor *self)
     T value = ((T *)self->data)[i];                                                                                    \
     ((T *)self->data)[i] = value > 0 ? value : 0;                                                                      \
   }
-    case LE_TYPE_FLOAT32:
+    case LE_TYPE_F32:
       APPLY_RELU (gfloat)
       break;
-    case LE_TYPE_FLOAT64:
+    case LE_TYPE_F64:
       APPLY_RELU (gdouble)
       break;
-    case LE_TYPE_INT8:
+    case LE_TYPE_I8:
       APPLY_RELU (gint8)
       break;
-    case LE_TYPE_INT16:
+    case LE_TYPE_I16:
       APPLY_RELU (gint16)
       break;
-    case LE_TYPE_INT32:
+    case LE_TYPE_I32:
       APPLY_RELU (gint32)
       break;
     default:
@@ -1133,22 +1146,22 @@ le_tensor_to_cstr (const LeTensor *self)
 
       int written = 0;
       switch (self->element_type) {
-      case LE_TYPE_UINT8:
+      case LE_TYPE_U8:
         sprintf (ptr, "%u%n", (guint)((guint8 *)self->data)[y * self->shape->sizes[1] + x], &written);
         break;
-      case LE_TYPE_INT8:
+      case LE_TYPE_I8:
         sprintf (ptr, "%d%n", (gint)((gint8 *)self->data)[y * self->shape->sizes[1] + x], &written);
         break;
-      case LE_TYPE_INT16:
+      case LE_TYPE_I16:
         sprintf (ptr, "%d%n", (gint)((gint16 *)self->data)[y * self->shape->sizes[1] + x], &written);
         break;
-      case LE_TYPE_INT32:
+      case LE_TYPE_I32:
         sprintf (ptr, "%d%n", (gint)((gint32 *)self->data)[y * self->shape->sizes[1] + x], &written);
         break;
-      case LE_TYPE_FLOAT32:
+      case LE_TYPE_F32:
         sprintf (ptr, "%f%n", ((gfloat *)self->data)[y * self->shape->sizes[1] + x], &written);
         break;
-      case LE_TYPE_FLOAT64:
+      case LE_TYPE_F64:
         sprintf (ptr, "%lf%n", ((gdouble *)self->data)[y * self->shape->sizes[1] + x], &written);
         break;
       case LE_TYPE_VOID:

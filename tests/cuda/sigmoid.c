@@ -5,7 +5,7 @@
 
 int main(int argc, char *argv[])
 {   
-    LeTensor *a = le_tensor_new(LE_TYPE_FLOAT32, 2, 4, 4,
+    LeTensor *a = le_tensor_new(LE_TYPE_F32, 2, 4, 4,
         0.0, 0.1, 0.2, 0.3,
         0.4, 0.5, 0.6, 0.7,
         0.8, 0.9, 1.0, 1.1,
@@ -26,7 +26,7 @@ int main(int argc, char *argv[])
     le_tensor_unref(ca);
     le_tensor_unref(a);
 
-    a = le_tensor_new(LE_TYPE_FLOAT32, 2, 4, 4,
+    a = le_tensor_new(LE_TYPE_F32, 2, 4, 4,
         0.0, 0.1, 0.2, 0.3,
         0.4, 0.5, 0.6, 0.7,
         0.8, 0.9, 1.0, 1.1,

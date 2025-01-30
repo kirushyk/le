@@ -91,7 +91,7 @@ le_knn_predict (LeModel *model, const LeTensor *x)
   unsigned test_examples_count  = le_matrix_get_width (x);
   unsigned features_count       = le_matrix_get_height (x);
   assert (le_matrix_get_height (priv->x) == features_count);
-  LeTensor *h                 = le_matrix_new_uninitialized (LE_TYPE_FLOAT32, 1, test_examples_count);
+  LeTensor *h                 = le_matrix_new_uninitialized (LE_TYPE_F32, 1, test_examples_count);
   gfloat   *squared_distances = g_new0 (gfloat, train_examples_count);
   unsigned *indices           = g_new0 (unsigned, priv->k);
   for (unsigned i = 0; i < test_examples_count; i++) {

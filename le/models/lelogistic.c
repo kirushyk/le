@@ -150,7 +150,7 @@ le_logistic_classifier_train (LeLogisticClassifier *self, LeTensor *x_train, LeT
 
   LeLogisticClassifierPrivate *priv = le_logistic_classifier_get_instance_private (self);
   g_assert_nonnull (priv);
-  priv->weights = le_matrix_new_zeros (LE_TYPE_FLOAT32, features_count, 1);
+  priv->weights = le_matrix_new_zeros (LE_TYPE_F32, features_count, 1);
   priv->bias = 0;
   priv->polynomia_degree = options.polynomia_degree;
 

@@ -74,7 +74,7 @@ static LeTensor *
 le_tensor_new_softmax_jacobians_stacked(LeTensor *softmax_output)
 {  
     LeTensor *self = g_new0 (LeTensor, 1);
-    self->element_type = LE_TYPE_FLOAT32;
+    self->element_type = LE_TYPE_F32;
     unsigned num_classes = le_matrix_get_height(softmax_output);
     unsigned num_examples = le_matrix_get_width(softmax_output);
     self->shape = le_shape_new(3, num_examples, num_classes, num_classes);

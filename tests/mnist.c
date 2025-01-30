@@ -22,7 +22,7 @@ main ()
   /// @note: In case MNIST dataset is not installed with
   /// `ninja install`, this test will fail here:
   g_assert_nonnull (train_images);
-  g_assert_cmpint (train_images->element_type, ==, LE_TYPE_UINT8);
+  g_assert_cmpint (train_images->element_type, ==, LE_TYPE_U8);
   g_assert_nonnull (train_images->shape);
   g_assert_cmpint (train_images->shape->num_dimensions, ==, 3);
   g_assert_cmpint (train_images->shape->sizes[0], ==, 60000);
@@ -34,7 +34,7 @@ main ()
   LeTensor *train_labels = le_data_set_get_output (mnist->train);
 
   g_assert_nonnull (train_labels);
-  g_assert_cmpint (train_labels->element_type, ==, LE_TYPE_UINT8);
+  g_assert_cmpint (train_labels->element_type, ==, LE_TYPE_U8);
   g_assert_nonnull (train_labels->shape);
   g_assert_cmpint (train_labels->shape->num_dimensions, ==, 1);
   g_assert_cmpint (train_labels->shape->sizes[0], ==, 60000);
@@ -44,7 +44,7 @@ main ()
   LeTensor *test_images = le_data_set_get_input (mnist->test);
 
   g_assert_nonnull (test_images);
-  g_assert_cmpint (test_images->element_type, ==, LE_TYPE_UINT8);
+  g_assert_cmpint (test_images->element_type, ==, LE_TYPE_U8);
   g_assert_nonnull (test_images->shape);
   g_assert_cmpint (test_images->shape->num_dimensions, ==, 3);
   g_assert_cmpint (test_images->shape->sizes[0], ==, 10000);
@@ -56,7 +56,7 @@ main ()
   LeTensor *test_labels = le_data_set_get_output (mnist->test);
 
   g_assert_nonnull (test_labels);
-  g_assert_cmpint (test_labels->element_type, ==, LE_TYPE_UINT8);
+  g_assert_cmpint (test_labels->element_type, ==, LE_TYPE_U8);
   g_assert_nonnull (test_labels->shape);
   g_assert_cmpint (test_labels->shape->num_dimensions, ==, 1);
   g_assert_cmpint (test_labels->shape->sizes[0], ==, 10000);

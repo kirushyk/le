@@ -9,18 +9,18 @@
 int
 main()
 {
-  LeTensor *a = le_tensor_new (LE_TYPE_FLOAT32, 2, 4, 3,
+  LeTensor *a = le_tensor_new (LE_TYPE_F32, 2, 4, 3,
     1.0, 2.0, 3.0,
     4.0, 5.0, 6.0,
     7.0, 8.0, 9.0,
     1.0, 2.0, 3.0,
   );
-  LeTensor *a_t = le_tensor_new (LE_TYPE_FLOAT32, 2, 3, 4,
+  LeTensor *a_t = le_tensor_new (LE_TYPE_F32, 2, 3, 4,
     1.0, 4.0, 7.0, 1.0,
     2.0, 5.0, 8.0, 2.0,
     3.0, 6.0, 9.0, 3.0
   );
-  LeTensor *greater_a = le_tensor_new (LE_TYPE_FLOAT32, 2, 4, 5,
+  LeTensor *greater_a = le_tensor_new (LE_TYPE_F32, 2, 4, 5,
     0.0, 1.0, 2.0, 3.0, 0.0,
     0.0, 4.0, 5.0, 6.0, 0.0,
     0.0, 7.0, 8.0, 9.0, 0.0,

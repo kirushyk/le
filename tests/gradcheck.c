@@ -18,11 +18,11 @@ main (int argc, char *argv[])
 #endif
 
   const gfloat epsilon = 1e-3f;
-  LeTensor *x = le_tensor_new (LE_TYPE_FLOAT32, 2, 2, 4, // clang-format off
+  LeTensor *x = le_tensor_new (LE_TYPE_F32, 2, 2, 4, // clang-format off
       1.0, 2.0, 3.0, 4.0,
       4.0, 3.0, 2.0, 1.0
   ); // clang-format on
-  LeTensor *y = le_tensor_new (LE_TYPE_FLOAT32, 2, 1, 4, // clang-format off
+  LeTensor *y = le_tensor_new (LE_TYPE_F32, 2, 1, 4, // clang-format off
       0.0, 0.0, 1.0, 1.0
   ); // clang-format on
 

@@ -18,13 +18,13 @@ main(int argc, const char *argv[])
     srand(time(NULL));
 #endif
 
-    LeTensor *x = le_tensor_new(LE_TYPE_FLOAT32, 2, 2, 4,
+    LeTensor *x = le_tensor_new(LE_TYPE_F32, 2, 2, 4,
         1.0, 2.0, 1.0, 2.0,
         2.0, 2.0, 1.0, 1.0
     );
     
     /// @note: Non-linearly-separable / XOR-like labels
-    LeTensor *y = le_tensor_new(LE_TYPE_FLOAT32, 2, 1, 4, 
+    LeTensor *y = le_tensor_new(LE_TYPE_F32, 2, 1, 4, 
         0.0, 1.0, 1.0, 0.0
     );
     

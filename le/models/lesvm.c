@@ -123,7 +123,7 @@ le_svm_margins(LeSVM *self, const LeTensor *x)
       return NULL;
       
     unsigned test_examples_count = le_matrix_get_width (x);
-    LeTensor *margins = le_matrix_new_uninitialized (LE_TYPE_FLOAT32, 1, test_examples_count);
+    LeTensor *margins = le_matrix_new_uninitialized (LE_TYPE_F32, 1, test_examples_count);
     for (unsigned i = 0; i < test_examples_count; i++)
     {
       LeTensor *example = le_matrix_get_column (x, i);
@@ -176,7 +176,7 @@ le_svm_train (LeSVM * self, const LeTensor * x_train, const LeTensor * y_train, 
   priv->kernel = options.kernel;
   /// @todo: Add cleanup here
   /// @note: Maybe use stack variable instead
-  priv->alphas = le_matrix_new_zeros (LE_TYPE_FLOAT32, 1, examples_count);
+  priv->alphas = le_matrix_new_zeros (LE_TYPE_F32, 1, examples_count);
   priv->bias = 0;
   /// @todo: Add cleanup here
   priv->weights = NULL;
@@ -272,7 +272,7 @@ le_svm_train (LeSVM * self, const LeTensor * x_train, const LeTensor * y_train, 
   if (priv->kernel == LE_KERNEL_LINEAR)
   {
       /* For linear kernel, we calculate weights */
-      priv->weights = le_matrix_new_uninitialized(LE_TYPE_FLOAT32, features_count, 1);
+      priv->weights = le_matrix_new_uninitialized(LE_TYPE_F32, features_count, 1);
       for (int j = 0; j < features_count; j++)
       {
           gfloat s = 0.0f;
@@ -294,9 +294,9 @@ le_svm_train (LeSVM * self, const LeTensor * x_train, const LeTensor * y_train, 
               support_vectors_count++;
       }
       
-      LeTensor *new_alphas = le_matrix_new_uninitialized(LE_TYPE_FLOAT32, 1, support_vectors_count);
-      priv->x = le_matrix_new_uninitialized(LE_TYPE_FLOAT32, features_count, support_vectors_count);
-      priv->y = le_matrix_new_uninitialized(LE_TYPE_FLOAT32, 1, support_vectors_count);
+      LeTensor *new_alphas = le_matrix_new_uninitialized(LE_TYPE_F32, 1, support_vectors_count);
+      priv->x = le_matrix_new_uninitialized(LE_TYPE_F32, features_count, support_vectors_count);
+      priv->y = le_matrix_new_uninitialized(LE_TYPE_F32, 1, support_vectors_count);
 
       int j = 0; /// Iterator for new matrices
       for (int i = 0; i < examples_count; i++)

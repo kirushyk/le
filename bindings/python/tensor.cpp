@@ -10,7 +10,7 @@ py::object tensor(py::array_t<float> elements)
         s[i] = r.shape(i);
     }
     unsigned numElements = le_shape_get_elements_count(s.c_shape());
-    le::Tensor t(le::Type::FLOAT32, s);
+    le::Tensor t(le::Type::F32, s);
     std::memcpy(t.data(), r.data(0), numElements * sizeof(float));
     return py::cast(t);
 }

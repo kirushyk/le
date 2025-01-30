@@ -106,12 +106,12 @@ le_main_window_init(LEMainWindow *self)
         le_tensor_add_tensor(mean_image_u32, current_image_u32);
         le_tensor_unref(current_image_u32);
     }
-    self->mean_inputs = le_tensor_new_uninitialized (LE_TYPE_UINT8, le_shape_new(3, CLASSES_COUNT, 28, 28));
+    self->mean_inputs = le_tensor_new_uninitialized (LE_TYPE_U8, le_shape_new(3, CLASSES_COUNT, 28, 28));
     for (guint32 i = 0; i < 10; i++)
     {
         LeTensor *current_mean_image_u32 = le_tensor_pick(mean_inputs_u32, i);
         le_tensor_div_u32(current_mean_image_u32, examples_count / contrast);
-        LeTensor *mean_image_u8 = le_tensor_new_cast(current_mean_image_u32, LE_TYPE_UINT8);
+        LeTensor *mean_image_u8 = le_tensor_new_cast(current_mean_image_u32, LE_TYPE_U8);
         LeTensor *current_mean_image_u8 = le_tensor_pick(self->mean_inputs, i);
         le_tensor_assign(current_mean_image_u8, mean_image_u8);
     }

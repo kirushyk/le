@@ -11,8 +11,8 @@ LeTensor *
 le_openblas_matrix_new_product(const LeTensor *a, bool transpose_a, const LeTensor *b, bool transpose_b)
 {
     /// @todo: Take stride into account
-    assert(a->element_type == LE_TYPE_FLOAT32);
-    assert(b->element_type == LE_TYPE_FLOAT32);
+    assert(a->element_type == LE_TYPE_F32);
+    assert(b->element_type == LE_TYPE_F32);
     assert(a->shape->num_dimensions == 2);
     assert(b->shape->num_dimensions == 2);
     assert(le_tensor_contiguous(a));
@@ -25,7 +25,7 @@ le_openblas_matrix_new_product(const LeTensor *a, bool transpose_a, const LeTens
     unsigned c_height = transpose_a ? a->shape->sizes[1] : a->shape->sizes[0];
     unsigned c_width = transpose_b ? b->shape->sizes[0] : b->shape->sizes[1];
     
-    LeTensor *c = le_matrix_new_uninitialized(LE_TYPE_FLOAT32, c_height, c_width);
+    LeTensor *c = le_matrix_new_uninitialized(LE_TYPE_F32, c_height, c_width);
     
     cblas_sgemm(CblasRowMajor,
                 transpose_a ? CblasTrans : CblasNoTrans,
@@ -43,8 +43,8 @@ le_openblas_matrix_new_product(const LeTensor *a, bool transpose_a, const LeTens
 gfloat
 le_openblas_dot_product(const LeTensor *a, const LeTensor *b)
 {
-    assert(a->element_type == LE_TYPE_FLOAT32);
-    assert(b->element_type == LE_TYPE_FLOAT32);
+    assert(a->element_type == LE_TYPE_F32);
+    assert(b->element_type == LE_TYPE_F32);
     assert(a->shape->num_dimensions == 2);
     assert(b->shape->num_dimensions == 2);
     /** @todo: Test results against transposed a multiplied by b */

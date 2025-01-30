@@ -79,23 +79,23 @@ std::ostream & le::operator << (std::ostream &output, const Tensor &tensor)
         {
             switch (tensor.priv->tensor->element_type)
             {
-            case LE_TYPE_UINT8:
+            case LE_TYPE_U8:
                 output << (unsigned)((std::uint8_t *)c_tensor->data)[y * c_tensor->shape->sizes[1] + x];
                 break;
-            case LE_TYPE_INT8:
+            case LE_TYPE_I8:
                 output << (int)((std::int8_t *)c_tensor->data)[y * c_tensor->shape->sizes[1] + x];
                 break;
-            case LE_TYPE_INT16:
+            case LE_TYPE_I16:
                 output << (int)((std::int16_t *)c_tensor->data)[y * c_tensor->shape->sizes[1] + x];
                 break;
-            case LE_TYPE_INT32:
+            case LE_TYPE_I32:
                 output << (int)((std::int32_t *)c_tensor->data)[y * c_tensor->shape->sizes[1] + x];
                 break;
-            case LE_TYPE_FLOAT32:
+            case LE_TYPE_F32:
                 output << std::fixed << std::setprecision(3) << 
                     ((float *)c_tensor->data)[y * c_tensor->shape->sizes[1] + x];
                 break;
-            case LE_TYPE_FLOAT64:
+            case LE_TYPE_F64:
                 output << std::fixed << std::setprecision(3) <<
                     ((double *)c_tensor->data)[y * c_tensor->shape->sizes[1] + x];
                 break;

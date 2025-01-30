@@ -33,8 +33,8 @@ le_cuda_matrix_new_product (const LeTensor *a, gboolean transpose_a, const LeTen
   g_assert_cmpint (a->device_type, ==, LE_DEVICE_TYPE_CUDA);
   g_assert_cmpint (b->device_type, ==, LE_DEVICE_TYPE_CUDA);
 
-  g_assert_cmpint (a->element_type, ==, LE_TYPE_FLOAT32);
-  g_assert_cmpint (b->element_type, ==, LE_TYPE_FLOAT32);
+  g_assert_cmpint (a->element_type, ==, LE_TYPE_F32);
+  g_assert_cmpint (b->element_type, ==, LE_TYPE_F32);
   g_assert_cmpint (a->shape->num_dimensions, ==, 2);
   g_assert_cmpint (b->shape->num_dimensions, ==, 2);
   g_assert_true (le_tensor_contiguous (a));
@@ -87,8 +87,8 @@ le_cuda_tensor_mul_tensor (LeTensor *self, const LeTensor *b)
 {
   g_assert_cmpint (self->device_type, ==, LE_DEVICE_TYPE_CUDA);
   g_assert_cmpint (b->device_type, ==, LE_DEVICE_TYPE_CUDA);
-  g_assert_cmpint (self->element_type, ==, LE_TYPE_FLOAT32);
-  g_assert_cmpint (b->element_type, ==, LE_TYPE_FLOAT32);
+  g_assert_cmpint (self->element_type, ==, LE_TYPE_F32);
+  g_assert_cmpint (b->element_type, ==, LE_TYPE_F32);
   g_assert_cmpint (self->shape->num_dimensions, ==, 2);
   g_assert_cmpint (b->shape->num_dimensions, ==, 2);
   g_assert_true (le_tensor_contiguous (self));
@@ -103,7 +103,7 @@ void
 le_cuda_tensor_apply_sigmoid (LeTensor *self)
 {
   g_assert_cmpint (self->device_type, ==, LE_DEVICE_TYPE_CUDA);
-  g_assert_cmpint (self->element_type, ==, LE_TYPE_FLOAT32);
+  g_assert_cmpint (self->element_type, ==, LE_TYPE_F32);
   g_assert_true (le_tensor_contiguous (self));
   sigmoid_wrapper (self->data, le_shape_get_elements_count (self->shape));
   cudaDeviceSynchronize ();
@@ -115,7 +115,7 @@ void
 le_cuda_tensor_apply_sigmoid_prime (LeTensor *self)
 {
   g_assert_cmpint (self->device_type, ==, LE_DEVICE_TYPE_CUDA);
-  g_assert_cmpint (self->element_type, ==, LE_TYPE_FLOAT32);
+  g_assert_cmpint (self->element_type, ==, LE_TYPE_F32);
   g_assert_true (le_tensor_contiguous (self));
   sigmoid_prime_wrapper (self->data, le_shape_get_elements_count (self->shape));
   cudaDeviceSynchronize ();

@@ -12,7 +12,7 @@ main (int argc, char *argv[])
   le_sequential_add (nn, LE_LAYER (le_conv2d_new ("C1", 3, 1, 1, 0, 1)));
   le_sequential_free (nn);
 
-  LeTensor *input = le_tensor_new (LE_TYPE_FLOAT32, 4, 1, 6, 6, 1, // clang-format off
+  LeTensor *input = le_tensor_new (LE_TYPE_F32, 4, 1, 6, 6, 1, // clang-format off
       1.0, 1.0, 1.0, 0.0, 0.0, 0.0,
       1.0, 1.0, 1.0, 0.0, 0.0, 0.0,
       1.0, 1.0, 1.0, 0.0, 0.0, 0.0,
@@ -20,7 +20,7 @@ main (int argc, char *argv[])
       0.0, 0.0, 0.0, 1.0, 1.0, 1.0,
       0.0, 0.0, 0.0, 1.0, 1.0, 1.0
   ); // clang-format on
-  LeTensor *expected_output = le_tensor_new (LE_TYPE_FLOAT32, 4, 1, 4, 4, 1, // clang-format off
+  LeTensor *expected_output = le_tensor_new (LE_TYPE_F32, 4, 1, 4, 4, 1, // clang-format off
       0.0, 0.0, 0.0, 0.0,
       4.0, 2.0, -2.0, -4.0,
       4.0, 2.0, -2.0, -4.0,

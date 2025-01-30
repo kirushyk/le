@@ -6,7 +6,7 @@ LeScalar *
 le_scalar_new_f32(gfloat scalar)
 {
     LeTensor *self = g_new0 (LeTensor, 1);
-    self->element_type = LE_TYPE_FLOAT32;
+    self->element_type = LE_TYPE_F32;
     self->shape = le_shape_new(0);
     self->stride = 0;
     self->owns_data = true;
@@ -19,7 +19,7 @@ LeScalar *
 le_scalar_new_f64(gdouble scalar)
 {
     LeTensor *self = g_new0 (LeTensor, 1);
-    self->element_type = LE_TYPE_FLOAT64;
+    self->element_type = LE_TYPE_F64;
     self->shape = le_shape_new(0);
     self->stride = 0;
     self->owns_data = true;
