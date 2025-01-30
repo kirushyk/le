@@ -94,13 +94,13 @@ le_main_window_init(LEMainWindow *self)
     self->mnist = le_mnist_load(NULL);
     self->image_visualisation = NULL;
 
-    LeTensor *mean_inputs_u32 = le_tensor_new_zeros (LE_TYPE_UINT32, le_shape_new(3, CLASSES_COUNT, 28, 28));
+    LeTensor *mean_inputs_u32 = le_tensor_new_zeros (LE_TYPE_U32, le_shape_new(3, CLASSES_COUNT, 28, 28));
     guint32 examples_count = 60000;
     guint32 contrast = 5;
     for (guint32 i = 0; i < examples_count; i++)
     {
         LeTensor *current_image = le_tensor_pick(le_data_set_get_input(self->mnist->train), i);
-        LeTensor *current_image_u32 = le_tensor_new_cast(current_image, LE_TYPE_UINT32);
+        LeTensor *current_image_u32 = le_tensor_new_cast(current_image, LE_TYPE_U32);
         guint8 label = le_tensor_at_u8(le_data_set_get_output(self->mnist->train), i);
         LeTensor *mean_image_u32 = le_tensor_pick(mean_inputs_u32, label);
         le_tensor_add_tensor(mean_image_u32, current_image_u32);

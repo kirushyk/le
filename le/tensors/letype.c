@@ -11,11 +11,11 @@ le_type_size(LeType type)
     case LE_TYPE_U8:
         return 1;
     case LE_TYPE_I16:
-    case LE_TYPE_UINT16:
-    case LE_TYPE_FLOAT16:
+    case LE_TYPE_U16:
+    case LE_TYPE_F16:
         return 2;
     case LE_TYPE_I32:
-    case LE_TYPE_UINT32:
+    case LE_TYPE_U32:
     case LE_TYPE_F32:
         return 4;
     case LE_TYPE_F64:
@@ -36,13 +36,13 @@ le_type_name(LeType type)
         return "uint8";
     case LE_TYPE_I16:
         return "int16";
-    case LE_TYPE_UINT16:
+    case LE_TYPE_U16:
         return "uint16";
-    case LE_TYPE_FLOAT16:
+    case LE_TYPE_F16:
         return "float16";
     case LE_TYPE_I32:
         return "int32";
-    case LE_TYPE_UINT32:
+    case LE_TYPE_U32:
         return "uint32";
     case LE_TYPE_F32:
         return "float32";

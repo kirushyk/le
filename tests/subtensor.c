@@ -11,7 +11,7 @@
 int
 main ()
 {
-  LeTensor *tensor = le_tensor_new (LE_TYPE_UINT32, 2, 3, 3, // clang-format off
+  LeTensor *tensor = le_tensor_new (LE_TYPE_U32, 2, 3, 3, // clang-format off
     1, 2, 3,
     4, 5, 6,
     7, 8, 9

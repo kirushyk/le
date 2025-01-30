@@ -30,7 +30,7 @@ main ()
   le_matrix_set (m, 0, 0, (gint16)2);
   le_tensor_unref (m);
 
-  m = le_tensor_new (LE_TYPE_UINT16, 2, 1, 1, 1);
+  m = le_tensor_new (LE_TYPE_U16, 2, 1, 1, 1);
   le_matrix_set (m, 0, 0, (guint16)2);
   le_tensor_unref (m);
 
@@ -38,7 +38,7 @@ main ()
   le_matrix_set (m, 0, 0, (gint32)2);
   le_tensor_unref (m);
 
-  m = le_tensor_new (LE_TYPE_UINT32, 2, 1, 1, 1);
+  m = le_tensor_new (LE_TYPE_U32, 2, 1, 1, 1);
   le_matrix_set (m, 0, 0, (guint32)2);
   le_tensor_unref (m);
 
