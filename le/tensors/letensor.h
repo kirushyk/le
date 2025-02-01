@@ -199,6 +199,8 @@ typedef struct LeTensorStats
 
 LeTensorStats      le_tensor_get_stats           (LeTensor *       tensor);
 
+LeType             le_tensor_get_element_type    (LeTensor *       tensor);
+
 LeTensor *         le_tensor_new_equal_u8        (LeType           type,
                                                   LeTensor *       tensor,
                                                   guint8           scalar);

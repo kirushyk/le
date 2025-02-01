@@ -10,9 +10,9 @@
 #include <stdlib.h>
 #include <string.h>
 #include <glib.h>
-#include "../backends/cpu/lecpu.h"
 #include <le/lebackend.h>
 #include <le/lelog.h>
+#include "../backends/cpu/lecpu.h"
 #include "letensor-cast.h"
 #include "letensor-imp.h"
 #ifdef __APPLE__
@@ -1282,4 +1282,11 @@ le_tensor_get_stats (LeTensor *self)
   }
 
   return stats;
+}
+
+LeType
+le_tensor_get_element_type (LeTensor *tensor)
+{
+  g_return_val_if_fail (tensor != NULL, LE_TYPE_VOID);
+  return tensor->element_type;
 }
