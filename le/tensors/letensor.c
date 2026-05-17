@@ -441,6 +441,7 @@ le_tensor_equal (const LeTensor *a, const LeTensor *b)
 bool
 le_tensor_reshape (LeTensor *self, gsize num_dimensions, ...)
 {
+  g_assert_nonnull (self);
   /// @todo: Take stride into account
   /// @todo: Add more assertions
 
