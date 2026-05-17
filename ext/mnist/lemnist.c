@@ -12,26 +12,54 @@
 MNIST *
 le_mnist_load (const char *path)
 {
+  LeTensor *train_input = NULL;
+  LeTensor *train_output = NULL;
+  LeTensor *test_input = NULL;
+  LeTensor *test_output = NULL;
+
   if (!path) {
     path = MNIST_DATASET_INSTALL_PATH;
   }
 
-  MNIST *mnist = g_new0 (MNIST, 1);
-  char   buffer[1024];
+  char buffer[1024];
 
   sprintf (buffer, "%s/train-images-idx3-ubyte.gz", path);
-  LeTensor *input = le_idx_gz_read (buffer);
+  train_input = le_idx_gz_read (buffer);
+  if (!train_input)
+    goto error;
   sprintf (buffer, "%s/train-labels-idx1-ubyte.gz", path);
-  LeTensor *output = le_idx_gz_read (buffer);
-  mnist->train     = le_data_set_new_take (input, output);
+  train_output = le_idx_gz_read (buffer);
+  if (!train_output)
+    goto error;
 
   sprintf (buffer, "%s/t10k-images-idx3-ubyte.gz", path);
-  input = le_idx_gz_read (buffer);
+  test_input = le_idx_gz_read (buffer);
+  if (!test_input)
+    goto error;
   sprintf (buffer, "%s/t10k-labels-idx1-ubyte.gz", path);
-  output      = le_idx_gz_read (buffer);
-  mnist->test = le_data_set_new_take (input, output);
+  test_output = le_idx_gz_read (buffer);
+  if (!test_output)
+    goto error;
 
+  MNIST *mnist = g_new0 (MNIST, 1);
+  mnist->train = le_data_set_new_take (train_input, train_output);
+  mnist->test = le_data_set_new_take (test_input, test_output);
   return mnist;
+
+error:
+  if (train_input) {
+    le_tensor_unref (train_input);
+  }
+  if (train_output) {
+    le_tensor_unref (train_output);
+  }
+  if (test_input) {
+    le_tensor_unref (test_input);
+  }
+  if (test_output) {
+    le_tensor_unref (test_output);
+  }
+  return NULL;
 }
 
 void
